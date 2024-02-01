@@ -8,6 +8,7 @@ const Home = () => {
       router.replace('/pools')
     }
   )
+  
   return <></>
 }
 

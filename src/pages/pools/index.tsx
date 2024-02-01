@@ -239,7 +239,6 @@ const useViewportWidth = () => {
       return () => window.removeEventListener('resize', handleResize);
     }, []); // Empty array ensures that effect runs only on mount and unmount
   
-    console.log(width)
     return width;
 };
   
@@ -363,6 +362,7 @@ const Pools = () => {
             minWidth: 185,
             renderHeader: (params) => {
                 const headerName = params.colDef.headerName ?? '';
+
                 return (
                     <span style={{ lineHeight: '1.5em', fontWeight: 'bold', textAlign: 'center',        display: 'block' }}>
                         {headerName.split(' ').map((line, index) => (
@@ -386,6 +386,7 @@ const Pools = () => {
             minWidth: 185,
             renderHeader: (params) => {
                 const headerName = params.colDef.headerName ?? '';
+                
                 return (
                     <span style={{ lineHeight: '1.5em', fontWeight: 'bold', textAlign: 'center', display: 'block' }}>
                         {headerName.split(' ').map((line, index) => (
