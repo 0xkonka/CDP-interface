@@ -39,11 +39,14 @@ const CanViewNavGroup = (props: Props) => {
     return ability && ability.can(item.action, item.subject) && hasAnyVisibleChild
   }
 
-  if (navGroup && navGroup.auth === false) {
-    return <>{children}</>
-  } else {
-    return navGroup && canViewMenuGroup(navGroup) ? <>{children}</> : null
-  }
+  return <>{children}</>
+
+  // We will use this code for permission authorization later.
+  // if (navGroup && navGroup.auth === false) {
+  //   return <>{children}</>
+  // } else {
+  //   return navGroup && canViewMenuGroup(navGroup) ? <>{children}</> : null
+  // }
 }
 
 export default CanViewNavGroup
