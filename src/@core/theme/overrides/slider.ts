@@ -101,10 +101,11 @@ const Slider = () => {
         valueLabel: ({ theme }: OwnerStateThemeType) => ({
           borderRadius: 4,
           padding: theme.spacing(1, 2),
-          backgroundColor:
-            theme.palette.mode === 'light'
-              ? `rgba(${theme.palette.customColors.main}, 0.9)`
-              : hexToRGBA(theme.palette.customColors.trackBg, 0.9),
+          backgroundColor: 'transparent',
+          // backgroundColor:
+          //   theme.palette.mode === 'light'
+          //     ? `rgba(${theme.palette.customColors.main}, 0.9)`
+          //     : hexToRGBA(theme.palette.customColors.trackBg, 0.9),
           '&:before': {
             display: 'none'
           },

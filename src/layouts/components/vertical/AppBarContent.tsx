@@ -1,8 +1,14 @@
+// ** React Imports
+import { MouseEvent, useState } from 'react'
+
 // ** MUI Imports
 import { styled, Theme } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Button, {ButtonProps} from '@mui/material/Button'
+import { ListItemIcon, ListItemText } from '@mui/material'
+import MuiMenu, { MenuProps } from '@mui/material/Menu'
+import MuiMenuItem, { MenuItemProps } from '@mui/material/MenuItem'
 import Image from 'next/image'
 
 // ** Icon Imports
@@ -11,13 +17,13 @@ import Icon from 'src/@core/components/icon'
 // ** Type Import
 import { Settings } from 'src/@core/context/settingsContext'
 
-// ** Components
-import Autocomplete from 'src/layouts/components/Autocomplete'
-import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
-import SocialsDropdown, {SocialsType} from 'src/@core/layouts/components/shared-components/SocialsDropdown'
-
 // ** Hook Import
 import { useAuth } from 'src/hooks/useAuth'
+
+
+
+// ** Util Import
+import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 
 interface Props {
   hidden: boolean
@@ -26,46 +32,29 @@ interface Props {
   saveSettings: (values: Settings) => void
 }
 
-const socials: SocialsType[] = [
-  {
-    title: 'Discord',
-    url: 'https://twitter.com/TrenFinance',
-    icon: 'discord',
-  },
-  {
-    title: 'Instagram',
-    url: 'https://twitter.com/TrenFinance',
-    icon: 'instagram',
-  },
-  {
-    title: 'Twitter',
-    icon: 'twitter',
-    url: 'https://twitter.com/TrenFinance',
-  },
-  {
-    title: 'Telegram',
-    icon: 'telegram',
-    url: 'https://twitter.com/TrenFinance',
-  },
-  {
-    title: 'LinkedIn',
-    icon: 'linkedin',
-    url: 'https://twitter.com/TrenFinance',
-  },
-]
-// ** Styled Components
-const SquareSocialButton = styled(Button)<ButtonProps>(() => ({
-  padding: 4,
-  marginLeft: 8,
-  marginRight: 8,
-  minWidth: 38,
-  minHeight: 38,
-  border: 'solid 1px #53545F',
-  borderRadius: 10,
+// Styled Menu component
+const Menu = styled(MuiMenu)<MenuProps>(({ theme }) => ({
+  '& .MuiMenu-paper': {
+    border: `1px solid ${theme.palette.divider}`
+  }
 }))
 
-const ConnectWalletButton = styled(Button)<ButtonProps>(() => ({
-  color: 'white',
+// Styled MenuItem component
+const MenuItem = styled(MuiMenuItem)<MenuItemProps>(({ theme }) => ({
+  margin: 0,
+  borderRadius: 0,
+  '&:not(.Mui-focusVisible):hover': {
+    backgroundColor: theme.palette.action.hover
+  },
+  '&.Mui-selected': {
+    backgroundColor: hexToRGBA(theme.palette.primary.main, 0.08)
+  },
+  '&.Mui-focusVisible': {
+    backgroundColor: theme.palette.primary.main,
+    '& .MuiListItemIcon-root, & .MuiTypography-root': {
+      color: theme.palette.common.white
+    }
+  }
 }))
 
 const AppBarContent = (props: Props) => {
@@ -74,6 +63,17 @@ const AppBarContent = (props: Props) => {
 
   // ** Hook
   const auth = useAuth()
+
+  // ** Wallet connection state
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -91,23 +91,50 @@ const AppBarContent = (props: Props) => {
           <>
           </>
         )}
-        {hidden && !settings.navHidden ? 
-          (<SocialsDropdown settings={settings} shortcuts={socials} />) : (
-          <Box>
-            {socials.map(social => (
-              <SquareSocialButton variant='outlined' color='secondary' href={social.url} key={social.title}>
-                <Image src={`/images/icons/social-icons/${social.icon}.svg`}
-                  alt={social.title}
-                  width={20}
-                  height={20}
-                />
-              </SquareSocialButton>
-            ))}
-          </Box>
-        )}
-        <ConnectWalletButton sx={{ 
-          ml: {xs: 2, sm: 5}
-        }} variant='outlined'>Connect Wallet</ConnectWalletButton>
+        
+        {/* When wallet is not connected*/}
+        {/* <Button sx={{ 
+            color: 'white',
+            ml: {xs: 2, sm: 5},
+            minWidth: 160
+          }} variant='outlined'>Connect Wallet
+        </Button> */}
+
+        {/* Wallet Connected */}
+        <Button aria-haspopup='true' onClick={handleClick} aria-controls='wallet-connect'>
+          <Icon icon='tabler:wallet' fontSize={28} style={{marginRight: 10}}/>
+            0x83...cEc1
+          <Icon icon='tabler:chevron-down' fontSize={18} style={{marginLeft: 5}}/>
+        </Button>
+        <Menu 
+          keepMounted
+          elevation={0}
+          anchorEl={anchorEl}
+          id='customized-menu'
+          onClose={handleClose}
+          open={Boolean(anchorEl)}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center'
+          }}
+        >
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <Icon icon='mdi:content-copy' fontSize={20} />
+            </ListItemIcon>
+            <ListItemText primary='Copy Address' />
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <Icon icon='tabler:mail-opened' fontSize={20} />
+            </ListItemIcon>
+            <ListItemText primary='Disconnect' />
+          </MenuItem>
+        </Menu>
       </Box>
     </Box>
   )

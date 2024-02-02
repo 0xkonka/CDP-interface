@@ -74,32 +74,47 @@ const FooterContent = () => {
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
   return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
-      <Typography sx={{ mr: 2, display: 'flex', color: 'text.secondary' }}>
-        Tren Finance Protocol
-        <Typography sx={{ ml: 1 }} target='_blank' href='https://pixinvent.com' component={StyledCompanyName}>
-        {`© ${new Date().getFullYear()} All Right Reserved `}
-        </Typography>
-        
-        
-        {/* <Typography sx={{ ml: 1 }} target='_blank' href='https://pixinvent.com' component={StyledCompanyName}> */}
-          {/* Pixinvent */}
-        {/* </Typography> */}
-      </Typography>
-      {hidden ? null : (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center'}}>
-          {socials.map(social => (
-            <SquareSocialButton variant='outlined' color='secondary' href={social.url} key={social.title}>
-              <Image src={`/images/icons/social-icons/${social.icon}.svg`}
-                alt={social.title}
-                width={20}
-                height={20}
-                style={{marginRight: 0}}
-              />
-            </SquareSocialButton>
-          ))}
+    <Box>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', mb: 6 }}>
+        <Box sx={{display: 'flex'}}>
+          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://policy.com'>
+            Privacy Policy
+          </Typography>
+          <Typography variant='subtitle1' sx={{px: 4}}>/</Typography>
+          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://terms.com'>
+            Terms of Use
+          </Typography>
         </Box>
-      )}
+        <Box sx={{display: 'flex'}}>
+          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://discord.com'>
+            Discord
+          </Typography>
+          <Typography variant='subtitle1' sx={{px: 4}}>/</Typography>
+          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://twitter.com'>
+            Twitter
+          </Typography>
+          <Typography variant='subtitle1' sx={{px: 4}}>/</Typography>
+          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://instagram.com'>
+            Instagram
+          </Typography>
+          <Typography variant='subtitle1' sx={{px: 4}}>/</Typography>
+          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://telegram.com'>
+            Telegram
+          </Typography>
+          <Typography variant='subtitle1' sx={{px: 4}}>/</Typography>
+          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://linkedin.com'>
+            Linkedin
+          </Typography>
+        </Box>
+      </Box>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'end', borderTop: 'solid 1px #414141', py: 6}}>
+        <Typography variant='subtitle2' sx={{display: 'flex', alignItems: 'center', fontWeight: 400, color: 'text.secondary' }}>
+          Tren Finance Protocol
+          <Typography sx={{ml:2, color: (theme) => theme.palette.primary.main}}>
+          {`© ${new Date().getFullYear()} All Right Reserved `}
+          </Typography>
+        </Typography>
+      </Box>
     </Box>
   )
 }

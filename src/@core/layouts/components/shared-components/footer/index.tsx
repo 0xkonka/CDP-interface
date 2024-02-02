@@ -34,7 +34,6 @@ const Footer = (props: Props) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderTop: 'solid 1px #3333334f',
         ...(footer === 'fixed' && {
           bottom: 0,
           position: 'sticky',

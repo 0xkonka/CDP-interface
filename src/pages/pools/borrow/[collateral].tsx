@@ -104,7 +104,7 @@ const Borrow = () => {
 
   return (
     <Box sx={{height: '100%', display: 'flex', flexDirection: 'column'}}>
-        <Box sx={{display:'flex', alignItems: 'center', width: 'fit-content', cursor: 'pointer'}} >
+        <Box sx={{display:'flex', alignItems: 'center', width: 'fit-content', cursor: 'pointer', mb:4}} >
             <Icon fontSize='24' icon='basil:arrow-left-outline' style={{color: theme.palette.primary.main}}/>
             <Typography variant='body1' color='primary' sx={{ml:1}} onClick={()=>{router.push('/pools')}}>
                 Go back to Pools
@@ -143,42 +143,18 @@ const Borrow = () => {
                         Collateral assets
                     </Typography>
                     <Grid container spacing={2}>
-                        <Grid item xs={5}>
-                            <Box>
-                                <CustomTextField select 
-                                    defaultValue={collaterals.filter(element => element.toLowerCase() === String(collateral).toLowerCase())} 
-                                    label='Select asset' 
-                                    id='collateral_select'
-                                    className='collateral_select'
-                                    onChange={(event) => {router.push(`/pools/borrow/${event.target.value}`)}}
-                                    sx={{ 
-                                        minWidth: 400,
-                                        '& .MuiInputBase-root': {
-                                            border: 'none'
-                                        },
-                                        '& .MuiSelect-select': {
-                                            display: 'flex !important',
-                                            alignItems: 'center',
-                                            paddingLeft: '0 !important',
-                                            paddingRight: '35px !important'
-                                        }
-                                    }}
-                                >
-                                    {collaterals.map((collateral, index) => (
-                                        <MenuItem key={index} value={collateral}>
-                                            <Image 
-                                                src={`/images/tokens/${collateral}.png`}
-                                                alt='LinkedIn' width={32} height={32}
-                                                style={{ borderRadius: '100%', marginRight: 10 }}
-                                            />
-                                            {collateral}
-                                        </MenuItem>
-                                    ))}
-                                </CustomTextField>
-                            </Box>
-                            <Typography variant='body1' color='#707175'>
+                        <Grid item xs={5} sx={{display: 'flex', alignItems: 'center'}}>
+                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                <Image 
+                                    src={`/images/tokens/${collateral}.png`}
+                                    alt='LinkedIn' width={42} height={42}
+                                    style={{ borderRadius: '100%', marginRight: 10 }}
+                                />
                                 {collateral}
-                            </Typography>
+                            </Box>
+                            {/* <Typography variant='body1' color='#707175'>
+                                {collateral}
+                            </Typography> */}
                         </Grid>
                         <Grid item xs={7}>
                             <Box sx={{display: 'flex', justifyContent: 'end', alignItems: 'center', mb: 1}}>
@@ -199,10 +175,14 @@ const Borrow = () => {
                                     }
                                 }}
                                 InputProps={{
-                                    endAdornment: <InputAdornment position='end'>MAX</InputAdornment>
+                                    endAdornment: <InputAdornment position='end' 
+                                                    sx={{cursor: 'pointer', '& p' : {color: theme.palette.primary.main, fontSize: 12}}} 
+                                                    onClick={()=>{alert('Max clicked')}}>
+                                                    MAX
+                                                  </InputAdornment>
                                 }}
                             />
-                            <Typography variant='body1' color='#707175' sx={{ml:3}}>
+                            <Typography variant='body1' sx={{ml:3}}>
                                 $0.0
                             </Typography>
                         </Grid>
@@ -217,7 +197,7 @@ const Borrow = () => {
                             <Box sx={{display: 'flex', alignItems: 'center', mb:2}}>
                                 <Image 
                                     src={`/images/tokens/trenUSD.png`}
-                                    alt='LinkedIn' width={28} height={28}
+                                    alt='LinkedIn' width={32} height={32}
                                     style={{ borderRadius: '100%', marginRight: 24 }}
                                 />
                                 <Typography variant='body1'>
@@ -243,13 +223,13 @@ const Borrow = () => {
                                     }
                                 }}
                             />
-                            <Typography variant='body1' color='#707175' sx={{ml:3}}>
+                            <Typography variant='body1' sx={{ml:3}}>
                                 $0.0
                             </Typography>
                         </Grid>
                     </Grid>
                 </StyledRoundedBox>
-                <Box sx={{display: 'flex', alignItems: 'center', gap:4, marginBottom: 4}}>
+                <Box sx={{display: 'flex', alignItems: 'center', gap: 4, py: 4}}>
                     <CustomTextField
                         sx={{width: 100}}
                         placeholder='Custom'
@@ -257,22 +237,101 @@ const Borrow = () => {
                         onChange={(event:React.ChangeEvent<HTMLInputElement>)=>{setBorrowRate(Number(event.target.value))}}
                     />
                     <Box sx={{width: '100%'}}>
-                        <Typography variant='body1' sx={{fontWeight: 600, mb: '-5px'}}>
-                            0%
-                        </Typography>
-                        <Slider aria-labelledby='continuous-slider' value={borrowRate} onChange={(event:any)=>{setBorrowRate(event.target.value)}}/>
-                        <Typography variant='body1' sx={{fontWeight: 600, mt: '-10px', float: 'right'}}>
-                            100%
-                        </Typography>
+                        <Slider aria-labelledby='continuous-slider' 
+                                valueLabelDisplay='on'
+                                value={borrowRate}
+                                valueLabelFormat={(value)=>{return `${value}%`}}
+                                onChange={(event:any)=>{setBorrowRate(event.target.value)}}/>
+                        <Box sx={{display:'flex', justifyContent: 'space-between'}}>
+                            <Typography variant='subtitle2' color='#707175' sx={{mt: '-10px'}}>
+                                0%
+                            </Typography>
+                            <Typography variant='subtitle2' color='#707175' sx={{mt: '-10px'}}>
+                                100%
+                            </Typography>
+                        </Box>
                     </Box>
-                    
                 </Box>
             </Grid>
             <Grid item xs={12} md={6} sx={{display: 'flex', flexDirection: 'column'}}>
                 <StyledRoundedBox sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%'}}>
-                    <Typography variant='body1' color='#707175'>
+                    <Grid container sx={{height: '100%'}}>
+                        <Grid item xs={12} md={6} sx={{
+                            pr: 4,
+                            borderBottom: { xs: 'solid 1px #2D3131', md: 0 },
+                            borderRight: { md: 'solid 1px #2D3131' }
+                        }}>
+                            <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
+                                Deposit
+                            </Typography>
+                            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                    <Image 
+                                        src={`/images/tokens/${collateral}.png`}
+                                        alt='LinkedIn' width={42} height={42}
+                                        style={{ borderRadius: '100%', marginRight: 10 }}
+                                    />
+                                    {collateral}
+                                </Box>
+                                <Box>
+                                    <Typography variant='subtitle1'>
+                                        20,000.00
+                                    </Typography>
+                                    <Typography variant='subtitle2' sx={{color: '#707175'}}>
+                                        $20,000.00
+                                    </Typography>
+                                </Box>
+                            </Box>
+                            <Box sx={{display: 'flex', mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 }}}>
+                                <Button sx={{ 
+                                    mr: {xs: 2, md: 4},
+                                    color: 'white',
+                                    borderColor: '#6795DA'
+                                }} variant='outlined'>Withdraw</Button>
+                                <Button sx={{ 
+                                    color: 'white',
+                                    borderColor: '#67DAB1'
+                                }} variant='outlined'>Deposit more</Button>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} md={6} sx={{pl: 4}}>
+                            <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
+                                Borrow
+                            </Typography>
+                            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                    <Image 
+                                        src={`/images/tokens/trenUSD.png`}
+                                        alt='LinkedIn' width={32} height={32}
+                                        style={{ borderRadius: '100%', marginRight: 10 }}
+                                    />
+                                    trenUSD
+                                </Box>
+                                <Box>
+                                    <Typography variant='subtitle1'>
+                                        20,000.00
+                                    </Typography>
+                                    <Typography variant='subtitle2' sx={{color: '#707175'}}>
+                                        $20,000.00
+                                    </Typography>
+                                </Box>
+                            </Box>
+                            <Box sx={{display: 'flex', mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 }}}>
+                                <Button sx={{ 
+                                    mr: {xs: 2, md: 4},
+                                    color: 'white',
+                                    borderColor: '#C6E0DC'
+                                }} variant='outlined'>Borrow more</Button>
+                                <Button sx={{ 
+                                    color: 'white',
+                                    borderColor: '#C9A3FA'
+                                }} variant='outlined'>Repay</Button>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                    {/* <Typography variant='body1' color='#707175'>
                         No open positions
-                    </Typography>
+                    </Typography> */}
                 </StyledRoundedBox>
                 <StyledRoundedBox>
                     <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
@@ -393,7 +452,7 @@ const Borrow = () => {
         </StyledRoundedBox>
         <Box sx={{display: 'flex', justifyContent: 'center', py: 8}}>
             <Button sx={{ 
-                ml: {xs: 2, sm: 5},
+                ml: {xs: 2, sm: 2},
                 color: 'white',
                 minWidth: 250
             }} variant='outlined'>Approve</Button>
