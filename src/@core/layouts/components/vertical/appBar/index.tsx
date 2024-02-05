@@ -2,6 +2,7 @@
 import { styled, Theme } from '@mui/material/styles'
 import MuiAppBar, { AppBarProps } from '@mui/material/AppBar'
 import MuiToolbar, { ToolbarProps } from '@mui/material/Toolbar'
+import useScrollTrigger from '@mui/material/useScrollTrigger'
 
 // ** Type Imports
 import { LayoutProps } from 'src/@core/layouts/types'
@@ -49,6 +50,12 @@ const LayoutAppBar = (props: Props) => {
   // ** Vars
   const { skin, appBar, appBarBlur, contentWidth } = settings
 
+  // ** init trigger for scroll down 100px
+  const trigger = useScrollTrigger({
+    threshold: 100,
+    disableHysteresis: true
+  })
+
   const appBarBlurEffect = appBarBlur && {
     '&:after': {
       top: 0,
@@ -85,7 +92,7 @@ const LayoutAppBar = (props: Props) => {
       elevation={0}
       color='default'
       className='layout-navbar'
-      sx={{ ...appBarBlurEffect, ...userAppBarStyle }}
+      sx={{ ...appBarBlurEffect, ...userAppBarStyle}}
       position={appBar === 'fixed' ? 'sticky' : 'static'}
       {...userAppBarProps}
     >
@@ -94,8 +101,7 @@ const LayoutAppBar = (props: Props) => {
         sx={{
           ...(appBarBlur && { backdropFilter: 'blur(6px)' }),
           minHeight: theme => `${theme.mixins.toolbar.minHeight as number}px !important`,
-          // backgroundColor: 'transparent',
-          // backgroundColor: theme => hexToRGBA(theme.palette.background.paper, appBarBlur ? 0.95 : 1),
+          backgroundColor: trigger ? '#101818' : 'transparent',   // Topbar background - Mobile View.
           ...(skin === 'bordered' ? { borderBottom: '1px solid #333' } : { boxShadow: 2 }),
           // ...(contentWidth === 'boxed' && {
           //   '@media (min-width:1440px)': { maxWidth: theme => `calc(1440px - ${theme.spacing(6 * 2)})` }

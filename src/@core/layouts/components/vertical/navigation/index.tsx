@@ -197,14 +197,14 @@ const Navigation = (props: Props) => {
               ? afterNavMenuContent(navMenuContentProps)
               : null}
           </Box>
-          <Box sx={{p: 6}}>
+          {/* <Box sx={{p: 6}}>
             <Typography variant='subtitle2' sx={{ mb: 2 }}>
               Tren Finance Protocol
             </Typography>
             <Typography variant='subtitle2' sx={{ fontWeight: 300, mb: 2, color: theme => theme.palette.primary.main}}>
               2024 All Rights Reserved
             </Typography>
-          </Box>
+          </Box> */}
         </Box>
       </Drawer>
     </ThemeProvider>

@@ -20,17 +20,17 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'Swap',
-      icon: 'swap',
+      icon: 'stake',
       path: '/swap'
     },
     {
       title: 'Farm',
-      icon: 'farm',
+      icon: 'stake',
       path: '/farm'
     },
     {
       title: 'Governance',
-      icon: 'governance',
+      icon: 'stake',
       path: '/governance'
     },
     {

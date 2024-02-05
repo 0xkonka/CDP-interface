@@ -16,6 +16,7 @@ import themeConfig from 'src/configs/themeConfig'
 import { LayoutProps } from 'src/@core/layouts/types'
 
 // ** Components
+import Footer from './components/shared-components/footer'
 import AppBar from './components/vertical/appBar'
 import Customizer from 'src/@core/components/customizer'
 import Navigation from './components/vertical/navigation'
@@ -30,9 +31,9 @@ const MainContentWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   flexGrow: 1,
   minWidth: 0,
   display: 'flex',
-  // minHeight: '100vh',
+  minHeight: '100vh',
   flexDirection: 'column',
-  height: '100vh',
+  // height: '100vh',
   // maxHeight: `calc(100vh - ${theme.mixins.toolbar.minHeight as number}px`
 }))
 
@@ -128,12 +129,12 @@ const VerticalLayout = (props: LayoutProps) => {
             }}
           >
             {children}
+            {/* Footer */}
+            <Footer {...props} footerStyles={footerProps?.sx} footerContent={footerProps?.content} />
           </ContentWrapper>
         </MainContentWrapper>
       </VerticalLayoutWrapper>
 
-      {/* Customizer */}
-      {/* {disableCustomizer || hidden ? null : <Customizer />} */}
 
       {/* Scroll to top button */}
       {scrollToTop ? (

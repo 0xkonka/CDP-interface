@@ -75,7 +75,7 @@ const FooterContent = () => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', mb: 6 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
         <Box sx={{display: 'flex'}}>
           <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://policy.com'>
             Privacy Policy
@@ -85,7 +85,7 @@ const FooterContent = () => {
             Terms of Use
           </Typography>
         </Box>
-        <Box sx={{display: 'flex'}}>
+        <Box sx={{display: 'flex', flexWrap: 'wrap'}}>
           <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://discord.com'>
             Discord
           </Typography>
@@ -107,7 +107,7 @@ const FooterContent = () => {
           </Typography>
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'end', borderTop: 'solid 1px #414141', py: 6}}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: {xs: 'start', md: 'end'}, borderTop: 'solid 1px #414141', pt: 2, pb: 6}}>
         <Typography variant='subtitle2' sx={{display: 'flex', alignItems: 'center', fontWeight: 400, color: 'text.secondary' }}>
           Tren Finance Protocol
           <Typography sx={{ml:2, color: (theme) => theme.palette.primary.main}}>

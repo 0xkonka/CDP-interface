@@ -4,6 +4,7 @@ import AppBar from '@mui/material/AppBar'
 import { styled } from '@mui/material/styles'
 import Box, { BoxProps } from '@mui/material/Box'
 import MuiToolbar, { ToolbarProps } from '@mui/material/Toolbar'
+import useScrollTrigger from '@mui/material/useScrollTrigger'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -80,6 +81,13 @@ const HorizontalLayout = (props: LayoutProps) => {
   const { skin, appBar, navHidden, appBarBlur, contentWidth } = settings
   const appBarProps = horizontalLayoutProps?.appBar?.componentProps
 
+   // ** init trigger for scroll down 100px
+  const trigger = useScrollTrigger({
+    threshold: 100,
+    disableHysteresis: true
+  })
+
+
   let userAppBarStyle = {}
   if (appBarProps && appBarProps.sx) {
     userAppBarStyle = appBarProps.sx
@@ -103,8 +111,7 @@ const HorizontalLayout = (props: LayoutProps) => {
             ...(appBar === 'static' && { zIndex: 13 }),
             transition: 'border-bottom 0.2s ease-in-out',
             ...(appBarBlur && { backdropFilter: 'blur(6px)' }),
-            // backgroundColor: theme => hexToRGBA(theme.palette.background.paper, appBarBlur ? 0.95 : 1),
-            backgroundColor: 'transparent',
+            backgroundColor: trigger ? '#101818' : 'transparent',       // Topbar background - DesktopView.
             ...(skin === 'bordered' && { borderBottom: theme => `1px solid ${theme.palette.divider}` }),
             ...userAppBarStyle
           }}
@@ -137,29 +144,6 @@ const HorizontalLayout = (props: LayoutProps) => {
               />
             </Toolbar>
           </Box>
-          {/* Navigation Menu */}
-          {/* {navHidden ? null : (
-            <Box className='layout-horizontal-nav' sx={{ width: '100%', ...horizontalLayoutProps?.navMenu?.sx }}>
-              <Toolbar
-                className='horizontal-nav-content-container'
-                sx={{
-                  mx: 'auto',
-                  ...(contentWidth === 'boxed' && { '@media (min-width:1440px)': { maxWidth: 1440 } }),
-                  minHeight: theme =>
-                    `${(theme.mixins.toolbar.minHeight as number) - 4 - (skin === 'bordered' ? 1 : 0)}px !important`
-                }}
-              >
-                {(userNavMenuContent && userNavMenuContent(props)) || (
-                  <Navigation
-                    {...props}
-                    horizontalNavItems={
-                      (horizontalLayoutProps as NonNullable<LayoutProps['horizontalLayoutProps']>).navMenu?.navItems
-                    }
-                  />
-                )}
-              </Toolbar>
-            </Box>
-          )} */}
         </AppBar>
         {/* Content */}
         <ContentWrapper

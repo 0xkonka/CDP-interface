@@ -35,42 +35,42 @@ import ButtonsOutlined from 'src/views/components/buttons/ButtonsOutlined';
 const labels = [
     {
         key: 'TVL',
-        tooltip: 'Placeholder Tooltip',
+        tooltip: 'Total value locked',
         value: '4.296M'
     },
     {
         key: 'trenUSD Available',
-        tooltip: 'Placeholder Tooltip',
+        tooltip: 'trenUSD available to borrow/total trenUSD allocated',
         value: '766.231K/800K'
     },
     {
         key: 'Utilization',
-        tooltip: 'Placeholder Tooltip',
+        tooltip: 'Total borrowed trenUSD/total trenUSD allocated',
         value: '84.86%'
     },
     {
         key: 'Max LTV',
-        tooltip: 'Placeholder Tooltip',
+        tooltip: 'Maximum loan-to-value',
         value: '75%'
     },
     {
         key: 'Interest',
-        tooltip: 'Placeholder Tooltip',
+        tooltip: 'Rate of debt accrual',
         value: '5%'
     },
     {
         key: 'Borrow Fee',
-        tooltip: 'Placeholder Tooltip',
+        tooltip: 'A one time fee paid upon opening a position Tooltip',
         value: '6.263%'
     },
     {
         key: 'Liquidation',
-        tooltip: 'Placeholder Tooltip',
+        tooltip: 'the LTV at which the position will be flagged for liquidation',
         value: '5%'
     },
     {
         key: 'Rate Type',
-        tooltip: 'Placeholder Tooltip',
+        tooltip: 'The interest rate used for the pool',
         value: 'Variable Rate'
     },
 ]
@@ -103,7 +103,7 @@ const Borrow = () => {
   }))
 
   return (
-    <Box sx={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+    <Box>
         <Box sx={{display:'flex', alignItems: 'center', width: 'fit-content', cursor: 'pointer', mb:4}} >
             <Icon fontSize='24' icon='basil:arrow-left-outline' style={{color: theme.palette.primary.main}}/>
             <Typography variant='body1' color='primary' sx={{ml:1}} onClick={()=>{router.push('/pools')}}>
@@ -114,14 +114,19 @@ const Borrow = () => {
             <Typography variant='h2' sx={{ textTransform: 'uppercase' }}>
                 {collateral}
             </Typography>
-            <ButtonGroup variant='outlined' color='secondary'>
-                <Button sx={{borderColor: theme.palette.primary.main}}>Borrow</Button>
-                <Button sx={{borderLeftColor: theme.palette.primary.main}}>Leverage</Button>
-            </ButtonGroup>
+            <Box sx={{borderRadius: '50px', border: 'solid 1px #C6C6C74D'}}>
+                <Button sx={{borderRadius: '50px', px: 6, py: 3.5, fontWeight: 600, backgroundColor: theme.palette.primary.main, color: '#101617',
+                            '&:hover': {
+                                backgroundColor: theme.palette.primary.main
+                            }}}>
+                    Borrow
+                </Button>
+                <Button onClick={() => router.push(`/pools/leverage/${collateral}`)} sx={{borderRadius: '50px', px: 6, py: 3.5, fontWeight: 600, color: theme.palette.secondary.main}}>Leverage</Button>
+            </Box>
         </Box>
         <StyledRoundedBox sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
             {labels.map((label, index) => (
-                <Box key={index} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: isSmallScreen ? 0:1}}>
+                <Box key={index} sx={{display: 'flex', flexDirection: 'column', alignItems: {xs: 'start', md: 'center'}, gap: isSmallScreen ? 0:1}}>
                     <Typography variant='body1' color='#707175' sx={{display: 'flex', alignItems: 'center'}}>
                         {label.key} 
                         <Tooltip title={label.tooltip} placement='top'>
@@ -294,7 +299,7 @@ const Borrow = () => {
                                 }} variant='outlined'>Deposit more</Button>
                             </Box>
                         </Grid>
-                        <Grid item xs={12} md={6} sx={{pl: 4}}>
+                        <Grid item xs={12} md={6} sx={{pl: {xs: 0, md: 4}, pt: {xs: 4, md: 0}}}>
                             <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
                                 Borrow
                             </Typography>
