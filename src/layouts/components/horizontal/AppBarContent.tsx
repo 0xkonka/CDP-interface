@@ -60,6 +60,8 @@ const AppBarContent = (props: Props) => {
 
   // ** Wallet connection state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [walletAddress, setWalletAddress] = useState<string>('0x3be8905f243680d510f5ebc946faa3f3113bbb86')
+
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -89,7 +91,7 @@ const AppBarContent = (props: Props) => {
       {/* Wallet Connected */}
       <Button aria-haspopup='true' onClick={handleClick} aria-controls='wallet-connect'>
         <Icon icon='tabler:wallet' fontSize={28} style={{marginRight: 10}}/>
-          0x83...cEc1
+          {walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}
         <Icon icon='tabler:chevron-down' fontSize={18} style={{marginLeft: 5}}/>
       </Button>
       <Menu 

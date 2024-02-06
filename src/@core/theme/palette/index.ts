@@ -7,7 +7,7 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin): Palette => {
   const whiteColor = '#FFF'
   const lightColor = '47, 43, 61'
   const darkColor = '255, 255, 255'
-  const darkPaperBgColor = '#172726'
+  const darkPaperBgColor = '#0E1314'
   const mainColor = mode === 'light' ? lightColor : darkColor
 
   const defaultBgColor = () => {
