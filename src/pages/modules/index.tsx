@@ -242,7 +242,7 @@ const useViewportWidth = () => {
     return width;
 };
   
-const Pools = () => {
+const Modules = () => {
     const [rows, setRows] = useState<Pool[]>(initialRows)
     const [filterText, setFilterText] = useState<string>('')
     const [filterOnlyActive, setFilterOnlyActive] = useState<boolean>(true)
@@ -452,11 +452,11 @@ const Pools = () => {
     }, [filterText, filterOnlyActive])
 
     const handleBorrowClick = (row:any) => {
-        router.push(`/pools/borrow/${row.collateral}`)
+        router.push(`/modules/borrow/${row.collateral}`)
     }
     
     const handleLeverageClick = (row:any) => {
-        router.push(`/pools/leverage/${row.collateral}`)
+        router.push(`/modules/leverage/${row.collateral}`)
     }
 
     const filterRows = () => {
@@ -481,7 +481,7 @@ const Pools = () => {
     return (
         <Box sx={{height: '100%', display: 'flex', flexDirection: 'column'}}>
             <Typography variant='h2' sx={{ mb: 2 }}>
-                Pools
+                Modules
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap:2.5, justifyContent: 'space-between', alignItems: 'center', py: 4}}>
                 <Box>
@@ -558,4 +558,4 @@ const Pools = () => {
     )
 }
 
-export default Pools
+export default Modules

@@ -4,9 +4,9 @@ import { HorizontalNavItemsType } from 'src/@core/layouts/types'
 const navigation = (): HorizontalNavItemsType => {
   return [
     {
-      title: 'Pools',
+      title: 'Modules',
       icon: 'pools',
-      path: '/pools'
+      path: '/modules'
     },
     {
       title: 'Positions',

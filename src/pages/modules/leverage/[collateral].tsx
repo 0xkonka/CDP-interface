@@ -1,40 +1,35 @@
-import { useRouter } from 'next/router';
-
-// MUI imports
-import Box, {BoxProps} from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import Tooltip from '@mui/material/Tooltip'
-import IconButton from '@mui/material/IconButton'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import Grid from '@mui/material/Grid'
-import { styled, Breakpoint } from '@mui/material/styles'
-import InputAdornment from '@mui/material/InputAdornment'
-import Slider from '@mui/material/Slider'
-import Dialog from '@mui/material/Dialog'
-import Slide, { SlideProps } from '@mui/material/Slide'
-import { useTheme, Theme } from '@mui/material/styles'
-
-// ** Styled Component
-import CleaveWrapper from 'src/@core/styles/libs/react-cleave'
-
 // Import from Next
 import Image from 'next/image'
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next/types'
+import { useRouter } from 'next/router';
+
+// Import React Basic Func
+import React, { forwardRef, Ref, ReactElement, useEffect, Fragment, useState } from 'react'
+
+// MUI imports
+import {
+    Box,
+    Typography,
+    Button,
+    Tooltip,
+    IconButton,
+    useMediaQuery,
+    Grid,
+    Slider,
+    Dialog,
+    Slide,
+    useTheme,
+    Theme,
+    SlideProps 
+} from '@mui/material';
 
 // ** Core Components Imports
+import CleaveWrapper from 'src/@core/styles/libs/react-cleave'
 import Icon from 'src/@core/components/icon'
-
-// Import theme basic config
-import CustomTextField from 'src/@core/components/mui/text-field'
 
 // ** CleaveJS Imports
 import Cleave from 'cleave.js/react'
 import 'cleave.js/dist/addons/cleave-phone.us'
 
-// Import React Basic Func
-import React, { forwardRef, Ref, ReactElement, useEffect, Fragment, useState } from 'react'
-import { relative } from 'path';
 
 const labels = [
     {
@@ -79,13 +74,6 @@ const labels = [
     },
 ]
 
-// export const getStaticProps: GetStaticProps = ({ params }: GetStaticPropsContext) => {
-//     return {
-//       props: {
-//         collateral: params?.collateral
-//       }
-//     }
-// }
 const Transition = forwardRef(function Transition(
     props: SlideProps & { children?: ReactElement<any, any> },
     ref: Ref<unknown>
@@ -93,18 +81,14 @@ const Transition = forwardRef(function Transition(
     return <Slide direction='up' ref={ref} {...props} />
 })
 
-const Borrow = () => {
+const Leverage = () => {
   const router = useRouter();
   const theme: Theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [borrowRate, setBorrowRate] = useState(0)
-  const [openSummary, setOpenSummary] = useState<boolean>(false)
-  const handleClickOpenSummary = () => setOpenSummary(true)
-  const handleCloseSummary = () => setOpenSummary(false)
+  const [multiplyRate, setMultiplyRate] = useState(0)
+  const [openAdjust, setOpenAdjust] = useState<boolean>(false)
+  const [openRepay, setOpenRepay] = useState<boolean>(false)
   const { collateral } = router.query
-
-  const [fullWidth, setFullWidth] = useState<boolean>(true)
-  const [maxWidth, setMaxWidth] = useState<Breakpoint>('sm')
 
   const radiusBoxStyle = {
     paddingLeft: isSmallScreen ? 3 : 6,
@@ -122,8 +106,8 @@ const Borrow = () => {
     <Box>
         <Box sx={{display:'flex', alignItems: 'center', width: 'fit-content', cursor: 'pointer', mb:4}} >
             <Icon fontSize='24' icon='basil:arrow-left-outline' style={{color: theme.palette.primary.main}}/>
-            <Typography variant='body1' color='primary' sx={{ml:1}} onClick={()=>{router.push('/pools')}}>
-                Go back to Pools
+            <Typography variant='body1' color='primary' sx={{ml:1}} onClick={()=>{router.push('/modules')}}>
+                Go back to Modules
             </Typography>
         </Box>
         <Box sx={{display:'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4}}>
@@ -131,13 +115,13 @@ const Borrow = () => {
                 {collateral}
             </Typography>
             <Box sx={{borderRadius: '50px', border: 'solid 1px #C6C6C74D'}}>
+                <Button onClick={() => router.push(`/modules/borrow/${collateral}`)} sx={{borderRadius: '50px', px: 6, py: 3.5, fontWeight: 600, color: 'white'}}>Borrow</Button>
                 <Button sx={{borderRadius: '50px', px: 6, py: 3.5, fontWeight: 600, backgroundColor: theme.palette.primary.main, color: '#101617',
                             '&:hover': {
                                 backgroundColor: theme.palette.primary.main
                             }}}>
-                    Borrow
+                    Leverage
                 </Button>
-                <Button onClick={() => router.push(`/pools/leverage/${collateral}`)} sx={{borderRadius: '50px', px: 6, py: 3.5, fontWeight: 600, color: 'white'}}>Leverage</Button>
             </Box>
         </Box>
         <Box sx={{...radiusBoxStyle, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
@@ -202,146 +186,109 @@ const Borrow = () => {
                     </Grid>
                 </Box>
                 <Box sx={radiusBoxStyle}>
-                    <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
-                        trenUSD to Borrow
-                    </Typography>
-                    <Grid container spacing={2}>
-                        <Grid item xs={5}>
-                            <Box sx={{display: 'flex', alignItems: 'center', mb:2}}>
-                                <Image 
-                                    src={`/images/tokens/trenUSD.png`}
-                                    alt='LinkedIn' width={32} height={32}
-                                    style={{ borderRadius: '100%', marginRight: 24 }}
-                                />
-                                <Typography variant='body1'>
-                                    trenUSD
-                                </Typography>
-                            </Box>
-                            <Typography variant='body1' color='#707175'>
-                                Tren Finance USD
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={7}>
-                            <CleaveWrapper>
-                                <Cleave id='tren-usd-amount' 
-                                        placeholder='0.00' 
-                                        options={{ 
-                                            numeral: true,
-                                            numeralThousandsGroupStyle: 'thousand',
-                                            numeralDecimalScale: 2, // Always show two decimal points
-                                            numeralDecimalMark: '.', // Decimal mark is a period
-                                            stripLeadingZeroes: false // Prevents stripping the leading zero before the decimal point
-                                         }} />
-                            </CleaveWrapper>
-                            <Typography variant='body1' sx={{ml:3}}>
-                                $0.0
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Box>
-                <Box sx={{display: 'flex', alignItems: 'center', gap: 4, py: 4}}>
-                    <CustomTextField
-                        sx={{width: 100}}
-                        placeholder='Custom'
-                        value={borrowRate != 0 ? borrowRate : ''}
-                        onChange={(event:React.ChangeEvent<HTMLInputElement>)=>{setBorrowRate(Number(event.target.value))}}
-                    />
+                    <Box sx={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <Typography variant='subtitle1' sx={{fontWeight: 600}}>
+                            Leverage
+                        </Typography>
+                        <Icon fontSize='28' icon='tabler:settings' style={{color: theme.palette.primary.main, cursor: 'pointer'}}/>
+                    </Box>
+                    <Typography variant='subtitle1' color='#707175' sx={{mb: 2}}>Recursive borrowing engine using trenUSD</Typography>
                     <Box sx={{width: '100%'}}>
-                        <Slider aria-labelledby='continuous-slider' 
-                                valueLabelDisplay='on'
-                                value={borrowRate}
-                                valueLabelFormat={(value)=>{return `${value}%`}}
-                                onChange={(event:any)=>{setBorrowRate(event.target.value)}}/>
-                        <Box sx={{display:'flex', justifyContent: 'space-between'}}>
-                            <Typography variant='subtitle2' color='#707175' sx={{mt: '-10px'}}>
-                                0%
+                        <Box sx={{display:'flex', justifyContent: 'flex-end'}}>
+                            <Typography variant='subtitle1' color={theme.palette.primary.main} sx={{mb: '-10px'}}>
+                                Safe
                             </Typography>
-                            <Typography variant='subtitle2' color='#707175' sx={{mt: '-10px'}}>
-                                100%
+                        </Box>
+                        <Slider aria-labelledby='continuous-slider'
+                                value={multiplyRate}
+                                min={0}
+                                max={60}
+                                onChange={(event:any)=>{setMultiplyRate(event.target.value)}}/>
+                        <Box sx={{display:'flex', justifyContent: 'flex-end', mt: -2}}>
+                            <Typography variant='subtitle2' color='white'>
+                                {multiplyRate}x
                             </Typography>
                         </Box>
                     </Box>
                 </Box>
+                <Box sx={{ ...radiusBoxStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Typography variant='subtitle1' sx={{fontWeight: 600}}>
+                        Feature value
+                    </Typography>
+                    <Typography variant='subtitle1'>
+                        0
+                    </Typography>
+                </Box>
             </Grid>
             <Grid item xs={12} md={6} sx={{display: 'flex', flexDirection: 'column'}}>
-                <Box sx={{...radiusBoxStyle, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%'}}>
-                    <Grid container sx={{height: '100%'}}>
-                        <Grid item xs={12} md={6} sx={{
-                             pr: {xs: 0, md: 4},
-                            borderBottom: { xs: 'solid 1px #2D3131', md: 0 },
-                            borderRight: { md: 'solid 1px #2D3131' }
-                        }}>
-                            <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
-                                Deposit
-                            </Typography>
-                            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                                <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                    <Image 
-                                        src={`/images/tokens/${collateral}.png`}
-                                        alt='LinkedIn' width={42} height={42}
-                                        style={{ borderRadius: '100%', marginRight: 10 }}
-                                    />
-                                    {collateral}
+                <Box sx={{...radiusBoxStyle, height: '100%', mb: 10}}>
+                    <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
+                        Leverage
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <Grid container sx={{height: '100%'}}>
+                            <Grid item xs={12} md={6} sx={{
+                                pr: {xs: 0, md: 4},
+                                borderBottom: { xs: 'solid 1px #2D3131', md: 0 },
+                                borderRight: { md: 'solid 1px #2D3131' }
+                            }}>
+                                <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                        <Image 
+                                            src={`/images/tokens/${collateral}.png`}
+                                            alt='LinkedIn' width={42} height={42}
+                                            style={{ borderRadius: '100%', marginRight: 10 }}
+                                        />
+                                        {collateral}
+                                    </Box>
+                                    <Box>
+                                        <Typography variant='subtitle1'>
+                                            20,000.00
+                                        </Typography>
+                                        <Typography variant='subtitle2' sx={{color: '#707175'}}>
+                                            $20,000.00
+                                        </Typography>
+                                    </Box>
                                 </Box>
-                                <Box>
-                                    <Typography variant='subtitle1'>
-                                        20,000.00
-                                    </Typography>
-                                    <Typography variant='subtitle2' sx={{color: '#707175'}}>
-                                        $20,000.00
-                                    </Typography>
+                                <Box sx={{display: 'flex', justifyContent: {xs: 'flex-end', md: 'flex-start'}, mt: { xs: 4, md: 10 }, mb: { xs: 4, md: 0 }}}>
+                                    <Button sx={{ 
+                                        color: 'white',
+                                        borderColor: '#C6E0DC'
+                                    }} variant='outlined' onClick={() => {setOpenAdjust(true)}}>Adjust Leverage</Button>
                                 </Box>
-                            </Box>
-                            <Box sx={{display: 'flex', mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 }}}>
-                                <Button sx={{ 
-                                    mr: {xs: 2, md: 4},
-                                    color: 'white',
-                                    borderColor: '#6795DA'
-                                }} variant='outlined'>Withdraw</Button>
-                                <Button sx={{ 
-                                    color: 'white',
-                                    borderColor: '#67DAB1'
-                                }} variant='outlined'>Deposit more</Button>
-                            </Box>
+                            </Grid>
+                            <Grid item xs={12} md={6} sx={{pl: {xs: 0, md: 4}, pt: {xs: 4, md: 0}}}>
+                                <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                        <Image 
+                                            src={`/images/tokens/trenUSD.png`}
+                                            alt='LinkedIn' width={32} height={32}
+                                            style={{ borderRadius: '100%', marginRight: 10 }}
+                                        />
+                                        trenUSD
+                                    </Box>
+                                    <Box>
+                                        <Typography variant='subtitle1'>
+                                            16,000.00
+                                        </Typography>
+                                        <Typography variant='subtitle2' sx={{color: '#707175'}}>
+                                            $16,000.00
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                                <Box sx={{display: 'flex', justifyContent: 'flex-end', mt: { xs: 4, md: 10 }, mb: { xs: 4, md: 0 }}}>
+                                    <Button sx={{ 
+                                        color: 'white',
+                                        borderColor: '#C9A3FA'
+                                        }} variant='outlined'
+                                        onClick={() => {setOpenRepay(true)}}
+                                    >
+                                        Repay
+                                        </Button>
+                                </Box>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} md={6} sx={{pl: {xs: 0, md: 4}, pt: {xs: 4, md: 0}}}>
-                            <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
-                                Borrow
-                            </Typography>
-                            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                                <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                    <Image 
-                                        src={`/images/tokens/trenUSD.png`}
-                                        alt='LinkedIn' width={32} height={32}
-                                        style={{ borderRadius: '100%', marginRight: 10 }}
-                                    />
-                                    trenUSD
-                                </Box>
-                                <Box>
-                                    <Typography variant='subtitle1'>
-                                        20,000.00
-                                    </Typography>
-                                    <Typography variant='subtitle2' sx={{color: '#707175'}}>
-                                        $20,000.00
-                                    </Typography>
-                                </Box>
-                            </Box>
-                            <Box sx={{display: 'flex', mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 }}}>
-                                <Button sx={{ 
-                                    mr: {xs: 2, md: 4},
-                                    color: 'white',
-                                    borderColor: '#C6E0DC'
-                                }} variant='outlined'>Borrow more</Button>
-                                <Button sx={{ 
-                                    color: 'white',
-                                    borderColor: '#C9A3FA'
-                                }} variant='outlined'>Repay</Button>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                    {/* <Typography variant='body1' color='#707175'>
-                        No open positions
-                    </Typography> */}
+                    </Box>
                 </Box>
                 <Box sx={radiusBoxStyle}>
                     <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
@@ -465,67 +412,90 @@ const Borrow = () => {
                 ml: {xs: 2, sm: 2},
                 color: 'white',
                 minWidth: 250
-            }} variant='outlined' onClick={handleClickOpenSummary}>Approve</Button>
+            }} variant='outlined'>Approve</Button>
         </Box>
+
+        {/* Adjust Leverage Modal Popup */}
         <Fragment>
             <Dialog
-                open={openSummary}
+                open={openAdjust}
                 keepMounted
-                onClose={handleCloseSummary}
+                onClose={() => {setOpenAdjust(false)}}
                 TransitionComponent={Transition}
-                maxWidth={maxWidth}
-                fullWidth={fullWidth}
+                maxWidth='sm'
+                fullWidth={true}
                 aria-labelledby='alert-dialog-slide-title'
                 aria-describedby='alert-dialog-slide-description'
             >
                 <Box sx={{ p: 6, position: 'relative' }}>
-                    <Typography sx={{textAlign: 'center', mb: 8, fontWeight: 600}} variant='h4' color='white'>
-                        Summary
+                    <Typography sx={{textAlign: 'center', mb: 8, fontWeight: 600}} variant='h4'>
+                        Adjust Leverage
                     </Typography>
-                    <Icon style={{position: 'absolute', right: 20, top: 20, cursor: 'pointer', fontWeight: 'bold'}} icon='tabler:x' fontSize='1.75rem' onClick={handleCloseSummary}/>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Collateral Deposited:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0</Typography>
+                    <Icon style={{position: 'absolute', right: 20, top: 20, cursor: 'pointer', fontWeight: 'bold'}} icon='tabler:x' fontSize='1.75rem' onClick={() => {setOpenAdjust(false)}}/>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 1}}>
+                        <Typography>Collateral Deposited:</Typography>
+                        <Typography>0.0</Typography>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Collateral Value:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>$ 0.0</Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 1}}>
+                        <Typography>Collateral Value:</Typography>
+                        <Typography>$ 0.0</Typography>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>trenUSD Borrowed:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0</Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 1}}>
+                        <Typography>trenUSD Borrowed:</Typography>
+                        <Typography>0.0</Typography>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>TVL:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>$ 0.0</Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 1}}>
+                        <Typography>TVL:</Typography>
+                        <Typography>$ 0.0</Typography>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Liquidation Price:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>$ 0.0</Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 1}}>
+                        <Typography>Liquidation Price:</Typography>
+                        <Typography>$ 0.0</Typography>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Interest:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0%</Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 1}}>
+                        <Typography>Interest:</Typography>
+                        <Typography>0.0%</Typography>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Max Collateral Ratio:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0%</Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 1}}>
+                        <Typography>Max Collateral Ratio:</Typography>
+                        <Typography>0.0%</Typography>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Price:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>$ 0.0</Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 1}}>
+                        <Typography>Price:</Typography>
+                        <Typography>$ 0.0</Typography>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Liquidation Fee:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0%</Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 1}}>
+                        <Typography>Liquidation Fee:</Typography>
+                        <Typography>0.0%</Typography>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Borrow Fee:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0</Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 1}}>
+                        <Typography>Borrow Fee:</Typography>
+                        <Typography>0.0</Typography>
                     </Box>
                     <Box sx={{display: 'flex', justifyContent: 'space-between', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>trenUSD Left To Borrow:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0 USD</Typography>
+                        <Typography variant='subtitle1' sx={{fontWeight: 600}}>trenUSD Left To Borrow:</Typography>
+                        <Typography variant='subtitle1' sx={{fontWeight: 600}}>0.0 USD</Typography>
+                    </Box>
+                    
+                    <Box sx={{width: '100%', mt: 6}}>
+                        <Box sx={{display:'flex', justifyContent: 'space-between'}}>
+                            <Typography variant='subtitle1' sx={{fontWeight: 600, mb: '-10px'}}>
+                                Leverage
+                            </Typography>
+                        </Box>
+                        <Typography variant='subtitle1' color={theme.palette.primary.main} sx={{mb: '-10px', textAlign: 'end'}}>
+                            Safe
+                        </Typography>
+                        <Slider aria-labelledby='continuous-slider'
+                                value={multiplyRate}
+                                min={0}
+                                max={60}
+                                onChange={(event:any)=>{setMultiplyRate(event.target.value)}}/>
+                        <Box sx={{display:'flex', justifyContent: 'flex-end', mt: -2}}>
+                            <Typography variant='subtitle2' color='white'>
+                                {multiplyRate}X
+                            </Typography>
+                        </Box>
                     </Box>
                     <Box sx={{display: 'flex', justifyContent: 'center', mt: 8}}>
                         <Button sx={{ 
@@ -534,15 +504,59 @@ const Borrow = () => {
                             px: 20,
                             minWidth: 200,
                             fontSize: 18
-                        }} variant='outlined' onClick={handleCloseSummary}>
-                            Add collateral & borrow
+                        }} variant='outlined' onClick={() => {setOpenAdjust(false)}}>
+                            Confirm
                         </Button>
                     </Box>
                 </Box>
             </Dialog>
         </Fragment>
+        {/* End Adjust Leverage Modal Popup */}
+
+        {/* Repay Modal Popup */}
+        <Fragment>
+            <Dialog
+                open={openRepay}
+                keepMounted
+                onClose={() => {setOpenRepay(false)}}
+                TransitionComponent={Transition}
+                maxWidth='sm'
+                fullWidth={true}
+                aria-labelledby='alert-dialog-slide-title'
+                aria-describedby='alert-dialog-slide-description'
+            >
+                <Box sx={{ p: 6, position: 'relative' }}>
+                    <Typography sx={{textAlign: 'center', mb: 8, fontWeight: 600}} variant='h4'>
+                        Repay
+                    </Typography>
+                    <Icon style={{position: 'absolute', right: 20, top: 20, cursor: 'pointer', fontWeight: 'bold'}} icon='tabler:x' fontSize='1.75rem' onClick={() => {setOpenRepay(false)}}/>
+                    <Typography sx={{textAlign: 'center', maxWidth: 490, m: 'auto'}}>
+                        Here we will have a short text.Here we will have a short text.Here we will have a short text.Here we will have a short text.Here we will have a short text.
+                    </Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'center', gap: 4, mt: { xs: 4, md: 10 }, mb: { xs: 4, md: 0 }}}>
+                        <Button sx={{ 
+                            color: 'white',
+                            fontSize: 18,
+                            borderColor: '#C9A3FA'
+                            }} variant='outlined'
+                        >
+                            Repay
+                        </Button>
+                        <Button sx={{ 
+                            color: 'white',
+                            fontSize: 18,
+                            borderColor: '#C6E0DC'
+                            }} variant='outlined'
+                        >
+                            Close Position
+                        </Button>
+                    </Box>
+                </Box>
+            </Dialog>
+        </Fragment>
+        {/* End Repay Modal */}
     </Box>
   );
 };
 
-export default Borrow;
+export default Leverage;
