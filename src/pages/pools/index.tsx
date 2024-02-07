@@ -453,11 +453,10 @@ const Pools = () => {
 
     const handleBorrowClick = (row:any) => {
         router.push(`/pools/borrow/${row.collateral}`)
-        // router.push(`/edit/${row.id}`);
     }
     
     const handleLeverageClick = (row:any) => {
-        console.log('Leverage Clicked: ', row)
+        router.push(`/pools/leverage/${row.collateral}`)
     }
 
     const filterRows = () => {
