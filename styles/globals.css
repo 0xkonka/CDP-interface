@@ -8,13 +8,13 @@ body {
   font-family: 'Work Sans', sans-serif;
 }
 
-::-webkit-scrollbar {
+body::-webkit-scrollbar {
   width: 6px;
 }
-::-webkit-scrollbar-track {
+body::-webkit-scrollbar-track {
   background: transparent;
 }
-::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
   background-color: #67DAB1;
   border-radius: 20px;
 }
