@@ -71,7 +71,7 @@ const MultiSelectDropdown = (props : MultiSelectDropdownProps) => {
               padding: 0,
               borderBottom: index != availableFilters.length - 1 ? 'solid 1px #2D3131' : '',
               borderRadius: 0,
-          }}>
+          }} key={index}>
             <Checkbox
               id={getIDFormat(filter)}
               checked={selectedOptions.includes(filter)}
