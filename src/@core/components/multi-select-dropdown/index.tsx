@@ -5,6 +5,7 @@ import React from 'react';
 import {
     Menu, MenuItem, Checkbox, Box, InputLabel, Typography, Button
 } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel'
 
 // Import from core components
 import Icon from 'src/@core/components/icon'
@@ -46,7 +47,7 @@ const MultiSelectDropdown = (props : MultiSelectDropdownProps) => {
               minWidth: '260px', borderRadius: 1, cursor: 'pointer',
               border: (theme) => `solid 1px ${anchorEl ? theme.palette.primary.main : '#2D3131'}`}}>
           <Typography variant='h6'>
-              Filter by {selectedOptions.join(', ')}
+              Sort by {selectedOptions.join(', ')}
           </Typography>
           {
             anchorEl ? 
@@ -65,19 +66,19 @@ const MultiSelectDropdown = (props : MultiSelectDropdownProps) => {
           }
         }}
       >
+       
         {availableFilters.map((filter:string, index:number) => (
           <MenuItem sx={{
-              margin: 0,
               padding: 0,
               borderBottom: index != availableFilters.length - 1 ? 'solid 1px #2D3131' : '',
               borderRadius: 0,
           }} key={index}>
-            <Checkbox
-              id={getIDFormat(filter)}
-              checked={selectedOptions.includes(filter)}
-              onChange={() => handleOptionClick(filter)}
-            />
-            <InputLabel sx={{width: '100%'}} htmlFor={getIDFormat(filter)}>{filter}</InputLabel>
+            <FormControlLabel label={filter} control={
+              <Checkbox id={getIDFormat(filter)} name='filterByType'
+                checked={selectedOptions.includes(filter)}
+                onChange={() => handleOptionClick(filter)}
+              />
+            }  sx={{ width: '100%' }}/>
           </MenuItem>
         ))}
         <Box sx={{px: 2, pt: 4}}>
