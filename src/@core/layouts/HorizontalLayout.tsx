@@ -129,7 +129,10 @@ const HorizontalLayout = (props: LayoutProps) => {
               className='navbar-content-container'
               sx={{
                 mx: 'auto',
-                ...(contentWidth === 'boxed' && { '@media (min-width:1440px)': { maxWidth: 1440 } }),
+                ...(contentWidth === 'boxed' && { 
+                  '@media (min-width:1440px)': { maxWidth: 1440 },
+                  '@media (min-width:1680px)': { maxWidth: 1680 } 
+                }),
                 minHeight: theme => `${(theme.mixins.toolbar.minHeight as number) - 2}px !important`
               }}
             >
@@ -152,8 +155,9 @@ const HorizontalLayout = (props: LayoutProps) => {
             ...(contentHeightFixed && { display: 'flex', overflow: 'hidden' }),
             ...(contentWidth === 'boxed' && {
               mx: 'auto',
+              '@media (min-width:1200px)': { maxWidth: '100%' },
               '@media (min-width:1440px)': { maxWidth: 1440 },
-              '@media (min-width:1200px)': { maxWidth: '100%' }
+              '@media (min-width:1680px)': { maxWidth: 1680 },
             })
           }}
         >

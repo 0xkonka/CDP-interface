@@ -1,42 +1,36 @@
 import { useRouter } from 'next/router';
 
-import { Typography } from '@mui/material'
-import Box from '@mui/material/Box'
-import { styled } from '@mui/material/styles'
-import Button, {ButtonProps} from '@mui/material/Button'
-import InputAdornment from '@mui/material/InputAdornment'
-import Switch from '@mui/material/Switch'
-import Grid from '@mui/material/Grid'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { useTheme, Theme } from '@mui/material/styles';
-import Stack from '@mui/material/Stack'
+import { 
+    Typography,
+    Button, ButtonProps,
+    Box,
+    InputAdornment,
+    Switch,
+    Stack,
+    // methods
+    styled,
+    useTheme, Theme,
+    useMediaQuery
+ } from '@mui/material'
 
-// Import from Next
-import Image from 'next/image'
-
-// ** Icon Imports
+// ** Core Components Import
 import Icon from 'src/@core/components/icon'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import MultiSelectDropdown from 'src/@core/components/multi-select-dropdown'
 import CustomChip from 'src/@core/components/mui/chip'
 
+// Import Basic React
 import React, { useEffect, useState } from 'react'
 
-// Define Pool Type
-interface Pool {
-    id: number
-    asset: string
-    type: string
-    borrowAPY: number
-    maxLeverage: number
-    LTVRatio: number
-    maxDepositAPY: number
-    baseDepositAPY: number
-    active?: boolean
-}
+// ** Types
+import { CollateralType } from 'src/types/collateral/types'
+
+// Import Subviews
+import HeaderInfo from 'src/pages/modules/headerInfo'
+import CollateralRow from 'src/pages/modules/collateralRow'
 
 // Static rows data
-const initialRows: Pool[] = [
+const initialRows: CollateralType[] = [
     {
         id: 1,
         asset: 'PEPE',
@@ -180,7 +174,7 @@ const ToogleOffButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }))
   
 const Modules = () => {
-    const [rows, setRows] = useState<Pool[]>(initialRows)
+    const [rows, setRows] = useState<CollateralType[]>(initialRows)
     const [filterText, setFilterText] = useState<string>('')
     const [filterOnlyActive, setFilterOnlyActive] = useState<boolean>(false)
     const [assetFilter, setAssetFilter] = useState<string>('All')
@@ -189,31 +183,6 @@ const Modules = () => {
     const assetTypes:string[] = ['All', 'LRT', 'LST', 'RWA', 'LP Token', 'Vault', 'PT Token', 'Meme', 'Volatile', 'Stable']
     const theme: Theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
-
-    const getChipTheme = (label: string) => {
-        switch(label) {
-            case 'LRT':
-                return 'secondary';
-            case 'LST':
-                return 'secondary';
-            case 'RWA':
-                return 'error';
-            case 'LP Token':
-                return 'primary';
-            case 'Vault':
-                return 'info';
-            case 'PT Tokens':
-                return 'secondary';
-            case 'Meme':
-                return 'secondary';
-            case 'Volatile':
-                return 'warning';
-            case 'Stable':
-                return 'success';
-            default:
-                return 'secondary';
-        }
-    }
 
     useEffect(() => {
         console.log(filterText)
@@ -244,49 +213,7 @@ const Modules = () => {
 
     return (
         <Box>
-            <Typography variant='h1' sx={{ mb: 8, fontSize: {xs:36, md: 64, xl: 72} }}>
-                Isolated Modules
-            </Typography>
-            <Typography variant='h5' sx={{ mb: 16, fontWeight: 300, width: 730, maxWidth: '100%' }}>
-                Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop 
-                your assets in one click to leverage exposure for your spot assets. Pay back your loan 
-                later using trenUSD or your collateral.
-            </Typography>
-            {/* Total Info Group Seection */}
-            <Box id="total-info" sx={{display: 'flex', mb: 12, justifyContent: 'space-between', flexWrap: 'wrap', gap: {xs: 8, md: 16}}}>
-                <Box sx={{display: 'flex', flexWrap: 'wrap', gap: {xs: 8, md: 16}}}>
-                    <Box>
-                        <Typography variant='subtitle1' color='#C6C6C7'>Total Collateral</Typography>
-                        <Typography variant='h4'>$200,000.00</Typography>
-                    </Box>
-                    <Box>
-                        <Typography variant='subtitle1' color='#C6C6C7'>Total Debts</Typography>
-                        <Typography variant='h4'>$ 50,000.00</Typography>
-                    </Box>
-                    <Box>
-                        <Typography variant='subtitle1' color='#C6C6C7'>Net Worth</Typography>
-                        <Typography variant='h4'>$ 150,000.00</Typography>
-                    </Box>
-                </Box>
-                <Box sx={{display: 'flex', alignItems: 'center', border: 'solid 1px #2D3131', borderRadius: 2.5, px: {xs: 4, md: 8}, py: {xs: 2, md: 4}, gap: 4.5}}>
-                    <Typography variant='subtitle1' color='#C6C6C7'>TVL</Typography>
-                    <Typography variant='h5' style={{fontWeight: 600}}>$ 100.5m</Typography>
-                    <Box sx={{height: '100%',borderLeft: 'solid 1px #2B3440'}}></Box>
-                    <Typography variant='h5' color='primary' sx={{fontWeight: 400, cursor: 'pointer'}}>
-                        Analytics
-                        <svg style={{marginLeft: 4}} xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <g clipPath="url(#clip0_719_13657)">
-                            <path d="M11.625 0.75V4.125C11.625 4.33228 11.4573 4.5 11.25 4.5C11.0427 4.5 10.875 4.33228 10.875 4.125V1.65525L5.51512 7.01513C5.44191 7.08834 5.34591 7.125 5.25 7.125C5.15409 7.125 5.05809 7.08834 4.98488 7.01513C4.95003 6.98032 4.92239 6.93899 4.90353 6.8935C4.88467 6.84801 4.87496 6.79925 4.87496 6.75C4.87496 6.70075 4.88467 6.65199 4.90353 6.6065C4.92239 6.56101 4.95003 6.51968 4.98488 6.48487L10.3448 1.125H7.875C7.66772 1.125 7.5 0.957281 7.5 0.75C7.5 0.542719 7.66772 0.375 7.875 0.375H11.25C11.4573 0.375 11.625 0.542719 11.625 0.75ZM10.125 10.5V6C10.125 5.79272 9.95728 5.625 9.75 5.625C9.54272 5.625 9.375 5.79272 9.375 6V10.5C9.375 10.7069 9.20691 10.875 9 10.875H1.5C1.29309 10.875 1.125 10.7069 1.125 10.5V3C1.125 2.79309 1.29309 2.625 1.5 2.625H6C6.20728 2.625 6.375 2.45728 6.375 2.25C6.375 2.04272 6.20728 1.875 6 1.875H1.5C0.879656 1.875 0.375 2.37966 0.375 3V10.5C0.375 11.1203 0.879656 11.625 1.5 11.625H9C9.62034 11.625 10.125 11.1203 10.125 10.5Z" fill="#67DAB1"/>
-                        </g>
-                        <defs>
-                            <clipPath id="clip0_719_13657">
-                            <rect width="12" height="12" fill="white"/>
-                            </clipPath>
-                        </defs>
-                        </svg>
-                    </Typography>
-                </Box>
-            </Box>
+            <HeaderInfo/>
             {/* Search and Multi Select Filter Section */}
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap:2.5, justifyContent: 'space-between', alignItems: 'center', pb: 8}}>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 4 }}>
@@ -304,9 +231,9 @@ const Modules = () => {
                         onChange={handleFilterChange}
                         placeholder='Search....'
                     />
-                    <MultiSelectDropdown 
+                    {/* <MultiSelectDropdown 
                         availableFilters = {['LP Token', 'Volatile', 'Vault', 'RWA', 'Stable', 'Trades']}
-                    />
+                    /> */}
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant='h6' sx={{ fontWeight: 400, mt: 1 }}>
@@ -316,7 +243,7 @@ const Modules = () => {
                 </Box>
             </Box>
             {/* Token Types Buttons Section */}
-            <Box sx={{display: 'flex', gap: 4, overflowX: 'auto', pb: 8}}>
+            <Box sx={{display: 'flex', gap: 4, overflowX: 'auto', pb: 2}}>
                 {
                     assetTypes.map((value, index) => {
                         return value == assetFilter ? 
@@ -331,7 +258,9 @@ const Modules = () => {
             </Box>
             
             {/* Sort By Columns Header */}
-            <Stack direction='row' sx={{px: 3, py: 2}}>
+            <Stack direction='row' sx={{px: 6, pt: 2, display: {
+                xs: 'none', lg: 'flex'
+            }}}>
                 <Stack sx={{flex: '2 1 0%', alignItems: 'center', cursor: 'pointer'}} direction='row'>
                     Asset
                     <svg style={{marginLeft: 8}} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -362,62 +291,9 @@ const Modules = () => {
                 </Stack>
             </Stack>
             {/* Collateral Group Stack*/}
-            <Stack>
+            <Stack sx={{mt: 4}}>
                 {rows.map((row, index) => (
-                    <Stack key={index} direction='row' sx={{p: 3, alignItems: 'center', borderRadius:2, border: 'solid 1px transparent', 
-                        '& .arrow-right': {
-                            display: 'none'
-                        },
-                        '&:hover': {
-                            borderColor: theme.palette.primary.main,
-                            '& .active-open': {
-                                color: theme.palette.primary.main,
-                                '& .arrow-diagonal': {
-                                    display: 'none'
-                                },
-                                '& .arrow-right': {
-                                    display: 'block'
-                                }
-                            },
-                        },
-                    }}>
-                        <Stack direction='row' sx={{flex: '2 1 0%', alignItems: 'center'}}>
-                            <img 
-                                src={`/images/tokens/${row.asset.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
-                                alt={row.asset} width={32} height={32}
-                                style={{ width: 'auto' }}
-                            />
-                            <Typography variant='h5' sx={{fontWeight: 400, ml: 2}}>{row.asset}</Typography>
-                            <CustomChip label={row.type} skin='light' color={getChipTheme(row.type)} style={{marginLeft: 16}}/>
-                        </Stack>
-                        <Stack direction='row' sx={{flex: '1 1 0%'}}>
-                            <Typography variant='h5' sx={{fontWeight: 400}}>{row.borrowAPY}%</Typography>
-                        </Stack>
-                        <Stack direction='row' sx={{flex: '1 1 0%', alignItems: 'center'}}>
-                            <Typography variant='h5' sx={{fontWeight: 400}}>{row.maxLeverage}x&nbsp;</Typography>
-                            <Typography variant='subtitle1' color='#98999D'>{row.LTVRatio}% LTV</Typography>
-                        </Stack>
-                        <Stack direction='row' sx={{flex: '1.25 1 0%', alignItems: 'center'}}>
-                            <Typography variant='h5' sx={{fontWeight: 400}} color='primary'>{row.maxDepositAPY}%&nbsp;</Typography>
-                            <Icon icon='bi:fire' color={theme.palette.primary.main} fontSize={18}/>
-                            <Typography variant='subtitle1' color='#98999D' sx={{display: 'flex', alignItems: 'center'}}>
-                                &nbsp;(Base&nbsp;
-                                    <Icon icon='mi:circle-information' fontSize={18}/>
-                                &nbsp;: {row.baseDepositAPY}%)
-                            </Typography>
-                        </Stack>
-                        <Stack direction='row' sx={{flex: '1.25 1 0%', justifyContent:'space-between', alignItems: 'center'}}>
-                            <Stack direction='row' sx={{cursor: 'pointer'}} className='active-open'>
-                                Open
-                                <Icon style={{marginLeft: 4}} icon='eva:diagonal-arrow-right-up-outline' className='arrow-diagonal'/>
-                                <Icon style={{marginLeft: 4}} icon='ph:arrow-right' className='arrow-right'/>
-                            </Stack>
-                            <Box>
-                                <Typography color='primary'>{row.active ? 'Active' : ''}</Typography>
-                            </Box>
-                            <Icon icon='solar:alt-arrow-down-outline' style={{cursor: 'pointer'}}/>
-                        </Stack>
-                    </Stack>
+                    <CollateralRow row={row} index={index}/>
                 ))}
             </Stack>
         </Box>
