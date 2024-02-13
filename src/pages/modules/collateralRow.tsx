@@ -29,7 +29,7 @@ interface TableHeaderProps {
     row: CollateralType
 }
   
-const collateralRow = (props: TableHeaderProps) => {
+const CollateralRow = (props: TableHeaderProps) => {
     const {index, row} = props
     const [open, setOpen] = React.useState(false)
     const theme: Theme = useTheme()
@@ -412,4 +412,4 @@ const collateralRow = (props: TableHeaderProps) => {
         </Stack>
     )
 }
-export default collateralRow
+export default CollateralRow
