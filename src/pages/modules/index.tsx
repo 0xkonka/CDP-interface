@@ -293,7 +293,7 @@ const Modules = () => {
             {/* Collateral Group Stack*/}
             <Stack sx={{mt: 4}}>
                 {rows.map((row, index) => (
-                    <CollateralRow row={row} index={index}/>
+                    <CollateralRow row={row} index={index} key={index}/>
                 ))}
             </Stack>
         </Box>

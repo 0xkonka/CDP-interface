@@ -62,7 +62,7 @@ const CollateralRow = (props: TableHeaderProps) => {
     }
 
     return (
-        <Stack key={index} sx={{p: {xs: 3, md: 6}, borderRadius: isMediumScreen ? 0 : 2, border: `solid 1px ${open ? theme.palette.primary.main : isMediumScreen ? '#A8AAAE5C' : 'transparent'}`, 
+        <Stack sx={{p: {xs: 3, md: 6}, borderRadius: isMediumScreen ? 0 : 2, border: `solid 1px ${open ? theme.palette.primary.main : isMediumScreen ? '#A8AAAE5C' : 'transparent'}`, 
             '& .active-open': {
                 color: theme.palette.primary.main,
                 '& .arrow-diagonal': {
