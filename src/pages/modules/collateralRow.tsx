@@ -36,6 +36,11 @@ const CollateralRow = (props: TableHeaderProps) => {
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
 
+    if (!row || typeof row.asset === 'undefined') {
+        console.error('CollateralRow component received undefined "row" or "row.asset" property.');
+        return <div>Missing data</div>; // You can customize this message or behavior as needed.
+    }
+
     const getChipTheme = (label: string) => {
         switch(label) {
             case 'LRT':
