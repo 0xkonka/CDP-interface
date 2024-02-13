@@ -32,7 +32,6 @@ interface TableHeaderProps {
   
 const CollateralRow = (props: TableHeaderProps) => {
     const {isOpen, row, onToogle} = props
-    // const [open, setOpen] = React.useState(false)
     const theme: Theme = useTheme()
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
@@ -116,7 +115,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                 </Stack>
                 <Stack direction='row' sx={{mt: 2}}>
                     <Stack direction='row' sx={{flex: '1 1 0%', cursor: 'pointer'}} className={clsx('active-hover', {
-                        'active-open': open
+                        'active-open': isOpen
                     })}>
                         Open
                         <Icon style={{marginLeft: 4}} icon='eva:diagonal-arrow-right-up-outline' className='arrow-diagonal'/>
@@ -191,7 +190,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                 </Stack>
                 <Stack direction='row' sx={{flex: '1.25 1 0%', justifyContent:'space-between', alignItems: 'center'}}>
                     <Stack direction='row' sx={{cursor: 'pointer'}} className={clsx('active-hover', {
-                        'active-open': open
+                        'active-open': isOpen
                     })}>
                         Open
                         <Icon style={{marginLeft: 4}} icon='eva:diagonal-arrow-right-up-outline' className='arrow-diagonal'/>
