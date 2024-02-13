@@ -25,20 +25,21 @@ import clsx from 'clsx'
 
 // Define Props
 interface TableHeaderProps {
-    index: number,
+    isOpen: boolean,
     row: CollateralType
+    onToogle: () => void;
 }
   
 const CollateralRow = (props: TableHeaderProps) => {
-    const {index, row} = props
-    const [open, setOpen] = React.useState(false)
+    const {isOpen, row, onToogle} = props
+    // const [open, setOpen] = React.useState(false)
     const theme: Theme = useTheme()
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
 
     if (!row || typeof row.asset === 'undefined') {
         console.error('CollateralRow component received undefined "row" or "row.asset" property.');
-        
+
         return <div>Missing data</div>; // You can customize this message or behavior as needed.
     }
 
@@ -68,7 +69,7 @@ const CollateralRow = (props: TableHeaderProps) => {
     }
 
     return (
-        <Stack sx={{p: {xs: 3, md: 6}, borderRadius: isMediumScreen ? 0 : 2, border: `solid 1px ${open ? theme.palette.primary.main : isMediumScreen ? '#A8AAAE5C' : 'transparent'}`, 
+        <Stack sx={{p: {xs: 3, md: 6}, borderRadius: isMediumScreen ? 0 : 2, border: `solid 1px ${isOpen ? theme.palette.primary.main : isMediumScreen ? '#A8AAAE5C' : 'transparent'}`, 
             '& .active-open': {
                 color: theme.palette.primary.main,
                 '& .arrow-diagonal': {
@@ -107,10 +108,9 @@ const CollateralRow = (props: TableHeaderProps) => {
                         <CustomChip label={row.type} skin='light' color={getChipTheme(row.type)} style={{marginLeft: 16}}/>
                     </Stack>
                     <Stack direction='row' sx={{justifyContent:'space-between', alignItems: 'center'}}>
-                       
                         {
-                            open ? <Icon icon='solar:alt-arrow-up-outline' color={theme.palette.primary.main} style={{cursor: 'pointer'}} onClick={() => {setOpen(false)}}/> :
-                                    <Icon icon='solar:alt-arrow-down-outline' style={{cursor: 'pointer'}} onClick={() => {setOpen(true)}}/>
+                            isOpen ? <Icon icon='solar:alt-arrow-up-outline' color={theme.palette.primary.main} style={{cursor: 'pointer'}} onClick={onToogle}/> :
+                                    <Icon icon='solar:alt-arrow-down-outline' style={{cursor: 'pointer'}} onClick={onToogle}/>
                         }
                     </Stack>
                 </Stack>
@@ -201,15 +201,15 @@ const CollateralRow = (props: TableHeaderProps) => {
                         <Typography color='primary'>{row.active ? 'Active' : ''}</Typography>
                     </Box>
                     {
-                        open ? <Icon icon='solar:alt-arrow-up-outline' color={theme.palette.primary.main} style={{cursor: 'pointer'}} onClick={() => {setOpen(false)}}/> :
-                                <Icon icon='solar:alt-arrow-down-outline' style={{cursor: 'pointer'}} onClick={() => {setOpen(true)}}/>
+                        isOpen ? <Icon icon='solar:alt-arrow-up-outline' color={theme.palette.primary.main} style={{cursor: 'pointer'}} onClick={onToogle}/> :
+                                <Icon icon='solar:alt-arrow-down-outline' style={{cursor: 'pointer'}} onClick={onToogle}/>
                     }
                 </Stack>
             </Stack>
             )}
             
              {/* Collapsible Content */}
-            <Collapse in={open}>
+            <Collapse in={isOpen}>
                 <Box sx={{
                     mt: 4, 
                     borderTop: 'solid 1px #36373D',

@@ -178,11 +178,16 @@ const Modules = () => {
     const [filterText, setFilterText] = useState<string>('')
     const [filterOnlyActive, setFilterOnlyActive] = useState<boolean>(false)
     const [assetFilter, setAssetFilter] = useState<string>('All')
+    const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
     const router = useRouter()
 
     const assetTypes:string[] = ['All', 'LRT', 'LST', 'RWA', 'LP Token', 'Vault', 'PT Token', 'Meme', 'Volatile', 'Stable']
     const theme: Theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
+
+    const handleRowClick = (index: number) => {
+        setOpenRowIndex(openRowIndex === index ? -1 : index);
+    }
 
     useEffect(() => {
         console.log(filterText)
@@ -293,7 +298,7 @@ const Modules = () => {
             {/* Collateral Group Stack*/}
             <Stack sx={{mt: 4}}>
                 {rows.map((row, index) => (
-                    <CollateralRow row={row} index={index} key={index}/>
+                    <CollateralRow row={row} onToogle={() => handleRowClick(index)} isOpen={openRowIndex === index} key={index}/>
                 ))}
             </Stack>
         </Box>
