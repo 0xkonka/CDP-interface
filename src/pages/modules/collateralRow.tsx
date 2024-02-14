@@ -66,6 +66,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                 return 'secondary';
         }
     }
+    
     return (
         <Stack sx={{p: {xs: 3, sm: 6}, borderRadius:  2, border: `solid 1px ${isOpen ? theme.palette.primary.main : 'transparent'}`, 
             '& .active-open': {
