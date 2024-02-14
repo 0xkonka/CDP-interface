@@ -1,16 +1,22 @@
 // MUI components import
 import {
     Box,
-    Typography
+    Typography,
+    Theme,
+    useTheme,
+    useMediaQuery
 } from '@mui/material'
 
 const HeaderInfo = () => {
+    const theme: Theme = useTheme()
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
+
     return (
         <Box>
-            <Typography variant='h1' sx={{ mb: 8, fontSize: {xs:36, md: 64, xl: 72} }}>
+            <Typography variant='h1' sx={{ mb: {xs: 2, md: 8}, fontSize: {xs:36, md: 64, xl: 72} }}>
                 Isolated Modules
             </Typography>
-            <Typography variant='h5' sx={{ mb: 16, fontWeight: 300, width: 730, maxWidth: '100%' }}>
+            <Typography variant='h5' color='#F3F3F3' sx={{ mb: {xs: 8, md: 16}, fontWeight: 300, width: 730, maxWidth: '100%' }}>
                 Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop 
                 your assets in one click to leverage exposure for your spot assets. Pay back your loan 
                 later using trenUSD or your collateral.
@@ -19,19 +25,19 @@ const HeaderInfo = () => {
             <Box id="total-info" sx={{display: 'flex', mb: 12, justifyContent: 'space-between', flexWrap: 'wrap', gap: {xs: 8, md: 16}}}>
                 <Box sx={{display: 'flex', flexWrap: 'wrap', gap: {xs: 8, md: 16}}}>
                     <Box>
-                        <Typography variant='subtitle1' color='#C6C6C7'>Total Collateral</Typography>
-                        <Typography variant='h4'>$200,000.00</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#C6C6C7'>Total Collateral</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'}>$200,000.00</Typography>
                     </Box>
                     <Box>
-                        <Typography variant='subtitle1' color='#C6C6C7'>Total Debts</Typography>
-                        <Typography variant='h4'>$ 50,000.00</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#C6C6C7'>Total Debts</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'}>$ 50,000.00</Typography>
                     </Box>
                     <Box>
-                        <Typography variant='subtitle1' color='#C6C6C7'>Net Worth</Typography>
-                        <Typography variant='h4'>$ 150,000.00</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#C6C6C7'>Net Worth</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'}>$ 150,000.00</Typography>
                     </Box>
                 </Box>
-                <Box sx={{display: 'flex', alignItems: 'center', border: 'solid 1px #2D3131', borderRadius: 2.5, px: {xs: 4, md: 8}, py: {xs: 2, md: 4}, gap: 4.5}}>
+                <Box sx={{display: 'flex', width: {xs: 1, md: 'auto'}, justifyContent: 'center', alignItems: 'center', border: 'solid 1px #2D3131', borderRadius: 2.5, px: {xs: 4, md: 8}, py: {xs: 2, md: 4}, gap: 4.5}}>
                     <Typography variant='subtitle1' color='#C6C6C7'>TVL</Typography>
                     <Typography variant='h5' style={{fontWeight: 600}}>$ 100.5m</Typography>
                     <Box sx={{height: '100%',borderLeft: 'solid 1px #2B3440'}}></Box>

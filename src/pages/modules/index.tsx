@@ -184,6 +184,7 @@ const Modules = () => {
     const assetTypes:string[] = ['All', 'LRT', 'LST', 'RWA', 'LP Token', 'Vault', 'PT Token', 'Meme', 'Volatile', 'Stable']
     const theme: Theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
+    const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
 
     const handleRowClick = (index: number) => {
         setOpenRowIndex(openRowIndex === index ? -1 : index);
@@ -220,8 +221,8 @@ const Modules = () => {
         <Box>
             <HeaderInfo/>
             {/* Search and Multi Select Filter Section */}
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap:2.5, justifyContent: 'space-between', alignItems: 'center', pb: 8}}>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 4 }}>
+            <Stack direction='row' sx={{ flexWrap: 'wrap', gap:2.5, justifyContent: 'space-between', alignItems: 'center', pb: 8}}>
+                <Stack direction='row' sx={{ flexWrap: 'wrap', alignItems: 'center', gap: 4, order: {xs: 1, md: 0} }}>
                     <CustomTextField
                         label=''
                         id='input-with-icon-textfield'
@@ -239,14 +240,14 @@ const Modules = () => {
                     {/* <MultiSelectDropdown 
                         availableFilters = {['LP Token', 'Volatile', 'Vault', 'RWA', 'Stable', 'Trades']}
                     /> */}
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                </Stack>
+                <Stack direction='row' sx={{ width: {xs: 1, md: 'auto'}, justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant='h6' sx={{ fontWeight: 400, mt: 1 }}>
                         Open Positions Only
                     </Typography>
                     <Switch checked={filterOnlyActive} onChange={handleSwitchChange} />
-                </Box>
-            </Box>
+                </Stack>
+            </Stack>
             {/* Token Types Buttons Section */}
             <Box sx={{display: 'flex', gap: 4, overflowX: 'auto', pb: 2}}>
                 {
@@ -296,7 +297,7 @@ const Modules = () => {
                 </Stack>
             </Stack>
             {/* Collateral Group Stack*/}
-            <Stack sx={{mt: 4}}>
+            <Stack sx={{mt: 4}} gap={isMediumScreen ? 5 : 0}>
                 {rows.map((row, index) => (
                     <CollateralRow row={row} onToogle={() => handleRowClick(index)} isOpen={openRowIndex === index} key={index}/>
                 ))}
