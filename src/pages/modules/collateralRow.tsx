@@ -6,6 +6,7 @@ import {
     Typography,
     Collapse,
     Grid,
+    Link,
     Button,
     useMediaQuery
 } from '@mui/material'
@@ -66,7 +67,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                 return 'secondary';
         }
     }
-    
+
     return (
         <Stack sx={{p: {xs: 3, sm: 6}, borderRadius:  2, border: `solid 1px ${isOpen ? theme.palette.primary.main : 'transparent'}`, 
             '& .active-open': {
@@ -186,13 +187,17 @@ const CollateralRow = (props: TableHeaderProps) => {
                     </Typography>
                 </Stack>
                 <Stack direction='row' sx={{flex: '1.25 1 0%', justifyContent:'space-between', alignItems: 'center'}}>
-                    <Stack direction='row' sx={{cursor: 'pointer'}} className={clsx('active-hover', {
-                        'active-open': isOpen
-                    })}>
-                        Open
-                        <Icon style={{marginLeft: 4}} icon='eva:diagonal-arrow-right-up-outline' className='arrow-diagonal'/>
-                        <Icon style={{marginLeft: 4}} icon='ph:arrow-right' className='arrow-right'/>
-                    </Stack>
+                    <Link href={`/modules/borrow/${row.asset}`}>
+                        <Stack direction='row' sx={{cursor: 'pointer'}} className={clsx('active-hover', {
+                            'active-open': isOpen
+                        })}>
+                            
+                                Open
+                                <Icon style={{marginLeft: 4}} icon='eva:diagonal-arrow-right-up-outline' className='arrow-diagonal'/>
+                                <Icon style={{marginLeft: 4}} icon='ph:arrow-right' className='arrow-right'/>
+                        </Stack>
+                    </Link>
+
                     <Box>
                         <Typography color='primary'>{row.active ? 'Active' : ''}</Typography>
                     </Box>
@@ -592,7 +597,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                 </Grid>
             </Collapse>
             <Stack direction='row' sx={{mt: 6, display: {xs: 'flex' , lg: 'none'}}}>
-                <Button color={isOpen ? 'primary' : 'secondary'} sx={{ 
+                <Button href={`/modules/borrow/${row.asset}`} color={isOpen ? 'primary' : 'secondary'} sx={{ 
                         minWidth: isSmallScreen ? 1 : 160
                     }} 
                     variant='outlined'
