@@ -227,7 +227,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                             <Stack direction='row' sx={{justifyContent: 'space-between', alignItems: 'center'}} >
                                 <Typography variant='subtitle1' color='#D4D4D4'>Platform</Typography>
                                 <Stack direction='row'>
-                                    <img width={26} src='/images/platforms/uniswap.png'/>
+                                    <img width={26} src='/images/platforms/uniswap.png' alt='Platform'/>
                                     <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} fontWeight={400}>Uniswap V3</Typography>
                                 </Stack>
                             </Stack>
