@@ -201,23 +201,27 @@ const Modules = () => {
 
         setRows((rows) => {
             if(direction == '+') {
-                console.log('asending')
+                
                 return rows.sort((a, b) => {
                     if (a[sortKey] > b[sortKey]) {
+                        
                         return -1;
                     }
                     if (a[sortKey] < b[sortKey]) {
+
                         return 1;
                     }
                     return 0;
                 });
             } else {
-                console.log('desending')
+                
                 return rows.sort((a, b) => {
                     if (a[sortKey] < b[sortKey]) {
+
                         return -1;
                     }
                     if (a[sortKey] > b[sortKey]) {
+
                         return 1;
                     }
                     return 0;
