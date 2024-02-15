@@ -204,28 +204,22 @@ const Modules = () => {
                 
                 return rows.sort((a, b) => {
                     if (a[sortKey] > b[sortKey]) {
-
                         return -1;
                     }
                     if (a[sortKey] < b[sortKey]) {
-
                         return 1;
                     }
-
                     return 0;
                 });
             } else {
                 
                 return rows.sort((a, b) => {
                     if (a[sortKey] < b[sortKey]) {
-
                         return -1;
                     }
                     if (a[sortKey] > b[sortKey]) {
-
                         return 1;
                     }
-                    
                     return 0;
                 });
             }
