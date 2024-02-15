@@ -519,7 +519,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                                             <path d="M1 0L1 10" stroke="#707175" stroke-dasharray="4 4"/>
                                         </svg> :
                                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="2" viewBox="0 0 40 2" fill="none">
-                                            <path d="M0 1L40 0.999997" stroke="#707175" stroke-width="2" stroke-dasharray="6 6"/>
+                                            <path d="M0 1L40 0.999997" stroke="#707175" strokeWidth="2" stroke-dasharray="6 6"/>
                                         </svg>
                                     }
                                 </Stack>

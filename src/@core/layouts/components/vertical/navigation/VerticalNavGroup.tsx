@@ -228,7 +228,8 @@ const VerticalNavGroup = (props: Props) => {
               }
             }}
           >
-            <ListItemIcon
+            {/* Jordan Lopez : Here we hide icons in the vertical mobile navbar, but we will use it later if needed */}
+            {/* <ListItemIcon
               sx={{
                 transition: 'margin .25s ease-in-out',
                 ...(parent && navCollapsed && !navHover ? {} : { mr: 2 }),
@@ -236,9 +237,9 @@ const VerticalNavGroup = (props: Props) => {
                 ...(parent && item.children ? { ml: 1.5, mr: 3.5 } : {})
               }}
             >
-              <Image src={`/images/icons/sidebar-icons/${icon}.png`} alt={icon as string} width={24} height={24}/>
+              <Image src={`/images/icons/sidebar-icons/${icon}.png`} alt={icon as string} width={24} height={24}/> */}
               {/* <UserIcon icon={icon as string} {...(parent && { fontSize: '0.625rem' })} /> */}
-            </ListItemIcon>
+            {/* </ListItemIcon> */}
             <MenuItemTextWrapper sx={{ ...menuGroupCollapsedStyles, ...(isSubToSub ? { ml: 2 } : {}) }}>
               <Typography
                 {...((themeConfig.menuTextTruncate || (!themeConfig.menuTextTruncate && navCollapsed && !navHover)) && {

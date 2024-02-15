@@ -28,7 +28,7 @@ interface Props {
   navMenuBranding?: LayoutProps['verticalLayoutProps']['navMenu']['branding']
   menuLockedIcon?: LayoutProps['verticalLayoutProps']['navMenu']['lockedIcon']
   menuUnlockedIcon?: LayoutProps['verticalLayoutProps']['navMenu']['unlockedIcon']
-}
+  }
 
 // ** Styled Components
 const MenuHeaderWrapper = styled(Box)<BoxProps>(({ theme }) => ({
@@ -38,7 +38,7 @@ const MenuHeaderWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   paddingRight: theme.spacing(3.5),
   transition: 'padding .25s ease-in-out',
   minHeight: theme.mixins.toolbar.minHeight,
-  marginBottom: 64
+  marginBottom: 24
 }))
 
 const HeaderTitle = styled(Typography)<TypographyProps>({
@@ -106,6 +106,7 @@ const VerticalNavHeader = (props: Props) => {
             priority />
         </LinkStyled>
       )}
+      <Icon icon='carbon:close' fontSize={42} onClick={toggleNavVisibility}/>
     </MenuHeaderWrapper>
   )
 }

@@ -4,7 +4,10 @@ import { useRef, useState } from 'react'
 // ** MUI Imports
 import List from '@mui/material/List'
 import Box, { BoxProps } from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import Link from '@mui/material/Link'
+import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import { createTheme, responsiveFontSizes, styled, ThemeProvider } from '@mui/material/styles'
 
@@ -28,9 +31,50 @@ import themeOptions from 'src/@core/theme/ThemeOptions'
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 
+type SocialsType = {
+  url: string
+  icon: string
+  title: string
+}
+
+const socials: SocialsType[] = [
+  {
+    title: 'Discord',
+    url: 'https://twitter.com/TrenFinance',
+    icon: 'discord-white',
+  },
+  {
+    title: 'Instagram',
+    url: 'https://twitter.com/TrenFinance',
+    icon: 'instagram-white',
+  },
+  {
+    title: 'Twitter',
+    url: 'https://twitter.com/TrenFinance',
+    icon: 'twitter-white',
+  },
+  {
+    title: 'Telegram',
+    url: 'https://twitter.com/TrenFinance',
+    icon: 'telegram-white',
+  },
+  {
+    title: 'LinkedIn',
+    url: 'https://twitter.com/TrenFinance',
+    icon: 'linkedin-white',
+  },
+]
+
+const LinkStyled = styled(Link)(({ theme }) => ({
+  textDecoration: 'none',
+  color: `${theme.palette.text.secondary} !important`,
+  '&:hover': {
+    color: `${theme.palette.primary.main} !important`
+  }
+}))
 
 interface Props {
-  navWidth: number
+  navWidth: string
   navVisible: boolean
   collapsedNavWidth: number
   hidden: LayoutProps['hidden']
@@ -148,7 +192,7 @@ const Navigation = (props: Props) => {
     <ThemeProvider theme={darkTheme}>
       <Drawer {...props} navHover={navHover} setNavHover={setNavHover} navigationBorderWidth={navigationBorderWidth}>
         {/* <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}> */}
-        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <Box sx={{height: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <Box>
             <VerticalNavHeader {...props} navHover={navHover} />
             {beforeNavMenuContent && beforeVerticalNavMenuContentPosition === 'fixed'
@@ -157,7 +201,7 @@ const Navigation = (props: Props) => {
             {(beforeVerticalNavMenuContentPosition === 'static' || !beforeNavMenuContent) && (
               <StyledBoxForShadow ref={shadowRef} />
             )}
-            <Box sx={{ position: 'relative', overflow: 'hidden' }}>
+            <Box sx={{ position: 'relative', overflow: 'hidden' }} >
               {/* @ts-ignore */}
               <ScrollWrapper
                 {...(hidden
@@ -177,7 +221,7 @@ const Navigation = (props: Props) => {
                 {userNavMenuContent ? (
                   userNavMenuContent(navMenuContentProps)
                 ) : (
-                  <List className='nav-items' sx={{ pt: 0, '& > :first-child': { mt: '0' } }}>
+                  <List className='nav-items' sx={{ pt: 0, px: 2, '& > :first-child': { mt: '0' } }}>
                     <VerticalNavItems
                       navHover={navHover}
                       groupActive={groupActive}
@@ -191,20 +235,49 @@ const Navigation = (props: Props) => {
                 {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'static'
                   ? afterNavMenuContent(navMenuContentProps)
                   : null}
+                <Box sx={{pt: 4, px: 2.5}}>
+                  <Button sx={{ 
+                      color: 'white',
+                      width: 1,
+                      minWidth: 160,
+                    }} 
+                    variant='outlined'
+                  >
+                    Connect Wallet
+                  </Button>
+                </Box>
               </ScrollWrapper>
             </Box>
             {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'fixed'
               ? afterNavMenuContent(navMenuContentProps)
               : null}
           </Box>
-          {/* <Box sx={{p: 6}}>
-            <Typography variant='subtitle2' sx={{ mb: 2 }}>
-              Tren Finance Protocol
-            </Typography>
-            <Typography variant='subtitle2' sx={{ fontWeight: 300, mb: 2, color: theme => theme.palette.primary.main}}>
-              2024 All Rights Reserved
-            </Typography>
-          </Box> */}
+          <Stack>
+            <Stack direction='row' sx={{justifyContent: 'center', alignItems: 'center', gap: 6}}>
+              {socials.map((social, index) => (
+                <Link href={social.url} target='_blank'>
+                  <img src={`/images/icons/social-icons/${social.icon}.svg`} width={30} key={index}/>
+                </Link>
+              ))}
+            </Stack>
+            <Stack direction='row' sx={{py: 4, mx: 2.5, justifyContent: 'center', alignItems: 'center', gap: 2}}>
+              <Typography variant='body2' component={LinkStyled}  target='_blank' href='https://policy.com'>
+                Privacy Policy
+              </Typography>
+              <Typography variant='body2' sx={{px: 4}}>/</Typography>
+              <Typography variant='body2' component={LinkStyled}  target='_blank' href='https://terms.com'>
+                Terms of Use
+              </Typography>
+            </Stack>
+            <Stack direction='row' sx={{py: 6, mx: 2.5, justifyContent: 'center', alignItems: 'center', borderTop: 'solid 1px #414141', gap: 2}}>
+              <Typography variant='body2'>
+                Tren Finance Protocol
+              </Typography>
+              <Typography variant='body2' sx={{ color: theme => theme.palette.primary.main}}>
+                @ 2024 All Rights Reserved
+              </Typography>
+            </Stack>
+          </Stack>
         </Box>
       </Drawer>
     </ThemeProvider>

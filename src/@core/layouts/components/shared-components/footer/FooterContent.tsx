@@ -11,40 +11,6 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 
 import Image from 'next/image'
 
-type SocialsType = {
-  url: string
-  icon: string
-  title: string
-}
-
-const socials: SocialsType[] = [
-  {
-    title: 'Discord',
-    url: 'https://twitter.com/TrenFinance',
-    icon: 'discord',
-  },
-  {
-    title: 'Instagram',
-    url: 'https://twitter.com/TrenFinance',
-    icon: 'instagram',
-  },
-  {
-    title: 'Twitter',
-    icon: 'twitter',
-    url: 'https://twitter.com/TrenFinance',
-  },
-  {
-    title: 'Telegram',
-    icon: 'telegram',
-    url: 'https://twitter.com/TrenFinance',
-  },
-  {
-    title: 'LinkedIn',
-    icon: 'linkedin',
-    url: 'https://twitter.com/TrenFinance',
-  },
-]
-
 const StyledCompanyName = styled(Link)(({ theme }) => ({
   fontWeight: 500,
   textDecoration: 'none',

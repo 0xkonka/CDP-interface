@@ -73,7 +73,8 @@ const VerticalLayout = (props: LayoutProps) => {
         {/* Navigation Menu */}
         {navHidden && !(navHidden && settings.lastLayout === 'horizontal') ? null : (
           <Navigation
-            navWidth={navWidth}
+            // navWidth={navWidth}
+            navWidth='100%'
             navVisible={navVisible}
             setNavVisible={setNavVisible}
             collapsedNavWidth={collapsedNavWidth}

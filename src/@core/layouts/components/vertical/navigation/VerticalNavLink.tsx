@@ -111,7 +111,7 @@ const VerticalNavLink = ({
         disablePadding
         className='nav-link'
         disabled={item.disabled || false}
-        sx={{ mt: 1, px: '0 !important' }}
+        sx={{ mt: 1, px: '0 !important', borderBottom: 'solid 1px #2D3131'}}
       >
         <MenuNavLink
           component={Link}
@@ -137,7 +137,8 @@ const VerticalNavLink = ({
             }
           }}
         >
-          <ListItemIcon
+          {/* Jordan Lopez : Here we hide icons in the vertical mobile navbar, but we will use it later if needed */}
+          {/* <ListItemIcon
             sx={{
               transition: 'margin .25s ease-in-out',
               ...(navCollapsed && !navHover ? { mr: 0 } : { mr: 2 }),
@@ -154,7 +155,7 @@ const VerticalNavLink = ({
               <UserIcon icon={icon as string} /> :
               <Image src={`/images/icons/sidebar-icons/${icon}.png`} alt={icon as string} width={24} height={24}/>
             }
-          </ListItemIcon>
+          </ListItemIcon> */}
 
           <MenuItemTextMetaWrapper
             sx={{

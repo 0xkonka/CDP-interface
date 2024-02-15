@@ -4,14 +4,9 @@ import { VerticalNavItemsType } from 'src/@core/layouts/types'
 const navigation = (): VerticalNavItemsType => {
   return [
     {
-      title: 'Modules',
+      title: 'Pools',
       icon: 'pools',
       path: '/modules'
-    },
-    {
-      title: 'Positions',
-      icon: 'positions',
-      path: '/positions'
     },
     {
       title: 'Stake',

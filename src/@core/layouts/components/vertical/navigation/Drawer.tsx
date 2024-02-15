@@ -6,7 +6,7 @@ import MuiSwipeableDrawer, { SwipeableDrawerProps } from '@mui/material/Swipeabl
 import { LayoutProps } from 'src/@core/layouts/types'
 
 interface Props {
-  navWidth: number
+  navWidth: string
   navHover: boolean
   navVisible: boolean
   collapsedNavWidth: number
