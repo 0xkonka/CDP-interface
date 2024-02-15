@@ -16,8 +16,7 @@ import {
 // ** Core Components Import
 import Icon from 'src/@core/components/icon'
 import CustomTextField from 'src/@core/components/mui/text-field'
-import MultiSelectDropdown from 'src/@core/components/multi-select-dropdown'
-import CustomChip from 'src/@core/components/mui/chip'
+import SortByDropdown from 'src/@core/components/sortby-dropdown'
 
 // Import Basic React
 import React, { useEffect, useState } from 'react'
@@ -179,6 +178,7 @@ const Modules = () => {
     const [filterOnlyActive, setFilterOnlyActive] = useState<boolean>(false)
     const [assetFilter, setAssetFilter] = useState<string>('All')
     const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
+    const [sortBy, setSortBy] = useState<string>('+asset')
     const router = useRouter()
 
     const assetTypes:string[] = ['All', 'LRT', 'LST', 'RWA', 'LP Token', 'Vault', 'PT Token', 'Meme', 'Volatile', 'Stable']
@@ -191,9 +191,40 @@ const Modules = () => {
     }
 
     useEffect(() => {
-        console.log(filterText)
         filterRows()
     }, [filterText, filterOnlyActive, assetFilter])
+
+    useEffect(() => {
+        const direction = sortBy[0]
+        const sortKey = sortBy.substring(1)
+        console.log(sortBy)
+
+        setRows((rows) => {
+            if(direction == '+') {
+                console.log('asending')
+                return rows.sort((a, b) => {
+                    if (a[sortKey] > b[sortKey]) {
+                        return -1;
+                    }
+                    if (a[sortKey] < b[sortKey]) {
+                        return 1;
+                    }
+                    return 0;
+                });
+            } else {
+                console.log('desending')
+                return rows.sort((a, b) => {
+                    if (a[sortKey] < b[sortKey]) {
+                        return -1;
+                    }
+                    if (a[sortKey] > b[sortKey]) {
+                        return 1;
+                    }
+                    return 0;
+                });
+            }
+        })
+    }, [sortBy])
 
     const filterRows = () => {
         let newRows = initialRows.filter((row) => row.asset.toLocaleLowerCase().includes(filterText.toLowerCase()))
@@ -236,10 +267,24 @@ const Modules = () => {
                         value={filterText}
                         onChange={handleFilterChange}
                         placeholder='Search....'
+                        sx={{
+                            height: isSmallScreen ? 40 : 50,
+                            '& .MuiInputBase-root': {
+                                height: 1,
+                                '& input': {
+                                    fontSize: isSmallScreen ? 16 : 18
+                                }
+                            }
+                        }}
                     />
-                    {/* <MultiSelectDropdown 
-                        availableFilters = {['LP Token', 'Volatile', 'Vault', 'RWA', 'Stable', 'Trades']}
-                    /> */}
+                    <SortByDropdown sortBy={sortBy} setSortBy={setSortBy} fields={[
+                        {key: 'asset', label: 'Name'},
+                        {key: 'borrowAPY', label: 'borrow APY'},
+                        {key: 'maxLeverage', label: 'Max Leverage'},
+                        {key: 'LTVRatio', label: 'LTV Ratio'},
+                        {key: 'maxDepositAPY', label: 'Max Deposit APY'},
+                        {key: 'baseDepositAPY', label: 'Base Deposit APY'},
+                    ]}/>
                 </Stack>
                 <Stack direction='row' sx={{ width: {xs: 1, md: 'auto'}, justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant='h6' sx={{ fontWeight: 400, mt: 1 }}>

@@ -8,4 +8,5 @@ export type CollateralType = {
   maxDepositAPY: number
   baseDepositAPY: number
   active?: boolean
+  [key: string]: any
 }

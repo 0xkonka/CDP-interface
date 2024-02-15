@@ -255,7 +255,7 @@ const Navigation = (props: Props) => {
           <Stack>
             <Stack direction='row' sx={{justifyContent: 'center', alignItems: 'center', gap: 6}}>
               {socials.map((social, index) => (
-                <Link href={social.url} target='_blank'>
+                <Link href={social.url} target='_blank' key={index}>
                   <img src={`/images/icons/social-icons/${social.icon}.svg`} width={30} key={index}/>
                 </Link>
               ))}

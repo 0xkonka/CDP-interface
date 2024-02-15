@@ -516,10 +516,10 @@ const CollateralRow = (props: TableHeaderProps) => {
                                     {
                                         isMediumScreen ? 
                                         <svg xmlns="http://www.w3.org/2000/svg" width="2" height="10" viewBox="0 0 2 10" fill="none">
-                                            <path d="M1 0L1 10" stroke="#707175" stroke-dasharray="4 4"/>
+                                            <path d="M1 0L1 10" stroke="#707175" strokeDasharray="4 4"/>
                                         </svg> :
                                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="2" viewBox="0 0 40 2" fill="none">
-                                            <path d="M0 1L40 0.999997" stroke="#707175" strokeWidth="2" stroke-dasharray="6 6"/>
+                                            <path d="M0 1L40 0.999997" stroke="#707175" strokeWidth="2" strokeDasharray="6 6"/>
                                         </svg>
                                     }
                                 </Stack>
