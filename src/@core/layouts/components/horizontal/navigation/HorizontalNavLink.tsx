@@ -50,12 +50,6 @@ const ListItem = styled(MuiListItem)<
   // '&.active, &.active:hover': {
   //   backgroundColor: hexToRGBA(theme.palette.primary.main, 0.08)
   // },
-  '&.active .MuiTypography-root, &.active .MuiListItemIcon-root': {
-    color: theme.palette.primary.main
-  },
-  '&.active .MuiTypography-root': {
-    fontWeight: 500
-  },
   '&:focus-visible': {
     outline: 0,
     backgroundColor: theme.palette.action.focus
@@ -103,12 +97,6 @@ const HorizontalNavLink = (props: Props) => {
             ...(!hasParent
               ? {
                   '&.active, &.active:hover': {
-                    // boxShadow: theme => `0px 2px 6px ${hexToRGBA(theme.palette.primary.main, 0.48)}`,
-                    // background: theme =>
-                    //   `linear-gradient(72.47deg, ${theme.palette.primary.main} 22.16%, ${hexToRGBA(
-                    //     theme.palette.primary.main,
-                    //     0.7
-                    //   )} 76.47%)`,
                     '&:focus-visible': {
                       background: theme =>
                         `linear-gradient(72.47deg, ${theme.palette.primary.dark} 22.16%, ${hexToRGBA(
@@ -117,8 +105,9 @@ const HorizontalNavLink = (props: Props) => {
                         )} 76.47%)`
                     },
                     '& .MuiTypography-root, & .MuiListItemIcon-root': {
-                      color: theme => theme.palette.primary.main,
-                      fontWeight: 700,
+                      // color: theme => theme.palette.primary.main,
+                      color: 'white',
+                      fontWeight: 600,
                     }
                   }
                 }
@@ -144,7 +133,7 @@ const HorizontalNavLink = (props: Props) => {
               <ListItemIcon sx={{ mr: 2, color: 'text.secondary' }}>
                 <UserIcon icon={icon} fontSize={icon === navSubItemIcon ? '0.625rem' : '1.375rem'} />
               </ListItemIcon>
-              <Typography {...(menuTextTruncate && { noWrap: true })} sx={{ color: 'text.secondary' }}>
+              <Typography {...(menuTextTruncate && { noWrap: true })} sx={{ fontSize: 16, fontWeight: 500, color: '#C6C6C7' }}>
                 <Translations text={item.title} />
               </Typography>
             </Box>
