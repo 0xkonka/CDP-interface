@@ -9,11 +9,6 @@ const navigation = (): HorizontalNavItemsType => {
       path: '/modules'
     },
     {
-      title: 'Positions',
-      icon: 'positions',
-      path: '/positions'
-    },
-    {
       title: 'Stake',
       icon: 'stake',
       path: '/stake'

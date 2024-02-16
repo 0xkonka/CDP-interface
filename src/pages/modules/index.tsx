@@ -197,12 +197,11 @@ const Modules = () => {
     useEffect(() => {
         const direction = sortBy[0]
         const sortKey = sortBy.substring(1)
-        console.log(sortBy)
 
         setRows((rows) => {
-            if(direction == '+') {
-                
-                return rows.sort((a, b) => {
+            const sortedRows = [...rows]; 
+            if(direction == '-') {
+                return sortedRows.sort((a, b) => {
                     if (a[sortKey] > b[sortKey]) {
                         return -1;
                     }
@@ -212,8 +211,7 @@ const Modules = () => {
                     return 0;
                 });
             } else {
-                
-                return rows.sort((a, b) => {
+                return sortedRows.sort((a, b) => {
                     if (a[sortKey] < b[sortKey]) {
                         return -1;
                     }

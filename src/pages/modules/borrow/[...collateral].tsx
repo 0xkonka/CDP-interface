@@ -8,8 +8,6 @@ import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Grid from '@mui/material/Grid'
-import { styled, Breakpoint } from '@mui/material/styles'
-import InputAdornment from '@mui/material/InputAdornment'
 import Slider from '@mui/material/Slider'
 import Dialog from '@mui/material/Dialog'
 import Slide, { SlideProps } from '@mui/material/Slide'
@@ -34,7 +32,6 @@ import 'cleave.js/dist/addons/cleave-phone.us'
 
 // Import React Basic Func
 import React, { forwardRef, Ref, ReactElement, useEffect, Fragment, useState } from 'react'
-import { relative } from 'path';
 
 const labels = [
     {
@@ -101,10 +98,13 @@ const Borrow = () => {
   const [openSummary, setOpenSummary] = useState<boolean>(false)
   const handleClickOpenSummary = () => setOpenSummary(true)
   const handleCloseSummary = () => setOpenSummary(false)
-  const { collateral } = router.query
+  let { collateral } = router.query
+ 
+  if (Array.isArray(collateral)) {
+    collateral = collateral.join(' / ');
+  }
+  console.log(collateral)
 
-  const [fullWidth, setFullWidth] = useState<boolean>(true)
-  const [maxWidth, setMaxWidth] = useState<Breakpoint>('sm')
 
   const radiusBoxStyle = {
     paddingLeft: isSmallScreen ? 3 : 6,
@@ -127,7 +127,7 @@ const Borrow = () => {
             </Typography>
         </Box>
         <Box sx={{display:'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4}}>
-            <Typography variant='h2' sx={{ textTransform: 'uppercase' }}>
+            <Typography variant='h2'>
                 {collateral}
             </Typography>
             <Box sx={{borderRadius: '50px', border: 'solid 1px #C6C6C74D'}}>
@@ -137,7 +137,7 @@ const Borrow = () => {
                             }}}>
                     Borrow
                 </Button>
-                <Button onClick={() => router.push(`/modules/leverage/${collateral}`)} sx={{borderRadius: '50px', px: 6, py: 3.5, fontWeight: 600, color: 'white'}}>Leverage</Button>
+                <Button onClick={() => router.push(`/modules/leverage/${collateral?.toString().trim().replace(/\s+/g, '')}`)} sx={{borderRadius: '50px', px: 6, py: 3.5, fontWeight: 600, color: 'white'}}>Leverage</Button>
             </Box>
         </Box>
         <Box sx={{...radiusBoxStyle, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
@@ -166,10 +166,10 @@ const Borrow = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={5} sx={{display: 'flex', alignItems: 'center'}}>
                             <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                <Image 
-                                    src={`/images/tokens/${collateral}.png`}
-                                    alt='LinkedIn' width={42} height={42}
-                                    style={{ borderRadius: '100%', marginRight: 10 }}
+                                <img 
+                                    src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
+                                    alt='LinkedIn' height={42}
+                                    style={{ marginRight: 10 }}
                                 />
                                 {collateral}
                             </Box>
@@ -276,10 +276,10 @@ const Borrow = () => {
                             </Typography>
                             <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
                                 <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                    <Image 
-                                        src={`/images/tokens/${collateral}.png`}
-                                        alt='LinkedIn' width={42} height={42}
-                                        style={{ borderRadius: '100%', marginRight: 10 }}
+                                    <img 
+                                        src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
+                                        alt='LinkedIn' height={42}
+                                        style={{ marginRight: 10 }}
                                     />
                                     {collateral}
                                 </Box>
@@ -473,8 +473,8 @@ const Borrow = () => {
                 keepMounted
                 onClose={handleCloseSummary}
                 TransitionComponent={Transition}
-                maxWidth={maxWidth}
-                fullWidth={fullWidth}
+                maxWidth={'sm'}
+                fullWidth={true}
                 aria-labelledby='alert-dialog-slide-title'
                 aria-describedby='alert-dialog-slide-description'
             >

@@ -187,7 +187,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                     </Typography>
                 </Stack>
                 <Stack direction='row' sx={{flex: '1.25 1 0%', justifyContent:'space-between', alignItems: 'center'}}>
-                    <Link href={`/modules/borrow/${row.asset}`}>
+                    <Link href={`/modules/borrow/${row.asset}`} sx={{color: 'white'}}>
                         <Stack direction='row' sx={{cursor: 'pointer'}} className={clsx('active-hover', {
                             'active-open': isOpen
                         })}>
