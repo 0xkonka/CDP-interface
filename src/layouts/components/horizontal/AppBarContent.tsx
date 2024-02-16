@@ -18,6 +18,7 @@ import Icon from 'src/@core/components/icon'
 
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
+import ConnectWallet from 'src/pages/components/connect-wallet/ConnectWallet'
 
 interface Props {
   hidden: boolean
@@ -89,11 +90,12 @@ const AppBarContent = (props: Props) => {
       </Button> */}
 
       {/* Wallet Connected */}
-      <Button aria-haspopup='true' onClick={handleClick} aria-controls='wallet-connect'>
+      {/* <Button aria-haspopup='true' onClick={handleClick} aria-controls='wallet-connect'>
         <Icon icon='tabler:wallet' fontSize={28} style={{marginRight: 10}}/>
           {walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}
         <Icon icon='tabler:chevron-down' fontSize={18} style={{marginLeft: 5}}/>
-      </Button>
+      </Button> */}
+      <ConnectWallet />
       <Menu 
         keepMounted
         elevation={0}
