@@ -168,7 +168,7 @@ const ToogleOffButton = styled(Button)<ButtonProps>(({ theme }) => ({
     height: 35,
     '&:hover': {
         color: 'black',
-        backgroundColor: theme.palette.secondary.main
+        backgroundColor: theme.palette.primary.main
     }
 }))
   
