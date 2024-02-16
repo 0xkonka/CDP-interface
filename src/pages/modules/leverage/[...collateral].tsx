@@ -112,7 +112,7 @@ const Leverage = () => {
         <Box sx={{display:'flex', alignItems: 'center', width: 'fit-content', cursor: 'pointer', mb:4}} >
             <Icon fontSize='24' icon='basil:arrow-left-outline' style={{color: theme.palette.primary.main}}/>
             <Typography variant='body1' color='primary' sx={{ml:1}} onClick={()=>{router.push('/modules')}}>
-                Go back to Modules
+                Go back to Pools
             </Typography>
         </Box>
         <Box sx={{display:'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4}}>
