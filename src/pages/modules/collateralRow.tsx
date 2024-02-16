@@ -69,7 +69,7 @@ const CollateralRow = (props: TableHeaderProps) => {
     }
 
     return (
-        <Stack sx={{p: {xs: 3, sm: 6}, borderRadius:  2, border: `solid 1px ${isOpen ? theme.palette.primary.main : 'transparent'}`, 
+        <Stack sx={{p: {xs: 3, sm: 6}, borderRadius:  2, border: `solid 1px ${isOpen ? theme.palette.primary.main : 'transparent'}`, cursor: 'pointer',
             '& .active-open': {
                 color: theme.palette.primary.main,
                 '& .arrow-diagonal': {
@@ -95,7 +95,30 @@ const CollateralRow = (props: TableHeaderProps) => {
                         }
                     },
                 }
-            }}}>
+            }}} onClick={
+                (event) => {
+                    // If the target is not Open button, it will collapse open.
+                    // if(!(event.target instanceof HTMLElement && event.target.className.includes('open-button')) &&
+                    //     !(event.target instanceof SVGElement && event.target.className.baseVal.includes('arrow-right'))) {
+                    //     onToogle()
+                    // }
+
+                    if(event.target instanceof HTMLElement && event.target.className.includes('open-button'))
+                        return
+                    if(event.target instanceof SVGElement && event.target.className.baseVal.includes('arrow-right'))
+                        return
+
+                    onToogle()
+
+                    // const target = event.target as HTMLElement
+                    // console.log(target.className.baseVal)
+                    // if(!target.className.includes('open-button') && !target.className.baseVal.includes('arrow-right')) {
+                    //     onToogle()
+                    // }
+                    // console.log(target.className)
+                    // onToogle()
+                }
+            }>
             {isMediumScreen ? (
             <Stack>
                 <Stack direction='row' sx={{alignItems: 'center', justifyContent: 'space-between'
@@ -111,8 +134,8 @@ const CollateralRow = (props: TableHeaderProps) => {
                     </Stack>
                     <Stack direction='row' sx={{justifyContent:'space-between', alignItems: 'center'}}>
                         {
-                            isOpen ? <Icon icon='solar:alt-arrow-up-outline' color={theme.palette.primary.main} style={{cursor: 'pointer'}} onClick={onToogle}/> :
-                                    <Icon icon='solar:alt-arrow-down-outline' style={{cursor: 'pointer'}} onClick={onToogle}/>
+                            isOpen ? <Icon icon='solar:alt-arrow-up-outline' color={theme.palette.primary.main}/> :
+                                    <Icon icon='solar:alt-arrow-down-outline'/>
                         }
                     </Stack>
                 </Stack>
@@ -188,7 +211,8 @@ const CollateralRow = (props: TableHeaderProps) => {
                 </Stack>
                 <Stack direction='row' sx={{flex: '1.25 1 0%', justifyContent:'space-between', alignItems: 'center'}}>
                     <Link href={`/modules/borrow/${row.asset}`} sx={{color: 'white'}}>
-                        <Stack direction='row' sx={{cursor: 'pointer', alignItems: 'center'}} className={clsx('active-hover', {
+                    {/* <Link> */}
+                        <Stack direction='row' sx={{cursor: 'pointer', alignItems: 'center'}} className={clsx('open-button active-hover', {
                             'active-open': isOpen
                         })}>
                             Open
@@ -207,8 +231,8 @@ const CollateralRow = (props: TableHeaderProps) => {
                         <Typography color='primary'>{row.active ? 'Active' : ''}</Typography>
                     </Box>
                     {
-                        isOpen ? <Icon icon='solar:alt-arrow-up-outline' color={theme.palette.primary.main} style={{cursor: 'pointer'}} onClick={onToogle}/> :
-                                <Icon icon='solar:alt-arrow-down-outline' style={{cursor: 'pointer'}} onClick={onToogle}/>
+                        isOpen ? <Icon icon='solar:alt-arrow-up-outline' color={theme.palette.primary.main} style={{cursor: 'pointer'}}/> :
+                                <Icon icon='solar:alt-arrow-down-outline' style={{cursor: 'pointer'}}/>
                     }
                 </Stack>
             </Stack>

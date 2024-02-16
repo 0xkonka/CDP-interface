@@ -89,7 +89,10 @@ const AppBarContent = (props: Props) => {
       </Button> */}
 
       {/* Wallet Connected */}
-      <Button aria-haspopup='true' onClick={handleClick} aria-controls='wallet-connect'>
+      <Button sx={{color: 'white', backgroundColor: 'transparent', 
+        '&:hover' : {
+          backgroundColor: 'transparent'
+        }}} aria-haspopup='true' onClick={handleClick} aria-controls='wallet-connect'>
         <Icon icon='tabler:wallet' fontSize={28} style={{marginRight: 10}}/>
           {walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}
         <Icon icon='tabler:chevron-down' fontSize={18} style={{marginLeft: 5}}/>

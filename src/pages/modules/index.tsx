@@ -250,7 +250,7 @@ const Modules = () => {
         <Box>
             <HeaderInfo/>
             {/* Search and Multi Select Filter Section */}
-            <Stack direction='row' sx={{ flexWrap: 'wrap', gap:2.5, justifyContent: 'space-between', alignItems: 'center', pb: 8}}>
+            <Stack direction='row' sx={{ flexWrap: 'wrap', gap:2.5, justifyContent: 'space-between', alignItems: 'center', pb: 6}}>
                 <Stack direction='row' sx={{ flexWrap: 'wrap', alignItems: 'center', gap: 4, order: {xs: 1, md: 0} }}>
                     <CustomTextField
                         label=''
@@ -292,7 +292,7 @@ const Modules = () => {
                 </Stack>
             </Stack>
             {/* Token Types Buttons Section */}
-            <Box sx={{display: 'flex', gap: 4, overflowX: 'auto', pb: 2}}>
+            <Box sx={{display: 'flex', gap: 4, overflowX: 'auto', pb: 10}}>
                 {
                     assetTypes.map((value, index) => {
                         return value == assetFilter ? 
