@@ -183,7 +183,7 @@ const Modules = () => {
     const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
     const [sortBy, setSortBy] = useState<string>('+asset')
     const router = useRouter()
-    const { chain } = useNetwork()
+    const { chain : chainId } = useNetwork()
     
     const assetTypes:string[] = ['All', 'LRT', 'LST', 'RWA', 'LP Token', 'Vault', 'PT Token', 'Meme', 'Volatile', 'Stable']
     const theme: Theme = useTheme()
@@ -191,10 +191,10 @@ const Modules = () => {
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
 
     const { data: marketInfo } = useContractRead({
-        address: MARKET_LENS_ADDR[chain?.id] as `0x${string}`,
+        address: MARKET_LENS_ADDR[chainId?.id ?? 5] as `0x${string}`,
         abi: MARKET_LENS_ABI,
         functionName: 'getMarketInfoTrenMarketV3',
-        args: [TREN_MARKET_ADDR[chain?.id]],
+        args: [TREN_MARKET_ADDR[chainId?.id ?? 5]],
       })
 
     console.log('marketInfo', marketInfo)
