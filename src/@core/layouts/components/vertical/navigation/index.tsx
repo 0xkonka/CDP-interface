@@ -260,7 +260,7 @@ const Navigation = (props: Props) => {
                 </Link>
               ))}
             </Stack>
-            <Stack direction='row' sx={{py: 4, mx: 2.5, justifyContent: 'center', alignItems: 'center', gap: 2}}>
+            <Stack direction='row' sx={{py: 6, mx: 2.5, justifyContent: 'center', alignItems: 'center', gap: 2}}>
               <Typography variant='body2' component={LinkStyled}  target='_blank' href='https://policy.com'>
                 Privacy Policy
               </Typography>

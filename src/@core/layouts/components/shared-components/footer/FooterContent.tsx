@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 import { Theme } from '@mui/material/styles'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
@@ -35,13 +36,47 @@ const SquareSocialButton = styled(Button)<ButtonProps>(() => ({
   borderRadius: 10,
 }))
 
+type SocialsType = {
+  url: string
+  icon: string
+  title: string
+}
+
+const socials: SocialsType[] = [
+  {
+    title: 'Discord',
+    url: 'https://twitter.com/TrenFinance',
+    icon: 'discord-white',
+  },
+  {
+    title: 'Instagram',
+    url: 'https://twitter.com/TrenFinance',
+    icon: 'instagram-white',
+  },
+  {
+    title: 'Twitter',
+    url: 'https://twitter.com/TrenFinance',
+    icon: 'twitter-white',
+  },
+  {
+    title: 'Telegram',
+    url: 'https://twitter.com/TrenFinance',
+    icon: 'telegram-white',
+  },
+  {
+    title: 'LinkedIn',
+    url: 'https://twitter.com/TrenFinance',
+    icon: 'linkedin-white',
+  },
+]
+
 const FooterContent = () => {
   // ** Var
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+      <Box sx={{ display: {xs: 'none', sm: 'flex'}, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', mb: 7.5 }}>
         <Box sx={{display: 'flex'}}>
           <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://policy.com'>
             Privacy Policy
@@ -73,7 +108,33 @@ const FooterContent = () => {
           </Typography>
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: {xs: 'start', md: 'end'}, borderTop: 'solid 1px #414141', pt: 2, pb: 6}}>
+      <Stack sx={{ display: {xs: 'flex', 'sm': 'none'}}}>
+        <Stack direction='row' sx={{justifyContent: 'center', alignItems: 'center', gap: 6}}>
+          {socials.map((social, index) => (
+            <Link href={social.url} target='_blank' key={index}>
+              <img src={`/images/icons/social-icons/${social.icon}.svg`} width={30} key={index} alt={social.title}/>
+            </Link>
+          ))}
+        </Stack>
+        <Stack direction='row' sx={{py: 6, mx: 2.5, justifyContent: 'center', alignItems: 'center', gap: 2}}>
+          <Typography variant='body2' component={LinkStyled}  target='_blank' href='https://policy.com'>
+            Privacy Policy
+          </Typography>
+          <Typography variant='body2' sx={{px: 4}}>/</Typography>
+          <Typography variant='body2' component={LinkStyled}  target='_blank' href='https://terms.com'>
+            Terms of Use
+          </Typography>
+        </Stack>
+        {/* <Stack direction='row' sx={{py: 6, mx: 2.5, justifyContent: 'center', alignItems: 'center', borderTop: 'solid 1px #414141', gap: 2}}>
+          <Typography variant='body2'>
+            Tren Finance Protocol
+          </Typography>
+          <Typography variant='body2' sx={{ color: theme => theme.palette.primary.main}}>
+            @ 2024 All Rights Reserved
+          </Typography>
+        </Stack> */}
+      </Stack>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: {xs: 'start', md: 'end'}, borderTop: 'solid 1px #414141', pt: 7.5}}>
         <Typography variant='subtitle2' sx={{display: 'flex', alignItems: 'center', fontWeight: 400, color: 'text.secondary' }}>
           Tren Finance Protocol
           <Typography sx={{ml:2, color: (theme) => theme.palette.primary.main}}>
@@ -81,6 +142,7 @@ const FooterContent = () => {
           </Typography>
         </Typography>
       </Box>
+      
     </Box>
   )
 }
