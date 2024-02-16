@@ -1,11 +1,13 @@
 // Import from react
-import React from 'react';
+import {useState, useEffect, useRef} from 'react';
 
 // Import from MUI components
 import {
-    Menu, MenuItem, Checkbox, Box, InputLabel, Typography, Button, Stack
+    Menu, Box, Typography, Button, Stack,
+    useMediaQuery,
+    Theme, useTheme
+
 } from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel'
 
 // Import from core components
 import Icon from 'src/@core/components/icon'
@@ -23,9 +25,14 @@ interface SortyByDropdownProps {
 }
 
 const SortByDropdown = (props : SortyByDropdownProps) => {
-  const [anchorEl, setAnchorEl] = React.useState(null)
-  const [selectedOptions, setSelectedOptions] = React.useState<string[]>([])
+  const [anchorEl, setAnchorEl] = useState(null)
+  const theme: Theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
   const {sortBy, setSortBy, fields} = props
+  const obj = fields.find(element => element.key == sortBy.substring(1))
+  const sortByLabel = obj?.label
+  const boxRef = useRef<HTMLDivElement>(null); // Ref for the Box
+  const [menuWidth, setMenuWidth] = useState(260); // Default min width
 
   const handleOpenMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -35,19 +42,33 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
     setAnchorEl(null);
   };
 
+  useEffect(() => {
+    if (boxRef.current) {
+      setMenuWidth(Math.max(boxRef.current.offsetWidth, 260));
+    }
+  }, [sortBy]); // Depend on sortByLabel to trigger width check
+
   return (
     <Box>
-      <Box onClick={handleOpenMenu} 
+      <Box onClick={handleOpenMenu} ref={boxRef}
           sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 4, py: 3, 
-              minWidth: '260px', borderRadius: 1, cursor: 'pointer',
+              minWidth: `${menuWidth}px`, borderRadius: 1, cursor: 'pointer',
               border: (theme) => `solid 1px ${anchorEl ? theme.palette.primary.main : '#2D3131'}`,
               borderBottom: `${anchorEl ? 'none' : ''}`,
               borderBottomLeftRadius: `${anchorEl ? 0 : 1}`,
               borderBottomRightRadius: `${anchorEl ? 0 : 1}`
               }}>
-          <Typography variant='h5'>
-              Sort by {selectedOptions.join(', ')}
-          </Typography>
+          <Stack direction='row' gap={1} sx={{alignItems: 'center'}}>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#a1a1a1'>
+                Sort by
+            </Typography>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'}>
+                {sortByLabel}
+            </Typography>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#a1a1a1'>
+              ({sortBy[0] == '-' ? 'desc' : 'asc' })
+            </Typography>
+          </Stack>
           {
             anchorEl ? 
             <Icon icon='tabler:chevron-down' fontSize={18} style={{marginLeft: 5}}/> : 
@@ -60,7 +81,7 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
         onClose={handleCloseMenu}
         sx={{ 
           '& .MuiPopover-paper' : {
-            minWidth: '260px',
+            minWidth: `${menuWidth}px`,
             border: theme => `solid 1px ${theme.palette.primary.main}`,
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0,

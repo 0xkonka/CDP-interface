@@ -88,7 +88,12 @@ const Leverage = () => {
   const [multiplyRate, setMultiplyRate] = useState(0)
   const [openAdjust, setOpenAdjust] = useState<boolean>(false)
   const [openRepay, setOpenRepay] = useState<boolean>(false)
-  const { collateral } = router.query
+  let { collateral } = router.query
+
+  if (Array.isArray(collateral)) {
+    collateral = collateral.join(' / ');
+  }
+  console.log(collateral)
 
   const radiusBoxStyle = {
     paddingLeft: isSmallScreen ? 3 : 6,
@@ -111,11 +116,11 @@ const Leverage = () => {
             </Typography>
         </Box>
         <Box sx={{display:'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4}}>
-            <Typography variant='h2' sx={{ textTransform: 'uppercase' }}>
+            <Typography variant='h2'>
                 {collateral}
             </Typography>
             <Box sx={{borderRadius: '50px', border: 'solid 1px #C6C6C74D'}}>
-                <Button onClick={() => router.push(`/modules/borrow/${collateral}`)} sx={{borderRadius: '50px', px: 6, py: 3.5, fontWeight: 600, color: 'white'}}>Borrow</Button>
+                <Button onClick={() => router.push(`/modules/borrow/${collateral?.toString().trim().replace(/\s+/g, '')}`)} sx={{borderRadius: '50px', px: 6, py: 3.5, fontWeight: 600, color: 'white'}}>Borrow</Button>
                 <Button sx={{borderRadius: '50px', px: 6, py: 3.5, fontWeight: 600, backgroundColor: theme.palette.primary.main, color: '#101617',
                             '&:hover': {
                                 backgroundColor: theme.palette.primary.main
@@ -150,10 +155,10 @@ const Leverage = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={5} sx={{display: 'flex', alignItems: 'center'}}>
                             <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                <Image 
-                                    src={`/images/tokens/${collateral}.png`}
-                                    alt='LinkedIn' width={42} height={42}
-                                    style={{ borderRadius: '100%', marginRight: 10 }}
+                                <img 
+                                    src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
+                                    alt='LinkedIn' height={42}
+                                    style={{ marginRight: 10 }}
                                 />
                                 {collateral}
                             </Box>
@@ -234,10 +239,10 @@ const Leverage = () => {
                             }}>
                                 <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
                                     <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                        <Image 
-                                            src={`/images/tokens/${collateral}.png`}
-                                            alt='LinkedIn' width={42} height={42}
-                                            style={{ borderRadius: '100%', marginRight: 10 }}
+                                        <img 
+                                            src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
+                                            alt='LinkedIn' height={42}
+                                            style={{ marginRight: 10 }}
                                         />
                                         {collateral}
                                     </Box>
