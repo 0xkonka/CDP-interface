@@ -121,10 +121,7 @@ const HorizontalLayout = (props: LayoutProps) => {
           <Box
             className='layout-navbar'
             sx={{
-              width: '100%',
-              ...(contentWidth === 'boxed' && { 
-                '@media (min-width:1680px)': { width: '85%' } 
-              })
+              width: '100%'
               // ...(navHidden ? {} : { borderBottom: theme => `1px solid ${theme.palette.divider}` })
             }}
           >
@@ -134,7 +131,8 @@ const HorizontalLayout = (props: LayoutProps) => {
                 mx: 'auto',
                 ...(contentWidth === 'boxed' && { 
                   '@media (min-width:1440px)': { maxWidth: 1440 },
-                  '@media (min-width:1680px)': { maxWidth: 1680 } 
+                  '@media (min-width:1680px)': { maxWidth: '85%' }, 
+                  '@media (min-width:1920px)': { maxWidth: '1920px !important' },
                 }),
                 minHeight: theme => `${(theme.mixins.toolbar.minHeight as number) - 2}px !important`
               }}
@@ -156,15 +154,13 @@ const HorizontalLayout = (props: LayoutProps) => {
           className='layout-page-content'
           sx={{
             width: '100%',
-            ...(contentWidth === 'boxed' && { 
-              '@media (min-width:1680px)': { width: '85%' } 
-            }),
             ...(contentHeightFixed && { display: 'flex', overflow: 'hidden' }),
             ...(contentWidth === 'boxed' && {
               mx: 'auto',
               '@media (min-width:1200px)': { maxWidth: '100%' },
               '@media (min-width:1440px)': { maxWidth: 1440 },
-              '@media (min-width:1680px)': { maxWidth: 1680 },
+              '@media (min-width:1680px)': { maxWidth: '85%' },
+              '@media (min-width:1920px)': { maxWidth: '1920px !important' },
             })
           }}
         >
