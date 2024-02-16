@@ -12,6 +12,7 @@ import { useAuth } from 'src/hooks/useAuth'
 import { Button, styled, ListItemIcon, ListItemText } from '@mui/material'
 import MuiMenu, { MenuProps } from '@mui/material/Menu'
 import MuiMenuItem, { MenuItemProps } from '@mui/material/MenuItem'
+import WalletDropDown from 'src/@core/layouts/components/horizontal/navigation/WalletDropDown'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -61,7 +62,23 @@ const AppBarContent = (props: Props) => {
   // ** Wallet connection state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [walletAddress, setWalletAddress] = useState<string>('0x3be8905f243680d510f5ebc946faa3f3113bbb86')
-
+  const walletItems = {
+    title: `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`,
+    icon: 'tabler:wallet',
+    children: [
+      {
+        title: 'Copy Address',
+        icon: 'mdi:content-copy',
+        // path: '/analytics/analytics-1'
+      },
+      {
+        title: 'Disconnect',
+        // path: '/analytics/analytics-2',
+        icon: 'tabler:logout'
+      }
+    ]
+  }
+  
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -89,7 +106,11 @@ const AppBarContent = (props: Props) => {
       </Button> */}
 
       {/* Wallet Connected */}
-      <Button sx={{color: 'white', backgroundColor: 'transparent', 
+      <WalletDropDown item={
+        walletItems
+      } settings={settings}/>
+
+      {/* <Button sx={{color: 'white', backgroundColor: 'transparent', 
         '&:hover' : {
           backgroundColor: 'transparent'
         }}} aria-haspopup='true' onClick={handleClick} aria-controls='wallet-connect'>
@@ -125,7 +146,7 @@ const AppBarContent = (props: Props) => {
           </ListItemIcon>
           <ListItemText primary='Disconnect' />
         </MenuItem>
-      </Menu>
+      </Menu> */}
     </Box>
   )
 }

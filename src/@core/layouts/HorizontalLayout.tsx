@@ -53,7 +53,7 @@ const Toolbar = styled(MuiToolbar)<ToolbarProps>(({ theme }) => ({
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
-  width: '100%',
+  // width: '100%',
   padding: theme.spacing(6),
   paddingBottom: theme.spacing(12),
   transition: 'padding .25s ease-in-out',
@@ -122,6 +122,9 @@ const HorizontalLayout = (props: LayoutProps) => {
             className='layout-navbar'
             sx={{
               width: '100%',
+              ...(contentWidth === 'boxed' && { 
+                '@media (min-width:1680px)': { width: '85%' } 
+              })
               // ...(navHidden ? {} : { borderBottom: theme => `1px solid ${theme.palette.divider}` })
             }}
           >
@@ -152,6 +155,10 @@ const HorizontalLayout = (props: LayoutProps) => {
         <ContentWrapper
           className='layout-page-content'
           sx={{
+            width: '100%',
+            ...(contentWidth === 'boxed' && { 
+              '@media (min-width:1680px)': { width: '85%' } 
+            }),
             ...(contentHeightFixed && { display: 'flex', overflow: 'hidden' }),
             ...(contentWidth === 'boxed' && {
               mx: 'auto',
@@ -170,7 +177,16 @@ const HorizontalLayout = (props: LayoutProps) => {
           scrollToTop(props)
         ) : (
           <ScrollToTop className='mui-fixed'>
-            <Fab color='primary' size='small' aria-label='scroll back to top'>
+            <Fab size='small' aria-label='scroll back to top' sx={{
+              backgroundColor: 'transparent',
+              color: theme => theme.palette.primary.main,
+              border: 'solid 1px white',
+              '&:hover': {
+                backgroundColor: theme => theme.palette.primary.main,
+                color: '#000',
+                border: 'none'
+              }
+            }}>
               <Icon icon='tabler:arrow-up' />
             </Fab>
           </ScrollToTop>
