@@ -132,7 +132,7 @@ const HorizontalLayout = (props: LayoutProps) => {
                 ...(contentWidth === 'boxed' && { 
                   '@media (min-width:1440px)': { maxWidth: 1440 },
                   '@media (min-width:1680px)': { maxWidth: '85%' }, 
-                  '@media (min-width:1920px)': { maxWidth: '1920px !important' },
+                  '@media (min-width:2560px)': { maxWidth: '1920px !important' },
                 }),
                 minHeight: theme => `${(theme.mixins.toolbar.minHeight as number) - 2}px !important`
               }}
@@ -160,7 +160,7 @@ const HorizontalLayout = (props: LayoutProps) => {
               '@media (min-width:1200px)': { maxWidth: '100%' },
               '@media (min-width:1440px)': { maxWidth: 1440 },
               '@media (min-width:1680px)': { maxWidth: '85%' },
-              '@media (min-width:1920px)': { maxWidth: '1920px !important' },
+              '@media (min-width:2560px)': { maxWidth: '1920px !important' },
             })
           }}
         >
