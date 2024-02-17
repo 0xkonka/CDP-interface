@@ -7,15 +7,26 @@ import {
     useMediaQuery
 } from '@mui/material'
 
+
 const HeaderInfo = () => {
     const theme: Theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
+    const textStyle = {
+        background: 'linear-gradient(180deg, #B7BCBC 0%, #FFF 100%)',
+        backgroundClip: 'text',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent'
+    };
 
     return (
         <Box>
-            <Typography variant='h1' sx={{ mb: {xs: 2, md: 8}, fontSize: {xs:36, md: 64, xl: 72}, mt: 8 }} style={{
+            <Typography variant='h1' sx={{ 
+                mb: {xs: 2, md: 8}, 
+                mt: 8, 
+                fontSize: {xs:36, md: 64, xl: 72}, 
+                fontWeight: 400,
                 fontFamily: `'Britanica-HeavySemiExpanded', sans-serif`
-            }}>
+            }} style={textStyle}>
                 Isolated Modules
             </Typography>
             <Typography variant='h5' color='#F3F3F3' sx={{ mb: {xs: 8, md: 16}, fontWeight: 300, width: 730, maxWidth: '100%', lineHeight: 1.7 }}>
