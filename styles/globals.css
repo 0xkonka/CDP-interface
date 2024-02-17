@@ -38,3 +38,10 @@ code:not([class*='language-']):after {
 code[class*='language-'] {
   padding: 0;
 }
+
+@font-face {
+  font-family: 'Britanica-HeavySemiExpanded';
+  src: url('/fonts/britanica-heavy-semi-expanded/britanica-heavy-semi-expanded.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}

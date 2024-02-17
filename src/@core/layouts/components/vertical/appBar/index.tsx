@@ -101,7 +101,8 @@ const LayoutAppBar = (props: Props) => {
         sx={{
           ...(appBarBlur && { backdropFilter: 'blur(6px)' }),
           minHeight: theme => `${theme.mixins.toolbar.minHeight as number}px !important`,
-          backgroundColor: trigger ? '#101818' : 'transparent',   // Topbar background - Mobile View.
+          // backgroundColor: trigger ? '#101818' : 'transparent',   // Topbar background - Mobile View.
+          backgroundColor: 'transparent',
           ...(skin === 'bordered' ? { borderBottom: '1px solid #333' } : { boxShadow: 2 }),
           // ...(contentWidth === 'boxed' && {
           //   '@media (min-width:1440px)': { maxWidth: theme => `calc(1440px - ${theme.spacing(6 * 2)})` }

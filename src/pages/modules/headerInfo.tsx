@@ -13,10 +13,12 @@ const HeaderInfo = () => {
 
     return (
         <Box>
-            <Typography variant='h1' sx={{ mb: {xs: 2, md: 8}, fontSize: {xs:36, md: 64, xl: 72} }}>
+            <Typography variant='h1' sx={{ mb: {xs: 2, md: 8}, fontSize: {xs:36, md: 64, xl: 72}, mt: 8 }} style={{
+                fontFamily: `'Britanica-HeavySemiExpanded', sans-serif`
+            }}>
                 Isolated Modules
             </Typography>
-            <Typography variant='h5' color='#F3F3F3' sx={{ mb: {xs: 8, md: 16}, fontWeight: 300, width: 730, maxWidth: '100%' }}>
+            <Typography variant='h5' color='#F3F3F3' sx={{ mb: {xs: 8, md: 16}, fontWeight: 300, width: 730, maxWidth: '100%', lineHeight: 1.7 }}>
                 Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop 
                 your assets in one click to leverage exposure for your spot assets. Pay back your loan 
                 later using trenUSD or your collateral.
