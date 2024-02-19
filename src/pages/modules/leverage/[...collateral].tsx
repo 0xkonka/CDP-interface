@@ -116,17 +116,24 @@ const Leverage = () => {
             </Typography>
         </Box>
         <Box sx={{display:'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4}}>
-            <Typography variant='h2'>
-                {collateral}
-            </Typography>
-            <Box sx={{borderRadius: '50px', border: 'solid 1px #C6C6C74D'}}>
-                <Button onClick={() => router.push(`/modules/borrow/${collateral?.toString().trim().replace(/\s+/g, '')}`)} sx={{borderRadius: '50px', px: 6, py: 3.5, fontWeight: 600, color: 'white'}}>Borrow</Button>
-                <Button sx={{borderRadius: '50px', px: 6, py: 3.5, fontWeight: 600, backgroundColor: theme.palette.primary.main, color: '#101617',
-                            '&:hover': {
-                                backgroundColor: theme.palette.primary.main
-                            }}}>
+            <Box sx={{borderRadius: 2, border: 'solid 1px #C6C6C74D'}}>
+                <Button variant='outlined' onClick={() => router.push(`/modules/borrow/${collateral?.toString().trim().replace(/\s+/g, '')}`)} 
+                    sx={{borderRadius: 2, px: 8, py: 2.5, fontSize: 16, fontWeight: 400, color: 'white', 
+                        border: 'solid 1px transparent',
+                        '&:hover': {
+                            borderColor: theme.palette.primary.main
+                        }}}>
+                        Borrow
+                </Button>
+                <Button variant='outlined' 
+                    sx={{borderRadius: 2, px: 8, py: 2.5, fontSize: 16, fontWeight: 400, color: 'white',
+                        '&:hover': {
+                            backgroundColor: 'transparent'
+                        }
+                    }}>
                     Leverage
                 </Button>
+                
             </Box>
         </Box>
         <Box sx={{...radiusBoxStyle, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
