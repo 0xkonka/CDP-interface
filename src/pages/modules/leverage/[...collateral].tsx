@@ -8,18 +8,20 @@ import React, { forwardRef, Ref, ReactElement, useEffect, Fragment, useState } f
 // MUI imports
 import {
     Box,
+    Stack,
     Typography,
-    Button,
+    Button, ButtonGroup,
     Tooltip,
     IconButton,
     useMediaQuery,
     Grid,
     Slider,
+    Link,
     Dialog,
     Slide,
     useTheme,
     Theme,
-    SlideProps 
+    SlideProps,
 } from '@mui/material';
 
 // ** Core Components Imports
@@ -29,7 +31,6 @@ import Icon from 'src/@core/components/icon'
 // ** CleaveJS Imports
 import Cleave from 'cleave.js/react'
 import 'cleave.js/dist/addons/cleave-phone.us'
-
 
 const labels = [
     {
@@ -84,16 +85,18 @@ const Transition = forwardRef(function Transition(
 const Leverage = () => {
   const router = useRouter();
   const theme: Theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [multiplyRate, setMultiplyRate] = useState(0)
   const [openAdjust, setOpenAdjust] = useState<boolean>(false)
   const [openRepay, setOpenRepay] = useState<boolean>(false)
+  const [openSlippage, setOpenSlippage] = useState<boolean>(false)
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
+  const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
+  const isLargeScreen = useMediaQuery(theme.breakpoints.down('xl'))
   let { collateral } = router.query
 
   if (Array.isArray(collateral)) {
     collateral = collateral.join(' / ');
   }
-  console.log(collateral)
 
   const radiusBoxStyle = {
     paddingLeft: isSmallScreen ? 3 : 6,
@@ -107,39 +110,32 @@ const Leverage = () => {
     gap: 3
   }
 
+  const smallBoxStyle = {
+    width: '100vw',
+    marginLeft: isSmallScreen ? -4 : -8,
+    padding: 4,
+    marginBottom: 4,
+    borderBottom: 'solid 1px',
+    borderTop: 'solid 1px',
+    borderColor: theme.palette.secondary.dark,
+    gap: 6,
+    overflowX: 'scroll'
+  }
+
+  const computedStyle = isMediumScreen ? smallBoxStyle : radiusBoxStyle;
+
   return (
     <Box>
-        <Box sx={{display:'flex', alignItems: 'center', width: 'fit-content', cursor: 'pointer', mb:4}} >
+        <Stack direction='row' sx={{alignItems: 'center', width: 'fit-content', cursor: 'pointer', mb:4}} >
             <Icon fontSize='24' icon='basil:arrow-left-outline' style={{color: theme.palette.primary.main}}/>
             <Typography variant='body1' color='primary' sx={{ml:1}} onClick={()=>{router.push('/modules')}}>
                 Go back to Pools
             </Typography>
-        </Box>
-        <Box sx={{display:'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4}}>
-            <Box sx={{borderRadius: 2, border: 'solid 1px #C6C6C74D'}}>
-                <Button variant='outlined' onClick={() => router.push(`/modules/borrow/${collateral?.toString().trim().replace(/\s+/g, '')}`)} 
-                    sx={{borderRadius: 2, px: 8, py: 2.5, fontSize: 16, fontWeight: 400, color: 'white', 
-                        border: 'solid 1px transparent',
-                        '&:hover': {
-                            borderColor: theme.palette.primary.main
-                        }}}>
-                        Borrow
-                </Button>
-                <Button variant='outlined' 
-                    sx={{borderRadius: 2, px: 8, py: 2.5, fontSize: 16, fontWeight: 400, color: 'white',
-                        '&:hover': {
-                            backgroundColor: 'transparent'
-                        }
-                    }}>
-                    Leverage
-                </Button>
-                
-            </Box>
-        </Box>
-        <Box sx={{...radiusBoxStyle, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between'}}>
+        </Stack>
+        <Stack direction='row' sx={{...computedStyle, flexWrap: isMediumScreen ? 'nowrap' : 'wrap', justifyContent: 'space-between'}}>
             {labels.map((label, index) => (
-                <Box key={index} sx={{display: 'flex', flexDirection: 'column', alignItems: {xs: 'start', md: 'center'}, gap: isSmallScreen ? 0:1}}>
-                    <Typography variant='body1' color='#707175' sx={{display: 'flex', alignItems: 'center'}}>
+                <Stack direction='row' key={index} sx={{flexDirection: 'column', alignItems: {xs: 'start', md: 'center'}, gap: isSmallScreen ? 0:1}}>
+                    <Typography variant='body1' color='#707175' sx={{display: 'flex', alignItems: 'center', whiteSpace: 'nowrap'}}>
                         {label.key} 
                         <Tooltip title={label.tooltip} placement='top'>
                             <IconButton sx={{bgcolor: 'transparent !important'}}>
@@ -150,31 +146,74 @@ const Leverage = () => {
                     <Typography variant='body1'>
                         {label.value}
                     </Typography>
-                </Box>
+                </Stack>
             ))}
-        </Box>
+        </Stack>
         <Grid container spacing={4}>
             <Grid item xs={12} md={6}>
+                <Stack direction={isMediumScreen ? 'column' : 'row'} sx={{alignItems: 'center', justifyContent: 'space-between', gap: 4, py: 4, mb: {xs: 4, lg: 0}}}>
+                    <Stack direction='row' sx={{alignItems: 'center', justifyContent: 'space-between', borderRadius: 2, border: 'solid 1px #C6C6C74D', width : {xs: 1, lg: 'auto'}}}>
+                        <Button variant='outlined' onClick={() => router.push(`/modules/borrow/${collateral?.toString().trim().replace(/\s+/g, '')}`)} 
+                            sx={{borderRadius: 2, px: 8, py: 2.5, fontSize: 16, fontWeight: 400, color: 'white', 
+                                width: 1/2,
+                                border: 'solid 1px transparent',
+                                '&:hover': {
+                                    borderColor: theme.palette.primary.main
+                                }}}>
+                                Borrow
+                        </Button>
+                        <Button variant='outlined' 
+                            sx={{borderRadius: 2, px: 8, py: 2.5, fontSize: 16, fontWeight: 400, color: 'white',
+                                width: 1/2,
+                                '&:hover': {
+                                    backgroundColor: 'transparent'
+                                }
+                            }}>
+                            Leverage
+                        </Button>
+                    </Stack>
+                    <Stack direction='row' style={{alignItems: 'center'}} gap={3}>
+                        <Link href='' sx={{display: 'flex', alignItems: 'center'}}>
+                            <Typography variant='h5' color='primary' sx={{fontWeight: 400}}>0x03B5...36Fa</Typography>
+                            <svg style={{marginLeft: 4, marginBottom: 4}} xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <g clipPath="url(#clip0_719_13657)">
+                                    <path d="M11.625 0.75V4.125C11.625 4.33228 11.4573 4.5 11.25 4.5C11.0427 4.5 10.875 4.33228 10.875 4.125V1.65525L5.51512 7.01513C5.44191 7.08834 5.34591 7.125 5.25 7.125C5.15409 7.125 5.05809 7.08834 4.98488 7.01513C4.95003 6.98032 4.92239 6.93899 4.90353 6.8935C4.88467 6.84801 4.87496 6.79925 4.87496 6.75C4.87496 6.70075 4.88467 6.65199 4.90353 6.6065C4.92239 6.56101 4.95003 6.51968 4.98488 6.48487L10.3448 1.125H7.875C7.66772 1.125 7.5 0.957281 7.5 0.75C7.5 0.542719 7.66772 0.375 7.875 0.375H11.25C11.4573 0.375 11.625 0.542719 11.625 0.75ZM10.125 10.5V6C10.125 5.79272 9.95728 5.625 9.75 5.625C9.54272 5.625 9.375 5.79272 9.375 6V10.5C9.375 10.7069 9.20691 10.875 9 10.875H1.5C1.29309 10.875 1.125 10.7069 1.125 10.5V3C1.125 2.79309 1.29309 2.625 1.5 2.625H6C6.20728 2.625 6.375 2.45728 6.375 2.25C6.375 2.04272 6.20728 1.875 6 1.875H1.5C0.879656 1.875 0.375 2.37966 0.375 3V10.5C0.375 11.1203 0.879656 11.625 1.5 11.625H9C9.62034 11.625 10.125 11.1203 10.125 10.5Z" fill="#67DAB1"/>
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_719_13657">
+                                    <rect width="12" height="12" fill="white"/>
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                        </Link>
+                        <Icon icon='tabler:copy' style={{cursor: 'pointer'}} fontSize={22}/>
+                        <Icon icon='iconoir:refresh' style={{cursor: 'pointer'}} fontSize={18}/>
+                        <Icon icon='tabler:settings' style={{cursor: 'pointer'}} fontSize={22}/>
+                    </Stack>
+                </Stack>
                 <Box sx={radiusBoxStyle}>
                     <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
-                        Collateral assets
+                        Deposit
                     </Typography>
                     <Grid container spacing={2}>
-                        <Grid item xs={5} sx={{display: 'flex', alignItems: 'center'}}>
-                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                        <Grid item xs={5}>
+                            <Stack direction='row' sx={{alignItems: 'center', mb: 2}}>
                                 <img 
                                     src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
                                     alt='LinkedIn' height={42}
                                     style={{ marginRight: 10 }}
                                 />
                                 {collateral}
-                            </Box>
+                            </Stack>
+                            <Typography variant='body1' color='#707175'>
+                                {collateral}
+                            </Typography>
                         </Grid>
                         <Grid item xs={7}>
-                            <Box sx={{display: 'flex', justifyContent: 'end', alignItems: 'center', mb: 1}}>
+                            <Stack direction='row' sx={{justifyContent: 'end', alignItems: 'center', mb: 1}}>
                                 <Typography variant='body2' color='#707175'>Available:</Typography>
                                 <Typography variant='body2' sx={{ml: 1}}>8,9B {collateral}</Typography>        
-                            </Box>
+                            </Stack>
                             <CleaveWrapper style={{position: 'relative'}}>
                                 <Cleave id='collateral-assets-amount' 
                                         placeholder='0.00' 
@@ -187,108 +226,161 @@ const Leverage = () => {
                                         }} 
                                         style={{paddingRight: 50}}
                                 />
-                                <Box sx={{position: 'absolute', right: 10, top: 10, cursor:'pointer', borderLeft: 'solid 1px #12201F', fontSize: 12, pl: 1}}>
+                                <Box sx={{position: 'absolute', right: 10, top: 10, cursor:'pointer', borderLeft: 'solid 1px #12201F', fontSize: 12, pl: 1, color: theme.palette.primary.main}}>
                                     MAX
                                 </Box>   
                             </CleaveWrapper>
-                            <Typography variant='body1' sx={{ml:3}}>
-                                $0.0
+                            <Typography variant='body1' sx={{ml:3, opacity: 0.5}}>
+                                = $0.0
                             </Typography>
                         </Grid>
                     </Grid>
                 </Box>
                 <Box sx={radiusBoxStyle}>
-                    <Box sx={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <Stack direction='row' sx={{width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
                         <Typography variant='subtitle1' sx={{fontWeight: 600}}>
                             Leverage
                         </Typography>
-                        <Icon fontSize='28' icon='tabler:settings' style={{color: theme.palette.primary.main, cursor: 'pointer'}}/>
-                    </Box>
+                        <Icon fontSize='28' icon='tabler:settings' style={{color: theme.palette.primary.main, cursor: 'pointer'}}
+                            onClick={() => {setOpenSlippage(true)}}/>
+                    </Stack>
                     <Typography variant='subtitle1' color='#707175' sx={{mb: 2}}>Recursive borrowing engine using trenUSD</Typography>
                     <Box sx={{width: '100%'}}>
-                        <Box sx={{display:'flex', justifyContent: 'flex-end'}}>
+                        <Stack direction='row' sx={{justifyContent: 'flex-end'}}>
                             <Typography variant='subtitle1' color={theme.palette.primary.main} sx={{mb: '-10px'}}>
                                 Safe
                             </Typography>
-                        </Box>
+                        </Stack>
                         <Slider aria-labelledby='continuous-slider'
                                 value={multiplyRate}
                                 min={0}
                                 max={60}
                                 onChange={(event:any)=>{setMultiplyRate(event.target.value)}}/>
-                        <Box sx={{display:'flex', justifyContent: 'flex-end', mt: -2}}>
+                        <Stack direction='row' sx={{justifyContent: 'flex-end', mt: -2}}>
                             <Typography variant='subtitle2' color='white'>
-                                {multiplyRate}x
+                                {multiplyRate == 0 ? '' : multiplyRate}x
                             </Typography>
-                        </Box>
+                        </Stack>
                     </Box>
-                </Box>
-                <Box sx={{ ...radiusBoxStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Typography variant='subtitle1' sx={{fontWeight: 600}}>
-                        Feature value
-                    </Typography>
-                    <Typography variant='subtitle1'>
-                        0
-                    </Typography>
                 </Box>
             </Grid>
             <Grid item xs={12} md={6} sx={{display: 'flex', flexDirection: 'column'}}>
                 <Box sx={{...radiusBoxStyle, height: '100%', mb: 10}}>
-                    <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
+                    {/* <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
                         Leverage
-                    </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    </Typography> */}
+                    <Stack sx={{alignItems: 'center', justifyContent: 'center'}}>
                         <Grid container sx={{height: '100%'}}>
-                            <Grid item xs={12} md={6} sx={{
-                                pr: {xs: 0, md: 4},
-                                borderBottom: { xs: 'solid 1px #2D3131', md: 0 },
-                                borderRight: { md: 'solid 1px #2D3131' }
+                            <Grid item xs={12} lg={6} sx={{
+                                pr: {xs: 0, lg: 4},
+                                borderBottom: { xs: 'solid 1px #2D3131', lg: 0 },
+                                borderRight: { lg: 'solid 1px #2D3131' }
                             }}>
-                                <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
+                                    Collateral
+                                </Typography>
+                                <Stack sx={{alignItems: 'center', justifyContent: 'space-between', width: 1}}>
+                                    <Stack direction='row' sx={{width: 1, justifyContent: 'space-between'}}>
+                                        <Stack direction='row' sx={{alignItems: 'center'}}>
+                                            <img 
+                                                src={`/images/tokens/${collateral?.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
+                                                alt={collateral} height={isSmallScreen ? 36 : 42}
+                                                style={{ marginRight: 10 }}
+                                            />
+                                            {collateral}
+                                        </Stack>
+                                        <Stack sx={{ml: isSmallScreen ? 0 : 12, alignItems: 'flex-end'}}>
+                                            <Typography variant='subtitle1'>
+                                                17.2B
+                                            </Typography>
+                                            <Typography variant='subtitle2' sx={{color: '#707175'}}>
+                                                = $20,000.00
+                                            </Typography>
+                                        </Stack>
+                                    </Stack>
+                                    <Stack sx={{width: {xs: 1, lg: 'auto'}, justifyContent: 'center', alignItems: 'center'}}>
+                                        <Stack id='horizontal-before' sx={{justifyContent: 'center'}}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="2" height="10" viewBox="0 0 2 10" fill="none">
+                                                <path d="M1 0L1 10" stroke="#707175" strokeDasharray="4 4"/>
+                                            </svg>
+                                        </Stack>
+                                        <Stack>
+                                            <Typography color='primary' variant={isMediumScreen ? 'h4' : 'subtitle1'}>10x</Typography>
+                                        </Stack>
+                                        <Stack id='horizontal-after' sx={{justifyContent: 'center'}}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="11" viewBox="0 0 8 11" fill="none">
+                                                <path d="M3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659729 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 2.18557e-08L3.5 2.5L4.5 2.5L4.5 -2.18557e-08L3.5 2.18557e-08ZM3.5 7.5L3.5 10L4.5 10L4.5 7.5L3.5 7.5ZM3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659729 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 2.18557e-08L3.5 2.5L4.5 2.5L4.5 -2.18557e-08L3.5 2.18557e-08ZM3.5 7.5L3.5 10L4.5 10L4.5 7.5L3.5 7.5Z" fill="#707175"/>
+                                            </svg>
+                                        </Stack>
+                                    </Stack>
+                                    <Stack direction='row'  sx={{width: 1, justifyContent: 'space-between'}}>
+                                        <Stack direction='row' sx={{alignItems: 'center'}}>
+                                            <img 
+                                                src={`/images/tokens/${collateral?.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
+                                                alt={collateral} height={isSmallScreen ? 36 : 42}
+                                                style={{ marginRight: 10 }}
+                                            />
+                                            {collateral}
+                                        </Stack>
+                                        <Stack sx={{ml: isSmallScreen ? 0 : 12, alignItems: 'flex-end'}}>
+                                            <Typography variant='subtitle1'>
+                                                172B
+                                            </Typography>
+                                            <Typography variant='subtitle2' sx={{color: '#707175'}}>
+                                                = $200,000.00
+                                            </Typography>
+                                        </Stack>
+                                    </Stack>
+                                </Stack>
+                                {/* <Stack direction='row' sx={{justifyContent: 'space-between'}}>
+                                    <Stack direction='row' sx={{alignItems: 'center'}}>
                                         <img 
                                             src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
                                             alt='LinkedIn' height={42}
                                             style={{ marginRight: 10 }}
                                         />
                                         {collateral}
-                                    </Box>
+                                    </Stack>
                                     <Box>
-                                        <Typography variant='subtitle1'>
+                                        <Typography variant='subtitle1' sx={{textAlign: 'center'}}>
                                             20,000.00
                                         </Typography>
-                                        <Typography variant='subtitle2' sx={{color: '#707175'}}>
+                                        <Typography variant='subtitle2' sx={{color: '#707175', textAlign: 'center'}}>
                                             $20,000.00
                                         </Typography>
                                     </Box>
-                                </Box>
-                                <Box sx={{display: 'flex', justifyContent: {xs: 'flex-end', md: 'flex-start'}, mt: { xs: 4, md: 10 }, mb: { xs: 4, md: 0 }}}>
-                                    <Button sx={{ 
-                                        color: 'white',
-                                        borderColor: '#C6E0DC'
-                                    }} variant='outlined' onClick={() => {setOpenAdjust(true)}}>Adjust Leverage</Button>
-                                </Box>
+                                </Stack> */}
+                                <Stack direction='row' sx={{justifyContent: {xs: 'flex-end', md: 'flex-start'}, mt: { xs: 4, md: 10 }, mb: { xs: 4, md: 0 }}}>
+                                    
+                                </Stack>
                             </Grid>
-                            <Grid item xs={12} md={6} sx={{pl: {xs: 0, md: 4}, pt: {xs: 4, md: 0}}}>
-                                <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                            <Grid item xs={12} lg={6} sx={{pl: {xs: 0, md: 4}, pt: {xs: 4, md: 0}}}>
+                                <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
+                                    Debt
+                                </Typography>
+                                <Stack direction='row' sx={{justifyContent: 'space-between'}}>
+                                    <Stack direction='row' sx={{alignItems: 'center'}}>
                                         <Image 
                                             src={`/images/tokens/trenUSD.png`}
                                             alt='LinkedIn' width={32} height={32}
                                             style={{ borderRadius: '100%', marginRight: 10 }}
                                         />
                                         trenUSD
-                                    </Box>
+                                    </Stack>
                                     <Box>
-                                        <Typography variant='subtitle1'>
+                                        <Typography variant='subtitle1' sx={{textAlign: 'end'}}>
                                             16,000.00
                                         </Typography>
-                                        <Typography variant='subtitle2' sx={{color: '#707175'}}>
-                                            $16,000.00
+                                        <Typography variant='subtitle2' sx={{color: '#707175', textAlign: 'end'}}>
+                                            = $16,000.00
                                         </Typography>
                                     </Box>
-                                </Box>
-                                <Box sx={{display: 'flex', justifyContent: 'flex-end', mt: { xs: 4, md: 10 }, mb: { xs: 4, md: 0 }}}>
+                                </Stack>
+                                <Stack direction='row' sx={{mt: { xs: 4, md: 10 }, mb: { xs: 4, md: 0 }, gap:4}}>
+                                    <Button sx={{ 
+                                        color: 'white',
+                                        borderColor: '#C6E0DC'
+                                    }} variant='outlined' onClick={() => {setOpenAdjust(true)}}>Adjust Leverage</Button>
                                     <Button sx={{ 
                                         color: 'white',
                                         borderColor: '#C9A3FA'
@@ -297,25 +389,22 @@ const Leverage = () => {
                                     >
                                         Repay
                                         </Button>
-                                </Box>
+                                </Stack>
                             </Grid>
                         </Grid>
-                    </Box>
+                    </Stack>
                 </Box>
                 <Box sx={radiusBoxStyle}>
-                    <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
-                        {collateral} - trenUSD
-                    </Typography>
                     <Grid container spacing={8}>
                         <Grid item xs={12} lg={6}>
-                            <Box sx={{mb:2, display:'flex', justifyContent: 'space-between'}}>
-                                <Typography variant='subtitle2'>
+                            <Stack direction='row' sx={{mb:2, justifyContent: 'space-between'}}>
+                                <Typography variant='subtitle1'>
                                     Health factor
                                 </Typography>
-                                <Typography variant='subtitle2'>
+                                <Typography variant='subtitle1'>
                                     —
                                 </Typography>
-                            </Box>
+                            </Stack>
                             <Box className='gradientProgress'>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"
                                     style={{marginLeft: -8}}>
@@ -329,24 +418,24 @@ const Leverage = () => {
                                     background: 'linear-gradient(270deg, #00D084 0%, #FF9C19 54.06%, #FF5876 100.77%)'
                                 }}/>
                             </Box>
-                            <Box sx={{display:'flex', justifyContent: 'space-between'}}>
+                            <Stack direction='row' sx={{justifyContent: 'space-between'}}>
                                 <Typography variant='subtitle2' color='#707175'>
                                     Safe
                                 </Typography>
                                 <Typography variant='subtitle2' color='#707175'>
                                     Risky
                                 </Typography>
-                            </Box>
+                            </Stack>
                         </Grid>
                         <Grid item xs={12} lg={6}>
-                            <Box sx={{mb:2, display:'flex', justifyContent: 'space-between'}}>
-                                <Typography variant='subtitle2'>
+                            <Stack direction='row' sx={{mb:2, justifyContent: 'space-between'}}>
+                                <Typography variant='subtitle1'>
                                     Borrowing power used
                                 </Typography>
-                                <Typography variant='subtitle2'>
+                                <Typography variant='subtitle1'>
                                     —
                                 </Typography>
-                            </Box>
+                            </Stack>
                             <Box sx={{
                                 mt: '30px',
                                 width: '100%',
@@ -362,70 +451,81 @@ const Leverage = () => {
                                     background: 'linear-gradient(90deg, #67DAB1 0%, #0D8057 43.61%, #00200F 101.04%)'
                                 }}/>
                             </Box>
-                            <Box sx={{display:'flex', justifyContent: 'space-between'}}>
+                            <Stack direction='row' sx={{justifyContent: 'space-between'}}>
                                 <Typography variant='subtitle2' color='#707175'>
                                     0%
                                 </Typography>
                                 <Typography variant='subtitle2' color='#707175'>
                                     100%
                                 </Typography>
-                            </Box>
+                            </Stack>
                         </Grid>
                     </Grid>
                 </Box>
             </Grid>
         </Grid>
         <Box sx={radiusBoxStyle}>
-            <Grid container spacing={8}>
-                <Grid item xs={12} md={6} lg={3}>
-                    <Box sx={{display:'flex', justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
+            <Grid container spacing={isSmallScreen ? 4 : 8} sx={{justifyContent: 'space-between'}}>
+                <Grid item xs={12} md={6} lg={2}>
+                    <Stack direction='row' sx={{justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
+                        <Typography variant='body1' sx={{fontWeight: 600}}>
+                            Feature value
+                        </Typography>
+                        <Typography variant='body1' sx={{fontWeight: 600}}>
+                            —
+                        </Typography>
+                    </Stack>
+                </Grid>
+                <Grid item xs={12} md={6} lg={2}>
+                    <Stack direction='row' sx={{justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
                         <Typography variant='body1'>
                             Liquidation Price
                         </Typography>
                         <Typography variant='body1'>
                             —
                         </Typography>
-                    </Box>
+                    </Stack>
                 </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <Box sx={{display:'flex', justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
+                <Grid item xs={12} md={6} lg={2}>
+                    <Stack direction='row' sx={{justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
                         <Typography variant='body1'>
                             LTV
                         </Typography>
                         <Typography variant='body1'>
                             —
                         </Typography>
-                    </Box>
+                    </Stack>
                 </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <Box sx={{display:'flex', justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
+                <Grid item xs={12} md={6} lg={2}>
+                    <Stack direction='row' sx={{justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
                         <Typography variant='body1'>
                             Collateral Value
                         </Typography>
                         <Typography variant='body1'>
                             —
                         </Typography>
-                    </Box>
+                    </Stack>
                 </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <Box sx={{display:'flex', justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
+                <Grid item xs={12} md={6} lg={2}>
+                    <Stack direction='row' sx={{justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
                         <Typography variant='body1'>
                             Loan Value
                         </Typography>
                         <Typography variant='body1'>
                             —
                         </Typography>
-                    </Box>
+                    </Stack>
                 </Grid>
             </Grid>
         </Box>
-        <Box sx={{display: 'flex', justifyContent: 'center', py: 8}}>
+        <Stack direction='row' sx={{justifyContent: 'center', py: 8}}>
             <Button sx={{ 
                 ml: {xs: 2, sm: 2},
                 color: 'white',
-                minWidth: 250
+                minWidth: 250,
+                width: {xs: 1, sm: 'auto'}
             }} variant='outlined'>Approve</Button>
-        </Box>
+        </Stack>
 
         {/* Adjust Leverage Modal Popup */}
         <Fragment>
@@ -567,6 +667,48 @@ const Leverage = () => {
             </Dialog>
         </Fragment>
         {/* End Repay Modal */}
+
+        {/* Repay Slippage Tolerance Popup */}
+        <Fragment>
+            <Dialog
+                open={openSlippage}
+                keepMounted
+                onClose={() => {setOpenSlippage(false)}}
+                TransitionComponent={Transition}
+                maxWidth='sm'
+                fullWidth={true}
+                aria-labelledby='alert-dialog-slide-title'
+                aria-describedby='alert-dialog-slide-description'
+            >
+                <Box sx={{ p: 6, position: 'relative' }}>
+                    <Typography sx={{textAlign: 'center', mb: 8, fontWeight: 600}} variant='h4'>
+                        Slippage Tolerance
+                    </Typography>
+                    <Icon style={{position: 'absolute', right: 20, top: 20, cursor: 'pointer', fontWeight: 'bold'}} icon='tabler:x' fontSize='1.75rem' onClick={() => {setOpenSlippage(false)}}/>
+                    <Typography sx={{textAlign: 'center', maxWidth: 490, m: 'auto'}}>
+                        Price slippage is the difference in prices between the time a market order is placed and the time it completes on the blockchain or is filled.
+                    </Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'center', gap: 4, mt: { xs: 4, md: 10 }, mb: { xs: 4, md: 0 }}}>
+                        <Button sx={{ 
+                            color: 'white',
+                            backgroundColor: '#1A1F20',
+                            fontSize: 18,
+                            borderColor: '#67DAB1'
+                            }} variant='outlined'
+                        >
+                            Auto
+                        </Button>
+                        <ButtonGroup variant='tonal'>
+                            <Button sx={{color: 'white', backgroundColor: '#1A1F20', px: {xs: 3, sm: 5}}}>0.1%</Button>
+                            <Button sx={{color: 'white', backgroundColor: '#1A1F20', px: {xs: 3, sm: 5}}}>0.5%</Button>
+                            <Button sx={{color: 'white', backgroundColor: '#1A1F20', px: {xs: 3, sm: 5}}}>1%</Button>
+                            <Button sx={{color: 'white', backgroundColor: '#1A1F20', px: {xs: 3, sm: 5}}}>Custom</Button>
+                        </ButtonGroup>
+                    </Box>
+                </Box>
+            </Dialog>
+        </Fragment>
+        {/* End Slippage Tolerance Modal */}
     </Box>
   );
 };

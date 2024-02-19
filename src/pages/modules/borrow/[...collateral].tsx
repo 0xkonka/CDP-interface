@@ -97,7 +97,7 @@ const Borrow = () => {
   const [openSummary, setOpenSummary] = useState<boolean>(false)
   const handleClickOpenSummary = () => setOpenSummary(true)
   const handleCloseSummary = () => setOpenSummary(false)
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
   const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
   let { collateral } = router.query
  
@@ -213,7 +213,7 @@ const Borrow = () => {
                                 {collateral}
                             </Stack>
                             <Typography variant='body1' color='#707175'>
-                                Tren Finance USD
+                                {collateral}
                             </Typography>
                         </Grid>
                         <Grid item xs={7}>
@@ -235,7 +235,7 @@ const Borrow = () => {
                                 />
                                 <Box sx={{position: 'absolute', right: 10, top: 10, cursor:'pointer', borderLeft: 'solid 1px #12201F', fontSize: 12, pl: 1, color: theme.palette.primary.main}}>
                                     MAX
-                                </Box>   
+                                </Box>
                             </CleaveWrapper>
                             <Typography variant='body1'  sx={{ml:3, opacity: 0.5}}>
                                 = $0.0
@@ -394,16 +394,13 @@ const Borrow = () => {
                     </Typography> */}
                 </Stack>
                 <Box sx={radiusBoxStyle}>
-                    <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
-                        {collateral} - trenUSD
-                    </Typography>
                     <Grid container spacing={8}>
                         <Grid item xs={12} lg={6}>
                             <Stack direction='row' sx={{mb:2, display:'flex', justifyContent: 'space-between'}}>
-                                <Typography variant='subtitle2'>
+                                <Typography variant='subtitle1'>
                                     Health factor
                                 </Typography>
-                                <Typography variant='subtitle2'>
+                                <Typography variant='subtitle1'>
                                     —
                                 </Typography>
                             </Stack>
@@ -431,10 +428,10 @@ const Borrow = () => {
                         </Grid>
                         <Grid item xs={12} lg={6}>
                             <Stack direction='row' sx={{mb:2, justifyContent: 'space-between'}}>
-                                <Typography variant='subtitle2'>
+                                <Typography variant='subtitle1'>
                                     Borrowing power used
                                 </Typography>
-                                <Typography variant='subtitle2'>
+                                <Typography variant='subtitle1'>
                                     —
                                 </Typography>
                             </Stack>
