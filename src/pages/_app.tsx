@@ -1,11 +1,36 @@
 // ** React Imports
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 
 // ** Next Imports
 import Head from 'next/head'
 import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
+// ** Web3 Modules Import
+import {
+  connectorsForWallets,
+  RainbowKitProvider,
+  lightTheme,
+  darkTheme,
+  getDefaultWallets
+} from '@rainbow-me/rainbowkit'
+import {
+  injectedWallet,
+  metaMaskWallet,
+  braveWallet,
+  coinbaseWallet,
+  walletConnectWallet,
+  ledgerWallet,
+  rainbowWallet,
+  argentWallet,
+  trustWallet
+} from '@rainbow-me/rainbowkit/wallets'
+import { Chain } from '@rainbow-me/rainbowkit'
+import { mainnet, goerli } from 'wagmi/chains'
+import { createConfig, configureChains, WagmiConfig } from 'wagmi'
+import { infuraProvider } from 'wagmi/providers/infura'
+import { publicProvider } from 'wagmi/providers/public'
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
 // ** Store Imports
 import { store } from 'src/store'
@@ -62,6 +87,7 @@ import 'src/iconify-bundle/icons-bundle-react'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import '@rainbow-me/rainbowkit/styles.css';
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -129,30 +155,89 @@ const App = (props: ExtendedAppProps) => {
           <meta name='keywords' content='DeFi, TrenFi, Tren Finance, TrenFinance App' />
           <meta name='viewport' content='initial-scale=1, width=device-width' />
         </Head>
-
-        <AuthProvider>
-          <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-            <SettingsConsumer>
-              {({ settings }) => {
-                return (
-                  <ThemeComponent settings={settings}>
-                    {/* <Guard authGuard={authGuard} guestGuard={guestGuard}> */}
+        <Web3Wrapper>
+          <AuthProvider>
+            <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+              <SettingsConsumer>
+                {({ settings }) => {
+                  return (
+                    <ThemeComponent settings={settings}>
+                      {/* <Guard authGuard={authGuard} guestGuard={guestGuard}> */}
                       {/* <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}> */}
-                        {getLayout(<Component {...pageProps} />)}
+                      {getLayout(<Component {...pageProps} />)}
                       {/* </AclGuard> */}
-                    {/* </Guard> */}
-                    <ReactHotToast>
-                      <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-                    </ReactHotToast>
-                  </ThemeComponent>
-                )
-              }}
-            </SettingsConsumer>
-          </SettingsProvider>
-        </AuthProvider>
+                      {/* </Guard> */}
+                      <ReactHotToast>
+                        <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                      </ReactHotToast>
+                    </ThemeComponent>
+                  )
+                }}
+              </SettingsConsumer>
+            </SettingsProvider>
+          </AuthProvider>
+        </Web3Wrapper>
       </CacheProvider>
     </Provider>
   )
 }
 
 export default App
+
+// Web3 Configs
+const { chains, publicClient, webSocketPublicClient } = configureChains(
+  [goerli],
+  [
+    // infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_ID !== '' && process.env.NEXT_PUBLIC_INFURA_ID }),
+    // jsonRpcProvider({
+    //   rpc: chain => {
+    //     return {
+    //       http: `${chain.rpcUrls.default}`,
+    //     }
+    //   },
+    // }),
+    publicProvider()
+  ]
+)
+
+const projectId = 'e973a06523ca5ac45d042a4e0b9d73f7'
+
+const { wallets } = getDefaultWallets({
+  appName: 'Tren Finance',
+  projectId,
+  chains
+})
+
+const connectors = connectorsForWallets([
+  ...wallets,
+  {
+    groupName: 'Other',
+    wallets: [
+      argentWallet({ projectId, chains }),
+      trustWallet({ projectId, chains }),
+      ledgerWallet({ projectId, chains })
+    ]
+  }
+])
+
+const wagmiClient = createConfig({ autoConnect: true, connectors, publicClient, webSocketPublicClient })
+
+// Web3Wrapper
+export function Web3Wrapper({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+  if (!mounted) return null
+
+  return (
+    <WagmiConfig config={wagmiClient}>
+      <RainbowKitProvider
+        chains={chains}
+        initialChain={5} // Optional, initialChain={1}, initialChain={chain.mainnet}, initialChain={gnosisChain}
+        showRecentTransactions={true}
+      >
+        {children}
+      </RainbowKitProvider>
+    </WagmiConfig>
+  )
+}

@@ -27,6 +27,9 @@ import { CollateralType } from 'src/types/collateral/types'
 // Import Subviews
 import HeaderInfo from 'src/pages/modules/headerInfo'
 import CollateralRow from 'src/pages/modules/collateralRow'
+import { useContractRead, useNetwork } from 'wagmi';
+import { MARKET_LENS_ADDR, TREN_MARKET_ADDR } from 'src/configs/address';
+import MARKET_LENS_ABI from 'src/abi/MarketLens.json'
 
 // Static rows data
 const initialRows: CollateralType[] = [
@@ -180,13 +183,24 @@ const Modules = () => {
     const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
     const [sortBy, setSortBy] = useState<string>('+asset')
     const router = useRouter()
-
+    const { chain : chainId } = useNetwork()
+    
     const assetTypes:string[] = ['All', 'LRT', 'LST', 'RWA', 'LP Token', 'Vault', 'PT Token', 'Meme', 'Volatile', 'Stable']
     const theme: Theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
 
+    const { data: marketInfo } = useContractRead({
+        address: MARKET_LENS_ADDR[chainId?.id ?? 5] as `0x${string}`,
+        abi: MARKET_LENS_ABI,
+        functionName: 'getMarketInfoTrenMarketV3',
+        args: [TREN_MARKET_ADDR[chainId?.id ?? 5]],
+      })
+
+    console.log('marketInfo', marketInfo)
+    
     const handleRowClick = (index: number) => {
+        
         setOpenRowIndex(openRowIndex === index ? -1 : index);
     }
 
