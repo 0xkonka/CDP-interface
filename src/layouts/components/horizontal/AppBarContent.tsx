@@ -107,48 +107,10 @@ const AppBarContent = (props: Props) => {
       </Button> */}
 
       {/* Wallet Connected */}
-      <WalletDropDown item={
-        walletItems
-      } settings={settings}/>
-
-      {/* <Button sx={{color: 'white', backgroundColor: 'transparent', 
-        '&:hover' : {
-          backgroundColor: 'transparent'
-        }}} aria-haspopup='true' onClick={handleClick} aria-controls='wallet-connect'>
-        <Icon icon='tabler:wallet' fontSize={28} style={{marginRight: 10}}/>
-          {walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}
-        <Icon icon='tabler:chevron-down' fontSize={18} style={{marginLeft: 5}}/>
-      </Button> 
       <ConnectWallet />
-      <Menu 
-        keepMounted
-        elevation={0}
-        anchorEl={anchorEl}
-        id='customized-menu'
-        onClose={handleClose}
-        open={Boolean(anchorEl)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center'
-        }}
-      >
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Icon icon='mdi:content-copy' fontSize={20} />
-          </ListItemIcon>
-          <ListItemText primary='Copy Address' />
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Icon icon='tabler:logout' fontSize={20} />
-          </ListItemIcon>
-          <ListItemText primary='Disconnect' />
-        </MenuItem>
-      </Menu> */}
+      {/* <WalletDropDown item={
+        walletItems
+      } settings={settings}/> */}
     </Box>
   )
 }

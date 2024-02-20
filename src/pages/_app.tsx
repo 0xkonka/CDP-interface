@@ -12,6 +12,7 @@ import {
   RainbowKitProvider,
   lightTheme,
   darkTheme,
+  Theme,
   getDefaultWallets
 } from '@rainbow-me/rainbowkit'
 import {
@@ -25,6 +26,7 @@ import {
   argentWallet,
   trustWallet
 } from '@rainbow-me/rainbowkit/wallets'
+import merge from 'lodash.merge';
 import { Chain } from '@rainbow-me/rainbowkit'
 import { mainnet, goerli } from 'wagmi/chains'
 import { createConfig, configureChains, WagmiConfig } from 'wagmi'
@@ -221,6 +223,12 @@ const connectors = connectorsForWallets([
 ])
 
 const wagmiClient = createConfig({ autoConnect: true, connectors, publicClient, webSocketPublicClient })
+const myTheme = merge(darkTheme(), {
+  colors: {
+    accentColorForeground: 'white',
+    connectButtonBackground: 'transparent',
+  },
+} as Theme);
 
 // Web3Wrapper
 export function Web3Wrapper({ children }: { children: React.ReactNode }) {
@@ -232,9 +240,9 @@ export function Web3Wrapper({ children }: { children: React.ReactNode }) {
   return (
     <WagmiConfig config={wagmiClient}>
       <RainbowKitProvider
+        theme={myTheme}
         chains={chains}
         initialChain={5} // Optional, initialChain={1}, initialChain={chain.mainnet}, initialChain={gnosisChain}
-        showRecentTransactions={true}
       >
         {children}
       </RainbowKitProvider>
