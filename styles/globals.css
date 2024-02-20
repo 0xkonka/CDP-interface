@@ -46,11 +46,6 @@ code[class*='language-'] {
   font-style: normal;
 }
 
-.ju367v1s.ju367va {
-  /* width: 200px;
-  justify-content: end; */
-}
-
 .ju367v9h {
   background: transparent !important;
   border: solid 1px #67DAB1 !important; 
@@ -63,4 +58,13 @@ code[class*='language-'] {
 .iekbcc0.ju367v8 {
   font-size: 18px !important;
   font-weight: 400;
+}
+
+.ju367va2 {
+  border-color: transparent !important;
+  background: transparent !important;
+}
+
+:root {
+  --rk-colors-connectButtonBackground: transparent !important;
 }
