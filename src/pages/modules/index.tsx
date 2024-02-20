@@ -30,6 +30,7 @@ import CollateralRow from 'src/pages/modules/collateralRow'
 import { useContractRead, useNetwork } from 'wagmi';
 import { MARKET_LENS_ADDR, TREN_MARKET_ADDR } from 'src/configs/address';
 import MARKET_LENS_ABI from 'src/abi/MarketLens.json'
+import { useProtocolDataContext } from 'src/context/ProtocolDataProvider';
 
 // Static rows data
 const initialRows: CollateralType[] = [
@@ -190,14 +191,28 @@ const Modules = () => {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
 
-    const { data: marketInfo } = useContractRead({
-        address: MARKET_LENS_ADDR[chainId?.id ?? 5] as `0x${string}`,
-        abi: MARKET_LENS_ABI,
-        functionName: 'getMarketInfoTrenMarketV3',
-        args: [TREN_MARKET_ADDR[chainId?.id ?? 5]],
-      })
+    const { ProtocolInfo, UserPosition } = useProtocolDataContext()
 
-    console.log('marketInfo', marketInfo)
+    useEffect(() => {
+      if (ProtocolInfo && ProtocolInfo?.length > 0) {
+        for (let i = 0; i < ProtocolInfo?.length; i++) {
+          initialRows.push({
+            id: 11,
+            asset: 'stETH',
+            type: 'LST',
+            borrowAPY: 10,
+            maxLeverage: +(1 / (1 - Number(ProtocolInfo[i].maximumCollateralRatio) / 10000)).toFixed(2),
+            LTVRatio: Number(ProtocolInfo[i].maximumCollateralRatio) / 10000,
+            maxDepositAPY: 30,
+            baseDepositAPY: 10,
+            active: true
+          })
+        }
+      }
+    }, [ProtocolInfo])
+  
+  //   console.log('ProtocolInfo', ProtocolInfo)
+  //   console.log('UserPosition', UserPosition)
     
     const handleRowClick = (index: number) => {
         

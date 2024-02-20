@@ -88,7 +88,8 @@ import 'src/iconify-bundle/icons-bundle-react'
 
 // ** Global css styles
 import '../../styles/globals.css'
-import '@rainbow-me/rainbowkit/styles.css';
+import '@rainbow-me/rainbowkit/styles.css'
+import { PoolDataProvider } from 'src/context/ProtocolDataProvider'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -157,26 +158,28 @@ const App = (props: ExtendedAppProps) => {
           <meta name='viewport' content='initial-scale=1, width=device-width' />
         </Head>
         <Web3Wrapper>
-          <AuthProvider>
-            <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-              <SettingsConsumer>
-                {({ settings }) => {
-                  return (
-                    <ThemeComponent settings={settings}>
-                      {/* <Guard authGuard={authGuard} guestGuard={guestGuard}> */}
-                      {/* <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}> */}
-                      {getLayout(<Component {...pageProps} />)}
-                      {/* </AclGuard> */}
-                      {/* </Guard> */}
-                      <ReactHotToast>
-                        <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-                      </ReactHotToast>
-                    </ThemeComponent>
-                  )
-                }}
-              </SettingsConsumer>
-            </SettingsProvider>
-          </AuthProvider>
+          <PoolDataProvider>
+            <AuthProvider>
+              <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+                <SettingsConsumer>
+                  {({ settings }) => {
+                    return (
+                      <ThemeComponent settings={settings}>
+                        {/* <Guard authGuard={authGuard} guestGuard={guestGuard}> */}
+                        {/* <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}> */}
+                        {getLayout(<Component {...pageProps} />)}
+                        {/* </AclGuard> */}
+                        {/* </Guard> */}
+                        <ReactHotToast>
+                          <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                        </ReactHotToast>
+                      </ThemeComponent>
+                    )
+                  }}
+                </SettingsConsumer>
+              </SettingsProvider>
+            </AuthProvider>
+          </PoolDataProvider>
         </Web3Wrapper>
       </CacheProvider>
     </Provider>
