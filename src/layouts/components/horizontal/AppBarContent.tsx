@@ -8,7 +8,6 @@ import Box from '@mui/material/Box'
 import { Settings } from 'src/@core/context/settingsContext'
 
 // ** Hook Import
-import { useAuth } from 'src/hooks/useAuth'
 import { Button, styled, ListItemIcon, ListItemText } from '@mui/material'
 import MuiMenu, { MenuProps } from '@mui/material/Menu'
 import MuiMenuItem, { MenuItemProps } from '@mui/material/MenuItem'
@@ -58,7 +57,6 @@ const AppBarContent = (props: Props) => {
   const { hidden, settings, saveSettings } = props
 
   // ** Hook
-  const auth = useAuth()
 
   // ** Wallet connection state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -92,12 +90,7 @@ const AppBarContent = (props: Props) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       {/* <ModeToggler settings={settings} saveSettings={saveSettings} /> */}
-      {auth.user && (
-        <>
-        </>
-      )}
-      
-    
+
       {/* When wallet is not connected*/}
       {/* <Button sx={{ 
           color: 'white',
