@@ -191,20 +191,21 @@ const Modules = () => {
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
 
     const { ProtocolInfo, UserPosition } = useProtocolDataContext()
-  
-    const initialRows:CollateralType[] = []
+    console.log(ProtocolInfo)
+    let initialRows:CollateralType[] = [];
+
     if (ProtocolInfo && ProtocolInfo?.length > 0) {
         for (let i = 0; i < ProtocolInfo?.length; i++) {
             initialRows.push({
-            id: 11,
-            asset: 'stETH',
-            type: 'LST',
-            borrowAPY: 10,
-            maxLeverage: +(1 / (1 - Number(ProtocolInfo[i].maximumCollateralRatio) / 10000)).toFixed(2),
-            LTVRatio: Number(ProtocolInfo[i].maximumCollateralRatio) / 10000,
-            maxDepositAPY: 30,
-            baseDepositAPY: 10,
-            active: true
+                id: 11,
+                asset: 'stETH',
+                type: 'LST',
+                borrowAPY: 10,
+                maxLeverage: +(1 / (1 - Number(ProtocolInfo[i].maximumCollateralRatio) / 10000)).toFixed(2),
+                LTVRatio: Number(ProtocolInfo[i].maximumCollateralRatio) / 10000,
+                maxDepositAPY: 30,
+                baseDepositAPY: 10,
+                active: true
             })
         }
     }
