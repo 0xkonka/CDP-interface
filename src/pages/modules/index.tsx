@@ -192,7 +192,7 @@ const Modules = () => {
 
     const { ProtocolInfo, UserPosition } = useProtocolDataContext()
     console.log(ProtocolInfo)
-    let initialRows:CollateralType[] = [];
+    const initialRows:CollateralType[] = [];
 
     if (ProtocolInfo && ProtocolInfo?.length > 0) {
         for (let i = 0; i < ProtocolInfo?.length; i++) {
