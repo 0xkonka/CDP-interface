@@ -27,120 +27,124 @@ import { CollateralType } from 'src/types/collateral/types'
 // Import Subviews
 import HeaderInfo from 'src/pages/modules/headerInfo'
 import CollateralRow from 'src/pages/modules/collateralRow'
+import { useContractRead, useNetwork } from 'wagmi';
+import { MARKET_LENS_ADDR, TREN_MARKET_ADDR } from 'src/configs/address';
+import MARKET_LENS_ABI from 'src/abi/MarketLens.json'
+import { useProtocolDataContext } from 'src/context/ProtocolDataProvider';
 
 // Static rows data
-const initialRows: CollateralType[] = [
-    {
-        id: 1,
-        asset: 'PEPE',
-        type: 'Meme',
-        borrowAPY: 10,
-        maxLeverage: 30,
-        LTVRatio: 95,
-        maxDepositAPY: 922.12,
-        baseDepositAPY: 61.25,
-        active: false,
-    },
-    {
-        id: 2,
-        asset: 'GRAIL / USDC.e',
-        type: 'LP Token',
-        borrowAPY: 10,
-        maxLeverage: 30,
-        LTVRatio: 95,
-        maxDepositAPY: 86.40,
-        baseDepositAPY: 61.25,
-        active: true,
-    },
-    {
-        id: 3,
-        asset: 'FLOKI',
-        type: 'Meme',
-        borrowAPY: 10,
-        maxLeverage: 30,
-        LTVRatio: 95,
-        maxDepositAPY: 722.24,
-        baseDepositAPY: 61.25,
-        active: false,
-    },
-    {
-        id: 4,
-        asset: 'T-WBTC-C',
-        type: 'Vault',
-        borrowAPY: 10,
-        maxLeverage: 30,
-        LTVRatio: 95,
-        maxDepositAPY: 18.02,
-        baseDepositAPY: 61.25,
-        active: true,
-    },
-    {
-        id: 5,
-        asset: 'GRAIL / ETH',
-        type: 'Stable',
-        borrowAPY: 10,
-        maxLeverage: 30,
-        LTVRatio: 95,
-        maxDepositAPY: 42.93,
-        baseDepositAPY: 61.25,
-        active: false,
-    },
-    {
-        id: 6,
-        asset: 'wTAO',
-        type: 'Stable',
-        borrowAPY: 10,
-        maxLeverage: 30,
-        LTVRatio: 95,
-        maxDepositAPY: 640.08,
-        baseDepositAPY: 61.25,
-        active: false,
-    },
-    {
-        id: 7,
-        asset: 'BONE',
-        type: 'Volatile',
-        borrowAPY: 10,
-        maxLeverage: 30,
-        LTVRatio: 95,
-        maxDepositAPY: 32.68,
-        baseDepositAPY: 61.25,
-        active: false,
-    },
-    {
-        id: 8,
-        asset: 'T-APE-C',
-        type: 'Vault',
-        borrowAPY: 10,
-        maxLeverage: 30,
-        LTVRatio: 95,
-        maxDepositAPY: 12,
-        baseDepositAPY: 61.25,
-        active: false,
-    },
-    {
-        id: 9,
-        asset: 'ELON',
-        type: 'RWA',
-        borrowAPY: 10,
-        maxLeverage: 30,
-        LTVRatio: 95,
-        maxDepositAPY: 243.63,
-        baseDepositAPY: 61.25,
-        active: false,
-    },
-    {
-        id: 10,
-        asset: 'GRAIL / USDC.e',
-        type: 'Volatile',
-        borrowAPY: 10,
-        maxLeverage: 30,
-        LTVRatio: 95,
-        maxDepositAPY: 15.82,
-        baseDepositAPY: 61.25,
-        active: false,
-    },
-]
+// const initialRows: CollateralType[] = [
+//     {
+//         id: 1,
+//         asset: 'PEPE',
+//         type: 'Meme',
+//         borrowAPY: 10,
+//         maxLeverage: 30,
+//         LTVRatio: 95,
+//         maxDepositAPY: 922.12,
+//         baseDepositAPY: 61.25,
+//         active: false,
+//     },
+//     {
+//         id: 2,
+//         asset: 'GRAIL / USDC.e',
+//         type: 'LP Token',
+//         borrowAPY: 10,
+//         maxLeverage: 30,
+//         LTVRatio: 95,
+//         maxDepositAPY: 86.40,
+//         baseDepositAPY: 61.25,
+//         active: true,
+//     },
+//     {
+//         id: 3,
+//         asset: 'FLOKI',
+//         type: 'Meme',
+//         borrowAPY: 10,
+//         maxLeverage: 30,
+//         LTVRatio: 95,
+//         maxDepositAPY: 722.24,
+//         baseDepositAPY: 61.25,
+//         active: false,
+//     },
+//     {
+//         id: 4,
+//         asset: 'T-WBTC-C',
+//         type: 'Vault',
+//         borrowAPY: 10,
+//         maxLeverage: 30,
+//         LTVRatio: 95,
+//         maxDepositAPY: 18.02,
+//         baseDepositAPY: 61.25,
+//         active: true,
+//     },
+//     {
+//         id: 5,
+//         asset: 'GRAIL / ETH',
+//         type: 'Stable',
+//         borrowAPY: 10,
+//         maxLeverage: 30,
+//         LTVRatio: 95,
+//         maxDepositAPY: 42.93,
+//         baseDepositAPY: 61.25,
+//         active: false,
+//     },
+//     {
+//         id: 6,
+//         asset: 'wTAO',
+//         type: 'Stable',
+//         borrowAPY: 10,
+//         maxLeverage: 30,
+//         LTVRatio: 95,
+//         maxDepositAPY: 640.08,
+//         baseDepositAPY: 61.25,
+//         active: false,
+//     },
+//     {
+//         id: 7,
+//         asset: 'BONE',
+//         type: 'Volatile',
+//         borrowAPY: 10,
+//         maxLeverage: 30,
+//         LTVRatio: 95,
+//         maxDepositAPY: 32.68,
+//         baseDepositAPY: 61.25,
+//         active: false,
+//     },
+//     {
+//         id: 8,
+//         asset: 'T-APE-C',
+//         type: 'Vault',
+//         borrowAPY: 10,
+//         maxLeverage: 30,
+//         LTVRatio: 95,
+//         maxDepositAPY: 12,
+//         baseDepositAPY: 61.25,
+//         active: false,
+//     },
+//     {
+//         id: 9,
+//         asset: 'ELON',
+//         type: 'RWA',
+//         borrowAPY: 10,
+//         maxLeverage: 30,
+//         LTVRatio: 95,
+//         maxDepositAPY: 243.63,
+//         baseDepositAPY: 61.25,
+//         active: false,
+//     },
+//     {
+//         id: 10,
+//         asset: 'GRAIL / USDC.e',
+//         type: 'Volatile',
+//         borrowAPY: 10,
+//         maxLeverage: 30,
+//         LTVRatio: 95,
+//         maxDepositAPY: 15.82,
+//         baseDepositAPY: 61.25,
+//         active: false,
+//     },
+// ]
 
 const ToogleOnButton = styled(Button)<ButtonProps>(({ theme }) => ({
     borderRadius: '50px', 
@@ -171,20 +175,44 @@ const ToogleOffButton = styled(Button)<ButtonProps>(({ theme }) => ({
         backgroundColor: theme.palette.primary.main
     }
 }))
-  
+let initialRows: CollateralType[] = [];
+
 const Modules = () => {
-    const [rows, setRows] = useState<CollateralType[]>(initialRows)
     const [filterText, setFilterText] = useState<string>('')
     const [filterOnlyActive, setFilterOnlyActive] = useState<boolean>(false)
     const [assetFilter, setAssetFilter] = useState<string>('All')
     const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
     const [sortBy, setSortBy] = useState<string>('+asset')
+    const [rows, setRows] = useState<CollateralType[]>([])
     const router = useRouter()
-
+    const { chain : chainId } = useNetwork()
+    
     const assetTypes:string[] = ['All', 'LRT', 'LST', 'RWA', 'LP Token', 'Vault', 'PT Token', 'Meme', 'Volatile', 'Stable']
     const theme: Theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
+
+    const { ProtocolInfo, UserPosition } = useProtocolDataContext()
+
+    useEffect(() => {
+        if (ProtocolInfo && ProtocolInfo?.length > 0) {
+            initialRows = []
+            for (let i = 0; i < ProtocolInfo?.length; i++) {
+                initialRows.push({
+                    id: 11,
+                    asset: 'stETH',
+                    type: 'LST',
+                    borrowAPY: 10,
+                    maxLeverage: +(1 / (1 - Number(ProtocolInfo[i].maximumCollateralRatio) / 10000)).toFixed(2),
+                    LTVRatio: Number(ProtocolInfo[i].maximumCollateralRatio) / 10000,
+                    maxDepositAPY: 30,
+                    baseDepositAPY: 10,
+                    active: true
+                })
+            }
+            setRows(initialRows)
+        }
+    }, [ProtocolInfo])
 
     const handleRowClick = (index: number) => {
         setOpenRowIndex(openRowIndex === index ? -1 : index);
@@ -194,6 +222,7 @@ const Modules = () => {
         filterRows()
     }, [filterText, filterOnlyActive, assetFilter])
 
+    // Sory by different specs
     useEffect(() => {
         const direction = sortBy[0]
         const sortKey = sortBy.substring(1)
@@ -224,6 +253,7 @@ const Modules = () => {
         })
     }, [sortBy])
 
+    // Comprehensive filter function
     const filterRows = () => {
         let newRows = initialRows.filter((row) => row.asset.toLocaleLowerCase().includes(filterText.toLowerCase()))
         if(assetFilter != 'All') {
@@ -234,12 +264,14 @@ const Modules = () => {
         setRows(newRows)
     }
 
+    // Event : Search filter text value changes
     const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value
         setFilterText(value)
         filterRows()
     }
     
+    // Event : Open Positions Only Toogle changes
     const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const isChecked = event.target.checked
         setFilterOnlyActive(isChecked)

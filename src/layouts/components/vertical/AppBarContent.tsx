@@ -18,8 +18,7 @@ import Icon from 'src/@core/components/icon'
 import { Settings } from 'src/@core/context/settingsContext'
 
 // ** Hook Import
-import { useAuth } from 'src/hooks/useAuth'
-
+import ConnectWallet from 'src/pages/components/connect-wallet/ConnectWallet'
 
 
 // ** Util Import
@@ -62,7 +61,6 @@ const AppBarContent = (props: Props) => {
   const { hidden, settings, saveSettings, toggleNavVisibility } = props
 
   // ** Hook
-  const auth = useAuth()
 
   // ** Wallet connection state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -88,11 +86,7 @@ const AppBarContent = (props: Props) => {
       </Box>
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
         {/* <ModeToggler settings={settings} saveSettings={saveSettings} /> */}
-        {auth.user && (
-          <>
-          </>
-        )}
-        
+        <ConnectWallet />
         {/* When wallet is not connected*/}
         {/* <Button sx={{ 
             color: 'white',
@@ -102,7 +96,7 @@ const AppBarContent = (props: Props) => {
         </Button> */}
 
         {/* Wallet Connected */}
-        <Button aria-haspopup='true' onClick={handleClick} aria-controls='wallet-connect'>
+        {/* <Button aria-haspopup='true' onClick={handleClick} aria-controls='wallet-connect'>
           <Icon icon='tabler:wallet' fontSize={28} style={{marginRight: 10}}/>
           {walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}
           
@@ -136,7 +130,7 @@ const AppBarContent = (props: Props) => {
             </ListItemIcon>
             <ListItemText primary='Disconnect' />
           </MenuItem>
-        </Menu>
+        </Menu> */}
       </Box>
     </Box>
   )

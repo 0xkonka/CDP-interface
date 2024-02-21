@@ -235,7 +235,7 @@ const Navigation = (props: Props) => {
                 {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'static'
                   ? afterNavMenuContent(navMenuContentProps)
                   : null}
-                <Box sx={{pt: 4, px: 2.5}}>
+                {/* <Box sx={{pt: 4, px: 2.5}}>
                   <Button sx={{ 
                       color: 'white',
                       width: 1,
@@ -245,7 +245,7 @@ const Navigation = (props: Props) => {
                   >
                     Connect Wallet
                   </Button>
-                </Box>
+                </Box> */}
               </ScrollWrapper>
             </Box>
             {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'fixed'

@@ -8,7 +8,6 @@ import Box from '@mui/material/Box'
 import { Settings } from 'src/@core/context/settingsContext'
 
 // ** Hook Import
-import { useAuth } from 'src/hooks/useAuth'
 import { Button, styled, ListItemIcon, ListItemText } from '@mui/material'
 import MuiMenu, { MenuProps } from '@mui/material/Menu'
 import MuiMenuItem, { MenuItemProps } from '@mui/material/MenuItem'
@@ -19,6 +18,7 @@ import Icon from 'src/@core/components/icon'
 
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
+import ConnectWallet from 'src/pages/components/connect-wallet/ConnectWallet'
 
 interface Props {
   hidden: boolean
@@ -57,7 +57,6 @@ const AppBarContent = (props: Props) => {
   const { hidden, settings, saveSettings } = props
 
   // ** Hook
-  const auth = useAuth()
 
   // ** Wallet connection state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -91,12 +90,7 @@ const AppBarContent = (props: Props) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       {/* <ModeToggler settings={settings} saveSettings={saveSettings} /> */}
-      {auth.user && (
-        <>
-        </>
-      )}
-      
-    
+
       {/* When wallet is not connected*/}
       {/* <Button sx={{ 
           color: 'white',
@@ -106,47 +100,10 @@ const AppBarContent = (props: Props) => {
       </Button> */}
 
       {/* Wallet Connected */}
-      <WalletDropDown item={
+      <ConnectWallet />
+      {/* <WalletDropDown item={
         walletItems
-      } settings={settings}/>
-
-      {/* <Button sx={{color: 'white', backgroundColor: 'transparent', 
-        '&:hover' : {
-          backgroundColor: 'transparent'
-        }}} aria-haspopup='true' onClick={handleClick} aria-controls='wallet-connect'>
-        <Icon icon='tabler:wallet' fontSize={28} style={{marginRight: 10}}/>
-          {walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}
-        <Icon icon='tabler:chevron-down' fontSize={18} style={{marginLeft: 5}}/>
-      </Button>
-      <Menu 
-        keepMounted
-        elevation={0}
-        anchorEl={anchorEl}
-        id='customized-menu'
-        onClose={handleClose}
-        open={Boolean(anchorEl)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center'
-        }}
-      >
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Icon icon='mdi:content-copy' fontSize={20} />
-          </ListItemIcon>
-          <ListItemText primary='Copy Address' />
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Icon icon='tabler:logout' fontSize={20} />
-          </ListItemIcon>
-          <ListItemText primary='Disconnect' />
-        </MenuItem>
-      </Menu> */}
+      } settings={settings}/> */}
     </Box>
   )
 }
