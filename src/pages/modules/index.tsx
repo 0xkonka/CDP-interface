@@ -175,13 +175,15 @@ const ToogleOffButton = styled(Button)<ButtonProps>(({ theme }) => ({
         backgroundColor: theme.palette.primary.main
     }
 }))
-  
+let initialRows: CollateralType[] = [];
+
 const Modules = () => {
     const [filterText, setFilterText] = useState<string>('')
     const [filterOnlyActive, setFilterOnlyActive] = useState<boolean>(false)
     const [assetFilter, setAssetFilter] = useState<string>('All')
     const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
     const [sortBy, setSortBy] = useState<string>('+asset')
+    const [rows, setRows] = useState<CollateralType[]>([])
     const router = useRouter()
     const { chain : chainId } = useNetwork()
     
@@ -191,29 +193,27 @@ const Modules = () => {
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
 
     const { ProtocolInfo, UserPosition } = useProtocolDataContext()
-    console.log(ProtocolInfo)
-    const initialRows:CollateralType[] = [];
 
-    if (ProtocolInfo && ProtocolInfo?.length > 0) {
-        for (let i = 0; i < ProtocolInfo?.length; i++) {
-            initialRows.push({
-                id: 11,
-                asset: 'stETH',
-                type: 'LST',
-                borrowAPY: 10,
-                maxLeverage: +(1 / (1 - Number(ProtocolInfo[i].maximumCollateralRatio) / 10000)).toFixed(2),
-                LTVRatio: Number(ProtocolInfo[i].maximumCollateralRatio) / 10000,
-                maxDepositAPY: 30,
-                baseDepositAPY: 10,
-                active: true
-            })
+    useEffect(() => {
+        if (ProtocolInfo && ProtocolInfo?.length > 0) {
+            initialRows = []
+            for (let i = 0; i < ProtocolInfo?.length; i++) {
+                initialRows.push({
+                    id: 11,
+                    asset: 'stETH',
+                    type: 'LST',
+                    borrowAPY: 10,
+                    maxLeverage: +(1 / (1 - Number(ProtocolInfo[i].maximumCollateralRatio) / 10000)).toFixed(2),
+                    LTVRatio: Number(ProtocolInfo[i].maximumCollateralRatio) / 10000,
+                    maxDepositAPY: 30,
+                    baseDepositAPY: 10,
+                    active: true
+                })
+            }
+            setRows(initialRows)
         }
-    }
+    }, [ProtocolInfo])
 
-    const [rows, setRows] = useState<CollateralType[]>(initialRows)
-
-        
-    // Collapse open the each row
     const handleRowClick = (index: number) => {
         setOpenRowIndex(openRowIndex === index ? -1 : index);
     }
