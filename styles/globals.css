@@ -46,6 +46,8 @@ code[class*='language-'] {
   font-style: normal;
 }
 
+/* Start -- Rainbow connect wallet custom style */
+
 .ju367v9h {
   background: transparent !important;
   border: solid 1px #67DAB1 !important; 
@@ -68,3 +70,5 @@ code[class*='language-'] {
 :root {
   --rk-colors-connectButtonBackground: transparent !important;
 }
+
+/* End -- Rainbow connect wallet custom style */
