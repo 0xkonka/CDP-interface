@@ -191,7 +191,6 @@ export function Web3Wrapper({ children }: { children: React.ReactNode }) {
   return (
     <WagmiConfig config={wagmiClient}>
       <RainbowKitProvider
-        // theme={myTheme}
         theme={darkTheme()}
         chains={chains}
         initialChain={5} // Optional, initialChain={1}, initialChain={chain.mainnet}, initialChain={gnosisChain}

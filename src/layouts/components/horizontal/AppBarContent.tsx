@@ -90,20 +90,8 @@ const AppBarContent = (props: Props) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       {/* <ModeToggler settings={settings} saveSettings={saveSettings} /> */}
-
-      {/* When wallet is not connected*/}
-      {/* <Button sx={{ 
-          color: 'white',
-          ml: {xs: 2, sm: 5},
-          minWidth: 160
-        }} variant='outlined'>Connect Wallet
-      </Button> */}
-
       {/* Wallet Connected */}
       <ConnectWallet />
-      {/* <WalletDropDown item={
-        walletItems
-      } settings={settings}/> */}
     </Box>
   )
 }

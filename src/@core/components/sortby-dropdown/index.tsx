@@ -32,7 +32,7 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
   const obj = fields.find(element => element.key == sortBy.substring(1))
   const sortByLabel = obj?.label
   const boxRef = useRef<HTMLDivElement>(null); // Ref for the Box
-  const [menuWidth, setMenuWidth] = useState(260); // Default min width
+  const [menuWidth, setMenuWidth] = useState<number>(0); // Default min width
 
   const handleOpenMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -44,12 +44,15 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
 
   useEffect(() => {
     if (boxRef.current) {
-      setMenuWidth(Math.max(boxRef.current.offsetWidth, 260));
+      if(isSmallScreen)
+        setMenuWidth(0)
+      else 
+        setMenuWidth(Math.max(boxRef.current.offsetWidth, 260));
     }
-  }, [sortBy]); // Depend on sortByLabel to trigger width check
+  }, [sortBy, isSmallScreen]); // Depend on sortByLabel to trigger width check
 
   return (
-    <Box>
+    <Box sx={{flex: 1}}>
       <Box onClick={handleOpenMenu} ref={boxRef}
           sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 4, py: 3, 
               minWidth: `${menuWidth}px`, borderRadius: 1, cursor: 'pointer',
@@ -63,10 +66,10 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
                 Sort by
             </Typography>
             <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'}>
-                {sortByLabel}
+                {isSmallScreen ? '' : sortByLabel}
             </Typography>
             <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#a1a1a1'>
-              ({sortBy[0] == '-' ? 'desc' : 'asc' })
+              {isSmallScreen ? '' : (sortBy[0] == '-' ? 'desc' : 'asc')}
             </Typography>
           </Stack>
           {
