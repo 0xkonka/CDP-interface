@@ -69,7 +69,7 @@ const StyledBoxForShadow = styled(Box)<BoxProps>(({ theme }) => ({
   position: 'absolute',
   pointerEvents: 'none',
   width: 'calc(100% + 15px)',
-  height: theme.mixins.toolbar.minHeight,
+  height: 58,
   transition: 'opacity .15s ease-in-out',
   background: `linear-gradient(${theme.palette.background.paper} ${
     theme.direction === 'rtl' ? '95%' : '5%'

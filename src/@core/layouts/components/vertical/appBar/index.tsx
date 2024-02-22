@@ -25,21 +25,11 @@ const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme }) => ({
   justifyContent: 'center',
   backgroundColor: 'transparent',
   color: theme.palette.text.primary,
-  minHeight: theme.mixins.toolbar.minHeight,
-  // [theme.breakpoints.up('sm')]: {
-  //   paddingLeft: theme.spacing(6),
-  //   paddingRight: theme.spacing(6)
-  // },
-  // [theme.breakpoints.down('sm')]: {
-  //   paddingLeft: theme.spacing(4),
-  //   paddingRight: theme.spacing(4)
-  // }
+  minHeight: 58,
 }))
 
 const Toolbar = styled(MuiToolbar)<ToolbarProps>(({ theme }) => ({
   width: '100%',
-  // marginTop: theme.spacing(4),
-  // borderRadius: theme.shape.borderRadius,
   padding: `${theme.spacing(0, 6)} !important`
 }))
 
@@ -65,7 +55,7 @@ const LayoutAppBar = (props: Props) => {
       content: '""',
       position: 'absolute',
       backdropFilter: 'blur(10px)',
-      height: (theme: Theme) => `calc(${theme.mixins.toolbar.minHeight as number}px + ${theme.spacing(4)})`,
+      height: (theme: Theme) => `calc(58px + ${theme.spacing(4)})`,
       mask: (theme: Theme) =>
         `linear-gradient(${theme.palette.background.default}, ${theme.palette.background.default} 18%, transparent 100%)`,
       background: (theme: Theme) =>
@@ -100,7 +90,7 @@ const LayoutAppBar = (props: Props) => {
         className='navbar-content-container'
         sx={{
           ...(appBarBlur && { backdropFilter: 'blur(6px)' }),
-          minHeight: theme => `${theme.mixins.toolbar.minHeight as number}px !important`,
+          minHeight: theme => `58px !important`,
           // backgroundColor: trigger ? '#101818' : 'transparent',   // Topbar background - Mobile View.
           backgroundColor: 'transparent',
           ...(skin === 'bordered' ? { borderBottom: '1px solid #333' } : { boxShadow: 2 }),
