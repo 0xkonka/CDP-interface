@@ -2,6 +2,7 @@
 import {
     Box,
     Typography,
+    Stack,
     Theme,
     useTheme,
     useMediaQuery
@@ -29,31 +30,31 @@ const HeaderInfo = () => {
             }} style={textStyle}>
                 Isolated Modules
             </Typography>
-            <Typography variant='h5' color='#F3F3F3' sx={{ mb: {xs: 8, md: 16}, fontWeight: 300, width: 730, maxWidth: '100%', lineHeight: 1.7 }}>
+            <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} color='#F3F3F3' sx={{ mb: {xs: 8, md: 16}, fontWeight: 300, width: 730, maxWidth: '100%', lineHeight: {xs: 1.25, sm: 1.7} }}>
                 Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop 
                 your assets in one click to leverage exposure for your spot assets. Pay back your loan 
                 later using trenUSD or your collateral.
             </Typography>
             {/* Total Info Group Seection */}
-            <Box id="total-info" sx={{display: 'flex', mb: 12, justifyContent: 'space-between', flexWrap: 'wrap', gap: {xs: 8, md: 16}}}>
-                <Box sx={{display: 'flex', flexWrap: 'wrap', gap: {xs: 8, md: 16}}}>
+            <Stack id="total-info" direction='row' sx={{mb: 12, justifyContent: 'space-between', flexWrap: 'wrap', gap: {xs: 8, md: 16}}}>
+                <Stack direction='row' sx={{width: {xs: 1, md: 'auto'}, justifyContent: 'space-between', gap: {xs: 4, md: 16}}}>
                     <Box>
-                        <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#C6C6C7'>Total Collateral</Typography>
-                        <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'}>$200,000.00</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{mb: 1}} color='#C6C6C7'>Total Collateral</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{fontWeight: 600}}>$200,000.00</Typography>
                     </Box>
                     <Box>
-                        <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#C6C6C7'>Total Debts</Typography>
-                        <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'}>$ 50,000.00</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{mb: 1}} color='#C6C6C7'>Total Debts</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{fontWeight: 600}}>$50,000.00</Typography>
                     </Box>
                     <Box>
-                        <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#C6C6C7'>Net Worth</Typography>
-                        <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'}>$ 150,000.00</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{mb: 1}} color='#C6C6C7'>Net Worth</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{fontWeight: 600}}>$150,000.00</Typography>
                     </Box>
-                </Box>
-                <Box sx={{display: 'flex', width: {xs: 1, md: 'auto'}, justifyContent: 'center', alignItems: 'center', border: 'solid 1px #2D3131', borderRadius: 2.5, px: {xs: 4, md: 8}, py: {xs: 2, md: 4}, gap: 4.5}}>
+                </Stack>
+                <Stack direction='row' sx={{width: {xs: 1, md: 'auto'}, justifyContent: 'center', alignItems: 'center', border: 'solid 1px #2D3131', borderRadius: 2.5, px: {xs: 4, md: 8}, py: {xs: 2, md: 4}, gap: 4.5}}>
                     <Typography variant='subtitle1' color='#C6C6C7'>TVL</Typography>
                     <Typography variant='h5' style={{fontWeight: 600}}>$ 100.5m</Typography>
-                    <Box sx={{height: '100%',borderLeft: 'solid 1px #2B3440'}}></Box>
+                    <Box sx={{height: 1,borderLeft: 'solid 1px #2B3440'}}></Box>
                     <Typography variant='h5' color='primary' sx={{fontWeight: 400, cursor: 'pointer'}}>
                         Analytics
                         <svg style={{marginLeft: 4, marginBottom: 2}} xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -67,8 +68,8 @@ const HeaderInfo = () => {
                             </defs>
                         </svg>
                     </Typography>
-                </Box>
-            </Box>
+                </Stack>
+            </Stack>
         </Box>
     )
 }

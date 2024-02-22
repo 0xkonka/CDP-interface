@@ -7,6 +7,7 @@ import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Button, {ButtonProps} from '@mui/material/Button'
 import { ListItemIcon, ListItemText } from '@mui/material'
+import Link from '@mui/material/Link'
 import MuiMenu, { MenuProps } from '@mui/material/Menu'
 import MuiMenuItem, { MenuItemProps } from '@mui/material/MenuItem'
 import Image from 'next/image'
@@ -16,10 +17,6 @@ import Icon from 'src/@core/components/icon'
 
 // ** Type Import
 import { Settings } from 'src/@core/context/settingsContext'
-
-// ** Hook Import
-import ConnectWallet from 'src/pages/components/connect-wallet/ConnectWallet'
-
 
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
@@ -56,6 +53,12 @@ const MenuItem = styled(MuiMenuItem)<MenuItemProps>(({ theme }) => ({
   }
 }))
 
+const LinkStyled = styled(Link)({
+  display: 'flex',
+  alignItems: 'center',
+  textDecoration: 'none',
+})
+
 const AppBarContent = (props: Props) => {
   // ** Props
   const { hidden, settings, saveSettings, toggleNavVisibility } = props
@@ -77,60 +80,23 @@ const AppBarContent = (props: Props) => {
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
-        {hidden && !settings.navHidden ? (
-          <IconButton color='inherit' sx={{ ml: -2.75 }} onClick={toggleNavVisibility}>
-            <Icon fontSize='1.5rem' icon='tabler:menu-2' />
-          </IconButton>
-        ) : null}
-        {/* {auth.user && <Autocomplete hidden={hidden} settings={settings} />} */}
+        <LinkStyled href='/'>
+          <Image src='/images/logos/logo.svg' alt='TrenFi Logo' sizes="100vw"
+            width={207}
+            height={24}
+            style={{
+              width: '100%',
+              height: 18,
+            }}
+            priority />
+         </LinkStyled>
       </Box>
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
-        {/* <ModeToggler settings={settings} saveSettings={saveSettings} /> */}
-        <ConnectWallet />
-        {/* When wallet is not connected*/}
-        {/* <Button sx={{ 
-            color: 'white',
-            ml: {xs: 2, sm: 5},
-            minWidth: 160
-          }} variant='outlined'>Connect Wallet
-        </Button> */}
-
-        {/* Wallet Connected */}
-        {/* <Button aria-haspopup='true' onClick={handleClick} aria-controls='wallet-connect'>
-          <Icon icon='tabler:wallet' fontSize={28} style={{marginRight: 10}}/>
-          {walletAddress.slice(0, 4)}...{walletAddress.slice(-4)}
-          
-          <Icon icon='tabler:chevron-down' fontSize={18} style={{marginLeft: 5}}/>
-        </Button>
-        <Menu 
-          keepMounted
-          elevation={0}
-          anchorEl={anchorEl}
-          id='customized-menu'
-          onClose={handleClose}
-          open={Boolean(anchorEl)}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center'
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center'
-          }}
-        >
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Icon icon='mdi:content-copy' fontSize={20} />
-            </ListItemIcon>
-            <ListItemText primary='Copy Address' />
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Icon icon='tabler:mail-opened' fontSize={20} />
-            </ListItemIcon>
-            <ListItemText primary='Disconnect' />
-          </MenuItem>
-        </Menu> */}
+        {hidden && !settings.navHidden ? (
+          <IconButton color='inherit' sx={{ ml: -2.75 }} onClick={toggleNavVisibility}>
+            <Icon fontSize='1.75rem' icon='tabler:menu-2' />
+          </IconButton>
+        ) : null}
       </Box>
     </Box>
   )

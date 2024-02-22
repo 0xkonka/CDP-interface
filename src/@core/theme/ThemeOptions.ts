@@ -1,6 +1,6 @@
 // ** MUI Theme Provider
 import { deepmerge } from '@mui/utils'
-import { PaletteMode, ThemeOptions } from '@mui/material'
+import { PaletteMode, ThemeOptions, useMediaQuery, Theme, useTheme } from '@mui/material'
 
 // ** User Theme Options
 import UserThemeOptions from 'src/layouts/UserThemeOptions'
@@ -19,6 +19,8 @@ import breakpoints from './breakpoints'
 const themeOptions = (settings: Settings, overrideMode: PaletteMode): ThemeOptions => {
   // ** Vars
   const { skin, mode, direction, themeColor } = settings
+  const theme: Theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
 
   // ** Create New object before removing user component overrides and typography objects from userThemeOptions
   const userThemeConfig: ThemeOptions = Object.assign({}, UserThemeOptions())
@@ -35,7 +37,7 @@ const themeOptions = (settings: Settings, overrideMode: PaletteMode): ThemeOptio
       },
       mixins: {
         toolbar: {
-          minHeight: 84
+          minHeight: isSmallScreen ? 58 : 96
         }
       },
       shadows: shadows(mode === 'semi-dark' ? overrideMode : mode),

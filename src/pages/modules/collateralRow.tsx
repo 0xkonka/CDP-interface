@@ -139,22 +139,22 @@ const CollateralRow = (props: TableHeaderProps) => {
                         }
                     </Stack>
                 </Stack>
-                <Stack direction='row' sx={{mt: 2}}>
+                <Stack direction='row' sx={{mt: 2, alignItems: 'center'}}>
                     <Stack direction='row' sx={{flex: '1 1 0%'}}>
-                        <Typography variant='body2' color='#98999D'>Borrow APY</Typography>
+                        <Typography variant='body2' color='#D4D4D4'>MAX Leverage</Typography>
                     </Stack>
                     <Stack direction='row' sx={{flex: '1 1 0%'}}>
-                        <Typography variant='body2' color='#98999D'>MAX Leverage</Typography>
+                        <Typography variant='body2' color='#D4D4D4'>Borrow APY</Typography>
                     </Stack>
                     <Stack direction='row' sx={{flex: '1.3 1 0%'}}>
-                        <Typography variant='body2' color='#98999D'>Deposit APY</Typography>
+                        <Typography variant='body2' color='#D4D4D4'>Deposit APY</Typography>
                     </Stack>
                 </Stack>
-                <Stack direction='row' sx={{mt: 2}}>
+                <Stack direction='row' sx={{mt: 2, alignItems: 'center'}}>
                     <Stack direction='row' sx={{flex: '1 1 0%'}}>
                         <Typography variant='h5' sx={{fontWeight: 400}}>{row.borrowAPY}%</Typography>
                     </Stack>
-                    <Stack direction='row' sx={{flex: '1 1 0%', alignItems: 'center'}}>
+                    <Stack direction='row' sx={{flex: '1 1 0%'}}>
                         <Typography variant='h5' sx={{fontWeight: 400}}>{row.maxLeverage}x&nbsp;</Typography>
                     </Stack>
                     <Stack direction='row' sx={{flex: '1.3 1 0%', alignItems: 'center'}}>
@@ -162,7 +162,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                         <Icon icon='bi:fire' color={theme.palette.primary.main} fontSize={18}/>
                     </Stack>
                 </Stack>
-                <Stack direction='row' sx={{mt: 2}}>
+                <Stack direction='row' sx={{mt: 2, alignItems: 'center'}}>
                     <Stack direction='row' sx={{flex: '1 1 0%'}}>
                         <Typography color='primary'>{row.active ? 'Active' : ''}</Typography>
                     </Stack>
@@ -244,16 +244,17 @@ const CollateralRow = (props: TableHeaderProps) => {
                     borderBottom: 'solid 1px #36373D',
                 }}>
                     <Grid container sx={{
+                            py: 2.5,
                             width: 'calc(100% + 64px)',
                             marginLeft: -8,
                             '& > .MuiGrid-item': {
-                                padding: theme => `${theme.spacing(isSmallScreen ? 1 :  3)} ${theme.spacing(8)}`, // vertical | horizontal spacing
+                                padding: theme => `${theme.spacing(isSmallScreen ? 1 :  2)} ${theme.spacing(8)}`, // vertical | horizontal spacing
                             },
                         }}>
                         <Grid item xs={12} sm={6} lg={4} xl={3}>
                             <Stack direction='row' sx={{justifyContent: 'space-between', alignItems: 'center'}} >
                                 <Typography variant='subtitle1' color='#D4D4D4'>Platform</Typography>
-                                <Stack direction='row'>
+                                <Stack direction='row' sx={{gap: 2}}>
                                     <img width={26} src='/images/platforms/uniswap.png' alt='Platform'/>
                                     <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} fontWeight={400}>Uniswap V3</Typography>
                                 </Stack>
