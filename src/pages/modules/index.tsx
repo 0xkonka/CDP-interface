@@ -283,7 +283,7 @@ const Modules = () => {
             <HeaderInfo/>
             {/* Search and Multi Select Filter Section */}
             <Stack direction='row' sx={{ flexWrap: 'wrap', gap:2.5, justifyContent: 'space-between', alignItems: 'center', pb: 6}}>
-                <Stack direction='row' sx={{ flexWrap: 'wrap', alignItems: 'center', gap: 4, order: {xs: 1, md: 0} }}>
+                <Stack direction='row' sx={{ flexWrap: 'wrap', alignItems: 'center', gap: 4, order: {xs: 1, md: 0}, width: {xs: 1, md: 'auto'} }}>
                     <CustomTextField
                         label=''
                         id='input-with-icon-textfield'
@@ -298,8 +298,10 @@ const Modules = () => {
                         onChange={handleFilterChange}
                         placeholder='Search....'
                         sx={{
-                            height: isSmallScreen ? 40 : 50,
+                            height: isSmallScreen ? 44 : 52,
+                            flex: 1,
                             '& .MuiInputBase-root': {
+                                width: 1,
                                 height: 1,
                                 '& input': {
                                     fontSize: isSmallScreen ? 16 : 18

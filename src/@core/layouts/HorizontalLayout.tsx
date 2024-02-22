@@ -17,7 +17,6 @@ import { LayoutProps } from 'src/@core/layouts/types'
 
 // ** Components
 import Footer from './components/shared-components/footer'
-import Navigation from './components/horizontal/navigation'
 import ScrollToTop from 'src/@core/components/scroll-to-top'
 import AppBarContent from './components/horizontal/app-bar-content'
 
@@ -177,7 +176,7 @@ const HorizontalLayout = (props: LayoutProps) => {
             <Fab size='small' aria-label='scroll back to top' sx={{
               backgroundColor: 'transparent',
               color: theme => theme.palette.primary.main,
-              border: 'solid 1px white',
+              border: theme => `solid 1px ${theme.palette.primary.main}`,
               '&:hover': {
                 backgroundColor: theme => theme.palette.primary.main,
                 color: '#000',
