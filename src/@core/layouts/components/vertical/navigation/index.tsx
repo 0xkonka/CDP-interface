@@ -4,8 +4,9 @@ import { useRef, useState } from 'react'
 // ** MUI Imports
 import List from '@mui/material/List'
 import Box, { BoxProps } from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
-import Button from '@mui/material/Button'
 import { createTheme, responsiveFontSizes, styled, ThemeProvider } from '@mui/material/styles'
 import ConnectWallet from 'src/pages/components/connect-wallet/ConnectWallet'
 
@@ -58,7 +59,7 @@ interface Props {
   menuUnlockedIcon: LayoutProps['verticalLayoutProps']['navMenu']['unlockedIcon']
   afterNavMenuContent: LayoutProps['verticalLayoutProps']['navMenu']['afterContent']
   beforeNavMenuContent: LayoutProps['verticalLayoutProps']['navMenu']['beforeContent']
-  footerProps?: FooterProps
+footerProps?: FooterProps
 }
 
 const StyledBoxForShadow = styled(Box)<BoxProps>(({ theme }) => ({
@@ -160,7 +161,7 @@ const Navigation = (props: Props) => {
     <ThemeProvider theme={darkTheme}>
       <Drawer {...props} navHover={navHover} setNavHover={setNavHover} navigationBorderWidth={navigationBorderWidth}>
         {/* <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}> */}
-        <Box sx={{height: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <Box sx={{height: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 5 }}>
           <Box>
             <VerticalNavHeader {...props} navHover={navHover} />
             {beforeNavMenuContent && beforeVerticalNavMenuContentPosition === 'fixed'
@@ -189,7 +190,7 @@ const Navigation = (props: Props) => {
                 {userNavMenuContent ? (
                   userNavMenuContent(navMenuContentProps)
                 ) : (
-                  <List className='nav-items' sx={{ pt: 0, px: 2, '& > :first-child': { mt: '0' } }}>
+                  <List className='nav-items' sx={{'& > :first-child': { mt: '0' } }}>
                     <VerticalNavItems
                       navHover={navHover}
                       groupActive={groupActive}
@@ -204,18 +205,8 @@ const Navigation = (props: Props) => {
                   ? afterNavMenuContent(navMenuContentProps)
                   : null}
                   
-                <Box sx={{pt: 4, px: 2.5}}>
-                  {/* <ConnectWallet /> */}
-
-                  <Button sx={{ 
-                      color: 'white',
-                      width: 1,
-                      minWidth: 160,
-                    }} 
-                    variant='outlined'
-                  >
-                    Connect Wallet
-                  </Button>
+                <Box sx={{pt: 8, px: 5}}>
+                  <ConnectWallet />
                 </Box>
               </ScrollWrapper>
             </Box>

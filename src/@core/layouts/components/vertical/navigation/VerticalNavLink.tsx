@@ -52,14 +52,11 @@ const MenuNavLink = styled(ListItemButton)<
   marginRight: 0,
   paddingLeft: '24px !important',
   transition: 'padding-left .25s ease-in-out, padding-right .25s ease-in-out',
-  '&:hover': {
-    backgroundColor: theme.palette.action.hover
-  },
+  // '&:hover': {
+  //   backgroundColor: theme.palette.action.hover
+  // },
   '&.active': {
-    borderRightWidth: '3px',
-    borderRightStyle: 'solid',
-    borderRightColor: theme.palette.primary.main,
-    '&, &:hover': {
+    '&': {
       background: '#93929619',
     },
     '& .MuiTypography-root, & svg': {
@@ -137,33 +134,13 @@ const VerticalNavLink = ({
             }
           }}
         >
-          {/* Jordan Lopez : Here we hide icons in the vertical mobile navbar, but we will use it later if needed */}
-          {/* <ListItemIcon
-            sx={{
-              transition: 'margin .25s ease-in-out',
-              ...(navCollapsed && !navHover ? { mr: 0 } : { mr: 2 }),
-              ...(parent ? { ml: 1.5, mr: 3.5 } : {}), // This line should be after (navCollapsed && !navHover) condition for proper styling
-              '& svg': {
-                fontSize: '0.625rem',
-                ...(!parent ? { fontSize: '1.375rem' } : {}),
-                ...(parent && item.icon ? { fontSize: '0.875rem' } : {})
-              }
-            }}
-          >
-            { 
-              parent && !item.icon ? 
-              <UserIcon icon={icon as string} /> :
-              <Image src={`/images/icons/sidebar-icons/${icon}.png`} alt={icon as string} width={24} height={24}/>
-            }
-          </ListItemIcon> */}
-
           <MenuItemTextMetaWrapper
             sx={{
               ...(isSubToSub ? { ml: 2 } : {}),
               ...(navCollapsed && !navHover ? { opacity: 0 } : { opacity: 1 })
             }}
           >
-            <Typography
+            <Typography variant='h5' sx={{fontWeight: 400}}
               {...((themeConfig.menuTextTruncate || (!themeConfig.menuTextTruncate && navCollapsed && !navHover)) && {
                 noWrap: true
               })}
