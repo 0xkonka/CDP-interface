@@ -34,15 +34,15 @@ const navigation = (): VerticalNavItemsType => {
       children: [
         {
           title: 'Analytics 1',
-          path: '/apps/analytics-1'
+          path: '/analytics/analytics-1'
         },
         {
           title: 'Analytics 2',
-          path: '/apps/analytics-2'
+          path: '/analytics/analytics-2'
         },
         {
           title: 'Analytics 3',
-          path: '/apps/analytics-3'
+          path: '/analytics/analytics-3'
         },
       ]
     },

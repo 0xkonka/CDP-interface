@@ -1,6 +1,7 @@
 // ** MUI Imports
 import { styled } from '@mui/material/styles'
 import MuiSwipeableDrawer, { SwipeableDrawerProps } from '@mui/material/SwipeableDrawer'
+import { useRef } from 'react'
 
 // ** Type Import
 import { LayoutProps } from 'src/@core/layouts/types'
@@ -99,8 +100,12 @@ const Drawer = (props: Props) => {
   delete userNavMenuProps.sx
   delete userNavMenuProps.PaperProps
 
+  const containerRef = useRef(null)
+
   return (
+    <div ref={containerRef}>
     <SwipeableDrawer
+     container={containerRef.current}
       className='layout-vertical-nav'
       variant={hidden ? 'temporary' : 'permanent'}
       {...(hidden ? { ...MobileDrawerProps } : { ...DesktopDrawerProps })}
@@ -124,6 +129,7 @@ const Drawer = (props: Props) => {
     >
       {children}
     </SwipeableDrawer>
+    </div>
   )
 }
 
