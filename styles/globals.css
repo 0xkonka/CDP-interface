@@ -63,6 +63,12 @@ code[class*='language-'] {
   text-align: center;
 }
 
+.layout-vertical-nav .ju367v1p {
+  width: calc(100vw - 60px);
+  display: flex;
+  justify-content: space-between;
+}
+
 
 .iekbcc0.ju367v8 {
   font-size: 18px !important;

@@ -52,14 +52,11 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
   }, [sortBy, isSmallScreen]); // Depend on sortByLabel to trigger width check
 
   return (
-    <Box sx={{flex: 1}}>
+    <Box sx={{flex: {xs: 1, md: 'none'}}}>
       <Box onClick={handleOpenMenu} ref={boxRef}
           sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 4, py: 3, 
               minWidth: `${menuWidth}px`, borderRadius: 1, cursor: 'pointer',
-              border: (theme) => `solid 1px ${anchorEl ? theme.palette.primary.main : '#2D3131'}`,
-              borderBottom: `${anchorEl ? 'none' : ''}`,
-              borderBottomLeftRadius: `${anchorEl ? 0 : 1}`,
-              borderBottomRightRadius: `${anchorEl ? 0 : 1}`
+              border: 'solid 1px #2D3131',
               }}>
           <Stack direction='row' gap={1} sx={{alignItems: 'center'}}>
             <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#a1a1a1'>
@@ -86,9 +83,6 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
           '& .MuiPopover-paper' : {
             minWidth: `${menuWidth}px`,
             border: theme => `solid 1px ${theme.palette.primary.main}`,
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-            borderTop: 'none'
           }
         }}
       >
