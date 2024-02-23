@@ -57,6 +57,13 @@ code[class*='language-'] {
   justify-content: end;
 }
 
+.layout-vertical-nav .ju367va button{
+  width: 100%;
+  border-radius: 10px;
+  text-align: center;
+}
+
+
 .iekbcc0.ju367v8 {
   font-size: 18px !important;
   font-weight: 400;

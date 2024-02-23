@@ -90,7 +90,6 @@ const AppBarContent = (props: Props) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       {/* <ModeToggler settings={settings} saveSettings={saveSettings} /> */}
-      {/* Wallet Connected */}
       <ConnectWallet />
     </Box>
   )

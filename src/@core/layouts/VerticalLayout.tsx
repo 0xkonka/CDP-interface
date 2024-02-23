@@ -85,6 +85,7 @@ const VerticalLayout = (props: LayoutProps) => {
             menuUnlockedIcon={verticalLayoutProps.navMenu.unlockedIcon}
             afterNavMenuContent={verticalLayoutProps.navMenu.afterContent}
             beforeNavMenuContent={verticalLayoutProps.navMenu.beforeContent}
+            footerProps={footerProps}
             {...props}
           />
         )}
