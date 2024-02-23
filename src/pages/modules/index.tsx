@@ -299,7 +299,7 @@ const Modules = () => {
                         placeholder='Search....'
                         sx={{
                             height: isSmallScreen ? 44 : 52,
-                            flex: 1,
+                            flex: {xs: 1, md: 'auto'},
                             '& .MuiInputBase-root': {
                                 width: 1,
                                 height: 1,
@@ -375,9 +375,14 @@ const Modules = () => {
             </Stack>
             {/* Collateral Group Stack*/}
             <Stack sx={{mt: 4}} gap={isMediumScreen ? 5 : 0}>
-                {rows.map((row, index) => (
+                {rows.length > 0 ? 
+                rows.map((row, index) => (
                     <CollateralRow row={row} onToogle={() => handleRowClick(index)} isOpen={openRowIndex === index} key={index}/>
-                ))}
+                )) : 
+                <Box sx={{p: 6, textAlign: 'center'}}>
+                    <Typography variant='body1'>No matching collateral</Typography>
+                </Box>
+                }
             </Stack>
         </Box>
     )
