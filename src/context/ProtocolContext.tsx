@@ -60,7 +60,6 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({
   const [config, setConfig] = useState<LiquityFrontendConfig>()
 
   const { data: client } = useWalletClient()
-  console.log('client', client)
   const signer = clientToSigner(client!)
 
   const connection = useMemo(() => {
@@ -69,7 +68,6 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({
 
       const batchedProvider = new BatchedProvider(provider, chainId)
       // batchedProvider._debugLog = true;
-      // console.log('batchedProvider', batchedProvider)
       try {
         return _connectByChainId(batchedProvider, signer, chainId, {
           userAddress: account,
@@ -91,7 +89,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({
 
       getProvider()
     }
-    getConfig().then(setConfig)
+    setConfig(getConfig())
   }, [connector])
 
   if (!config || !signer || !account) {
@@ -109,10 +107,6 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({
 
   const protocol = EthersLiquity._from(connection)
   protocol.store.logging = true
-
-  console.log('connection', connection)
-  console.log('config', config)
-  console.log('liquity', protocol)
 
   return (
     <ProtocolContext.Provider value={{ config, account, provider: connection.provider, protocol }}>

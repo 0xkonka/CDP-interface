@@ -1,36 +1,37 @@
-import { AddressZero } from "@ethersproject/constants";
-import { isAddress, getAddress } from "@ethersproject/address";
+import { AddressZero } from '@ethersproject/constants'
+import { isAddress, getAddress } from '@ethersproject/address'
+import configData from './config.json'
 
 export type LiquityFrontendConfig = {
-  frontendTag: string;
+  frontendTag: string
   // infuraApiKey?: string;
   // alchemyApiKey?: string;
-  testnetOnly?: boolean;
+  testnetOnly?: boolean
   // walletConnectProjectId: string;
-};
+}
 
 const defaultConfig: LiquityFrontendConfig = {
   frontendTag: AddressZero,
   // walletConnectProjectId: "b16efb4fd41473c0f45dbad8efa15a00",
   testnetOnly: true
-};
+}
 
 function hasKey<K extends string>(o: object, k: K): o is Record<K, unknown> {
-  return k in o;
+  return k in o
 }
 
 const parseConfig = (json: unknown): LiquityFrontendConfig => {
-  const config = { ...defaultConfig };
+  const config = { ...defaultConfig }
 
-  if (typeof json === "object" && json !== null) {
-    if (hasKey(json, "frontendTag") && json.frontendTag !== "") {
-      const { frontendTag } = json;
+  if (typeof json === 'object' && json !== null) {
+    if (hasKey(json, 'frontendTag') && json.frontendTag !== '') {
+      const { frontendTag } = json
 
-      if (typeof frontendTag === "string" && isAddress(frontendTag)) {
-        config.frontendTag = getAddress(frontendTag);
+      if (typeof frontendTag === 'string' && isAddress(frontendTag)) {
+        config.frontendTag = getAddress(frontendTag)
       } else {
-        console.error("Malformed frontendTag:");
-        console.log(frontendTag);
+        console.error('Malformed frontendTag:')
+        console.log(frontendTag)
       }
     }
 
@@ -56,45 +57,39 @@ const parseConfig = (json: unknown): LiquityFrontendConfig => {
     //   }
     // }
 
-    if (hasKey(json, "testnetOnly")) {
-      const { testnetOnly } = json;
+    if (hasKey(json, 'testnetOnly')) {
+      const { testnetOnly } = json
 
-      if (typeof testnetOnly === "boolean") {
-        config.testnetOnly = testnetOnly;
+      if (typeof testnetOnly === 'boolean') {
+        config.testnetOnly = testnetOnly
       } else {
-        console.error("Malformed testnetOnly:");
-        console.log(testnetOnly);
+        console.error('Malformed testnetOnly:')
+        console.log(testnetOnly)
       }
     }
   } else {
-    console.error("Malformed config:");
-    console.log(json);
+    console.error('Malformed config:')
+    console.log(json)
   }
 
-  return config;
-};
+  return config
+}
 
-let configPromise: Promise<LiquityFrontendConfig> | undefined = undefined;
-
-const fetchConfig = async () => {
+const fetchConfig = () => {
   try {
-    const response = await fetch("config.json");
+    // const response = await fetch("config.json");
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch config.json (status ${response.status})`);
-    }
+    // if (!response.ok) {
+    //   throw new Error(`Failed to fetch config.json (status ${response.status})`);
+    // }
 
-    return parseConfig(await response.json());
+    return parseConfig(configData)
   } catch (err) {
-    console.error(err);
-    return { ...defaultConfig };
+    console.error(err)
+    return { ...defaultConfig }
   }
-};
+}
 
-export const getConfig = (): Promise<LiquityFrontendConfig> => {
-  if (!configPromise) {
-    configPromise = fetchConfig();
-  }
-
-  return configPromise;
-};
+export const getConfig = (): LiquityFrontendConfig => {
+  return fetchConfig()
+}
