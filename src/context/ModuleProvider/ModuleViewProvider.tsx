@@ -48,7 +48,7 @@ const transitions: ModuleEventTransitions = {
   }
 };
 
-type ModuleStateEvents = Partial<Record<UserModuleStatus, ModuleEvent>>;
+type ModuleStateEvents = Partial<Record<UserTroveStatus, ModuleEvent>>;
 
 const moduleStatusEvents: ModuleStateEvents = {
   open: "MODULE_OPENED",
@@ -62,7 +62,7 @@ const transition = (view: ModuleView, event: ModuleEvent): ModuleView => {
   return nextView;
 };
 
-const getInitialView = (moduleStatus: UserModuleStatus): ModuleView => {
+const getInitialView = (moduleStatus: UserTroveStatus): ModuleView => {
   if (moduleStatus === "closedByLiquidation") {
     return "LIQUIDATED";
   }
