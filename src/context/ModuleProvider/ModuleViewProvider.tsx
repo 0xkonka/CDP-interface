@@ -81,13 +81,8 @@ export const ModuleViewProvider: React.FC = props => {
   const { children } = props;
   const moduleStatus = useLiquitySelector(select);
 
-  console.log('moduleStatus', moduleStatus)
-
   const [view, setView] = useState<ModuleView>(getInitialView(moduleStatus));
   const viewRef = useRef<ModuleView>(view);
-
-  console.log('view', view)
-  console.log('viewRef', viewRef)
 
   const dispatchEvent = useCallback((event: ModuleEvent) => {
     const nextView = transition(viewRef.current, event);

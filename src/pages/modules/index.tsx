@@ -29,10 +29,6 @@ import HeaderInfo from '@/pages/modules/headerInfo'
 import CollateralRow from '@/pages/modules/collateralRow'
 import { useContractRead, useNetwork } from 'wagmi';
 
-import { MARKET_LENS_ADDR, TREN_MARKET_ADDR } from 'src/configs/address';
-import MARKET_LENS_ABI from 'src/abi/MarketLens.json'
-import { useProtocolDataContext } from '@/context/ProtocolDataProvider';
-
 const ToogleOnButton = styled(Button)<ButtonProps>(({ theme }) => ({
     borderRadius: '50px', 
     fontWeight: 600, 
