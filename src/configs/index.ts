@@ -75,7 +75,7 @@ const parseConfig = (json: unknown): LiquityFrontendConfig => {
   return config
 }
 
-const fetchConfig = () => {
+export const getConfig = (): LiquityFrontendConfig => {
   try {
     // const response = await fetch("config.json");
 
@@ -88,8 +88,4 @@ const fetchConfig = () => {
     console.error(err)
     return { ...defaultConfig }
   }
-}
-
-export const getConfig = (): LiquityFrontendConfig => {
-  return fetchConfig()
 }

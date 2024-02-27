@@ -21,13 +21,13 @@ type NameLookup = {
 
 const interfaceLookupFrom = (contractLookup: ContractLookup): InterfaceLookup => {
   return Object.fromEntries(
-    Object.entries(contractLookup).map(([, contract]) => [contract.address, contract.interface])
+    Object.entries(contractLookup).map(([, contract]) => [(contract as any).address, (contract as any).interface])
   );
 };
 
 const nameLookupFrom = (contractLookup: ContractLookup): NameLookup => {
   return Object.fromEntries(
-    Object.entries(contractLookup).map(([name, contract]) => [contract.address, name])
+    Object.entries(contractLookup).map(([name, contract]) => [(contract as any).address, name])
   );
 };
 

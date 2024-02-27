@@ -197,7 +197,7 @@ const wrap = <A extends unknown[], R>(f: (...args: A) => R) => (...args: A) => f
 
 const difference = <T>(a: T, b: T) =>
   Object.fromEntries(
-    Object.entries(a).filter(([key, value]) => value !== (b as Record<string, unknown>)[key])
+    Object.entries(a as any).filter(([key, value]) => value !== (b as Record<string, unknown>)[key])
   ) as Partial<T>;
 
 /**
@@ -211,7 +211,7 @@ const difference = <T>(a: T, b: T) =>
  *
  * @public
  */
-export abstract class LiquityStore<T = unknown> {
+export abstract class LiquityStore<T = any> {
   /** Turn console logging on/off. */
   logging = false;
 

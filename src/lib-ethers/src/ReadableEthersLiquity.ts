@@ -70,7 +70,7 @@ const expectPositiveInt = <K extends string>(obj: { [P in K]?: number }, key: K)
       throw new Error(`${key} must be an integer`);
     }
 
-    if (obj[key] < 0) {
+    if ((obj as any)[key] < 0) {
       throw new Error(`${key} must not be negative`);
     }
   }
@@ -323,7 +323,7 @@ export class ReadableEthersLiquity implements ReadableLiquity {
     address ??= _requireAddress(this.connection);
     const { uniToken, unipool } = _getContracts(this.connection);
 
-    return uniToken.allowance(address, unipool.address, { ...overrides }).then(decimalify);
+    return uniToken.allowance(address, (unipool as any).address, { ...overrides }).then(decimalify);
   }
 
   /** @internal */

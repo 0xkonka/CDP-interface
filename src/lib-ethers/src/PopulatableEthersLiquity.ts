@@ -1,3 +1,4 @@
+/* eslint-disable */
 import assert from "assert";
 
 import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
@@ -153,7 +154,7 @@ export interface _RawTransactionReplacedError extends Error {
   receipt: EthersTransactionReceipt;
 }
 
-const hasProp = <T, P extends string>(o: T, p: P): o is T & { [_ in P]: unknown } => p in o;
+const hasProp = <T, P extends string>(o: T, p: P): o is T & { [_ in P]: unknown } => p in (o as any);
 
 const isTransactionFailedError = (error: Error): error is RawTransactionFailedError =>
   hasProp(error, "code") &&
@@ -660,7 +661,7 @@ export class PopulatableEthersLiquity
 
         const [withdrawLUSD] = lusdToken
           .extractEvents(logs, "Transfer")
-          .filter(({ args: { from, to } }) => from === stabilityPool.address && to === userAddress)
+          .filter(({ args: { from, to } }) => from === (stabilityPool as any).address && to === userAddress)
           .map(({ args: { value } }) => decimalify(value));
 
         return {
@@ -1367,7 +1368,7 @@ export class PopulatableEthersLiquity
       await uniToken.estimateAndPopulate.approve(
         overrides,
         id,
-        unipool.address,
+        (unipool as any).address,
         Decimal.from(allowance ?? Decimal.INFINITY).hex
       )
     );
