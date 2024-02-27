@@ -12,14 +12,14 @@ import {
 } from '@mui/material'
 
 // ** Core Components Import
-import Icon from 'src/@core/components/icon'
-import CustomChip from 'src/@core/components/mui/chip'
+import Icon from '@/@core/components/icon'
+import CustomChip from '@/@core/components/mui/chip'
 
 // ** Import React Core
 import React from 'react'
 
 // ** Types
-import { CollateralType } from 'src/types/collateral/types'
+import { CollateralType } from '@/types/collateral/types'
 
 // ** Third Party Components
 import clsx from 'clsx'

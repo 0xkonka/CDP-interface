@@ -22,11 +22,13 @@ import {
     useTheme,
     Theme,
     SlideProps,
+    InputAdornment
 } from '@mui/material';
 
 // ** Core Components Imports
-import CleaveWrapper from 'src/@core/styles/libs/react-cleave'
-import Icon from 'src/@core/components/icon'
+import CleaveWrapper from '@/@core/styles/libs/react-cleave'
+import Icon from '@/@core/components/icon'
+import CustomTextField from '@/@core/components/mui/text-field'
 
 // ** CleaveJS Imports
 import Cleave from 'cleave.js/react'
@@ -89,6 +91,8 @@ const Leverage = () => {
   const [openAdjust, setOpenAdjust] = useState<boolean>(false)
   const [openRepay, setOpenRepay] = useState<boolean>(false)
   const [openSlippage, setOpenSlippage] = useState<boolean>(false)
+  const [modeAuto, setModeAuto] = useState<boolean>(true)
+  const [slippagePercent, setSlippagePercent] = useState<string>('0.5')
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
   const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
   const isLargeScreen = useMediaQuery(theme.breakpoints.down('xl'))
@@ -123,6 +127,13 @@ const Leverage = () => {
   }
 
   const computedStyle = isMediumScreen ? smallBoxStyle : radiusBoxStyle;
+
+  // Event : Search filter text value changes
+  const changeSlippagePerent = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+    setModeAuto(value.length == 0)
+    setSlippagePercent(value)
+  }
 
   return (
     <Box>
@@ -241,8 +252,11 @@ const Leverage = () => {
                         <Typography variant='subtitle1' sx={{fontWeight: 600}}>
                             Leverage
                         </Typography>
-                        <Icon fontSize='28' icon='tabler:settings' style={{color: theme.palette.primary.main, cursor: 'pointer'}}
+                        <Stack direction='row' sx={{alignItems: 'center', gap: 2}}>
+                            <Typography variant='body2' color='#707175'>{modeAuto ? '' : `${slippagePercent}% slippage`}</Typography>
+                            <Icon fontSize='28' icon='tabler:settings' style={{color: theme.palette.primary.main, cursor: 'pointer'}}
                             onClick={() => {setOpenSlippage(true)}}/>
+                        </Stack>
                     </Stack>
                     <Typography variant='subtitle1' color='#707175' sx={{mb: 2}}>Recursive borrowing engine using trenUSD</Typography>
                     <Box sx={{width: '100%'}}>
@@ -675,7 +689,7 @@ const Leverage = () => {
                 keepMounted
                 onClose={() => {setOpenSlippage(false)}}
                 TransitionComponent={Transition}
-                maxWidth='sm'
+                maxWidth='xs'
                 fullWidth={true}
                 aria-labelledby='alert-dialog-slide-title'
                 aria-describedby='alert-dialog-slide-description'
@@ -688,23 +702,72 @@ const Leverage = () => {
                     <Typography sx={{textAlign: 'center', maxWidth: 490, m: 'auto'}}>
                         Price slippage is the difference in prices between the time a market order is placed and the time it completes on the blockchain or is filled.
                     </Typography>
-                    <Box sx={{display: 'flex', justifyContent: 'center', gap: 4, mt: { xs: 4, md: 10 }, mb: { xs: 4, md: 0 }}}>
-                        <Button sx={{ 
-                            color: 'white',
-                            backgroundColor: '#1A1F20',
-                            fontSize: 18,
-                            borderColor: '#67DAB1'
-                            }} variant='outlined'
-                        >
-                            Auto
-                        </Button>
-                        <ButtonGroup variant='tonal'>
-                            <Button sx={{color: 'white', backgroundColor: '#1A1F20', px: {xs: 3, sm: 5}}}>0.1%</Button>
-                            <Button sx={{color: 'white', backgroundColor: '#1A1F20', px: {xs: 3, sm: 5}}}>0.5%</Button>
-                            <Button sx={{color: 'white', backgroundColor: '#1A1F20', px: {xs: 3, sm: 5}}}>1%</Button>
-                            <Button sx={{color: 'white', backgroundColor: '#1A1F20', px: {xs: 3, sm: 5}}}>Custom</Button>
-                        </ButtonGroup>
-                    </Box>
+                    <Stack direction='row' sx={{mt: 4, justifyContent: 'center', gap: 4}}>
+                        <Stack direction='row' sx={{alignItems: 'center', justifyContent: 'space-between', borderRadius: 2, border: 'solid 1px #C6C6C74D'}}>
+                            <Button variant='outlined' onClick={() => {setModeAuto(true), setSlippagePercent('')}}
+                                sx={{borderRadius: 2, px: 4, py: 2, fontSize: 16, fontWeight: 400, color: 'white',
+                                    border: modeAuto ? 'auto' : 'solid 1px transparent',
+                                    '&:hover': {
+                                        borderColor: modeAuto ? theme.palette.primary.main : 'transparent'
+                                    }
+                                }}>
+                                Auto
+                            </Button>
+                            <Button variant='outlined' onClick={() => {setModeAuto(false)}}
+                                sx={{borderRadius: 2, px: 3, py: 2, fontSize: 16, fontWeight: 400, color: 'white', 
+                                    border: modeAuto ? 'solid 1px transparent' : 'auto',
+                                    '&:hover': {
+                                        borderColor: modeAuto ? 'transparent' : theme.palette.primary.main
+                                    }
+                                }}>
+                                Custom
+                            </Button>
+                        </Stack>
+                        {/* <CleaveWrapper style={{position: 'relative'}}>
+                            <Cleave id='slippage-percentage' 
+                                placeholder='0.5' 
+                                options={{ 
+                                    numeral: true,
+                                    numeralThousandsGroupStyle: 'thousand',
+                                    numeralDecimalScale: 2, // Always show two decimal points
+                                    numeralDecimalMark: '.', // Decimal mark is a period
+                                    stripLeadingZeroes: false // Prevents stripping the leading zero before the decimal point
+                                }} 
+                                style={{paddingRight: 24, textAlign: 'end', width: 100, borderRadius: 12}}
+                                value={slippagePercent}
+                                onChange={changeSlippagePerent}
+                            />
+                            <Box sx={{position: 'absolute', right: 7, top: 7, fontSize: 16, pl: 1, color: '#FFF'}}>
+                                %
+                            </Box>   
+                        </CleaveWrapper> */}
+                        <CustomTextField
+                            id='slippage-percentage'
+                            placeholder='0.5'
+                            InputProps={{
+                                endAdornment: <InputAdornment  position='end'>%</InputAdornment>
+                            }}
+                            inputProps={{ // Note this part for min and max
+                                min: 0, // Set the minimum value as needed
+                                max: "50" // Set the maximum value as needed
+                            }}
+                            value={slippagePercent}
+                            sx={{
+                                width: 100,
+                                '& .MuiInputBase-root': {
+                                    borderRadius: '12px !important'
+                                },
+                                '& .MuiInputBase-input': {
+                                    textAlign: 'end',
+                                },
+                                '& .MuiInputBase-root:focus': {
+                                    borderColor: '#C6C6C74D !important',
+                                }
+                            }}
+                            type='number'
+                            onChange={changeSlippagePerent}
+                        />
+                    </Stack>
                 </Box>
             </Dialog>
         </Fragment>

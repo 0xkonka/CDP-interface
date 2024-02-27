@@ -14,137 +14,23 @@ import {
  } from '@mui/material'
 
 // ** Core Components Import
-import Icon from 'src/@core/components/icon'
-import CustomTextField from 'src/@core/components/mui/text-field'
-import SortByDropdown from 'src/@core/components/sortby-dropdown'
+import Icon from '@/@core/components/icon'
+import CustomTextField from '@/@core/components/mui/text-field'
+import SortByDropdown from '@/@core/components/sortby-dropdown'
 
 // Import Basic React
 import React, { useEffect, useState } from 'react'
 
 // ** Types
-import { CollateralType } from 'src/types/collateral/types'
+import { CollateralType } from '@/types/collateral/types'
 
 // Import Subviews
-import HeaderInfo from 'src/pages/modules/headerInfo'
-import CollateralRow from 'src/pages/modules/collateralRow'
+import HeaderInfo from '@/pages/modules/headerInfo'
+import CollateralRow from '@/pages/modules/collateralRow'
 import { useContractRead, useNetwork } from 'wagmi';
 import { MARKET_LENS_ADDR, TREN_MARKET_ADDR } from 'src/configs/address';
 import MARKET_LENS_ABI from 'src/abi/MarketLens.json'
-import { useProtocolDataContext } from 'src/context/ProtocolDataProvider';
-
-// Static rows data
-// const initialRows: CollateralType[] = [
-//     {
-//         id: 1,
-//         asset: 'PEPE',
-//         type: 'Meme',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 922.12,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 2,
-//         asset: 'GRAIL / USDC.e',
-//         type: 'LP Token',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 86.40,
-//         baseDepositAPY: 61.25,
-//         active: true,
-//     },
-//     {
-//         id: 3,
-//         asset: 'FLOKI',
-//         type: 'Meme',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 722.24,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 4,
-//         asset: 'T-WBTC-C',
-//         type: 'Vault',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 18.02,
-//         baseDepositAPY: 61.25,
-//         active: true,
-//     },
-//     {
-//         id: 5,
-//         asset: 'GRAIL / ETH',
-//         type: 'Stable',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 42.93,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 6,
-//         asset: 'wTAO',
-//         type: 'Stable',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 640.08,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 7,
-//         asset: 'BONE',
-//         type: 'Volatile',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 32.68,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 8,
-//         asset: 'T-APE-C',
-//         type: 'Vault',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 12,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 9,
-//         asset: 'ELON',
-//         type: 'RWA',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 243.63,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 10,
-//         asset: 'GRAIL / USDC.e',
-//         type: 'Volatile',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 15.82,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-// ]
+import { useProtocolDataContext } from '@/context/ProtocolDataProvider';
 
 const ToogleOnButton = styled(Button)<ButtonProps>(({ theme }) => ({
     borderRadius: '50px', 
