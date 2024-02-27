@@ -74,7 +74,7 @@ import 'src/iconify-bundle/icons-bundle-react'
 // ** Global css styles
 import '../../styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css'
-import { PoolDataProvider } from 'src/context/ProtocolDataProvider'
+import { ProtocolProvider } from '@/context/ProtocolContext'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -109,18 +109,23 @@ const App = (props: ExtendedAppProps) => {
   const setConfig = Component.setConfig ?? undefined
 
   return (
-      <CacheProvider value={emotionCache}>
-        <Head>
-          <title>{`${themeConfig.templateName}`}</title>
-          <meta
-            name='description'
-            content={`${themeConfig.templateName} – TrenFi – is the DeFi Application based on Tren Finance.`}
-          />
-          <meta name='keywords' content='DeFi, TrenFi, Tren Finance, TrenFinance App' />
-          <meta name='viewport' content='initial-scale=1, width=device-width' />
-        </Head>
-        <Web3Wrapper>
-          <PoolDataProvider>
+    <CacheProvider value={emotionCache}>
+      <Head>
+        <title>{`${themeConfig.templateName}`}</title>
+        <meta
+          name='description'
+          content={`${themeConfig.templateName} – TrenFi – is the DeFi Application based on Tren Finance.`}
+        />
+        <meta name='keywords' content='DeFi, TrenFi, Tren Finance, TrenFinance App' />
+        <meta name='viewport' content='initial-scale=1, width=device-width' />
+      </Head>
+      <Web3Wrapper>
+        <ProtocolProvider
+          // loader={loader}
+          // unsupportedNetworkFallback={<UnsupportedNetworkFallback />}
+          // unsupportedMainnetFallback={<UnsupportedMainnetFallback />}
+        >
+          {/* <PoolDataProvider> */}
             <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
               <SettingsConsumer>
                 {({ settings }) => {
@@ -135,9 +140,10 @@ const App = (props: ExtendedAppProps) => {
                 }}
               </SettingsConsumer>
             </SettingsProvider>
-          </PoolDataProvider>
-        </Web3Wrapper>
-      </CacheProvider>
+          {/* </PoolDataProvider> */}
+        </ProtocolProvider>
+      </Web3Wrapper>
+    </CacheProvider>
   )
 }
 
