@@ -28,9 +28,6 @@ import { CollateralType } from 'src/types/collateral/types'
 import HeaderInfo from 'src/pages/modules/headerInfo'
 import CollateralRow from 'src/pages/modules/collateralRow'
 import { useContractRead, useNetwork } from 'wagmi';
-import { MARKET_LENS_ADDR, TREN_MARKET_ADDR } from 'src/configs/address';
-import MARKET_LENS_ABI from 'src/abi/MarketLens.json'
-import { useProtocolDataContext } from 'src/context/ProtocolDataProvider';
 
 // Static rows data
 // const initialRows: CollateralType[] = [
@@ -175,7 +172,7 @@ const ToogleOffButton = styled(Button)<ButtonProps>(({ theme }) => ({
         backgroundColor: theme.palette.primary.main
     }
 }))
-let initialRows: CollateralType[] = [];
+const initialRows: CollateralType[] = [];
 
 const Modules = () => {
     const [filterText, setFilterText] = useState<string>('')
@@ -192,27 +189,8 @@ const Modules = () => {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
 
-    const { ProtocolInfo, UserPosition } = useProtocolDataContext()
+    
 
-    useEffect(() => {
-        if (ProtocolInfo && ProtocolInfo?.length > 0) {
-            initialRows = []
-            for (let i = 0; i < ProtocolInfo?.length; i++) {
-                initialRows.push({
-                    id: 11,
-                    asset: 'stETH',
-                    type: 'LST',
-                    borrowAPY: 10,
-                    maxLeverage: +(1 / (1 - Number(ProtocolInfo[i].maximumCollateralRatio) / 10000)).toFixed(2),
-                    LTVRatio: Number(ProtocolInfo[i].maximumCollateralRatio) / 10000,
-                    maxDepositAPY: 30,
-                    baseDepositAPY: 10,
-                    active: true
-                })
-            }
-            setRows(initialRows)
-        }
-    }, [ProtocolInfo])
 
     const handleRowClick = (index: number) => {
         setOpenRowIndex(openRowIndex === index ? -1 : index);
