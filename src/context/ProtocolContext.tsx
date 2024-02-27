@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { Provider } from '@ethersproject/abstract-provider'
 import { FallbackProvider } from '@ethersproject/providers'
@@ -14,7 +15,7 @@ type ProtocolContextValue = {
   config: LiquityFrontendConfig
   account?: string
   provider?: Provider
-  protocol?: EthersLiquityWithStore<BlockPolledLiquityStore> | undefined
+  protocol?: EthersLiquityWithStore<BlockPolledLiquityStore>
 }
 
 const ProtocolContext = createContext<ProtocolContextValue | undefined>(undefined)

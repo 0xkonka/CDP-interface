@@ -1,5 +1,5 @@
-import assert from "assert";
-import { AddressZero } from "@ethersproject/constants";
+import assert from 'assert'
+import { AddressZero } from '@ethersproject/constants'
 
 import {
   Decimal,
@@ -10,12 +10,12 @@ import {
   LQTYStake,
   LiquityStore,
   Fees
-} from "@/lib-base";
+} from '@/lib-base'
 
-import { decimalify, promiseAllValues } from "./_utils";
-import { ReadableEthersLiquity } from "./ReadableEthersLiquity";
-import { EthersLiquityConnection, _getProvider } from "./EthersLiquityConnection";
-import { EthersCallOverrides, EthersProvider } from "./types";
+import { decimalify, promiseAllValues } from './_utils'
+import { ReadableEthersLiquity } from './ReadableEthersLiquity'
+import { EthersLiquityConnection, _getProvider } from './EthersLiquityConnection'
+import { EthersCallOverrides, EthersProvider } from './types'
 
 /**
  * Extra state added to {@link @liquity/lib-base#LiquityStoreState} by
@@ -31,15 +31,15 @@ export interface BlockPolledLiquityStoreExtraState {
    * @remarks
    * May be undefined when the store state is fetched for the first time.
    */
-  blockTag?: number;
+  blockTag?: number
 
   /**
    * Timestamp of latest block (number of seconds since epoch).
    */
-  blockTimestamp: number;
+  blockTimestamp: number
 
   /** @internal */
-  _feesFactory: (blockTimestamp: number, recoveryMode: boolean) => Fees;
+  _feesFactory: (blockTimestamp: number, recoveryMode: boolean) => Fees
 }
 
 /**
@@ -48,7 +48,7 @@ export interface BlockPolledLiquityStoreExtraState {
  *
  * @public
  */
-export type BlockPolledLiquityStoreState = LiquityStoreState<BlockPolledLiquityStoreExtraState>;
+export type BlockPolledLiquityStoreState = LiquityStoreState<BlockPolledLiquityStoreExtraState>
 
 /**
  * Ethers-based {@link @liquity/lib-base#LiquityStore} that updates state whenever there's a new
@@ -57,45 +57,40 @@ export type BlockPolledLiquityStoreState = LiquityStoreState<BlockPolledLiquityS
  * @public
  */
 export class BlockPolledLiquityStore extends LiquityStore<BlockPolledLiquityStoreExtraState> {
-  readonly connection: EthersLiquityConnection;
+  readonly connection: EthersLiquityConnection
 
-  private readonly _readable: ReadableEthersLiquity;
-  private readonly _provider: EthersProvider;
+  private readonly _readable: ReadableEthersLiquity
+  private readonly _provider: EthersProvider
 
   constructor(readable: ReadableEthersLiquity) {
-    super();
+    super()
 
-    this.connection = readable.connection;
-    this._readable = readable;
-    this._provider = _getProvider(readable.connection);
+    this.connection = readable.connection
+    this._readable = readable
+    this._provider = _getProvider(readable.connection)
   }
 
   private async _getRiskiestTroveBeforeRedistribution(
     overrides?: EthersCallOverrides
   ): Promise<TroveWithPendingRedistribution> {
     const riskiestTroves = await this._readable.getTroves(
-      { first: 1, sortedBy: "ascendingCollateralRatio", beforeRedistribution: true },
+      { first: 1, sortedBy: 'ascendingCollateralRatio', beforeRedistribution: true },
       overrides
-    );
+    )
 
     if (riskiestTroves.length === 0) {
-      return new TroveWithPendingRedistribution(AddressZero, "nonExistent");
+      return new TroveWithPendingRedistribution(AddressZero, 'nonExistent')
     }
 
-    return riskiestTroves[0];
+    return riskiestTroves[0]
   }
 
   private async _get(
     blockTag?: number
   ): Promise<[baseState: LiquityStoreBaseState, extraState: BlockPolledLiquityStoreExtraState]> {
-    const { userAddress, frontendTag } = this.connection;
+    const { userAddress, frontendTag } = this.connection
 
-    const {
-      blockTimestamp,
-      _feesFactory,
-      calculateRemainingLQTY,
-      ...baseState
-    } = await promiseAllValues({
+    const { blockTimestamp, _feesFactory, calculateRemainingLQTY, ...baseState } = await promiseAllValues({
       blockTimestamp: this._readable._getBlockTimestamp(blockTag),
       _feesFactory: this._readable._getFeesFactory({ blockTag }),
       calculateRemainingLQTY: this._readable._getRemainingLiquidityMiningLQTYRewardCalculator({
@@ -116,7 +111,7 @@ export class BlockPolledLiquityStore extends LiquityStore<BlockPolledLiquityStor
 
       frontend: frontendTag
         ? this._readable.getFrontendStatus(frontendTag, { blockTag })
-        : { status: "unregistered" as const },
+        : { status: 'unregistered' as const },
 
       ...(userAddress
         ? {
@@ -148,21 +143,12 @@ export class BlockPolledLiquityStore extends LiquityStore<BlockPolledLiquityStor
           liquidityMiningStake: Decimal.ZERO,
           liquidityMiningLQTYReward: Decimal.ZERO,
           collateralSurplusBalance: Decimal.ZERO,
-          troveBeforeRedistribution: new TroveWithPendingRedistribution(
-            AddressZero,
-            "nonExistent"
-          ),
-          stabilityDeposit: new StabilityDeposit(
-            Decimal.ZERO,
-            Decimal.ZERO,
-            Decimal.ZERO,
-            Decimal.ZERO,
-            AddressZero
-          ),
+          troveBeforeRedistribution: new TroveWithPendingRedistribution(AddressZero, 'nonExistent'),
+          stabilityDeposit: new StabilityDeposit(Decimal.ZERO, Decimal.ZERO, Decimal.ZERO, Decimal.ZERO, AddressZero),
           lqtyStake: new LQTYStake(),
-          ownFrontend: { status: "unregistered" as const }
+          ownFrontend: { status: 'unregistered' as const }
         })
-    });
+    })
 
     return [
       {
@@ -175,52 +161,52 @@ export class BlockPolledLiquityStore extends LiquityStore<BlockPolledLiquityStor
         blockTimestamp,
         _feesFactory
       }
-    ];
+    ]
   }
 
   /** @internal @override */
   protected _doStart(): () => void {
     this._get().then(state => {
       if (!this._loaded) {
-        this._load(...state);
+        this._load(...state)
       }
-    });
+    })
 
     const handleBlock = async (blockTag: number) => {
-      const state = await this._get(blockTag);
+      const state = await this._get(blockTag)
 
       if (this._loaded) {
-        this._update(...state);
+        this._update(...state)
       } else {
-        this._load(...state);
+        this._load(...state)
       }
-    };
+    }
 
-    let latestBlock: number | undefined;
-    let timerId: ReturnType<typeof setTimeout> | undefined;
+    let latestBlock: number | undefined
+    let timerId: ReturnType<typeof setTimeout> | undefined
 
     const blockListener = (blockTag: number) => {
-      latestBlock = Math.max(blockTag, latestBlock ?? blockTag);
+      latestBlock = Math.max(blockTag, latestBlock ?? blockTag)
 
       if (timerId !== undefined) {
-        clearTimeout(timerId);
+        clearTimeout(timerId)
       }
 
       timerId = setTimeout(() => {
-        assert(latestBlock !== undefined);
-        handleBlock(latestBlock);
-      }, 50);
-    };
+        assert(latestBlock !== undefined)
+        handleBlock(latestBlock)
+      }, 50)
+    }
 
-    this._provider.on("block", blockListener);
+    this._provider.on('block', blockListener)
 
     return () => {
-      this._provider.off("block", blockListener);
+      this._provider.off('block', blockListener)
 
       if (timerId !== undefined) {
-        clearTimeout(timerId);
+        clearTimeout(timerId)
       }
-    };
+    }
   }
 
   /** @internal @override */
@@ -232,6 +218,6 @@ export class BlockPolledLiquityStore extends LiquityStore<BlockPolledLiquityStor
       blockTag: stateUpdate.blockTag ?? oldState.blockTag,
       blockTimestamp: stateUpdate.blockTimestamp ?? oldState.blockTimestamp,
       _feesFactory: stateUpdate._feesFactory ?? oldState._feesFactory
-    };
+    }
   }
 }
