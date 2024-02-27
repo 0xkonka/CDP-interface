@@ -75,7 +75,7 @@ const getInitialView = (moduleStatus: UserTroveStatus): ModuleView => {
   return "NONE";
 };
 
-const select = ({ module: { status } }: LiquityStoreState) => status;
+const select = ({ trove: { status } }: LiquityStoreState) => status;
 
 export const ModuleViewProvider: React.FC = props => {
   const { children } = props;
