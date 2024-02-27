@@ -86,6 +86,7 @@ code[class*='language-'] {
 
 /* End -- Rainbow connect wallet custom style */
 
+/* Start -- Number Input box */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -94,3 +95,21 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+/* End -- Number Input box */
+
+/* Customize Toast Style */
+@keyframes progress-bar {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.go2072408551.react-hot-toast {
+  max-width: 100%;
+  padding: 0;
+}
+
+.go2072408551.react-hot-toast .go3958317564 {
+  margin: 0;
+}
+
+/* End -- Customize Toast Style */

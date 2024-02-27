@@ -71,8 +71,8 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
           </Stack>
           {
             anchorEl ? 
-            <Icon icon='tabler:chevron-down' fontSize={18} style={{marginLeft: 5}}/> : 
-            <Icon icon='tabler:chevron-up' fontSize={18} style={{marginLeft: 5}}/>
+            <Icon icon='tabler:chevron-up' fontSize={18} style={{marginLeft: 5}}/> : 
+            <Icon icon='tabler:chevron-down' fontSize={18} style={{marginLeft: 5}}/>
           }
       </Box>
       <Menu

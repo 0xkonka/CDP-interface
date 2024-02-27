@@ -58,7 +58,19 @@ const ToogleOffButton = styled(Button)<ButtonProps>(({ theme }) => ({
         backgroundColor: theme.palette.primary.main
     }
 }))
-const initialRows: CollateralType[] = [];
+const initialRows: CollateralType[] = [
+    {
+        id: 1,
+        asset: 'stETH',
+        type: 'LST',
+        borrowAPY: 10,
+        maxLeverage: 30,
+        LTVRatio: 95,
+        maxDepositAPY: 30,
+        baseDepositAPY: 10,
+        active: true
+    }
+];
 
 const Modules = () => {
     const [filterText, setFilterText] = useState<string>('')
@@ -66,7 +78,7 @@ const Modules = () => {
     const [assetFilter, setAssetFilter] = useState<string>('All')
     const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
     const [sortBy, setSortBy] = useState<string>('+asset')
-    const [rows, setRows] = useState<CollateralType[]>([])
+    const [rows, setRows] = useState<CollateralType[]>(initialRows)
     const router = useRouter()
     const { chain : chainId } = useNetwork()
     
@@ -74,9 +86,6 @@ const Modules = () => {
     const theme: Theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
-
-    
-
 
     const handleRowClick = (index: number) => {
         setOpenRowIndex(openRowIndex === index ? -1 : index);
