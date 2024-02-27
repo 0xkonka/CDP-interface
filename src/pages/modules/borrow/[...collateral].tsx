@@ -18,13 +18,12 @@ import {
 
 // Import from Next
 import Image from 'next/image'
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next/types'
 
 // ** Core Components Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/@core/components/icon'
 
 // ** Styled Component
-import CleaveWrapper from 'src/@core/styles/libs/react-cleave'
+import CleaveWrapper from '@/@core/styles/libs/react-cleave'
 
 // ** CleaveJS Imports
 import Cleave from 'cleave.js/react'
