@@ -1,10 +1,12 @@
-export {
-  _connectByChainId,
-  EthersLiquityConnection,
-  EthersLiquityConnectionOptionalParams,
-  EthersLiquityStoreOption,
-  UnsupportedNetworkError
-} from "./src/EthersLiquityConnection";
+// export {
+//   _connectByChainId,
+//   EthersLiquityConnection,
+//   EthersLiquityConnectionOptionalParams,
+//   EthersLiquityStoreOption,
+//   UnsupportedNetworkError
+// } from "./src/EthersLiquityConnection";
+
+export * from "./src/EthersLiquityConnection";
 
 export * from "./src/types";
 export * from "./src/ReadableEthersLiquity";
