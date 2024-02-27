@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useLiquitySelector } from "@/lib-react"; 
-import { LiquityStoreState, UserModuleStatus } from "@/lib-base";
+import { LiquityStoreState, UserTroveStatus } from "@/lib-base";
 import { ModuleViewContext } from "./ModuleViewContext";
 import type { ModuleView, ModuleEvent } from "./types";
 
