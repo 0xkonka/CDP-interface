@@ -12,9 +12,9 @@ import { BatchedProvider } from './providers/BatchingProvider'
 
 type ProtocolContextValue = {
   config: LiquityFrontendConfig
-  account: string
-  provider: Provider
-  protocol: EthersLiquityWithStore<BlockPolledLiquityStore>
+  account?: string
+  provider?: Provider
+  protocol?: EthersLiquityWithStore<BlockPolledLiquityStore> | undefined
 }
 
 const ProtocolContext = createContext<ProtocolContextValue | undefined>(undefined)
@@ -89,27 +89,33 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({
 
       getProvider()
     }
+    
     setConfig(getConfig())
+    
   }, [connector])
 
-  if (!config || !signer || !account) {
-    // return <>{loader}</>
+  if (!config) {
     return <></>
   }
 
-  if (config.testnetOnly && chainId === 1) {
-    return <>{unsupportedMainnetFallback}</>
+  // if (config.testnetOnly && chainId === 1) {
+  //   return <>{unsupportedMainnetFallback}</>
+  // }
+
+  // if (!connection) {
+  //   return <>{unsupportedNetworkFallback}</>
+  // }
+
+  let protocol;
+
+  if(connection){
+    protocol = EthersLiquity._from(connection)
+    protocol.store.logging = true
   }
 
-  if (!connection) {
-    return <>{unsupportedNetworkFallback}</>
-  }
-
-  const protocol = EthersLiquity._from(connection)
-  protocol.store.logging = true
 
   return (
-    <ProtocolContext.Provider value={{ config, account, provider: connection.provider, protocol }}>
+    <ProtocolContext.Provider value={{ config, account, provider: connection?.provider, protocol }}>
       {children}
     </ProtocolContext.Provider>
   )
