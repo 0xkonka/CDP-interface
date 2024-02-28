@@ -31,6 +31,7 @@ import 'cleave.js/dist/addons/cleave-phone.us'
 
 // Import React Basic Func
 import React, { forwardRef, Ref, ReactElement, useEffect, Fragment, useState } from 'react'
+import { showToast } from '@/hooks/toasts';
 
 const labels = [
     {
@@ -95,7 +96,6 @@ const Borrow = () => {
   const [borrowRate, setBorrowRate] = useState(0)
   const [openSummary, setOpenSummary] = useState<boolean>(false)
   const handleClickOpenSummary = () => setOpenSummary(true)
-  const handleCloseSummary = () => setOpenSummary(false)
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
   const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
   let { collateral } = router.query
@@ -129,6 +129,11 @@ const Borrow = () => {
   }
 
   const computedStyle = isMediumScreen ? smallBoxStyle : radiusBoxStyle;
+
+  const handleCloseSummary = () => {
+    setOpenSummary(false)
+    showToast('success', 'Success', 'Transaction has been completed', 2000)
+  }
 
   return (
     <Box>
@@ -513,6 +518,18 @@ const Borrow = () => {
                 minWidth: 250,
                 width: {xs: 1, sm: 'auto'}
             }} variant='outlined' onClick={handleClickOpenSummary}>Approve</Button>
+            <Button sx={{ 
+                ml: {xs: 2, sm: 2},
+                color: 'white',
+                minWidth: 250,
+                width: {xs: 1, sm: 'auto'}
+            }} variant='outlined' onClick={() => {showToast('success', 'Success', 'Transaction has been completed', 10000)}}>Success Test</Button>
+            <Button sx={{ 
+                ml: {xs: 2, sm: 2},
+                color: 'white',
+                minWidth: 250,
+                width: {xs: 1, sm: 'auto'}
+            }} variant='outlined' onClick={() => {showToast('error', 'Warning', 'Insufficient collateral volume', 10000)}}>Error Test</Button>
         </Stack>
         <Fragment>
             <Dialog
