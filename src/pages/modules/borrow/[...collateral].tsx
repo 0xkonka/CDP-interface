@@ -318,84 +318,86 @@ const Borrow = () => {
                 </Box> */}
             </Grid>
             <Grid item xs={12} md={6} sx={{display: 'flex', flexDirection: 'column'}}>
-                <Stack direction='row' sx={{...radiusBoxStyle, alignItems: 'center', justifyContent: 'center', height: '100%'}}>
-                    <Grid container sx={{height: '100%'}}>
-                        <Grid item xs={12} md={6} sx={{
-                             pr: {xs: 0, md: 4},
-                            borderBottom: { xs: 'solid 1px #2D3131', md: 0 },
-                            borderRight: { md: 'solid 1px #2D3131' }
-                        }}>
-                            <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
-                                Collateral
-                            </Typography>
-                            <Stack direction='row' sx={{justifyContent: 'space-between'}}>
-                                <Stack direction='row' sx={{alignItems: 'center'}}>
-                                    <img 
-                                        src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
-                                        alt='LinkedIn' height={42}
-                                        style={{ marginRight: 10 }}
-                                    />
-                                    {collateral}
+                <Stack sx={{...radiusBoxStyle, height: 1, mb: 10, justifyContent: 'center'}}>
+                    <Stack sx={{alignItems: 'center', justifyContent: 'center'}}>
+                        <Grid container sx={{height: '100%'}}>
+                            <Grid item xs={12} md={6} sx={{
+                                pr: {xs: 0, md: 4},
+                                borderBottom: { xs: 'solid 1px #2D3131', md: 0 },
+                                borderRight: { md: 'solid 1px #2D3131' }
+                            }}>
+                                <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
+                                    Collateral
+                                </Typography>
+                                <Stack direction='row' sx={{justifyContent: 'space-between'}}>
+                                    <Stack direction='row' sx={{alignItems: 'center'}}>
+                                        <img 
+                                            src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
+                                            alt='LinkedIn' height={42}
+                                            style={{ marginRight: 10 }}
+                                        />
+                                        {collateral}
+                                    </Stack>
+                                    <Box>
+                                        <Typography variant='subtitle1' sx={{textAlign: 'end'}}>
+                                            20,000.00
+                                        </Typography>
+                                        <Typography variant='subtitle2' sx={{color: '#707175', textAlign: 'end'}}>
+                                            = $20,000.00
+                                        </Typography>
+                                    </Box>
                                 </Stack>
-                                <Box>
-                                    <Typography variant='subtitle1' sx={{textAlign: 'end'}}>
-                                        20,000.00
-                                    </Typography>
-                                    <Typography variant='subtitle2' sx={{color: '#707175', textAlign: 'end'}}>
-                                        = $20,000.00
-                                    </Typography>
-                                </Box>
-                            </Stack>
-                            <Stack direction='row' sx={{mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 }}}>
-                                <Button sx={{ 
-                                    mr: {xs: 2, md: 4},
-                                    color: 'white',
-                                    borderColor: '#6795DA'
-                                }} variant='outlined'>Withdraw</Button>
-                                <Button sx={{ 
-                                    color: 'white',
-                                    borderColor: '#67DAB1'
-                                }} variant='outlined'>Deposit more</Button>
-                            </Stack>
-                        </Grid>
-                        <Grid item xs={12} md={6} sx={{pl: {xs: 0, md: 4}, pt: {xs: 4, md: 0}}}>
-                            <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
-                                Debt
-                            </Typography>
-                            <Stack direction='row' sx={{justifyContent: 'space-between'}}>
-                                <Stack direction='row' sx={{alignItems: 'center'}}>
-                                    <Image 
-                                        src={`/images/tokens/trenUSD.png`}
-                                        alt='LinkedIn' width={32} height={32}
-                                        style={{ borderRadius: '100%', marginRight: 10 }}
-                                    />
-                                    trenUSD
+                                <Stack direction='row' sx={{mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 }}}>
+                                    <Button sx={{ 
+                                        mr: {xs: 2, md: 4},
+                                        color: 'white',
+                                        borderColor: '#6795DA'
+                                    }} variant='outlined'>Withdraw</Button>
+                                    <Button sx={{ 
+                                        color: 'white',
+                                        borderColor: '#67DAB1'
+                                    }} variant='outlined'>Deposit more</Button>
                                 </Stack>
-                                <Box>
-                                    <Typography variant='subtitle1' sx={{textAlign: 'end'}}>
-                                        20,000.00
-                                    </Typography>
-                                    <Typography variant='subtitle2' sx={{color: '#707175', textAlign: 'end'}}>
-                                        = $20,000.00
-                                    </Typography>
-                                </Box>
-                            </Stack>
-                            <Stack direction='row' sx={{mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 }}}>
-                                <Button sx={{ 
-                                    mr: {xs: 2, md: 4},
-                                    color: 'white',
-                                    borderColor: '#C6E0DC'
-                                }} variant='outlined'>Borrow more</Button>
-                                <Button sx={{ 
-                                    color: 'white',
-                                    borderColor: '#C9A3FA'
-                                }} variant='outlined'>Repay</Button>
-                            </Stack>
+                            </Grid>
+                            <Grid item xs={12} md={6} sx={{pl: {xs: 0, md: 4}, pt: {xs: 4, md: 0}}}>
+                                <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
+                                    Debt
+                                </Typography>
+                                <Stack direction='row' sx={{justifyContent: 'space-between'}}>
+                                    <Stack direction='row' sx={{alignItems: 'center'}}>
+                                        <Image 
+                                            src={`/images/tokens/trenUSD.png`}
+                                            alt='LinkedIn' width={32} height={32}
+                                            style={{ borderRadius: '100%', marginRight: 10 }}
+                                        />
+                                        trenUSD
+                                    </Stack>
+                                    <Box>
+                                        <Typography variant='subtitle1' sx={{textAlign: 'end'}}>
+                                            20,000.00
+                                        </Typography>
+                                        <Typography variant='subtitle2' sx={{color: '#707175', textAlign: 'end'}}>
+                                            = $20,000.00
+                                        </Typography>
+                                    </Box>
+                                </Stack>
+                                <Stack direction='row' sx={{mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 }}}>
+                                    <Button sx={{ 
+                                        mr: {xs: 2, md: 4},
+                                        color: 'white',
+                                        borderColor: '#C6E0DC'
+                                    }} variant='outlined'>Borrow more</Button>
+                                    <Button sx={{ 
+                                        color: 'white',
+                                        borderColor: '#C9A3FA'
+                                    }} variant='outlined'>Repay</Button>
+                                </Stack>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    {/* <Typography variant='body1' color='#707175'>
-                        No open positions
-                    </Typography> */}
+                        {/* <Typography variant='body1' color='#707175'>
+                            No open positions
+                        </Typography> */}
+                    </Stack>
                 </Stack>
                 <Box sx={radiusBoxStyle}>
                     <Grid container spacing={8}>
