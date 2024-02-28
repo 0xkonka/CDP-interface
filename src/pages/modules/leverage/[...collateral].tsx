@@ -253,7 +253,7 @@ const Leverage = () => {
                             Leverage
                         </Typography>
                         <Stack direction='row' sx={{alignItems: 'center', gap: 2}}>
-                            <Typography variant='body2' color='#707175'>{modeAuto ? '' : `${slippagePercent}% slippage`}</Typography>
+                            <Typography variant='body2' color='#707175'>{modeAuto || !slippagePercent ? '' : `${slippagePercent}% slippage`}</Typography>
                             <Icon fontSize='28' icon='tabler:settings' style={{color: theme.palette.primary.main, cursor: 'pointer'}}
                             onClick={() => {setOpenSlippage(true)}}/>
                         </Stack>
@@ -279,15 +279,12 @@ const Leverage = () => {
                 </Box>
             </Grid>
             <Grid item xs={12} md={6} sx={{display: 'flex', flexDirection: 'column'}}>
-                <Box sx={{...radiusBoxStyle, height: '100%', mb: 10}}>
-                    {/* <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
-                        Leverage
-                    </Typography> */}
+                <Stack sx={{...radiusBoxStyle, height: 1, mb: 10, justifyContent: 'center'}}>
                     <Stack sx={{alignItems: 'center', justifyContent: 'center'}}>
                         <Grid container sx={{height: '100%'}}>
                             <Grid item xs={12} lg={6} sx={{
                                 pr: {xs: 0, lg: 4},
-                                borderBottom: { xs: 'solid 1px #2D3131', lg: 0 },
+                                // borderBottom: { xs: 'solid 1px #2D3131', lg: 0 },
                                 borderRight: { lg: 'solid 1px #2D3131' }
                             }}>
                                 <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
@@ -346,27 +343,6 @@ const Leverage = () => {
                                         </Stack>
                                     </Stack>
                                 </Stack>
-                                {/* <Stack direction='row' sx={{justifyContent: 'space-between'}}>
-                                    <Stack direction='row' sx={{alignItems: 'center'}}>
-                                        <img 
-                                            src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
-                                            alt='LinkedIn' height={42}
-                                            style={{ marginRight: 10 }}
-                                        />
-                                        {collateral}
-                                    </Stack>
-                                    <Box>
-                                        <Typography variant='subtitle1' sx={{textAlign: 'center'}}>
-                                            20,000.00
-                                        </Typography>
-                                        <Typography variant='subtitle2' sx={{color: '#707175', textAlign: 'center'}}>
-                                            $20,000.00
-                                        </Typography>
-                                    </Box>
-                                </Stack> */}
-                                <Stack direction='row' sx={{justifyContent: {xs: 'flex-end', md: 'flex-start'}, mt: { xs: 4, md: 10 }, mb: { xs: 4, md: 0 }}}>
-                                    
-                                </Stack>
                             </Grid>
                             <Grid item xs={12} lg={6} sx={{pl: {xs: 0, md: 4}, pt: {xs: 4, md: 0}}}>
                                 <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
@@ -407,7 +383,7 @@ const Leverage = () => {
                             </Grid>
                         </Grid>
                     </Stack>
-                </Box>
+                </Stack>
                 <Box sx={radiusBoxStyle}>
                     <Grid container spacing={8}>
                         <Grid item xs={12} lg={6}>
@@ -704,7 +680,7 @@ const Leverage = () => {
                     </Typography>
                     <Stack direction='row' sx={{mt: 4, justifyContent: 'center', gap: 4}}>
                         <Stack direction='row' sx={{alignItems: 'center', justifyContent: 'space-between', borderRadius: 2, border: 'solid 1px #C6C6C74D'}}>
-                            <Button variant='outlined' onClick={() => {setModeAuto(true), setSlippagePercent('')}}
+                            <Button variant='outlined' onClick={() => {setModeAuto(true), setSlippagePercent('0.5')}}
                                 sx={{borderRadius: 2, px: 4, py: 2, fontSize: 16, fontWeight: 400, color: 'white',
                                     border: modeAuto ? 'auto' : 'solid 1px transparent',
                                     '&:hover': {
@@ -713,7 +689,7 @@ const Leverage = () => {
                                 }}>
                                 Auto
                             </Button>
-                            <Button variant='outlined' onClick={() => {setModeAuto(false)}}
+                            <Button variant='outlined' onClick={() => {setModeAuto(false), setSlippagePercent((slippagePercent) => slippagePercent ? slippagePercent : '0.5')}}
                                 sx={{borderRadius: 2, px: 3, py: 2, fontSize: 16, fontWeight: 400, color: 'white', 
                                     border: modeAuto ? 'solid 1px transparent' : 'auto',
                                     '&:hover': {
@@ -723,7 +699,7 @@ const Leverage = () => {
                                 Custom
                             </Button>
                         </Stack>
-                        {/* <CleaveWrapper style={{position: 'relative'}}>
+                        <CleaveWrapper style={{position: 'relative'}}>
                             <Cleave id='slippage-percentage' 
                                 placeholder='0.5' 
                                 options={{ 
@@ -733,15 +709,17 @@ const Leverage = () => {
                                     numeralDecimalMark: '.', // Decimal mark is a period
                                     stripLeadingZeroes: false // Prevents stripping the leading zero before the decimal point
                                 }} 
-                                style={{paddingRight: 24, textAlign: 'end', width: 100, borderRadius: 12}}
-                                value={slippagePercent}
+                                style={{paddingRight: 28, textAlign: 'end', width: 100, borderRadius: 12}}
+                                value={modeAuto ? '' : slippagePercent}
                                 onChange={changeSlippagePerent}
+                                max={50}
+                                autoComplete='off'
                             />
-                            <Box sx={{position: 'absolute', right: 7, top: 7, fontSize: 16, pl: 1, color: '#FFF'}}>
+                            <Box sx={{position: 'absolute', right: 10, top: 7, fontSize: 16, pl: 1, color: '#FFF'}}>
                                 %
                             </Box>   
-                        </CleaveWrapper> */}
-                        <CustomTextField
+                        </CleaveWrapper>
+                        {/* <CustomTextField
                             id='slippage-percentage'
                             placeholder='0.5'
                             InputProps={{
@@ -751,13 +729,13 @@ const Leverage = () => {
                                 min: 0, // Set the minimum value as needed
                                 max: "50" // Set the maximum value as needed
                             }}
-                            value={slippagePercent}
+                            value={modeAuto ? '' : slippagePercent}
                             sx={{
-                                width: 100,
                                 '& .MuiInputBase-root': {
                                     borderRadius: '12px !important'
                                 },
                                 '& .MuiInputBase-input': {
+                                    width: 40,
                                     textAlign: 'end',
                                 },
                                 '& .MuiInputBase-root:focus': {
@@ -765,8 +743,9 @@ const Leverage = () => {
                                 }
                             }}
                             type='number'
+                            autoComplete='off'
                             onChange={changeSlippagePerent}
-                        />
+                        /> */}
                     </Stack>
                 </Box>
             </Dialog>
