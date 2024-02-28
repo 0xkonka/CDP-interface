@@ -27,7 +27,7 @@ import { CollateralType } from '@/types/collateral/types'
 // Import Subviews
 import HeaderInfo from '@/pages/modules/headerInfo'
 import CollateralRow from '@/pages/modules/collateralRow'
-import { useContractRead, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 const ToogleOnButton = styled(Button)<ButtonProps>(({ theme }) => ({
     borderRadius: '50px', 
@@ -80,7 +80,7 @@ const Modules = () => {
     const [sortBy, setSortBy] = useState<string>('+asset')
     const [rows, setRows] = useState<CollateralType[]>(initialRows)
     const router = useRouter()
-    const { chain : chainId } = useNetwork()
+    const { chain : chainId } = useAccount()
     
     const assetTypes:string[] = ['All', 'LRT', 'LST', 'RWA', 'LP Token', 'Vault', 'PT Token', 'Meme', 'Volatile', 'Stable']
     const theme: Theme = useTheme()
