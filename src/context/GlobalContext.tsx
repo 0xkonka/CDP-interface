@@ -26,6 +26,7 @@ interface GlobaContextValue {
 
 const defaultValues: GlobaContextValue = {
     slippageTolerance: 0.5,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     setOpenSlippage: () => {},
 }
 
