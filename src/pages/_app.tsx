@@ -75,6 +75,7 @@ import 'src/iconify-bundle/icons-bundle-react'
 import '../../styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import { ProtocolProvider } from '@/context/ProtocolContext'
+import {GlobalProvider} from '@/context/GlobalContext'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -131,10 +132,9 @@ const App = (props: ExtendedAppProps) => {
                 {({ settings }) => {
                   return (
                     <ThemeComponent settings={settings}>
+                      <GlobalProvider>
                       {getLayout(<Component {...pageProps} />)}
-                      <ReactHotToast>
-                        <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-                      </ReactHotToast>
+                      </GlobalProvider>
                     </ThemeComponent>
                   )
                 }}
