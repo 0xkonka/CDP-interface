@@ -30,7 +30,7 @@ const formatMoney = (value:number) => {
     if (value >= 1e12) return (value / 1e12).toFixed(2) + "T";
 }
 
-const formatPercent = (value:number, floating: number = 0) => {
+const formatPercent = (value:number, floating = 0) => {
     return value.toFixed(floating) + '%'
 }
 
