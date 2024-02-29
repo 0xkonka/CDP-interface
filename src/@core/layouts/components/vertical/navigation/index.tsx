@@ -4,11 +4,9 @@ import { useRef, useState } from 'react'
 // ** MUI Imports
 import List from '@mui/material/List'
 import Box, { BoxProps } from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
 import { createTheme, responsiveFontSizes, styled, ThemeProvider } from '@mui/material/styles'
-import ConnectWallet from 'src/pages/components/connect-wallet/ConnectWallet'
+import ConnectWallet from '@/views/components/ConnectWallet'
 
 // ** Third Party Components
 import PerfectScrollbar from 'react-perfect-scrollbar'
