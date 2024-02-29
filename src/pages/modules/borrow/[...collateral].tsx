@@ -32,6 +32,9 @@ import 'cleave.js/dist/addons/cleave-phone.us'
 // Import React Basic Func
 import React, { forwardRef, Ref, ReactElement, useEffect, Fragment, useState } from 'react'
 import { showToast } from '@/hooks/toasts';
+import { useProtocol } from '@/context/ProtocolContext';
+import { LiquityStoreState } from '@/lib-base';
+import { useLiquitySelector } from '@/lib-react';
 
 const labels = [
     {
@@ -99,6 +102,38 @@ const Borrow = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
   const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
   let { collateral } = router.query
+
+  const select = ({
+    numberOfTroves,
+    price,
+    total,
+    lusdInStabilityPool,
+    borrowingRate,
+    redemptionRate,
+
+    frontend
+  }: LiquityStoreState) => ({
+    numberOfTroves,
+    price,
+    total,
+    lusdInStabilityPool,
+    borrowingRate,
+    redemptionRate,
+    kickbackRate: frontend.status === 'registered' ? frontend.kickbackRate : null
+  })
+
+  const {
+    protocol: {
+      connection: { version: contractsVersion, deploymentDate, frontendTag }
+    }
+  } = useProtocol()
+
+  const { numberOfTroves, price, lusdInStabilityPool, total, borrowingRate, kickbackRate } = useLiquitySelector(select)
+
+  console.log('numberOfTroves', numberOfTroves)
+  console.log('total.collateral', +total.collateral + "ETH")
+  console.log('ETH price', +price + "$")
+  console.log('borrowingRate', +borrowingRate * 100 + "%")
  
   if (Array.isArray(collateral)) {
     collateral = collateral.join(' / ');
