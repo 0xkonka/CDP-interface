@@ -32,6 +32,7 @@ import 'cleave.js/dist/addons/cleave-phone.us'
 // Import React Basic Func
 import React, { forwardRef, Ref, ReactElement, useEffect, Fragment, useState } from 'react'
 import { showToast } from '@/hooks/toasts';
+import { useGlobalValues } from '@/context/GlobalContext';
 
 const labels = [
     {
@@ -98,6 +99,7 @@ const Borrow = () => {
   const handleClickOpenSummary = () => setOpenSummary(true)
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
   const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
+  const {slippageTolerance, setOpenSlippage} = useGlobalValues()
   let { collateral } = router.query
  
   if (Array.isArray(collateral)) {
@@ -199,7 +201,7 @@ const Borrow = () => {
                         </Link>
                         <Icon icon='tabler:copy' style={{cursor: 'pointer'}} fontSize={22}/>
                         <Icon icon='iconoir:refresh' style={{cursor: 'pointer'}} fontSize={18}/>
-                        <Icon icon='tabler:settings' style={{cursor: 'pointer'}} fontSize={22}/>
+                        <Icon icon='tabler:settings' style={{cursor: 'pointer'}} fontSize={22} onClick={() => {setOpenSlippage(true)}}/>
                     </Stack>
                 </Stack>
                 <Box sx={radiusBoxStyle}>
@@ -520,18 +522,6 @@ const Borrow = () => {
                 minWidth: 250,
                 width: {xs: 1, sm: 'auto'}
             }} variant='outlined' onClick={handleClickOpenSummary}>Approve</Button>
-            <Button sx={{ 
-                ml: {xs: 2, sm: 2},
-                color: 'white',
-                minWidth: 250,
-                width: {xs: 1, sm: 'auto'}
-            }} variant='outlined' onClick={() => {showToast('success', 'Success', 'Transaction has been completed', 10000)}}>Success Test</Button>
-            <Button sx={{ 
-                ml: {xs: 2, sm: 2},
-                color: 'white',
-                minWidth: 250,
-                width: {xs: 1, sm: 'auto'}
-            }} variant='outlined' onClick={() => {showToast('error', 'Warning', 'Insufficient collateral volume', 10000)}}>Error Test</Button>
         </Stack>
         <Fragment>
             <Dialog
