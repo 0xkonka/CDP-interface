@@ -78,6 +78,7 @@ import { ProtocolProvider, useProtocol } from '@/context/ProtocolContext'
 import { LiquityStoreProvider } from '@/lib-react'
 import Web3Wrapper from '@/context/Web3Wrapper'
 import { WalletConnector } from './components/connect-wallet/WalletConnector'
+import {GlobalProvider} from '@/context/GlobalContext'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {

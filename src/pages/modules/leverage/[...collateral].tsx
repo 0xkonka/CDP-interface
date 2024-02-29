@@ -33,6 +33,7 @@ import CustomTextField from '@/@core/components/mui/text-field'
 // ** CleaveJS Imports
 import Cleave from 'cleave.js/react'
 import 'cleave.js/dist/addons/cleave-phone.us'
+import { useGlobalValues } from '@/context/GlobalContext';
 
 const labels = [
     {
@@ -90,9 +91,7 @@ const Leverage = () => {
   const [multiplyRate, setMultiplyRate] = useState(0)
   const [openAdjust, setOpenAdjust] = useState<boolean>(false)
   const [openRepay, setOpenRepay] = useState<boolean>(false)
-  const [openSlippage, setOpenSlippage] = useState<boolean>(false)
-  const [modeAuto, setModeAuto] = useState<boolean>(true)
-  const [slippagePercent, setSlippagePercent] = useState<string>('0.5')
+  const {slippageTolerance, setOpenSlippage} = useGlobalValues()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
   const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
   const isLargeScreen = useMediaQuery(theme.breakpoints.down('xl'))
@@ -127,13 +126,6 @@ const Leverage = () => {
   }
 
   const computedStyle = isMediumScreen ? smallBoxStyle : radiusBoxStyle;
-
-  // Event : Search filter text value changes
-  const changeSlippagePerent = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
-    setModeAuto(value.length == 0)
-    setSlippagePercent(value)
-  }
 
   return (
     <Box>
@@ -199,7 +191,8 @@ const Leverage = () => {
                         </Link>
                         <Icon icon='tabler:copy' style={{cursor: 'pointer'}} fontSize={22}/>
                         <Icon icon='iconoir:refresh' style={{cursor: 'pointer'}} fontSize={18}/>
-                        <Icon icon='tabler:settings' style={{cursor: 'pointer'}} fontSize={22}/>
+                        {/* <Typography variant='body2' color='#707175'>{modeAuto || !slippageTolerance ? '' : `${slippageTolerance}% slippage`}</Typography> */}
+                        <Icon icon='tabler:settings' style={{cursor: 'pointer'}} fontSize={22} onClick={() => {setOpenSlippage(true)}}/>
                     </Stack>
                 </Stack>
                 <Box sx={radiusBoxStyle}>
@@ -248,16 +241,9 @@ const Leverage = () => {
                     </Grid>
                 </Box>
                 <Box sx={radiusBoxStyle}>
-                    <Stack direction='row' sx={{width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <Typography variant='subtitle1' sx={{fontWeight: 600}}>
-                            Leverage
-                        </Typography>
-                        <Stack direction='row' sx={{alignItems: 'center', gap: 2}}>
-                            <Typography variant='body2' color='#707175'>{modeAuto || !slippagePercent ? '' : `${slippagePercent}% slippage`}</Typography>
-                            <Icon fontSize='28' icon='tabler:settings' style={{color: theme.palette.primary.main, cursor: 'pointer'}}
-                            onClick={() => {setOpenSlippage(true)}}/>
-                        </Stack>
-                    </Stack>
+                    <Typography variant='subtitle1' sx={{fontWeight: 600}}>
+                        Leverage
+                    </Typography>
                     <Typography variant='subtitle1' color='#707175' sx={{mb: 2}}>Recursive borrowing engine using trenUSD</Typography>
                     <Box sx={{width: '100%'}}>
                         <Stack direction='row' sx={{justifyContent: 'flex-end'}}>
@@ -657,100 +643,6 @@ const Leverage = () => {
             </Dialog>
         </Fragment>
         {/* End Repay Modal */}
-
-        {/* Repay Slippage Tolerance Popup */}
-        <Fragment>
-            <Dialog
-                open={openSlippage}
-                keepMounted
-                onClose={() => {setOpenSlippage(false)}}
-                TransitionComponent={Transition}
-                maxWidth='xs'
-                fullWidth={true}
-                aria-labelledby='alert-dialog-slide-title'
-                aria-describedby='alert-dialog-slide-description'
-            >
-                <Box sx={{ p: 6, position: 'relative' }}>
-                    <Typography sx={{textAlign: 'center', mb: 8, fontWeight: 600}} variant='h4'>
-                        Slippage Tolerance
-                    </Typography>
-                    <Icon style={{position: 'absolute', right: 20, top: 20, cursor: 'pointer', fontWeight: 'bold'}} icon='tabler:x' fontSize='1.75rem' onClick={() => {setOpenSlippage(false)}}/>
-                    <Typography sx={{textAlign: 'center', maxWidth: 490, m: 'auto'}}>
-                        Price slippage is the difference in prices between the time a market order is placed and the time it completes on the blockchain or is filled.
-                    </Typography>
-                    <Stack direction='row' sx={{mt: 4, justifyContent: 'center', gap: 4}}>
-                        <Stack direction='row' sx={{alignItems: 'center', justifyContent: 'space-between', borderRadius: 2, border: 'solid 1px #C6C6C74D'}}>
-                            <Button variant='outlined' onClick={() => {setModeAuto(true), setSlippagePercent('0.5')}}
-                                sx={{borderRadius: 2, px: 4, py: 2, fontSize: 16, fontWeight: 400, color: 'white',
-                                    border: modeAuto ? 'auto' : 'solid 1px transparent',
-                                    '&:hover': {
-                                        borderColor: modeAuto ? theme.palette.primary.main : 'transparent'
-                                    }
-                                }}>
-                                Auto
-                            </Button>
-                            <Button variant='outlined' onClick={() => {setModeAuto(false), setSlippagePercent((slippagePercent) => slippagePercent ? slippagePercent : '0.5')}}
-                                sx={{borderRadius: 2, px: 3, py: 2, fontSize: 16, fontWeight: 400, color: 'white', 
-                                    border: modeAuto ? 'solid 1px transparent' : 'auto',
-                                    '&:hover': {
-                                        borderColor: modeAuto ? 'transparent' : theme.palette.primary.main
-                                    }
-                                }}>
-                                Custom
-                            </Button>
-                        </Stack>
-                        <CleaveWrapper style={{position: 'relative'}}>
-                            <Cleave id='slippage-percentage' 
-                                placeholder='0.5' 
-                                options={{ 
-                                    numeral: true,
-                                    numeralThousandsGroupStyle: 'thousand',
-                                    numeralDecimalScale: 2, // Always show two decimal points
-                                    numeralDecimalMark: '.', // Decimal mark is a period
-                                    stripLeadingZeroes: false // Prevents stripping the leading zero before the decimal point
-                                }} 
-                                style={{paddingRight: 28, textAlign: 'end', width: 100, borderRadius: 12}}
-                                value={modeAuto ? '' : slippagePercent}
-                                onChange={changeSlippagePerent}
-                                max={50}
-                                autoComplete='off'
-                            />
-                            <Box sx={{position: 'absolute', right: 10, top: 7, fontSize: 16, pl: 1, color: '#FFF'}}>
-                                %
-                            </Box>   
-                        </CleaveWrapper>
-                        {/* <CustomTextField
-                            id='slippage-percentage'
-                            placeholder='0.5'
-                            InputProps={{
-                                endAdornment: <InputAdornment  position='end'>%</InputAdornment>
-                            }}
-                            inputProps={{ // Note this part for min and max
-                                min: 0, // Set the minimum value as needed
-                                max: "50" // Set the maximum value as needed
-                            }}
-                            value={modeAuto ? '' : slippagePercent}
-                            sx={{
-                                '& .MuiInputBase-root': {
-                                    borderRadius: '12px !important'
-                                },
-                                '& .MuiInputBase-input': {
-                                    width: 40,
-                                    textAlign: 'end',
-                                },
-                                '& .MuiInputBase-root:focus': {
-                                    borderColor: '#C6C6C74D !important',
-                                }
-                            }}
-                            type='number'
-                            autoComplete='off'
-                            onChange={changeSlippagePerent}
-                        /> */}
-                    </Stack>
-                </Box>
-            </Dialog>
-        </Fragment>
-        {/* End Slippage Tolerance Modal */}
     </Box>
   );
 };
