@@ -91,10 +91,8 @@ const Leverage = () => {
   const [multiplyRate, setMultiplyRate] = useState(0)
   const [openAdjust, setOpenAdjust] = useState<boolean>(false)
   const [openRepay, setOpenRepay] = useState<boolean>(false)
-  const {slippageTolerance, setOpenSlippage} = useGlobalValues()
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
-  const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
-  const isLargeScreen = useMediaQuery(theme.breakpoints.down('xl'))
+  const {setOpenSlippage} = useGlobalValues()
+  const {isSmallScreen, isMediumScreen, isLargeScreen} = useGlobalValues()
   let { collateral } = router.query
 
   if (Array.isArray(collateral)) {

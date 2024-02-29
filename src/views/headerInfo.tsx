@@ -1,17 +1,15 @@
-// MUI components import
+//@ MUI components
 import {
     Box,
     Typography,
     Stack,
-    Theme,
-    useTheme,
-    useMediaQuery
 } from '@mui/material'
 
+//@ Contexts
+import { useGlobalValues } from '@/context/GlobalContext'
 
 const HeaderInfo = () => {
-    const theme: Theme = useTheme()
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
+    const {isSmallScreen} = useGlobalValues()
     const textStyle = {
         background: 'linear-gradient(180deg, #B7BCBC 0%, #FFF 100%)',
         backgroundClip: 'text',

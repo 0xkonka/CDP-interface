@@ -97,8 +97,7 @@ const Borrow = () => {
   const [borrowRate, setBorrowRate] = useState(0)
   const [openSummary, setOpenSummary] = useState<boolean>(false)
   const handleClickOpenSummary = () => setOpenSummary(true)
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
-  const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
+  const {isSmallScreen, isMediumScreen} = useGlobalValues()
   const {slippageTolerance, setOpenSlippage} = useGlobalValues()
   let { collateral } = router.query
  
