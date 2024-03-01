@@ -1,23 +1,28 @@
-//@ React Basic
+// React imports
 import React from 'react'
-//@ MUI components
+
+// Material-UI components
 import {
     Stack, Box, Typography, Collapse, Link, Button,
-    useTheme, Theme, useMediaQuery
+    useTheme, Theme
 } from '@mui/material'
-//@ Template core components
+
+// Core components & types
 import Icon from '@/@core/components/icon'
 import CustomChip from '@/@core/components/mui/chip'
-//@ Types
 import { CollateralType } from '@/types/collateral/types'
-//@ Tren Components
+
+// Subcomponents
 import { BorrowPosition } from './components/positions/borrow'
 import { LeveragePosition } from './components/positions/leverage'
-//@ Tren Subpages
+
+// Subpages
 import { CollateralOverview } from './collateralOverview'
-//@ Contexts
+
+// Contexts
 import { useGlobalValues } from '@/context/GlobalContext'
-//@@ Extra @@
+
+// Third-party libraries
 import clsx from 'clsx'
 
 // Define Props
@@ -232,7 +237,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                         borderTop: 'solid 1px #36373D',
                         borderBottom: 'solid 1px #36373D',
                     }}>
-                        <CollateralOverview collateral={row.asset}/>
+                        <CollateralOverview row={row}/>
                     </Box>
                     <BorrowPosition hasBorrowPosition={hasBorrowPosition} row={row}/>
                     <LeveragePosition hasLeveragePosition={hasLeveragePosition} row={row}/>
