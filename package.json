@@ -33,7 +33,8 @@
     "@mui/system": "5.12.1",
     "@mui/x-data-grid": "6.0.3",
     "@popperjs/core": "2.11.7",
-    "@rainbow-me/rainbowkit": "1.3.1",
+    "@rainbow-me/rainbowkit": "^2.0.1",
+    "@tanstack/react-query": "^5.24.1",
     "apexcharts-clevision": "3.28.5",
     "axios": "1.4.0",
     "axios-mock-adapter": "1.21.4",
@@ -70,8 +71,8 @@
     "recharts": "2.5.0",
     "stylis": "4.1.4",
     "stylis-plugin-rtl": "2.1.1",
-    "viem": "~1.19.15",
-    "wagmi": "~1.4.12",
+    "viem": "2.x",
+    "wagmi": "^2.5.7",
     "yup": "1.1.1"
   },
   "devDependencies": {

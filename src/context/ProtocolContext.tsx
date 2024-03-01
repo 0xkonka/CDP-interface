@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { Provider } from '@ethersproject/abstract-provider'
-import { FallbackProvider } from '@ethersproject/providers'
-import { useAccount, useChainId, useWalletClient, Config } from 'wagmi'
+import { Config, useAccount, useChainId, useClient, useWalletClient } from 'wagmi'
 import type { Account, Chain, Client, Transport } from 'viem'
 import { providers } from 'ethers'
 
@@ -12,20 +11,41 @@ import { BatchedProvider } from './providers/BatchingProvider'
 
 type ProtocolContextValue = {
   config: LiquityFrontendConfig
-  account?: string
-  provider?: Provider
-  protocol?: EthersLiquityWithStore<BlockPolledLiquityStore>
+  account: string
+  provider: Provider
+  protocol: EthersLiquityWithStore<BlockPolledLiquityStore>
 }
 
 const ProtocolContext = createContext<ProtocolContextValue | undefined>(undefined)
 
 type ProtocolProviderProps = {
   children: React.ReactNode
-  loader?: React.ReactNode
-  unsupportedNetworkFallback?: React.ReactNode
-  unsupportedMainnetFallback?: React.ReactNode
+  // loader?: React.ReactNode
 }
 
+export function clientToProvider(client: Client<Transport, Chain>) {
+  const { chain, transport } = client
+  const network = {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  }
+  if (transport.type === 'fallback')
+    return new providers.FallbackProvider(
+      (transport.transports as ReturnType<Transport>[]).map(
+        ({ value }) => new providers.JsonRpcProvider(value?.url, network),
+      ),
+    )
+  return new providers.JsonRpcProvider(transport.url, network)
+}
+
+/** Hook to convert a viem Client to an ethers.js Provider. */
+export function useEthersProvider({
+  chainId,
+}: { chainId?: number | undefined } = {}) {
+  const client = useClient<Config>({ chainId })
+  return useMemo(() => clientToProvider(client as any), [client])
+}
 export function clientToSigner(client: Client<Transport, Chain, Account>) {
   if (client) {
     const { account, chain, transport } = client
@@ -40,32 +60,17 @@ export function clientToSigner(client: Client<Transport, Chain, Account>) {
   }
 }
 
-// export async function useEthersSigner() {
-//   const { data: client } = useWalletClient()
-//   return useMemo(() => (client ? clientToSigner(client) : undefined), [client])
-// }
-
-export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({
-  children,
-  // loader,
-  unsupportedNetworkFallback,
-  unsupportedMainnetFallback
-}) => {
-  // const provider = useProvider<FallbackProvider>();
-  // const signer = useSigner();
+export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) => {
   const { connector, address: account } = useAccount()
   const chainId = useChainId()
-  // const {data : signer} = useWalletClient()
-  const [provider, setProvider] = useState<providers.BaseProvider | undefined>(undefined)
+  // const [provider, setProvider] = useState<FallbackProvider | undefined>(undefined)
   const [config, setConfig] = useState<LiquityFrontendConfig>()
-
+  const provider = useEthersProvider()
   const { data: client } = useWalletClient()
   const signer = clientToSigner(client!)
 
   const connection = useMemo(() => {
     if (config && account && connector && signer && provider) {
-      // const provider = connector?.getProvider()
-
       const batchedProvider = new BatchedProvider(provider, chainId)
       // batchedProvider._debugLog = true;
       try {
@@ -81,41 +86,18 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({
   }, [config, signer, account, chainId, connector, provider])
 
   useEffect(() => {
-    if (connector) {
-      const getProvider = async () => {
-        const provider = await connector?.getProvider()
-        setProvider(provider)
-      }
-
-      getProvider()
-    }
-    
     setConfig(getConfig())
-    
   }, [connector])
 
-  if (!config) {
+  if (!config || !connection || !account) {
     return <></>
   }
 
-  // if (config.testnetOnly && chainId === 1) {
-  //   return <>{unsupportedMainnetFallback}</>
-  // }
-
-  // if (!connection) {
-  //   return <>{unsupportedNetworkFallback}</>
-  // }
-
-  let protocol;
-
-  if(connection){
-    protocol = EthersLiquity._from(connection)
-    protocol.store.logging = true
-  }
-
+  const protocol = EthersLiquity._from(connection)
+  protocol.store.logging = true
 
   return (
-    <ProtocolContext.Provider value={{ config, account, provider: connection?.provider, protocol }}>
+    <ProtocolContext.Provider value={{ config, account, provider: connection.provider, protocol }}>
       {children}
     </ProtocolContext.Provider>
   )
@@ -125,7 +107,7 @@ export const useProtocol = () => {
   const protocolContext = useContext(ProtocolContext)
 
   if (!protocolContext) {
-    throw new Error('You must provide a LiquityContext via LiquityProvider')
+    throw new Error('You must provide a ProtocolContext via ProtocolProvider')
   }
 
   return protocolContext

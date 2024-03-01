@@ -33,6 +33,9 @@ import { Switcher } from '@/views/components/modules/switcher'
 import { HealthFactor } from '@/views/components/modules/healthFactor'
 import { BorrowingPower } from '@/views/components/modules/borrowingPower'
 import { Result } from '@/views/components/modules/result'
+import { useProtocol } from '@/context/ProtocolContext'
+import { LiquityStoreState } from '@/lib-base'
+import { useLiquitySelector } from '@/lib-react'
   
 const Transition = forwardRef(function Transition(
     props: SlideProps & { children?: ReactElement<any, any> },
@@ -48,6 +51,38 @@ const Borrow = () => {
   const handleClickOpenSummary = () => setOpenSummary(true)
   const {isSmallScreen, isMediumScreen} = useGlobalValues()
   let { collateral } = router.query
+
+  const select = ({
+    numberOfTroves,
+    price,
+    total,
+    lusdInStabilityPool,
+    borrowingRate,
+    redemptionRate,
+
+    frontend
+  }: LiquityStoreState) => ({
+    numberOfTroves,
+    price,
+    total,
+    lusdInStabilityPool,
+    borrowingRate,
+    redemptionRate,
+    kickbackRate: frontend.status === 'registered' ? frontend.kickbackRate : null
+  })
+
+  const {
+    protocol: {
+      connection: { version: contractsVersion, deploymentDate, frontendTag }
+    }
+  } = useProtocol()
+
+  const { numberOfTroves, price, lusdInStabilityPool, total, borrowingRate, kickbackRate } = useLiquitySelector(select)
+
+  console.log('numberOfTroves', numberOfTroves)
+  console.log('total.collateral', +total.collateral + "ETH")
+  console.log('ETH price', +price + "$")
+  console.log('borrowingRate', +borrowingRate * 100 + "%")
  
   if (Array.isArray(collateral)) {
     collateral = collateral.join(' / ');
@@ -301,6 +336,18 @@ const Borrow = () => {
                 minWidth: 250,
                 width: {xs: 1, sm: 'auto'}
             }} variant='outlined' onClick={handleClickOpenSummary}>Approve</Button>
+            <Button sx={{ 
+                ml: {xs: 2, sm: 2},
+                color: 'white',
+                minWidth: 250,
+                width: {xs: 1, sm: 'auto'}
+            }} variant='outlined' onClick={() => {showToast('success', 'Success', 'Transaction has been completed', 10000)}}>Success Test</Button>
+            <Button sx={{ 
+                ml: {xs: 2, sm: 2},
+                color: 'white',
+                minWidth: 250,
+                width: {xs: 1, sm: 'auto'}
+            }} variant='outlined' onClick={() => {showToast('error', 'Warning', 'Insufficient collateral volume', 10000)}}>Error Test</Button>
         </Stack>
         <Fragment>
             <Dialog
