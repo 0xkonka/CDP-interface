@@ -9,7 +9,8 @@ interface Props {
 }
 
 export const BorrowingPower = (props: Props) => {
-    let {label, percent} = props
+    const {percent} = props
+    let {label} = props
     if(label == undefined)
         label = 'Borrowing power used'
     return (
