@@ -16,7 +16,6 @@ interface ContentProps {
 }
 
 const ErrorContent = ({t, header, content, duration}: ContentProps) => {
-  const theme = useTheme()
   return (
     <Stack direction='row' sx={{
       position: 'relative',

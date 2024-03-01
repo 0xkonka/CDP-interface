@@ -1,14 +1,34 @@
-import React, { Fragment, ReactNode, createContext, useContext, useState, Ref, forwardRef, ReactElement } from 'react';
+// React related imports
+import React, {
+    Fragment,
+    ReactNode,
+    createContext,
+    useContext,
+    useState,
+    Ref,
+    forwardRef,
+    ReactElement,
+} from 'react'
+
+// Material-UI components and hooks
 import {
-    Box, Typography, Dialog, Stack, Button, useTheme, Theme,
-    Slide,SlideProps, useMediaQuery
+    Box,
+    Typography,
+    Dialog,
+    Stack,
+    Button,
+    useTheme,
+    Theme,
+    Slide,
+    SlideProps,
+    useMediaQuery,
 } from '@mui/material'
 
-// ** Core Components Imports
+// Core Components Imports
 import CleaveWrapper from '@/@core/styles/libs/react-cleave'
 import Icon from '@/@core/components/icon'
 
-// ** CleaveJS Imports
+// CleaveJS Imports for input formatting
 import Cleave from 'cleave.js/react'
 import 'cleave.js/dist/addons/cleave-phone.us'
 

@@ -3,7 +3,7 @@ import {
     styled
 } from '@mui/material'
 
-export const ToogleOnButton = styled(Button)<ButtonProps>(({ theme }) => ({
+export const ToggleOnButton = styled(Button)<ButtonProps>(({ theme }) => ({
     borderRadius: '50px', 
     fontWeight: 600, 
     backgroundColor: theme.palette.primary.main, 
@@ -17,7 +17,7 @@ export const ToogleOnButton = styled(Button)<ButtonProps>(({ theme }) => ({
     }
 }))
 
-export const ToogleOffButton = styled(Button)<ButtonProps>(({ theme }) => ({
+export const ToggleOffButton = styled(Button)<ButtonProps>(({ theme }) => ({
     borderRadius: '50px', 
     fontWeight: 400, 
     backgroundColor: '#191D1C', 

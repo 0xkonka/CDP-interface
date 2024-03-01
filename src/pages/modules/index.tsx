@@ -1,45 +1,31 @@
-//@ React Basic
+// External libraries
 import React, { useEffect, useState } from 'react'
-
-//@ MUI components
-import { 
+import { useContractRead, useNetwork } from 'wagmi'
+import {
     Typography, Box, InputAdornment, Switch, Stack,
- } from '@mui/material'
+} from '@mui/material'
 
-//@ Template core components
+// Core template components
 import Icon from '@/@core/components/icon'
 import CustomTextField from '@/@core/components/mui/text-field'
 import SortByDropdown from '@/@core/components/sortby-dropdown'
 
-//@ Types
-import { CollateralType } from '@/types/collateral/types'
-
-//@ Tren Views
+// Project component views
 import HeaderInfo from '@/views/headerInfo'
 import CollateralRow from '@/views/collateralRow'
+import { ToggleOnButton, ToggleOffButton } from '@/views/components/buttons'
 
-//@ Tren Components
-import {ToogleOnButton, ToogleOffButton} from '@/views/components/buttons'
+// Contexts & Types
+import { useGlobalValues } from '@/context/GlobalContext'
+import { CollateralType } from '@/types/collateral/types'
 
-//@ Contexts
-import { useGlobalValues } from '@/context/GlobalContext';
+// Utilities
+import { getOverView } from '@/hooks/utils'
 
-//@ Extra @
-import { useContractRead, useNetwork } from 'wagmi';
-
-const initialRows: CollateralType[] = [
-    {
-        id: 1,
-        asset: 'stETH',
-        type: 'LST',
-        borrowAPY: 10,
-        maxLeverage: 30,
-        LTVRatio: 95,
-        maxDepositAPY: 30,
-        baseDepositAPY: 10,
-        active: true
-    }
-];
+const collaterals = ['stETH']
+const initialRows: CollateralType[] = collaterals.map((value, index) => {
+    return {id: index + 1, ...getOverView(value)}
+}).filter(collateral => collateral !== undefined) as CollateralType[];
 
 const Modules = () => {
     const [filterText, setFilterText] = useState<string>('')
@@ -169,12 +155,12 @@ const Modules = () => {
                 {
                     assetTypes.map((value, index) => {
                         return value == assetFilter ? 
-                            <ToogleOnButton key={index} onClick={() => {setAssetFilter(value)}}>
+                            <ToggleOnButton key={index} onClick={() => {setAssetFilter(value)}}>
                                 {value + ' ' + rows.length}
-                            </ToogleOnButton> :
-                            <ToogleOffButton key={index} onClick={() => {setAssetFilter(value)}}>
+                            </ToggleOnButton> :
+                            <ToggleOffButton key={index} onClick={() => {setAssetFilter(value)}}>
                                 {value}
-                            </ToogleOffButton>
+                            </ToggleOffButton>
                     })
                 }
             </Box>
