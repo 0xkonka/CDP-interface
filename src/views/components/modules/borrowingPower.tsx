@@ -4,16 +4,20 @@ import {
 } from '@mui/material'
 
 interface Props {
+    label?: string
     percent: number
 }
 
 export const BorrowingPower = (props: Props) => {
     const {percent} = props
+    let {label} = props
+    if(label == undefined)
+        label = 'Borrowing power used'
     return (
         <Stack>
             <Stack direction='row' sx={{mb:2, justifyContent: 'space-between'}}>
                 <Typography variant='subtitle1'>
-                    Borrowing power used
+                    {label}
                 </Typography>
                 <Typography variant='subtitle1'>
                     {percent == 0 ? '-' : `${percent}%`}
