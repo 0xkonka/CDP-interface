@@ -77,8 +77,8 @@ import '@rainbow-me/rainbowkit/styles.css'
 import { ProtocolProvider, useProtocol } from '@/context/ProtocolContext'
 import { LiquityStoreProvider } from '@/lib-react'
 import Web3Wrapper from '@/context/Web3Wrapper'
-import { WalletConnector } from './components/connect-wallet/WalletConnector'
-import {GlobalProvider} from '@/context/GlobalContext'
+import { GlobalProvider } from '@/context/GlobalContext'
+import { WalletConnector } from '@/views/components/WalletConnector'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -132,10 +132,15 @@ const App = (props: ExtendedAppProps) => {
                   {({ settings }) => {
                     return (
                       <ThemeComponent settings={settings}>
-                        {getLayout(<Component {...pageProps} />)}
-                        <ReactHotToast>
-                          <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-                        </ReactHotToast>
+                        <GlobalProvider>
+                          {getLayout(<Component {...pageProps} />)}
+                          <ReactHotToast>
+                            <Toaster
+                              position={settings.toastPosition}
+                              toastOptions={{ className: 'react-hot-toast' }}
+                            />
+                          </ReactHotToast>
+                        </GlobalProvider>
                       </ThemeComponent>
                     )
                   }}
@@ -165,7 +170,7 @@ const config = getDefaultConfig({
       wallets: [argentWallet, trustWallet, ledgerWallet]
     }
   ],
-  chains: [goerli],
+  chains: [goerli]
   // ssr: true
 })
 const queryClient = new QueryClient()

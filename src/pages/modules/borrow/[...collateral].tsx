@@ -1,91 +1,42 @@
-import { useRouter } from 'next/router';
+// React imports
+import React, {
+    forwardRef, Ref, ReactElement, Fragment, useState
+} from 'react'
 
-// MUI imports
-import {
-    Box,
-    Typography,
-    Button,
-    Tooltip,
-    IconButton,
-    Grid,
-    Dialog,
-    Slide, SlideProps,
-    useMediaQuery,
-    Theme, useTheme,
-    Stack,
-    Link
-} from '@mui/material'
-
-// Import from Next
+// Next.js imports
+import { useRouter } from 'next/router'
 import Image from 'next/image'
 
-// ** Core Components Imports
+// MUI imports and hooks
+import {
+    Box, Typography, Button, Grid, Dialog, Slide, SlideProps,
+    Theme, useTheme, Stack, Link
+} from '@mui/material'
+
+// Core Components Imports
 import Icon from '@/@core/components/icon'
 
-// ** Styled Component
+// Styled Component Import
 import CleaveWrapper from '@/@core/styles/libs/react-cleave'
 
-// ** CleaveJS Imports
+// CleaveJS for input formatting
 import Cleave from 'cleave.js/react'
 import 'cleave.js/dist/addons/cleave-phone.us'
 
-// Import React Basic Func
-import React, { forwardRef, Ref, ReactElement, useEffect, Fragment, useState } from 'react'
-import { showToast } from '@/hooks/toasts';
-import { useProtocol } from '@/context/ProtocolContext';
-import { LiquityStoreState } from '@/lib-base';
-import { useLiquitySelector } from '@/lib-react';
+// Custom hook imports
+import { showToast } from '@/hooks/toasts'
 
-const labels = [
-    {
-        key: 'TVL',
-        tooltip: 'Total value locked',
-        value: '4.296M'
-    },
-    {
-        key: 'trenUSD Available',
-        tooltip: 'trenUSD available to borrow/total trenUSD allocated',
-        value: '766.231K/800K'
-    },
-    {
-        key: 'Utilization',
-        tooltip: 'Total borrowed trenUSD/total trenUSD allocated',
-        value: '84.86%'
-    },
-    {
-        key: 'Max LTV',
-        tooltip: 'Maximum loan-to-value',
-        value: '75%'
-    },
-    {
-        key: 'Interest',
-        tooltip: 'Rate of debt accrual',
-        value: '5%'
-    },
-    {
-        key: 'Borrow Fee',
-        tooltip: 'A one time fee paid upon opening a position Tooltip',
-        value: '6.263%'
-    },
-    {
-        key: 'Liquidation',
-        tooltip: 'the LTV at which the position will be flagged for liquidation',
-        value: '5%'
-    },
-    {
-        key: 'Rate Type',
-        tooltip: 'The interest rate used for the pool',
-        value: 'Variable Rate'
-    },
-]
-
-// export const getStaticProps: GetStaticProps = ({ params }: GetStaticPropsContext) => {
-//     return {
-//       props: {
-//         collateral: params?.collateral
-//       }
-//     }
-// }
+// Context imports
+import { useGlobalValues } from '@/context/GlobalContext'
+import { ModuleOverView } from '@/views/components/modules/moduleOverView'
+import { Switcher } from '@/views/components/modules/switcher'
+import { HealthFactor } from '@/views/components/modules/healthFactor'
+import { BorrowingPower } from '@/views/components/modules/borrowingPower'
+import { Result } from '@/views/components/modules/result'
+import { useProtocol } from '@/context/ProtocolContext'
+import { LiquityStoreState } from '@/lib-base'
+import { useLiquitySelector } from '@/lib-react'
+  
 const Transition = forwardRef(function Transition(
     props: SlideProps & { children?: ReactElement<any, any> },
     ref: Ref<unknown>
@@ -96,11 +47,9 @@ const Transition = forwardRef(function Transition(
 const Borrow = () => {
   const router = useRouter();
   const theme: Theme = useTheme();
-  const [borrowRate, setBorrowRate] = useState(0)
   const [openSummary, setOpenSummary] = useState<boolean>(false)
   const handleClickOpenSummary = () => setOpenSummary(true)
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
-  const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
+  const {isSmallScreen, isMediumScreen} = useGlobalValues()
   let { collateral } = router.query
 
   const select = ({
@@ -151,20 +100,6 @@ const Borrow = () => {
     gap: 3
   }
 
-  const smallBoxStyle = {
-    width: '100vw',
-    marginLeft: isSmallScreen ? -4 : -8,
-    padding: 4,
-    marginBottom: 4,
-    borderBottom: 'solid 1px',
-    borderTop: 'solid 1px',
-    borderColor: theme.palette.secondary.dark,
-    gap: 6,
-    overflowX: 'scroll'
-  }
-
-  const computedStyle = isMediumScreen ? smallBoxStyle : radiusBoxStyle;
-
   const handleCloseSummary = () => {
     setOpenSummary(false)
     showToast('success', 'Success', 'Transaction has been completed', 2000)
@@ -178,65 +113,10 @@ const Borrow = () => {
                 Go back to Pools
             </Typography>
         </Stack>
-        <Stack direction='row' sx={{...computedStyle, flexWrap: isMediumScreen ? 'nowrap' : 'wrap', justifyContent: 'space-between'}}>
-            {labels.map((label, index) => (
-                <Stack key={index} sx={{alignItems: 'center', gap: isSmallScreen ? 0:1}}>
-                    <Typography variant='body1' color='#707175' sx={{display: 'flex', alignItems: 'center', whiteSpace: 'nowrap'}}>
-                        {label.key} 
-                        <Tooltip title={label.tooltip} placement='top'>
-                            <IconButton sx={{bgcolor: 'transparent !important'}}>
-                                <Icon fontSize='14' icon='simple-line-icons:question' style={{color: '#707175', cursor: 'pointer'}}/>
-                            </IconButton>
-                        </Tooltip>
-                    </Typography>
-                    <Typography variant='body1'>
-                        {label.value}
-                    </Typography>
-                </Stack>
-            ))}
-        </Stack>
+        <ModuleOverView collateral={collateral || ''}/>
         <Grid container spacing={4}>
             <Grid item xs={12} md={6}>
-                <Stack direction={isMediumScreen ? 'column' : 'row'} sx={{alignItems: 'center', justifyContent: 'space-between', gap: 4, py: 4, mb: {xs: 4, lg: 0}}}>
-                    <Stack direction='row' sx={{alignItems: 'center', justifyContent: 'space-between', borderRadius: 2, border: 'solid 1px #C6C6C74D', width : {xs: 1, lg: 'auto'}}}>
-                        <Button variant='outlined' 
-                            sx={{borderRadius: 2, px: 8, py: 2.5, fontSize: 16, fontWeight: 400, color: 'white',
-                                width: 1/2,
-                                '&:hover': {
-                                    backgroundColor: 'transparent'
-                                }
-                            }}>
-                            Borrow
-                        </Button>
-                        <Button variant='outlined' onClick={() => router.push(`/modules/leverage/${collateral?.toString().trim().replace(/\s+/g, '')}`)} 
-                            sx={{borderRadius: 2, px: 8, py: 2.5, fontSize: 16, fontWeight: 400, color: 'white', 
-                                width: 1/2,
-                                border: 'solid 1px transparent',
-                                '&:hover': {
-                                    borderColor: theme.palette.primary.main
-                                }}}>
-                                Leverage
-                        </Button>
-                    </Stack>
-                    <Stack direction='row' style={{alignItems: 'center'}} gap={3}>
-                        <Link href='' sx={{display: 'flex', alignItems: 'center'}}>
-                            <Typography variant='h5' color='primary' sx={{fontWeight: 400}}>0x03B5...36Fa</Typography>
-                            <svg style={{marginLeft: 4, marginBottom: 4}} xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                                <g clipPath="url(#clip0_719_13657)">
-                                    <path d="M11.625 0.75V4.125C11.625 4.33228 11.4573 4.5 11.25 4.5C11.0427 4.5 10.875 4.33228 10.875 4.125V1.65525L5.51512 7.01513C5.44191 7.08834 5.34591 7.125 5.25 7.125C5.15409 7.125 5.05809 7.08834 4.98488 7.01513C4.95003 6.98032 4.92239 6.93899 4.90353 6.8935C4.88467 6.84801 4.87496 6.79925 4.87496 6.75C4.87496 6.70075 4.88467 6.65199 4.90353 6.6065C4.92239 6.56101 4.95003 6.51968 4.98488 6.48487L10.3448 1.125H7.875C7.66772 1.125 7.5 0.957281 7.5 0.75C7.5 0.542719 7.66772 0.375 7.875 0.375H11.25C11.4573 0.375 11.625 0.542719 11.625 0.75ZM10.125 10.5V6C10.125 5.79272 9.95728 5.625 9.75 5.625C9.54272 5.625 9.375 5.79272 9.375 6V10.5C9.375 10.7069 9.20691 10.875 9 10.875H1.5C1.29309 10.875 1.125 10.7069 1.125 10.5V3C1.125 2.79309 1.29309 2.625 1.5 2.625H6C6.20728 2.625 6.375 2.45728 6.375 2.25C6.375 2.04272 6.20728 1.875 6 1.875H1.5C0.879656 1.875 0.375 2.37966 0.375 3V10.5C0.375 11.1203 0.879656 11.625 1.5 11.625H9C9.62034 11.625 10.125 11.1203 10.125 10.5Z" fill="#67DAB1"/>
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_719_13657">
-                                    <rect width="12" height="12" fill="white"/>
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                        </Link>
-                        <Icon icon='tabler:copy' style={{cursor: 'pointer'}} fontSize={22}/>
-                        <Icon icon='iconoir:refresh' style={{cursor: 'pointer'}} fontSize={18}/>
-                        <Icon icon='tabler:settings' style={{cursor: 'pointer'}} fontSize={22}/>
-                    </Stack>
-                </Stack>
+                <Switcher page='borrow' collateral={collateral || ''} />
                 <Box sx={radiusBoxStyle}>
                     <Typography variant='subtitle1' sx={{mb:4, fontWeight: 600}}>
                         Deposit
@@ -437,116 +317,17 @@ const Borrow = () => {
                 <Box sx={radiusBoxStyle}>
                     <Grid container spacing={8}>
                         <Grid item xs={12} lg={6}>
-                            <Stack direction='row' sx={{mb:2, display:'flex', justifyContent: 'space-between'}}>
-                                <Typography variant='subtitle1'>
-                                    Health factor
-                                </Typography>
-                                <Typography variant='subtitle1'>
-                                    —
-                                </Typography>
-                            </Stack>
-                            <Box className='gradientProgress'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                    style={{marginLeft: -8}}>
-                                    <path d="M13.7302 5.07458C13.6912 4.98206 13.6006 4.92188 13.5 4.92188L2.50002 4.922C2.39956 4.922 2.30886 4.98218 2.26968 5.07471C2.23061 5.16724 2.25076 5.27429 2.32082 5.34631L7.82082 11.0032C7.86782 11.0515 7.93252 11.0789 8.00002 11.0789C8.06753 11.0789 8.13223 11.0515 8.17922 11.0032L13.6792 5.34619C13.7493 5.27405 13.7693 5.16711 13.7302 5.07458Z" fill="white"/>
-                                </svg>
-                                <Box sx={{
-                                    width: '100%',
-                                    height: 6,
-                                    mb: 2,
-                                    borderRadius: 8,
-                                    background: 'linear-gradient(270deg, #00D084 0%, #FF9C19 54.06%, #FF5876 100.77%)'
-                                }}/>
-                            </Box>
-                            <Stack direction='row' sx={{justifyContent: 'space-between'}}>
-                                <Typography variant='subtitle2' color='#707175'>
-                                    Safe
-                                </Typography>
-                                <Typography variant='subtitle2' color='#707175'>
-                                    Risky
-                                </Typography>
-                            </Stack>
+                            <HealthFactor safety={24}/>
                         </Grid>
                         <Grid item xs={12} lg={6}>
-                            <Stack direction='row' sx={{mb:2, justifyContent: 'space-between'}}>
-                                <Typography variant='subtitle1'>
-                                    Borrowing power used
-                                </Typography>
-                                <Typography variant='subtitle1'>
-                                    —
-                                </Typography>
-                            </Stack>
-                            <Box sx={{
-                                mt: '30px',
-                                width: '100%',
-                                height: 6,
-                                mb: 2,
-                                borderRadius: 8,
-                                background: '#141819',
-                            }}>
-                                <Box sx={{
-                                    width: '60%',
-                                    height: 6,
-                                    borderRadius: 8,
-                                    background: 'linear-gradient(90deg, #67DAB1 0%, #0D8057 43.61%, #00200F 101.04%)'
-                                }}/>
-                            </Box>
-                            <Box sx={{display:'flex', justifyContent: 'space-between'}}>
-                                <Typography variant='subtitle2' color='#707175'>
-                                    0%
-                                </Typography>
-                                <Typography variant='subtitle2' color='#707175'>
-                                    100%
-                                </Typography>
-                            </Box>
+                            <BorrowingPower percent={68}/>
                         </Grid>
                     </Grid>
                 </Box>
             </Grid>
         </Grid>
         <Box sx={radiusBoxStyle}>
-            <Grid container spacing={isSmallScreen ? 4 : 8}>
-                <Grid item xs={12} md={6} lg={3}>
-                    <Box sx={{display:'flex', justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
-                        <Typography variant='body1'>
-                            Liquidation Price
-                        </Typography>
-                        <Typography variant='body1'>
-                            —
-                        </Typography>
-                    </Box>
-                </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <Box sx={{display:'flex', justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
-                        <Typography variant='body1'>
-                            LTV
-                        </Typography>
-                        <Typography variant='body1'>
-                            —
-                        </Typography>
-                    </Box>
-                </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <Box sx={{display:'flex', justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
-                        <Typography variant='body1'>
-                            Collateral Value
-                        </Typography>
-                        <Typography variant='body1'>
-                            —
-                        </Typography>
-                    </Box>
-                </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <Box sx={{display:'flex', justifyContent: 'space-between', borderBottom: 'solid 1px #2C2D33', pb:1}}>
-                        <Typography variant='body1'>
-                            Loan Value
-                        </Typography>
-                        <Typography variant='body1'>
-                            —
-                        </Typography>
-                    </Box>
-                </Grid>
-            </Grid>
+            <Result liquidationPrice={0.000008} ltv={37.5} collateralValue={10000} loanValue={3750}/>
         </Box>
         <Stack direction='row' sx={{justifyContent: 'center', py: 8}}>
             <Button sx={{ 

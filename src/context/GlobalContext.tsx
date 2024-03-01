@@ -1,33 +1,52 @@
-import React, { Fragment, ReactNode, createContext, useContext, useState, Ref, forwardRef, ReactElement } from 'react';
+// React related imports
+import React, {
+    Fragment,
+    ReactNode,
+    createContext,
+    useContext,
+    useState,
+    Ref,
+    forwardRef,
+    ReactElement,
+} from 'react'
+
+// Material-UI components and hooks
 import {
     Box,
     Typography,
-    Dialog, 
+    Dialog,
     Stack,
     Button,
     useTheme,
     Theme,
     Slide,
     SlideProps,
+    useMediaQuery,
 } from '@mui/material'
 
-// ** Core Components Imports
+// Core Components Imports
 import CleaveWrapper from '@/@core/styles/libs/react-cleave'
 import Icon from '@/@core/components/icon'
 
-// ** CleaveJS Imports
+// CleaveJS Imports for input formatting
 import Cleave from 'cleave.js/react'
 import 'cleave.js/dist/addons/cleave-phone.us'
 
 interface GlobaContextValue {
     slippageTolerance: number;
     setOpenSlippage: (value: boolean) => void; 
+    isSmallScreen: boolean;
+    isMediumScreen: boolean;
+    isLargeScreen: boolean;
 }
 
 const defaultValues: GlobaContextValue = {
     slippageTolerance: 0.5,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     setOpenSlippage: () => {},
+    isSmallScreen: false,
+    isMediumScreen: false,
+    isLargeScreen: false
 }
 
 const Transition = forwardRef(function Transition(
@@ -47,7 +66,10 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
     const [slippageTolerance, setSlippageTolerance] = useState<number>(defaultValues.slippageTolerance)
     const [modeAuto, setModeAuto] = useState<boolean>(true)
     const [openSlippage, setOpenSlippage] = useState<boolean>(false)
-    const theme: Theme = useTheme();
+    const theme: Theme = useTheme()
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
+    const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
+    const isLargeScreen = useMediaQuery(theme.breakpoints.down('xl'))
 
     // Event : Change Slippage percent
     const changeSlippagePerent = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,12 +80,16 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
 
     const value = {
         slippageTolerance,
-        setOpenSlippage
+        setOpenSlippage,
+        isSmallScreen,
+        isMediumScreen,
+        isLargeScreen
     }
 
     return (
         <GlobalContext.Provider value={value}>
             {children}
+            {/* ===== Here are modals which will be used several times - Jordan */}
             {/* Repay Slippage Tolerance Popup */}
             <Fragment>
                 <Dialog
