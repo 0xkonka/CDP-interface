@@ -18,7 +18,6 @@ import { LayoutProps } from 'src/@core/layouts/types'
 // ** Components
 import Footer from './components/shared-components/footer'
 import AppBar from './components/vertical/appBar'
-import Customizer from 'src/@core/components/customizer'
 import Navigation from './components/vertical/navigation'
 import ScrollToTop from 'src/@core/components/scroll-to-top'
 
@@ -33,8 +32,6 @@ const MainContentWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   display: 'flex',
   minHeight: '100vh',
   flexDirection: 'column',
-  // height: '100vh',
-  // maxHeight: `calc(100vh - ${theme.mixins.toolbar.minHeight as number}px`
 }))
 
 const ContentWrapper = styled('main')(({ theme }) => ({
@@ -88,6 +85,7 @@ const VerticalLayout = (props: LayoutProps) => {
             menuUnlockedIcon={verticalLayoutProps.navMenu.unlockedIcon}
             afterNavMenuContent={verticalLayoutProps.navMenu.afterContent}
             beforeNavMenuContent={verticalLayoutProps.navMenu.beforeContent}
+            footerProps={footerProps}
             {...props}
           />
         )}
@@ -143,9 +141,9 @@ const VerticalLayout = (props: LayoutProps) => {
       ) : (
         <ScrollToTop className='mui-fixed'>
             <Fab size='small' aria-label='scroll back to top' sx={{
-              backgroundColor: '#101818',
+              backgroundColor: 'transparent',
               color: theme => theme.palette.primary.main,
-              border: 'solid 1px white',
+              border: theme => `solid 1px ${theme.palette.primary.main}`,
               '&:hover': {
                 backgroundColor: theme => theme.palette.primary.main,
                 color: '#000',

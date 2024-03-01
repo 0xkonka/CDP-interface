@@ -1,181 +1,31 @@
-import { useRouter } from 'next/router';
-
-import { 
-    Typography,
-    Button, ButtonProps,
-    Box,
-    InputAdornment,
-    Switch,
-    Stack,
-    // methods
-    styled,
-    useTheme, Theme,
-    useMediaQuery
- } from '@mui/material'
-
-// ** Core Components Import
-import Icon from 'src/@core/components/icon'
-import CustomTextField from 'src/@core/components/mui/text-field'
-import SortByDropdown from 'src/@core/components/sortby-dropdown'
-
-// Import Basic React
+// External libraries
 import React, { useEffect, useState } from 'react'
+import { useContractRead, useNetwork } from 'wagmi'
+import {
+    Typography, Box, InputAdornment, Switch, Stack,
+} from '@mui/material'
 
-// ** Types
-import { CollateralType } from 'src/types/collateral/types'
+// Core template components
+import Icon from '@/@core/components/icon'
+import CustomTextField from '@/@core/components/mui/text-field'
+import SortByDropdown from '@/@core/components/sortby-dropdown'
 
-// Import Subviews
-import HeaderInfo from 'src/pages/modules/headerInfo'
-import CollateralRow from 'src/pages/modules/collateralRow'
-import { useContractRead, useNetwork } from 'wagmi';
-import { MARKET_LENS_ADDR, TREN_MARKET_ADDR } from 'src/configs/address';
-import MARKET_LENS_ABI from 'src/abi/MarketLens.json'
-import { useProtocolDataContext } from 'src/context/ProtocolDataProvider';
+// Project component views
+import HeaderInfo from '@/views/headerInfo'
+import CollateralRow from '@/views/collateralRow'
+import { ToggleOnButton, ToggleOffButton } from '@/views/components/buttons'
 
-// Static rows data
-// const initialRows: CollateralType[] = [
-//     {
-//         id: 1,
-//         asset: 'PEPE',
-//         type: 'Meme',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 922.12,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 2,
-//         asset: 'GRAIL / USDC.e',
-//         type: 'LP Token',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 86.40,
-//         baseDepositAPY: 61.25,
-//         active: true,
-//     },
-//     {
-//         id: 3,
-//         asset: 'FLOKI',
-//         type: 'Meme',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 722.24,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 4,
-//         asset: 'T-WBTC-C',
-//         type: 'Vault',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 18.02,
-//         baseDepositAPY: 61.25,
-//         active: true,
-//     },
-//     {
-//         id: 5,
-//         asset: 'GRAIL / ETH',
-//         type: 'Stable',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 42.93,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 6,
-//         asset: 'wTAO',
-//         type: 'Stable',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 640.08,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 7,
-//         asset: 'BONE',
-//         type: 'Volatile',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 32.68,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 8,
-//         asset: 'T-APE-C',
-//         type: 'Vault',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 12,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 9,
-//         asset: 'ELON',
-//         type: 'RWA',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 243.63,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-//     {
-//         id: 10,
-//         asset: 'GRAIL / USDC.e',
-//         type: 'Volatile',
-//         borrowAPY: 10,
-//         maxLeverage: 30,
-//         LTVRatio: 95,
-//         maxDepositAPY: 15.82,
-//         baseDepositAPY: 61.25,
-//         active: false,
-//     },
-// ]
+// Contexts & Types
+import { useGlobalValues } from '@/context/GlobalContext'
+import { CollateralType } from '@/types/collateral/types'
 
-const ToogleOnButton = styled(Button)<ButtonProps>(({ theme }) => ({
-    borderRadius: '50px', 
-    fontWeight: 600, 
-    backgroundColor: theme.palette.primary.main, 
-    color: '#101617',
-    minWidth: 'fit-content',
-    paddingLeft: 20,
-    paddingRight: 20,
-    height: 35,
-    '&:hover': {
-        backgroundColor: theme.palette.primary.main
-    }
-}))
+// Utilities
+import { getOverView } from '@/hooks/utils'
 
-const ToogleOffButton = styled(Button)<ButtonProps>(({ theme }) => ({
-    borderRadius: '50px', 
-    fontWeight: 400, 
-    backgroundColor: '#191D1C', 
-    color: '#FFFFFF', 
-    border: 'solid 1px #2D3131',
-    minWidth: 'fit-content',
-    paddingLeft: 20,
-    paddingRight: 20,
-    height: 35,
-    '&:hover': {
-        color: 'black',
-        backgroundColor: theme.palette.primary.main
-    }
-}))
-let initialRows: CollateralType[] = [];
+const collaterals = ['stETH']
+const initialRows: CollateralType[] = collaterals.map((value, index) => {
+    return {id: index + 1, ...getOverView(value)}
+}).filter(collateral => collateral !== undefined) as CollateralType[];
 
 const Modules = () => {
     const [filterText, setFilterText] = useState<string>('')
@@ -183,36 +33,11 @@ const Modules = () => {
     const [assetFilter, setAssetFilter] = useState<string>('All')
     const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
     const [sortBy, setSortBy] = useState<string>('+asset')
-    const [rows, setRows] = useState<CollateralType[]>([])
-    const router = useRouter()
+    const [rows, setRows] = useState<CollateralType[]>(initialRows)
     const { chain : chainId } = useNetwork()
     
     const assetTypes:string[] = ['All', 'LRT', 'LST', 'RWA', 'LP Token', 'Vault', 'PT Token', 'Meme', 'Volatile', 'Stable']
-    const theme: Theme = useTheme()
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
-    const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
-
-    const { ProtocolInfo, UserPosition } = useProtocolDataContext()
-
-    useEffect(() => {
-        if (ProtocolInfo && ProtocolInfo?.length > 0) {
-            initialRows = []
-            for (let i = 0; i < ProtocolInfo?.length; i++) {
-                initialRows.push({
-                    id: 11,
-                    asset: 'stETH',
-                    type: 'LST',
-                    borrowAPY: 10,
-                    maxLeverage: +(1 / (1 - Number(ProtocolInfo[i].maximumCollateralRatio) / 10000)).toFixed(2),
-                    LTVRatio: Number(ProtocolInfo[i].maximumCollateralRatio) / 10000,
-                    maxDepositAPY: 30,
-                    baseDepositAPY: 10,
-                    active: true
-                })
-            }
-            setRows(initialRows)
-        }
-    }, [ProtocolInfo])
+    const {isSmallScreen, isMediumScreen} = useGlobalValues()
 
     const handleRowClick = (index: number) => {
         setOpenRowIndex(openRowIndex === index ? -1 : index);
@@ -283,7 +108,7 @@ const Modules = () => {
             <HeaderInfo/>
             {/* Search and Multi Select Filter Section */}
             <Stack direction='row' sx={{ flexWrap: 'wrap', gap:2.5, justifyContent: 'space-between', alignItems: 'center', pb: 6}}>
-                <Stack direction='row' sx={{ flexWrap: 'wrap', alignItems: 'center', gap: 4, order: {xs: 1, md: 0} }}>
+                <Stack direction='row' sx={{ flexWrap: 'wrap', alignItems: 'center', gap: 4, order: {xs: 1, md: 0}, width: {xs: 1, md: 'auto'} }}>
                     <CustomTextField
                         label=''
                         id='input-with-icon-textfield'
@@ -298,8 +123,10 @@ const Modules = () => {
                         onChange={handleFilterChange}
                         placeholder='Search....'
                         sx={{
-                            height: isSmallScreen ? 40 : 50,
+                            height: isSmallScreen ? 44 : 52,
+                            flex: {xs: 1, md: 'auto'},
                             '& .MuiInputBase-root': {
+                                width: 1,
                                 height: 1,
                                 '& input': {
                                     fontSize: isSmallScreen ? 16 : 18
@@ -328,54 +155,43 @@ const Modules = () => {
                 {
                     assetTypes.map((value, index) => {
                         return value == assetFilter ? 
-                            <ToogleOnButton key={index} onClick={() => {setAssetFilter(value)}}>
+                            <ToggleOnButton key={index} onClick={() => {setAssetFilter(value)}}>
                                 {value + ' ' + rows.length}
-                            </ToogleOnButton> :
-                            <ToogleOffButton key={index} onClick={() => {setAssetFilter(value)}}>
+                            </ToggleOnButton> :
+                            <ToggleOffButton key={index} onClick={() => {setAssetFilter(value)}}>
                                 {value}
-                            </ToogleOffButton>
+                            </ToggleOffButton>
                     })
                 }
             </Box>
             
-            {/* Sort By Columns Header */}
+            {/* Collateral Table Header */}
             <Stack direction='row' sx={{px: 6, pt: 2, display: {
                 xs: 'none', lg: 'flex'
             }}}>
                 <Stack sx={{flex: '2 1 0%', alignItems: 'center', cursor: 'pointer'}} direction='row'>
                     Asset
-                    <svg style={{marginLeft: 8}} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M7.80835 14.4621C7.86901 14.4873 7.93405 14.5002 7.99971 14.5001C8.06538 14.5002 8.13042 14.4873 8.19108 14.4621C8.25175 14.437 8.30685 14.4001 8.35322 14.3536L11.8532 10.8541C11.947 10.7603 11.9998 10.6332 11.9998 10.5005C11.9999 10.3679 11.9472 10.2407 11.8535 10.1468C11.7597 10.053 11.6325 10.0003 11.4999 10.0002C11.3673 10.0002 11.24 10.0528 11.1462 10.1466L7.99971 13.2926L4.85321 10.1466C4.75891 10.0555 4.63261 10.0051 4.50151 10.0063C4.37042 10.0074 4.24501 10.06 4.15231 10.1527C4.0596 10.2454 4.00702 10.3708 4.00588 10.5019C4.00474 10.633 4.05514 10.7593 4.14622 10.8536L7.64621 14.3536C7.69258 14.4001 7.74768 14.437 7.80835 14.4621Z" fill="#D4D4D4"/>
-                    <path d="M11.3083 5.96191C11.369 5.98705 11.434 5.99996 11.4997 5.99989C11.5986 5.99987 11.6952 5.97054 11.7774 5.91559C11.8596 5.86065 11.9237 5.78257 11.9616 5.69122C11.9994 5.59987 12.0093 5.49935 11.99 5.40238C11.9707 5.3054 11.9231 5.21632 11.8532 5.14639L8.35322 1.64639C8.25945 1.55266 8.1323 1.5 7.99971 1.5C7.86713 1.5 7.73998 1.55266 7.64621 1.64639L4.14622 5.14639C4.05514 5.24069 4.00474 5.367 4.00588 5.49809C4.00702 5.62919 4.0596 5.7546 4.15231 5.8473C4.24501 5.94001 4.37042 5.99259 4.50151 5.99373C4.63261 5.99487 4.75891 5.94447 4.85321 5.85339L7.99971 2.70689L11.1462 5.85339C11.1926 5.89989 11.2477 5.93677 11.3083 5.96191Z" fill="#D4D4D4"/>
-                    </svg>
                 </Stack>
                 <Stack sx={{flex: '1 1 0%', alignItems: 'center', cursor: 'pointer'}} direction='row'>
                     Borrow APY
-                    <svg style={{marginLeft: 8}} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M7.80835 14.4621C7.86901 14.4873 7.93405 14.5002 7.99971 14.5001C8.06538 14.5002 8.13042 14.4873 8.19108 14.4621C8.25175 14.437 8.30685 14.4001 8.35322 14.3536L11.8532 10.8541C11.947 10.7603 11.9998 10.6332 11.9998 10.5005C11.9999 10.3679 11.9472 10.2407 11.8535 10.1468C11.7597 10.053 11.6325 10.0003 11.4999 10.0002C11.3673 10.0002 11.24 10.0528 11.1462 10.1466L7.99971 13.2926L4.85321 10.1466C4.75891 10.0555 4.63261 10.0051 4.50151 10.0063C4.37042 10.0074 4.24501 10.06 4.15231 10.1527C4.0596 10.2454 4.00702 10.3708 4.00588 10.5019C4.00474 10.633 4.05514 10.7593 4.14622 10.8536L7.64621 14.3536C7.69258 14.4001 7.74768 14.437 7.80835 14.4621Z" fill="#D4D4D4"/>
-                    <path d="M11.3083 5.96191C11.369 5.98705 11.434 5.99996 11.4997 5.99989C11.5986 5.99987 11.6952 5.97054 11.7774 5.91559C11.8596 5.86065 11.9237 5.78257 11.9616 5.69122C11.9994 5.59987 12.0093 5.49935 11.99 5.40238C11.9707 5.3054 11.9231 5.21632 11.8532 5.14639L8.35322 1.64639C8.25945 1.55266 8.1323 1.5 7.99971 1.5C7.86713 1.5 7.73998 1.55266 7.64621 1.64639L4.14622 5.14639C4.05514 5.24069 4.00474 5.367 4.00588 5.49809C4.00702 5.62919 4.0596 5.7546 4.15231 5.8473C4.24501 5.94001 4.37042 5.99259 4.50151 5.99373C4.63261 5.99487 4.75891 5.94447 4.85321 5.85339L7.99971 2.70689L11.1462 5.85339C11.1926 5.89989 11.2477 5.93677 11.3083 5.96191Z" fill="#D4D4D4"/>
-                    </svg>
                 </Stack>
                 <Stack sx={{flex: '1 1 0%', alignItems: 'center', cursor: 'pointer'}} direction='row'>
                     MAX Leverage
-                    <svg style={{marginLeft: 2}} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M7.80835 14.4621C7.86901 14.4873 7.93405 14.5002 7.99971 14.5001C8.06538 14.5002 8.13042 14.4873 8.19108 14.4621C8.25175 14.437 8.30685 14.4001 8.35322 14.3536L11.8532 10.8541C11.947 10.7603 11.9998 10.6332 11.9998 10.5005C11.9999 10.3679 11.9472 10.2407 11.8535 10.1468C11.7597 10.053 11.6325 10.0003 11.4999 10.0002C11.3673 10.0002 11.24 10.0528 11.1462 10.1466L7.99971 13.2926L4.85321 10.1466C4.75891 10.0555 4.63261 10.0051 4.50151 10.0063C4.37042 10.0074 4.24501 10.06 4.15231 10.1527C4.0596 10.2454 4.00702 10.3708 4.00588 10.5019C4.00474 10.633 4.05514 10.7593 4.14622 10.8536L7.64621 14.3536C7.69258 14.4001 7.74768 14.437 7.80835 14.4621Z" fill="#D4D4D4"/>
-                    <path d="M11.3083 5.96191C11.369 5.98705 11.434 5.99996 11.4997 5.99989C11.5986 5.99987 11.6952 5.97054 11.7774 5.91559C11.8596 5.86065 11.9237 5.78257 11.9616 5.69122C11.9994 5.59987 12.0093 5.49935 11.99 5.40238C11.9707 5.3054 11.9231 5.21632 11.8532 5.14639L8.35322 1.64639C8.25945 1.55266 8.1323 1.5 7.99971 1.5C7.86713 1.5 7.73998 1.55266 7.64621 1.64639L4.14622 5.14639C4.05514 5.24069 4.00474 5.367 4.00588 5.49809C4.00702 5.62919 4.0596 5.7546 4.15231 5.8473C4.24501 5.94001 4.37042 5.99259 4.50151 5.99373C4.63261 5.99487 4.75891 5.94447 4.85321 5.85339L7.99971 2.70689L11.1462 5.85339C11.1926 5.89989 11.2477 5.93677 11.3083 5.96191Z" fill="#D4D4D4"/>
-                    </svg>
                 </Stack>
                 <Stack sx={{flex: '2.5 1 0%', alignItems: 'center', cursor: 'pointer'}} direction='row'>
                     Deposit APY
-                    <svg style={{marginLeft: 2}} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M7.80835 14.4621C7.86901 14.4873 7.93405 14.5002 7.99971 14.5001C8.06538 14.5002 8.13042 14.4873 8.19108 14.4621C8.25175 14.437 8.30685 14.4001 8.35322 14.3536L11.8532 10.8541C11.947 10.7603 11.9998 10.6332 11.9998 10.5005C11.9999 10.3679 11.9472 10.2407 11.8535 10.1468C11.7597 10.053 11.6325 10.0003 11.4999 10.0002C11.3673 10.0002 11.24 10.0528 11.1462 10.1466L7.99971 13.2926L4.85321 10.1466C4.75891 10.0555 4.63261 10.0051 4.50151 10.0063C4.37042 10.0074 4.24501 10.06 4.15231 10.1527C4.0596 10.2454 4.00702 10.3708 4.00588 10.5019C4.00474 10.633 4.05514 10.7593 4.14622 10.8536L7.64621 14.3536C7.69258 14.4001 7.74768 14.437 7.80835 14.4621Z" fill="#D4D4D4"/>
-                    <path d="M11.3083 5.96191C11.369 5.98705 11.434 5.99996 11.4997 5.99989C11.5986 5.99987 11.6952 5.97054 11.7774 5.91559C11.8596 5.86065 11.9237 5.78257 11.9616 5.69122C11.9994 5.59987 12.0093 5.49935 11.99 5.40238C11.9707 5.3054 11.9231 5.21632 11.8532 5.14639L8.35322 1.64639C8.25945 1.55266 8.1323 1.5 7.99971 1.5C7.86713 1.5 7.73998 1.55266 7.64621 1.64639L4.14622 5.14639C4.05514 5.24069 4.00474 5.367 4.00588 5.49809C4.00702 5.62919 4.0596 5.7546 4.15231 5.8473C4.24501 5.94001 4.37042 5.99259 4.50151 5.99373C4.63261 5.99487 4.75891 5.94447 4.85321 5.85339L7.99971 2.70689L11.1462 5.85339C11.1926 5.89989 11.2477 5.93677 11.3083 5.96191Z" fill="#D4D4D4"/>
-                    </svg>
                 </Stack>
             </Stack>
             {/* Collateral Group Stack*/}
             <Stack sx={{mt: 4}} gap={isMediumScreen ? 5 : 0}>
-                {rows.map((row, index) => (
+                {rows.length > 0 ? 
+                rows.map((row, index) => (
                     <CollateralRow row={row} onToogle={() => handleRowClick(index)} isOpen={openRowIndex === index} key={index}/>
-                ))}
+                )) : 
+                <Box sx={{p: 6, textAlign: 'center'}}>
+                    <Typography variant='body1'>No matching collateral</Typography>
+                </Box>
+                }
             </Stack>
         </Box>
     )

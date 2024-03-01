@@ -57,6 +57,19 @@ code[class*='language-'] {
   justify-content: end;
 }
 
+.layout-vertical-nav .ju367va button{
+  width: 100%;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.layout-vertical-nav .ju367v1p {
+  width: calc(100vw - 60px);
+  display: flex;
+  justify-content: space-between;
+}
+
+
 .iekbcc0.ju367v8 {
   font-size: 18px !important;
   font-weight: 400;
@@ -72,3 +85,31 @@ code[class*='language-'] {
 }
 
 /* End -- Rainbow connect wallet custom style */
+
+/* Start -- Number Input box */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+/* End -- Number Input box */
+
+/* Customize Toast Style */
+@keyframes progress-bar {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.go2072408551.react-hot-toast {
+  max-width: 100%;
+  padding: 0;
+}
+
+.go2072408551.react-hot-toast .go3958317564 {
+  margin: 0;
+}
+
+/* End -- Customize Toast Style */

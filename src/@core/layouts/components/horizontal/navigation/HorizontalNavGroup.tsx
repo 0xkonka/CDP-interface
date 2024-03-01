@@ -198,8 +198,9 @@ const HorizontalNavGroup = (props: Props) => {
                       },
                       '&.Mui-selected-parent': {
                         '& .MuiTypography-root, & .MuiListItemIcon-root, & svg': {
-                          color: theme => theme.palette.primary.main,
-                          fontWeight: 700,
+                          // color: theme => theme.palette.primary.main,
+                          color: '#FFF',
+                          fontWeight: 600,
                         }
                       }
                     }

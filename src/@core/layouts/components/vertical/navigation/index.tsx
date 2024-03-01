@@ -4,12 +4,9 @@ import { useRef, useState } from 'react'
 // ** MUI Imports
 import List from '@mui/material/List'
 import Box, { BoxProps } from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
-import Button from '@mui/material/Button'
-import Grid from '@mui/material/Grid'
 import { createTheme, responsiveFontSizes, styled, ThemeProvider } from '@mui/material/styles'
+import ConnectWallet from '@/views/components/ConnectWallet'
 
 // ** Third Party Components
 import PerfectScrollbar from 'react-perfect-scrollbar'
@@ -30,40 +27,8 @@ import themeOptions from 'src/@core/theme/ThemeOptions'
 
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
-
-type SocialsType = {
-  url: string
-  icon: string
-  title: string
-}
-
-const socials: SocialsType[] = [
-  {
-    title: 'Discord',
-    url: 'https://twitter.com/TrenFinance',
-    icon: 'discord-white',
-  },
-  {
-    title: 'Instagram',
-    url: 'https://twitter.com/TrenFinance',
-    icon: 'instagram-white',
-  },
-  {
-    title: 'Twitter',
-    url: 'https://twitter.com/TrenFinance',
-    icon: 'twitter-white',
-  },
-  {
-    title: 'Telegram',
-    url: 'https://twitter.com/TrenFinance',
-    icon: 'telegram-white',
-  },
-  {
-    title: 'LinkedIn',
-    url: 'https://twitter.com/TrenFinance',
-    icon: 'linkedin-white',
-  },
-]
+import { FooterProps } from 'src/@core/layouts/types'
+import Footer from '../../shared-components/footer'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -92,6 +57,7 @@ interface Props {
   menuUnlockedIcon: LayoutProps['verticalLayoutProps']['navMenu']['unlockedIcon']
   afterNavMenuContent: LayoutProps['verticalLayoutProps']['navMenu']['afterContent']
   beforeNavMenuContent: LayoutProps['verticalLayoutProps']['navMenu']['beforeContent']
+footerProps?: FooterProps
 }
 
 const StyledBoxForShadow = styled(Box)<BoxProps>(({ theme }) => ({
@@ -102,7 +68,7 @@ const StyledBoxForShadow = styled(Box)<BoxProps>(({ theme }) => ({
   position: 'absolute',
   pointerEvents: 'none',
   width: 'calc(100% + 15px)',
-  height: theme.mixins.toolbar.minHeight,
+  height: 58,
   transition: 'opacity .15s ease-in-out',
   background: `linear-gradient(${theme.palette.background.paper} ${
     theme.direction === 'rtl' ? '95%' : '5%'
@@ -123,7 +89,8 @@ const Navigation = (props: Props) => {
     afterNavMenuContent,
     beforeNavMenuContent,
     navigationBorderWidth,
-    navMenuContent: userNavMenuContent
+    navMenuContent: userNavMenuContent,
+    footerProps
   } = props
 
   // ** States
@@ -192,7 +159,7 @@ const Navigation = (props: Props) => {
     <ThemeProvider theme={darkTheme}>
       <Drawer {...props} navHover={navHover} setNavHover={setNavHover} navigationBorderWidth={navigationBorderWidth}>
         {/* <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}> */}
-        <Box sx={{height: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <Box sx={{height: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 5 }}>
           <Box>
             <VerticalNavHeader {...props} navHover={navHover} />
             {beforeNavMenuContent && beforeVerticalNavMenuContentPosition === 'fixed'
@@ -221,7 +188,7 @@ const Navigation = (props: Props) => {
                 {userNavMenuContent ? (
                   userNavMenuContent(navMenuContentProps)
                 ) : (
-                  <List className='nav-items' sx={{ pt: 0, px: 2, '& > :first-child': { mt: '0' } }}>
+                  <List className='nav-items'>
                     <VerticalNavItems
                       navHover={navHover}
                       groupActive={groupActive}
@@ -235,49 +202,19 @@ const Navigation = (props: Props) => {
                 {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'static'
                   ? afterNavMenuContent(navMenuContentProps)
                   : null}
-                {/* <Box sx={{pt: 4, px: 2.5}}>
-                  <Button sx={{ 
-                      color: 'white',
-                      width: 1,
-                      minWidth: 160,
-                    }} 
-                    variant='outlined'
-                  >
-                    Connect Wallet
-                  </Button>
-                </Box> */}
+                  
+                <Box sx={{pt: 8, px: 5}}>
+                  <ConnectWallet />
+                </Box>
               </ScrollWrapper>
             </Box>
             {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'fixed'
               ? afterNavMenuContent(navMenuContentProps)
               : null}
           </Box>
-          <Stack>
-            <Stack direction='row' sx={{justifyContent: 'center', alignItems: 'center', gap: 6}}>
-              {socials.map((social, index) => (
-                <Link href={social.url} target='_blank' key={index}>
-                  <img src={`/images/icons/social-icons/${social.icon}.svg`} width={30} key={index} alt={social.title}/>
-                </Link>
-              ))}
-            </Stack>
-            <Stack direction='row' sx={{py: 6, mx: 2.5, justifyContent: 'center', alignItems: 'center', gap: 2}}>
-              <Typography variant='body2' component={LinkStyled}  target='_blank' href='https://policy.com'>
-                Privacy Policy
-              </Typography>
-              <Typography variant='body2' sx={{px: 4}}>/</Typography>
-              <Typography variant='body2' component={LinkStyled}  target='_blank' href='https://terms.com'>
-                Terms of Use
-              </Typography>
-            </Stack>
-            <Stack direction='row' sx={{py: 6, mx: 2.5, justifyContent: 'center', alignItems: 'center', borderTop: 'solid 1px #414141', gap: 2}}>
-              <Typography variant='body2'>
-                Tren Finance Protocol
-              </Typography>
-              <Typography variant='body2' sx={{ color: theme => theme.palette.primary.main}}>
-                @ 2024 All Rights Reserved
-              </Typography>
-            </Stack>
-          </Stack>
+          <Box sx={{px: 2}}>
+            <Footer {...props} footerStyles={footerProps?.sx} footerContent={footerProps?.content} />
+          </Box>
         </Box>
       </Drawer>
     </ThemeProvider>

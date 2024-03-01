@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "rootDir": "src",
     "target": "es6",
     "lib": [
@@ -20,14 +20,6 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "paths": {
-      "apexcharts": [
-        "./node_modules/apexcharts-clevision"
-      ],
-      "apexcharts/*": [
-        "./node_modules/apexcharts-clevision/*"
-      ],
-    }
   },
   "include": [
     "src",
@@ -35,5 +27,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "extends": "./tsconfig.paths.json"
 }

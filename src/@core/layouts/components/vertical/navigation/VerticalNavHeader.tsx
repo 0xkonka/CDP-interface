@@ -37,7 +37,7 @@ const MenuHeaderWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   justifyContent: 'space-between',
   paddingRight: theme.spacing(3.5),
   transition: 'padding .25s ease-in-out',
-  minHeight: theme.mixins.toolbar.minHeight,
+  minHeight: 58,
   marginBottom: 24
 }))
 
@@ -86,10 +86,6 @@ const VerticalNavHeader = (props: Props) => {
     }
   }
 
-  const MenuLockedIcon = () => userMenuLockedIcon || <Icon icon='tabler:circle-dot' />
-
-  const MenuUnlockedIcon = () => userMenuUnlockedIcon || <Icon icon='tabler:circle' />
-
   return (
     <MenuHeaderWrapper className='nav-header' sx={{ pl: menuHeaderPaddingLeft() }}>
       {userNavMenuBranding ? (
@@ -101,7 +97,7 @@ const VerticalNavHeader = (props: Props) => {
             height={24}
             style={{
               width: '100%',
-              height: 'auto',
+              height: 18,
             }}
             priority />
         </LinkStyled>

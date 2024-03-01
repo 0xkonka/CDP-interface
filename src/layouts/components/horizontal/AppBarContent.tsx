@@ -8,17 +8,13 @@ import Box from '@mui/material/Box'
 import { Settings } from 'src/@core/context/settingsContext'
 
 // ** Hook Import
-import { Button, styled, ListItemIcon, ListItemText } from '@mui/material'
+import { styled } from '@mui/material'
 import MuiMenu, { MenuProps } from '@mui/material/Menu'
 import MuiMenuItem, { MenuItemProps } from '@mui/material/MenuItem'
-import WalletDropDown from 'src/@core/layouts/components/horizontal/navigation/WalletDropDown'
-
-// ** Icon Imports
-import Icon from 'src/@core/components/icon'
 
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
-import ConnectWallet from 'src/pages/components/connect-wallet/ConnectWallet'
+import ConnectWallet from '@/views/components/ConnectWallet'
 
 interface Props {
   hidden: boolean
@@ -56,54 +52,10 @@ const AppBarContent = (props: Props) => {
   // ** Props
   const { hidden, settings, saveSettings } = props
 
-  // ** Hook
-
-  // ** Wallet connection state
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [walletAddress, setWalletAddress] = useState<string>('0x3be8905f243680d510f5ebc946faa3f3113bbb86')
-  const walletItems = {
-    title: `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`,
-    icon: 'tabler:wallet',
-    children: [
-      {
-        title: 'Copy Address',
-        icon: 'mdi:content-copy',
-        // path: '/analytics/analytics-1'
-      },
-      {
-        title: 'Disconnect',
-        // path: '/analytics/analytics-2',
-        icon: 'tabler:logout'
-      }
-    ]
-  }
-  
-
-  const handleClick = (event: MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       {/* <ModeToggler settings={settings} saveSettings={saveSettings} /> */}
-
-      {/* When wallet is not connected*/}
-      {/* <Button sx={{ 
-          color: 'white',
-          ml: {xs: 2, sm: 5},
-          minWidth: 160
-        }} variant='outlined'>Connect Wallet
-      </Button> */}
-
-      {/* Wallet Connected */}
       <ConnectWallet />
-      {/* <WalletDropDown item={
-        walletItems
-      } settings={settings}/> */}
     </Box>
   )
 }
