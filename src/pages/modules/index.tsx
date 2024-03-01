@@ -20,11 +20,34 @@ import { CollateralType } from '@/types/collateral/types'
 
 // Utilities
 import { getOverView } from '@/hooks/utils'
+import { LiquityStoreState } from '@/lib-base'
+import { useLiquitySelector } from '@/lib-react'
 
 const collaterals = ['stETH']
 const initialRows: CollateralType[] = collaterals.map((value, index) => {
     return {id: index + 1, ...getOverView(value)}
 }).filter(collateral => collateral !== undefined) as CollateralType[];
+
+const select = ({
+    numberOfTroves,
+    price,
+    total,
+    lusdInStabilityPool,
+    borrowingRate,
+    redemptionRate,
+    totalStakedLQTY,
+    frontend
+  }: LiquityStoreState) => ({
+    numberOfTroves,
+    price,
+    total,
+    lusdInStabilityPool,
+    borrowingRate,
+    redemptionRate,
+    totalStakedLQTY,
+    kickbackRate: frontend.status === "registered" ? frontend.kickbackRate : null
+  });
+  
 
 const Modules = () => {
     const [filterText, setFilterText] = useState<string>('')
@@ -36,6 +59,22 @@ const Modules = () => {
     
     const assetTypes:string[] = ['All', 'LRT', 'LST', 'RWA', 'LP Token', 'Vault', 'PT Token', 'Meme', 'Volatile', 'Stable']
     const {isSmallScreen, isMediumScreen} = useGlobalValues()
+
+    const {
+        numberOfTroves,
+        price,
+        lusdInStabilityPool,
+        total,
+        borrowingRate,
+        totalStakedLQTY,
+        kickbackRate
+      } = useLiquitySelector(select);
+
+      console.log('price', +price)
+      console.log('lusdInStabilityPool', +lusdInStabilityPool)
+      console.log('total collateral', +total.collateral)
+      console.log('total debt', +total.netDebt)
+      console.log('borrowingRate', +borrowingRate)
 
     const handleRowClick = (index: number) => {
         setOpenRowIndex(openRowIndex === index ? -1 : index);
