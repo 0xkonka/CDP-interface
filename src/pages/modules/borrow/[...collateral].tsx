@@ -78,7 +78,7 @@ const Borrow = () => {
   }
 
   const handleClickApprove = () => {
-
+    console.log('Approve Popup')
   }
   const handleWithdraw = () => {
     setOpen(true)
@@ -93,7 +93,7 @@ const Borrow = () => {
     setType('borrow')
   }
   const handleRepay = () => {
-    
+    console.log('Repay Popup')
   }
 
   return (
