@@ -62,7 +62,7 @@ const CollateralRow = (props: TableHeaderProps) => {
     const theme: Theme = useTheme()
     const {isMediumScreen, isSmallScreen} = useGlobalValues()
     const hasBorrowPosition = true // We will get this value from collateral asset - Jordan
-    const hasLeveragePosition = true
+    const hasLeveragePosition = false
 
     if (!row || typeof row.asset === 'undefined') {
         console.error('CollateralRow component received undefined "row" or "row.asset" property.');

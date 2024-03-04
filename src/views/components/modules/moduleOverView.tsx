@@ -14,7 +14,7 @@ interface Props {
 export const ModuleOverView = (props: Props) => {
     const {collateral} = props
     const theme: Theme = useTheme();
-    const {isSmallScreen, isMediumScreen} = useGlobalValues()
+    const {isSmallScreen, isMediumScreen, radiusBoxStyle} = useGlobalValues()
     
     const overview = getOverView(collateral)
     if(collateral == '' || !overview)
@@ -62,18 +62,6 @@ export const ModuleOverView = (props: Props) => {
             value: overview.rateType
         },
     ]
-
-    const radiusBoxStyle = {
-        paddingLeft: isSmallScreen ? 3 : 6,
-        paddingRight: isSmallScreen ? 3 : 6,
-        paddingTop: 4,
-        paddingBottom: 4,
-        marginBottom: 4,
-        border: 'solid 1px',
-        borderRadius: 2.5, 
-        borderColor: theme.palette.secondary.dark, 
-        gap: 3
-    }
     
     const smallBoxStyle = {
         width: '100vw',
