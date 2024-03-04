@@ -1,7 +1,5 @@
 // React imports
-import React, {
-    forwardRef, Ref, ReactElement, Fragment, useState
-} from 'react'
+import React, { useState } from 'react'
 
 // Next.js imports
 import { useRouter } from 'next/router'
@@ -9,7 +7,7 @@ import Image from 'next/image'
 
 // MUI imports and hooks
 import {
-    Box, Typography, Button, Grid, Dialog, Slide, SlideProps,
+    Box, Typography, Button, Grid,
     Theme, useTheme, Stack, Link
 } from '@mui/material'
 
@@ -23,9 +21,6 @@ import CleaveWrapper from '@/@core/styles/libs/react-cleave'
 import Cleave from 'cleave.js/react'
 import 'cleave.js/dist/addons/cleave-phone.us'
 
-// Custom hook imports
-import { showToast } from '@/hooks/toasts'
-
 // Context imports
 import { useGlobalValues } from '@/context/GlobalContext'
 import { ModuleOverView } from '@/views/components/modules/moduleOverView'
@@ -33,23 +28,17 @@ import { Switcher } from '@/views/components/modules/switcher'
 import { HealthFactor } from '@/views/components/modules/healthFactor'
 import { BorrowingPower } from '@/views/components/modules/borrowingPower'
 import { Result } from '@/views/components/modules/result'
+import { BorrowPopup } from '@/views/components/modules/borrowPopup'
 import { useProtocol } from '@/context/ProtocolContext'
 import { LiquityStoreState } from '@/lib-base'
 import { useLiquitySelector } from '@/lib-react'
   
-const Transition = forwardRef(function Transition(
-    props: SlideProps & { children?: ReactElement<any, any> },
-    ref: Ref<unknown>
-) {
-    return <Slide direction='up' ref={ref} {...props} />
-})
-
 const Borrow = () => {
   const router = useRouter();
   const theme: Theme = useTheme();
-  const [openSummary, setOpenSummary] = useState<boolean>(false)
-  const handleClickOpenSummary = () => setOpenSummary(true)
-  const {isSmallScreen, isMediumScreen} = useGlobalValues()
+  const [open, setOpen] = useState<boolean>(false)
+  const [type, setType] = useState<string>('withdraw')
+  const {radiusBoxStyle} = useGlobalValues() 
   let { collateral } = router.query
 
   const select = ({
@@ -88,21 +77,23 @@ const Borrow = () => {
     collateral = collateral.join(' / ');
   }
 
-  const radiusBoxStyle = {
-    paddingLeft: isSmallScreen ? 3 : 6,
-    paddingRight: isSmallScreen ? 3 : 6,
-    paddingTop: 4,
-    paddingBottom: 4,
-    marginBottom: 4,
-    border: 'solid 1px',
-    borderRadius: 2.5, 
-    borderColor: theme.palette.secondary.dark, 
-    gap: 3
-  }
+  const handleClickApprove = () => {
 
-  const handleCloseSummary = () => {
-    setOpenSummary(false)
-    showToast('success', 'Success', 'Transaction has been completed', 2000)
+  }
+  const handleWithdraw = () => {
+    setOpen(true)
+    setType('withdraw')
+  }
+  const handleDepositMore = () => {
+    setOpen(true)
+    setType('deposit')
+  }
+  const handleBorrowMore = () => {
+    setOpen(true)
+    setType('borrow')
+  }
+  const handleRepay = () => {
+    
   }
 
   return (
@@ -208,29 +199,6 @@ const Borrow = () => {
                         </Grid>
                     </Grid>
                 </Box>
-                {/* <Box sx={{display: 'flex', alignItems: 'center', gap: 4, py: 4}}>
-                    <CustomTextField
-                        sx={{width: 100}}
-                        placeholder='Custom'
-                        value={borrowRate != 0 ? borrowRate : ''}
-                        onChange={(event:React.ChangeEvent<HTMLInputElement>)=>{setBorrowRate(Number(event.target.value))}}
-                    />
-                    <Box sx={{width: '100%'}}>
-                        <Slider aria-labelledby='continuous-slider' 
-                                valueLabelDisplay='on'
-                                value={borrowRate}
-                                valueLabelFormat={(value)=>{return `${value}%`}}
-                                onChange={(event:any)=>{setBorrowRate(event.target.value)}}/>
-                        <Box sx={{display:'flex', justifyContent: 'space-between'}}>
-                            <Typography variant='subtitle2' color='#707175' sx={{mt: '-10px'}}>
-                                0%
-                            </Typography>
-                            <Typography variant='subtitle2' color='#707175' sx={{mt: '-10px'}}>
-                                100%
-                            </Typography>
-                        </Box>
-                    </Box>
-                </Box> */}
             </Grid>
             <Grid item xs={12} md={6} sx={{display: 'flex', flexDirection: 'column'}}>
                 <Stack sx={{...radiusBoxStyle, height: 1, mb: 10, justifyContent: 'center'}}>
@@ -267,11 +235,11 @@ const Borrow = () => {
                                         mr: {xs: 2, md: 4},
                                         color: 'white',
                                         borderColor: '#6795DA'
-                                    }} variant='outlined'>Withdraw</Button>
+                                    }} variant='outlined' onClick={handleWithdraw}>Withdraw</Button>
                                     <Button sx={{ 
                                         color: 'white',
                                         borderColor: '#67DAB1'
-                                    }} variant='outlined'>Deposit more</Button>
+                                    }} variant='outlined' onClick={handleDepositMore}>Deposit more</Button>
                                 </Stack>
                             </Grid>
                             <Grid item xs={12} md={6} sx={{pl: {xs: 0, md: 4}, pt: {xs: 4, md: 0}}}>
@@ -301,11 +269,11 @@ const Borrow = () => {
                                         mr: {xs: 2, md: 4},
                                         color: 'white',
                                         borderColor: '#C6E0DC'
-                                    }} variant='outlined'>Borrow more</Button>
+                                    }} variant='outlined' onClick={handleBorrowMore}>Borrow more</Button>
                                     <Button sx={{ 
                                         color: 'white',
                                         borderColor: '#C9A3FA'
-                                    }} variant='outlined'>Repay</Button>
+                                    }} variant='outlined' onClick={handleRepay}>Repay</Button>
                                 </Stack>
                             </Grid>
                         </Grid>
@@ -320,7 +288,7 @@ const Borrow = () => {
                             <HealthFactor safety={24}/>
                         </Grid>
                         <Grid item xs={12} lg={6}>
-                            <BorrowingPower percent={68}/>
+                            <BorrowingPower percent={68} max={7500}/>
                         </Grid>
                     </Grid>
                 </Box>
@@ -335,94 +303,9 @@ const Borrow = () => {
                 color: 'white',
                 minWidth: 250,
                 width: {xs: 1, sm: 'auto'}
-            }} variant='outlined' onClick={handleClickOpenSummary}>Approve</Button>
-            <Button sx={{ 
-                ml: {xs: 2, sm: 2},
-                color: 'white',
-                minWidth: 250,
-                width: {xs: 1, sm: 'auto'}
-            }} variant='outlined' onClick={() => {showToast('success', 'Success', 'Transaction has been completed', 10000)}}>Success Test</Button>
-            <Button sx={{ 
-                ml: {xs: 2, sm: 2},
-                color: 'white',
-                minWidth: 250,
-                width: {xs: 1, sm: 'auto'}
-            }} variant='outlined' onClick={() => {showToast('error', 'Warning', 'Insufficient collateral volume', 10000)}}>Error Test</Button>
+            }} variant='outlined' onClick={handleClickApprove}>Approve</Button>
         </Stack>
-        <Fragment>
-            <Dialog
-                open={openSummary}
-                keepMounted
-                onClose={handleCloseSummary}
-                TransitionComponent={Transition}
-                maxWidth={'sm'}
-                fullWidth={true}
-                aria-labelledby='alert-dialog-slide-title'
-                aria-describedby='alert-dialog-slide-description'
-            >
-                <Box sx={{ p: 6, position: 'relative' }}>
-                    <Typography sx={{textAlign: 'center', mb: 8, fontWeight: 600}} variant='h4' color='white'>
-                        Summary
-                    </Typography>
-                    <Icon style={{position: 'absolute', right: 20, top: 20, cursor: 'pointer', fontWeight: 'bold'}} icon='tabler:x' fontSize='1.75rem' onClick={handleCloseSummary}/>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Collateral Deposited:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0</Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Collateral Value:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>$ 0.0</Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>trenUSD Borrowed:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0</Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>TVL:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>$ 0.0</Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Liquidation Price:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>$ 0.0</Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Interest:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0%</Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Max Collateral Ratio:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0%</Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Price:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>$ 0.0</Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Liquidation Fee:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0%</Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', borderBottom: 'solid 0.5px #2C2D33', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>Borrow Fee:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>0.0</Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', py: 2}}>
-                        <Typography variant='h5' sx={{fontWeight: 600}}>$trenUSD Left To Borrow:</Typography>
-                        <Typography variant='h5' sx={{fontWeight: 600}}>0.0 USD</Typography>
-                    </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'center', mt: 8}}>
-                        <Button sx={{ 
-                            color: 'white',
-                            py: 3,
-                            px: 20,
-                            minWidth: 200,
-                            fontSize: 18
-                        }} variant='outlined' onClick={handleCloseSummary}>
-                            Add collateral & borrow
-                        </Button>
-                    </Box>
-                </Box>
-            </Dialog>
-        </Fragment>
+        <BorrowPopup open={open} setOpen={setOpen} type={type} collateral={String(collateral)}/>
     </Box>
   );
 };

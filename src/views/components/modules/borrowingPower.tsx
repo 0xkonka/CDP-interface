@@ -1,4 +1,5 @@
 // MUI imports and hooks
+import { formatToThousands } from '@/hooks/utils'
 import {
     Stack, Typography, Box
 } from '@mui/material'
@@ -6,10 +7,11 @@ import {
 interface Props {
     label?: string
     percent: number
+    max: number
 }
 
 export const BorrowingPower = (props: Props) => {
-    const {percent} = props
+    const {percent, max} = props
     let {label} = props
     if(label == undefined)
         label = 'Borrowing power used'
@@ -40,10 +42,10 @@ export const BorrowingPower = (props: Props) => {
             </Box>
             <Box sx={{display:'flex', justifyContent: 'space-between'}}>
                 <Typography variant='subtitle2' color='#707175'>
-                    0%
+                    $0
                 </Typography>
                 <Typography variant='subtitle2' color='#707175'>
-                    100%
+                    {formatToThousands(max)}
                 </Typography>
             </Box>
         </Stack>
