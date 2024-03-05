@@ -12,6 +12,8 @@ interface Props {
     asset: string
     available: number
     type: string
+    amount: string
+    setAmount: (amount: string) => void
 }
 
 const getAmountTooltip = (type: string) => {
@@ -31,9 +33,8 @@ const getAmountTooltip = (type: string) => {
 
 export const AmountForm = (props: Props) => {
     const theme:Theme = useTheme()
-    const {asset, type, available} = props
+    const {asset, type, available, amount, setAmount} = props
     const [borderColorStyle, setBorderColorStyle] = useState({})
-    const [amount, setAmount] = useState('')
     const [collateralUSD, setCollateralUSD] = useState(1)
     const {radiusBoxStyle} = useGlobalValues()
 

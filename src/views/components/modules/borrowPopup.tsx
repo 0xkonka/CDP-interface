@@ -64,27 +64,33 @@ const getButtonLabel = (type: string) => {
 export const BorrowPopup = (props:Props) => {
     const {open, setOpen, type} = props
     const [useWalletBalance, setUseWalletBalance] = useState(true)
+    const [amount, setAmount] = useState('')
     const theme: Theme = useTheme()
     let {collateral} = props
     collateral = type == 'borrow' ? 'trenUSD' : collateral
 
     const handleSubmit = () => {
         if(type == 'withdraw') {
-            setOpen(false)
-            showToast('success', 'Withdraw Success', 'You have successfully withdrawn collateral', 10000)
+            initializePopupStates()
+            showToast('success', 'Withdraw Success', `You have successfully withdrawn ${amount} ${collateral}`, 10000)
         } else if(type == 'borrow') {
-            setOpen(false)
-            showToast('success', 'Borrow Success', 'You have successfully borrow trenUSD', 10000)
+            initializePopupStates()
+            showToast('success', 'Borrow Success', `You have successfully borrow ${amount} trenUSD`, 10000)
         } else if(type === 'deposit') {
-            setOpen(false)
-            showToast('success', 'Deposit Success', 'You have successfully deposit collateral', 10000)
+            initializePopupStates()
+            showToast('success', 'Deposit Success', `You have successfully deposit ${amount} ${collateral}`, 10000)
         } else if(type == 'repay') {
-            setOpen(false)
-            showToast('success', 'Repay Success', 'You have successfully repaid trenUSD', 10000)
+            initializePopupStates()
+            showToast('success', 'Repay Success', `You have successfully repaid ${amount} trenUSD`, 10000)
         } else if(type === 'approve') {
-            setOpen(false)
-            showToast('success', 'Borrow Success', 'You have successfully borrow trenUSD', 10000)
+            initializePopupStates()
+            showToast('success', 'Borrow Success', `You have successfully borrow trenUSD`, 10000)
         }
+    }
+
+    const initializePopupStates = () => {
+        setOpen(false)
+        setAmount('')
     }
 
     return (
@@ -92,7 +98,7 @@ export const BorrowPopup = (props:Props) => {
             <Dialog
                 open={open}
                 // keepMounted
-                onClose={() => {setOpen(false)}}
+                onClose={initializePopupStates}
                 TransitionComponent={Transition}
                 maxWidth={'sm'}
                 fullWidth={true}
@@ -105,10 +111,8 @@ export const BorrowPopup = (props:Props) => {
                         <Typography mb={8} fontWeight={600} variant='h4' color='white'>
                             {getTitle(type)}
                         </Typography>
-                        <Icon style={{position: 'absolute', right: 20, top: 20, cursor: 'pointer', fontWeight: 'bold'}} icon='tabler:x' fontSize='1.75rem' onClick={() => {
-                            setOpen(false)
-                        }}/>
-                        <AmountForm type={type} asset={String(collateral)} available={12.78}/>
+                        <Icon style={{position: 'absolute', right: 20, top: 20, cursor: 'pointer', fontWeight: 'bold'}} icon='tabler:x' fontSize='1.75rem' onClick={initializePopupStates}/>
+                        <AmountForm amount={amount} setAmount={setAmount} type={type} asset={String(collateral)} available={12.78}/>
                         <TransactionOverView healthFrom={14.54} healthTo={1.75} liquidationPrice={2520.78} gasFee={0.14}/>
                         <Button sx={{ 
                             color: 'white',
@@ -127,9 +131,7 @@ export const BorrowPopup = (props:Props) => {
                         <Typography mb={8} fontWeight={600} variant='h4' color='white'>
                             {getTitle(type)}
                         </Typography>
-                        <Icon style={{position: 'absolute', right: 20, top: 20, cursor: 'pointer', fontWeight: 'bold'}} icon='tabler:x' fontSize='1.75rem' onClick={() => {
-                            setOpen(false)
-                        }}/>
+                        <Icon style={{position: 'absolute', right: 20, top: 20, cursor: 'pointer', fontWeight: 'bold'}} icon='tabler:x' fontSize='1.75rem' onClick={initializePopupStates}/>
                         <ApproveDetailView collateral={String(collateral)} depositAmount={10} borrowAmount={9.58627}/>
                         <TransactionOverView healthTo={14.54} liquidationPrice={2520.78} gasFee={0.14} uptoFee={34.21}/>
                         <Button sx={{ 
@@ -149,9 +151,7 @@ export const BorrowPopup = (props:Props) => {
                         <Typography mb={8} fontWeight={600} variant='h4' color='white'>
                             {getTitle(type)}
                         </Typography>
-                        <Icon style={{position: 'absolute', right: 20, top: 20, cursor: 'pointer', fontWeight: 'bold'}} icon='tabler:x' fontSize='1.75rem' onClick={() => {
-                            setOpen(false)
-                        }}/>
+                        <Icon style={{position: 'absolute', right: 20, top: 20, cursor: 'pointer', fontWeight: 'bold'}} icon='tabler:x' fontSize='1.75rem' onClick={initializePopupStates}/>
                         <Typography variant='h5' color='#707175' mb={2} fontWeight={400}>Repay with</Typography>
                         <Stack direction='row' marginBottom={6} sx={{alignItems: 'center', justifyContent: 'space-between', borderRadius: 2, border: 'solid 1px #C6C6C74D', width : {xs: 1, lg: 'auto'}}}>
                             <Button variant='outlined' onClick={() => {setUseWalletBalance(true)}} sx={{borderRadius: 2, px: 8, py: 2.5, fontSize: 16, fontWeight: 400, color: 'white',
@@ -172,8 +172,8 @@ export const BorrowPopup = (props:Props) => {
                                     Collateral (coming soon)
                             </Button>
                         </Stack>
-                        <AmountForm type={type} asset='trenUSD' available={20}/>
-                        <TransactionOverView type={type} healthFrom={1.54} healthTo={13.42} liquidationPrice={149.34} gasFee={0.14} debt={30}/>
+                        <AmountForm amount={amount} setAmount={setAmount} type={type} asset='trenUSD' available={20}/>
+                        <TransactionOverView type={type} healthFrom={1.54} healthTo={13.42} liquidationPrice={149.34} gasFee={0.14} debt={30} amount={amount}/>
                         <Button sx={{ 
                             color: 'white',
                             py: 3,
