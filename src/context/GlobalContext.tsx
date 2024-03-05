@@ -38,6 +38,7 @@ interface GlobaContextValue {
     isSmallScreen: boolean;
     isMediumScreen: boolean;
     isLargeScreen: boolean;
+    radiusBoxStyle: any;
 }
 
 const defaultValues: GlobaContextValue = {
@@ -46,7 +47,8 @@ const defaultValues: GlobaContextValue = {
     setOpenSlippage: () => {},
     isSmallScreen: false,
     isMediumScreen: false,
-    isLargeScreen: false
+    isLargeScreen: false,
+    radiusBoxStyle: {}
 }
 
 const Transition = forwardRef(function Transition(
@@ -71,6 +73,18 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
     const isLargeScreen = useMediaQuery(theme.breakpoints.down('xl'))
 
+    const radiusBoxStyle = {
+        paddingLeft: isSmallScreen ? 3 : 6,
+        paddingRight: isSmallScreen ? 3 : 6,
+        paddingTop: 4,
+        paddingBottom: 4,
+        marginBottom: 4,
+        border: 'solid 1px',
+        borderRadius: '10px', 
+        borderColor: theme.palette.secondary.dark, 
+        gap: 3
+    }
+
     // Event : Change Slippage percent
     const changeSlippagePerent = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value
@@ -83,7 +97,8 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
         setOpenSlippage,
         isSmallScreen,
         isMediumScreen,
-        isLargeScreen
+        isLargeScreen,
+        radiusBoxStyle
     }
 
     return (
@@ -151,33 +166,6 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
                                     %
                                 </Box>   
                             </CleaveWrapper>
-                            {/* <CustomTextField
-                                id='slippage-percentage'
-                                placeholder='0.5'
-                                InputProps={{
-                                    endAdornment: <InputAdornment  position='end'>%</InputAdornment>
-                                }}
-                                inputProps={{ // Note this part for min and max
-                                    min: 0, // Set the minimum value as needed
-                                    max: "50" // Set the maximum value as needed
-                                }}
-                                value={modeAuto ? '' : slippageTolerance}
-                                sx={{
-                                    '& .MuiInputBase-root': {
-                                        borderRadius: '12px !important'
-                                    },
-                                    '& .MuiInputBase-input': {
-                                        width: 40,
-                                        textAlign: 'end',
-                                    },
-                                    '& .MuiInputBase-root:focus': {
-                                        borderColor: '#C6C6C74D !important',
-                                    }
-                                }}
-                                type='number'
-                                autoComplete='off'
-                                onChange={changeSlippagePerent}
-                            /> */}
                         </Stack>
                     </Box>
                 </Dialog>

@@ -39,23 +39,11 @@ const Leverage = () => {
   const [openAdjust, setOpenAdjust] = useState<boolean>(false)
   const [openRepay, setOpenRepay] = useState<boolean>(false)
   const {setOpenSlippage} = useGlobalValues()
-  const {isSmallScreen, isMediumScreen} = useGlobalValues()
+  const {isSmallScreen, isMediumScreen, radiusBoxStyle} = useGlobalValues()
   let { collateral } = router.query
 
   if (Array.isArray(collateral)) {
     collateral = collateral.join(' / ');
-  }
-
-  const radiusBoxStyle = {
-    paddingLeft: isSmallScreen ? 3 : 6,
-    paddingRight: isSmallScreen ? 3 : 6,
-    paddingTop: 4,
-    paddingBottom: 4,
-    marginBottom: 4,
-    border: 'solid 1px',
-    borderRadius: 2.5, 
-    borderColor: theme.palette.secondary.dark, 
-    gap: 3
   }
 
   return (
@@ -251,7 +239,7 @@ const Leverage = () => {
                             <HealthFactor safety={0}/>
                         </Grid>
                         <Grid item xs={12} lg={6}>
-                            <BorrowingPower percent={0}/>
+                            <BorrowingPower percent={0} max={7500}/>
                         </Grid>
                     </Grid>
                 </Box>

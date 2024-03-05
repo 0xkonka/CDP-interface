@@ -6,7 +6,7 @@ type AdjustingView = "ADJUSTING";
 type ClosingView = "CLOSING";
 type ActiveView = "ACTIVE";
 
-export type ModuleView =
+export type TroveView =
   | NoneView
   | LiquidatedView
   | RedeemedView
@@ -15,25 +15,25 @@ export type ModuleView =
   | ClosingView
   | ActiveView;
 
-type OpenModulePressedEvent = "OPEN_MODULE_PRESSED";
-type AdjustModulePressedEvent = "ADJUST_MODULE_PRESSED";
-type CloseModulePressedEvent = "CLOSE_MODULE_PRESSED";
-type CancelAdjustModulePressed = "CANCEL_ADJUST_MODULE_PRESSED";
-type ModuleAdjustedEvent = "MODULE_ADJUSTED";
-type ModuleOpenedEvent = "MODULE_OPENED";
-type ModuleClosedEvent = "MODULE_CLOSED";
-type ModuleLiquidatedEvent = "MODULE_LIQUIDATED";
-type ModuleRedeemedEvent = "MODULE_REDEEMED";
-type ModuleSurplusCollateralClaimedEvent = "MODULE_SURPLUS_COLLATERAL_CLAIMED";
+type OpenTrovePressedEvent = "OPEN_TROVE_PRESSED";
+type AdjustTrovePressedEvent = "ADJUST_TROVE_PRESSED";
+type CloseTrovePressedEvent = "CLOSE_TROVE_PRESSED";
+type CancelAdjustTrovePressed = "CANCEL_ADJUST_TROVE_PRESSED";
+type TroveAdjustedEvent = "TROVE_ADJUSTED";
+type TroveOpenedEvent = "TROVE_OPENED";
+type TroveClosedEvent = "TROVE_CLOSED";
+type TroveLiquidatedEvent = "TROVE_LIQUIDATED";
+type TroveRedeemedEvent = "TROVE_REDEEMED";
+type TroveSurplusCollateralClaimedEvent = "TROVE_SURPLUS_COLLATERAL_CLAIMED";
 
-export type ModuleEvent =
-  | OpenModulePressedEvent
-  | AdjustModulePressedEvent
-  | CloseModulePressedEvent
-  | CancelAdjustModulePressed
-  | ModuleClosedEvent
-  | ModuleLiquidatedEvent
-  | ModuleRedeemedEvent
-  | ModuleAdjustedEvent
-  | ModuleSurplusCollateralClaimedEvent
-  | ModuleOpenedEvent;
+export type TroveEvent =
+  | OpenTrovePressedEvent
+  | AdjustTrovePressedEvent
+  | CloseTrovePressedEvent
+  | CancelAdjustTrovePressed
+  | TroveClosedEvent
+  | TroveLiquidatedEvent
+  | TroveRedeemedEvent
+  | TroveAdjustedEvent
+  | TroveSurplusCollateralClaimedEvent
+  | TroveOpenedEvent;

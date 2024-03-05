@@ -39,5 +39,6 @@ export const formatPercent = (value:number, floating = 0) => {
 }
 
 export const formatToThousands = (value:number) => {
-    return '$' + value.toLocaleString('en-US')
+    // return '$' + value.toLocaleString('en-US')
+    return '$' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") 
 }
