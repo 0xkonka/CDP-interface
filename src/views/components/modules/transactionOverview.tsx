@@ -9,32 +9,65 @@ import {
 import Icon from '@/@core/components/icon'
 
 interface Props {
-    healthFrom: number
-    healthTo: number
+    healthFrom?: number
+    healthTo?: number
     liquidationPrice: number
     gasFee: number
+    uptoFee?: number
+    type?: string
+    debt?: number
+    amount?: string
 }
 
 export const TransactionOverView = (props: Props) => {
     const {radiusBoxStyle} = useGlobalValues()
     const theme:Theme = useTheme()
-    const {healthFrom, healthTo, liquidationPrice, gasFee} = props
+    const {healthFrom, healthTo, liquidationPrice, gasFee, uptoFee, type, debt, amount} = props
 
     return (
         <Stack>
-            <Typography variant='h5' color='#707175' mt={4} mb={3}>
+            <Typography variant='h5' fontWeight={400} color='#707175' mt={4} mb={3}>
                 Transaction overview
             </Typography>
-            <Box sx={radiusBoxStyle}>
+            <Stack sx={radiusBoxStyle} gap={6}>
+                {
+                    debt != undefined &&
+                    <Stack direction='row' justifyContent='space-between' alignItems='center'>
+                        <Typography variant='h5' fontWeight={400}>Remaining debt</Typography>
+                        <Stack direction='row' gap={3} alignItems='center'>
+                            <Stack direction='row' gap={1} alignItems='end'>
+                                <Typography variant='h5'>{formatToThousands(debt).substring(1)}</Typography>
+                                <Typography variant='body2' color='#FFF'>trenUSD</Typography>
+                            </Stack>
+                            
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none">
+                            <path d="M14.3536 4.35355C14.5488 4.15829 14.5488 3.84171 14.3536 3.64645L11.1716 0.464466C10.9763 0.269204 10.6597 0.269204 10.4645 0.464466C10.2692 0.659728 10.2692 0.976311 10.4645 1.17157L13.2929 4L10.4645 6.82843C10.2692 7.02369 10.2692 7.34027 10.4645 7.53553C10.6597 7.7308 10.9763 7.7308 11.1716 7.53553L14.3536 4.35355ZM0 4.5H14V3.5H0V4.5Z" fill="#707175"/>
+                            </svg>
+                            <Stack direction='row' gap={1} alignItems='end'>
+                                <Typography variant='h5' color='#67DAB1'>{formatToThousands(debt-Number(amount)).substring(1)}</Typography>
+                                <Typography variant='body2' color='#FFF'>trenUSD</Typography>
+                            </Stack>
+                        </Stack>
+                    </Stack>
+                }
                 <Stack direction='row' alignItems='center' justifyContent='space-between'>
                     <Typography variant='h5' fontWeight={400}>Health factor</Typography>
                     <Box>
                         <Stack direction='row' gap={2} justifyContent='flex-end' alignItems='center' sx={{marginRight: 4}}>
-                            <Typography variant='h4' color='primary'>{healthFrom}</Typography>
+                            {
+                                healthFrom != undefined &&
+                                <Typography variant='h4' color='primary'>{healthFrom}</Typography>
+                            }
+                            {
+                                healthFrom == undefined &&
+                                <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
+                                <path d="M12.6875 17.2188C11.3848 18.6682 9.48787 19.9375 7.36328 19.9375C4.29789 19.9375 1.8125 17.502 1.8125 14.5C1.8125 11.498 4.29789 9.0625 7.36328 9.0625C11.7812 9.0625 14.5 14.5 14.5 14.5C14.5 14.5 17.2188 19.9375 21.6367 19.9375C24.7021 19.9375 27.1875 17.502 27.1875 14.5C27.1875 11.498 24.7021 9.0625 21.6367 9.0625C19.5121 9.0625 17.6152 10.3318 16.3125 11.7812" stroke="#67DAB1" stroke-miterlimit="10" stroke-linecap="round"/>
+                                </svg>
+                            }
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none">
                                 <path d="M14.3536 4.35355C14.5488 4.15829 14.5488 3.84171 14.3536 3.64645L11.1716 0.464466C10.9763 0.269204 10.6597 0.269204 10.4645 0.464466C10.2692 0.659728 10.2692 0.976311 10.4645 1.17157L13.2929 4L10.4645 6.82843C10.2692 7.02369 10.2692 7.34027 10.4645 7.53553C10.6597 7.7308 10.9763 7.7308 11.1716 7.53553L14.3536 4.35355ZM0 4.5H14V3.5H0V4.5Z" fill="#707175"/>
                             </svg>
-                            <Typography variant='h4' color='#F9AA4B'>{healthTo}</Typography>
+                            <Typography variant='h4' color={healthFrom == undefined ? '#FFF' : '#F9AA4B'}>{healthTo}</Typography>
                         </Stack>
                         <Stack justifyContent='flex-end' mt={1}>
                             <Typography variant='h5' color='#707175' fontWeight={400}>
@@ -43,8 +76,8 @@ export const TransactionOverView = (props: Props) => {
                         </Stack>
                     </Box>
                 </Stack>
-            </Box>
-            <Stack direction='row' gap={2} ml={2}>
+            </Stack>
+            <Stack direction='row' gap={2} ml={2} justifyContent='space-between'>
                 <Typography fontSize={20} color='#707175' display='flex' alignItems='center' whiteSpace={'nowrap'} mb={2} gap={3}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                         <g clipPath="url(#clip0_1711_5642)">
@@ -57,14 +90,21 @@ export const TransactionOverView = (props: Props) => {
                         </defs>
                     </svg>
                     {formatToThousands(gasFee)}
-                    <Tooltip title='Gas Fee' placement='top'>
+                    <Tooltip title='Gas fees are payments made by users to compensate for the computing energy required to process and validate transactions on the blockchain. Fees vary based on network congestion and transaction complexity.' placement='top'>
                         <IconButton sx={{bgcolor: 'transparent !important', p: 0}}>
                             <Icon fontSize='23' icon='ci:info' style={{color: '#707175', cursor: 'pointer'}}/>
                         </IconButton>
                     </Tooltip>
                 </Typography>
+                {
+                    uptoFee != undefined &&
+                    <Typography fontSize={20} color='#707175' marginRight={6}>
+                        Fee ~ {formatToThousands(uptoFee)}
+                    </Typography>
+
+                }
             </Stack>
-            <Box sx={{...radiusBoxStyle, backgroundColor: 'rgba(103, 218, 177, 0.10)', mt: 2, mb: 12}}>
+            <Box sx={{...radiusBoxStyle, backgroundColor: 'rgba(103, 218, 177, 0.10)', mt: 2, mb: 12}} display={type == 'repay' ? 'none' : 'block'}>
                 <Typography variant='subtitle1' lineHeight='normal'>
                     <span style={{ color: theme.palette.primary.main, fontWeight: 600}}>Attention: </span>
                     Parameter changes via governance can alter your account health factor and risk of liquidation. Follow the Tren governance forum for updates.
