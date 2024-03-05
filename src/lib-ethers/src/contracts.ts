@@ -14,19 +14,17 @@ import {
 
 import activePoolAbi from "../abi/ActivePool.json";
 import borrowerOperationsAbi from "../abi/BorrowerOperations.json";
-import troveManagerAbi from "../abi/TroveManager.json";
-import lusdTokenAbi from "../abi/LUSDToken.json";
+import moduleManagerAbi from "../abi/ModuleManager.json";
+import trenUSDTokenAbi from "../abi/TrenUSDToken.json";
 import collSurplusPoolAbi from "../abi/CollSurplusPool.json";
 import communityIssuanceAbi from "../abi/CommunityIssuance.json";
 import defaultPoolAbi from "../abi/DefaultPool.json";
-import lqtyTokenAbi from "../abi/LQTYToken.json";
 import hintHelpersAbi from "../abi/HintHelpers.json";
 import lockupContractFactoryAbi from "../abi/LockupContractFactory.json";
-import lqtyStakingAbi from "../abi/LQTYStaking.json";
-import multiTroveGetterAbi from "../abi/MultiTroveGetter.json";
+import multiModuleGetterAbi from "../abi/MultiModuleGetter.json";
 import priceFeedAbi from "../abi/PriceFeed.json";
 import priceFeedTestnetAbi from "../abi/PriceFeedTestnet.json";
-import sortedTrovesAbi from "../abi/SortedTroves.json";
+import sortedModulesAbi from "../abi/SortedModules.json";
 import stabilityPoolAbi from "../abi/StabilityPool.json";
 import gasPoolAbi from "../abi/GasPool.json";
 import unipoolAbi from "../abi/Unipool.json";
@@ -36,19 +34,17 @@ import erc20MockAbi from "../abi/ERC20Mock.json";
 import {
   ActivePool,
   BorrowerOperations,
-  TroveManager,
-  LUSDToken,
+  ModuleManager,
+  TrenUSDToken,
   CollSurplusPool,
   CommunityIssuance,
   DefaultPool,
-  LQTYToken,
   HintHelpers,
   LockupContractFactory,
-  LQTYStaking,
-  MultiTroveGetter,
+  MultiModuleGetter,
   PriceFeed,
   PriceFeedTestnet,
-  SortedTroves,
+  SortedModules,
   StabilityPool,
   GasPool,
   Unipool,
@@ -138,7 +134,7 @@ const buildEstimatedFunctions = <T>(
     ])
   );
 
-export class _LiquityContract extends Contract {
+export class _TrenContract extends Contract {
   readonly estimateAndPopulate: Record<string, EstimatedContractFunction<PopulatedTransaction>>;
 
   constructor(
@@ -161,24 +157,22 @@ export class _LiquityContract extends Contract {
 }
 
 /** @internal */
-export type _TypedLiquityContract<T = unknown, U = unknown> = TypedContract<_LiquityContract, T, U>;
+export type _TypedTrenContract<T = unknown, U = unknown> = TypedContract<_TrenContract, T, U>;
 
 /** @internal */
-export interface _LiquityContracts {
+export interface _TrenContracts {
   activePool: ActivePool;
   borrowerOperations: BorrowerOperations;
-  troveManager: TroveManager;
-  lusdToken: LUSDToken;
+  moduleManager: ModuleManager;
+  trenUSDToken: TrenUSDToken;
   collSurplusPool: CollSurplusPool;
   communityIssuance: CommunityIssuance;
   defaultPool: DefaultPool;
-  lqtyToken: LQTYToken;
   hintHelpers: HintHelpers;
   lockupContractFactory: LockupContractFactory;
-  lqtyStaking: LQTYStaking;
-  multiTroveGetter: MultiTroveGetter;
+  multiModuleGetter: MultiModuleGetter;
   priceFeed: PriceFeed | PriceFeedTestnet;
-  sortedTroves: SortedTroves;
+  sortedModules: SortedModules;
   stabilityPool: StabilityPool;
   gasPool: GasPool;
   unipool: Unipool;
@@ -194,27 +188,25 @@ export const _priceFeedIsTestnet = (
 export const _uniTokenIsMock = (uniToken: IERC20 | ERC20Mock): uniToken is ERC20Mock =>
   "mint" in uniToken;
 
-type LiquityContractsKey = keyof _LiquityContracts;
+type TrenContractsKey = keyof _TrenContracts;
 
 /** @internal */
-export type _LiquityContractAddresses = Record<LiquityContractsKey, string>;
+export type _TrenContractAddresses = Record<TrenContractsKey, string>;
 
-type LiquityContractAbis = Record<LiquityContractsKey, JsonFragment[]>;
+type TrenContractAbis = Record<TrenContractsKey, JsonFragment[]>;
 
-const getAbi = (priceFeedIsTestnet: boolean, uniTokenIsMock: boolean): LiquityContractAbis => ({
+const getAbi = (priceFeedIsTestnet: boolean, uniTokenIsMock: boolean): TrenContractAbis => ({
   activePool: activePoolAbi,
   borrowerOperations: borrowerOperationsAbi,
-  troveManager: troveManagerAbi,
-  lusdToken: lusdTokenAbi,
+  moduleManager: moduleManagerAbi,
+  trenUSDToken: trenUSDTokenAbi,
   communityIssuance: communityIssuanceAbi,
   defaultPool: defaultPoolAbi,
-  lqtyToken: lqtyTokenAbi,
   hintHelpers: hintHelpersAbi,
   lockupContractFactory: lockupContractFactoryAbi,
-  lqtyStaking: lqtyStakingAbi,
-  multiTroveGetter: multiTroveGetterAbi,
+  multiModuleGetter: multiModuleGetterAbi,
   priceFeed: priceFeedIsTestnet ? priceFeedTestnetAbi : priceFeedAbi,
-  sortedTroves: sortedTrovesAbi,
+  sortedModules: sortedModulesAbi,
   stabilityPool: stabilityPoolAbi,
   gasPool: gasPoolAbi,
   collSurplusPool: collSurplusPoolAbi,
@@ -222,25 +214,22 @@ const getAbi = (priceFeedIsTestnet: boolean, uniTokenIsMock: boolean): LiquityCo
   uniToken: uniTokenIsMock ? erc20MockAbi : iERC20Abi
 });
 
-const mapLiquityContracts = <T, U>(
-  contracts: Record<LiquityContractsKey, T>,
-  f: (t: T, key: LiquityContractsKey) => U
+const mapTrenContracts = <T, U>(
+  contracts: Record<TrenContractsKey, T>,
+  f: (t: T, key: TrenContractsKey) => U
 ) =>
   Object.fromEntries(
-    Object.entries(contracts).map(([key, t]) => [key, f(t, key as LiquityContractsKey)])
-  ) as Record<LiquityContractsKey, U>;
+    Object.entries(contracts).map(([key, t]) => [key, f(t, key as TrenContractsKey)])
+  ) as Record<TrenContractsKey, U>;
 
 /** @internal */
-export interface _LiquityDeploymentJSON {
+export interface _TrenDeploymentJSON {
   readonly chainId: number;
-  readonly addresses: _LiquityContractAddresses;
+  readonly addresses: _TrenContractAddresses;
   readonly version: string;
   readonly deploymentDate: number;
   readonly startBlock: number;
-  readonly bootstrapPeriod: number;
-  readonly totalStabilityPoolLQTYReward: string;
-  readonly liquidityMiningLQTYRewardRate: string;
-  readonly _priceFeedIsTestnet: boolean;
+  readonly bootstrapPeriod: number;  readonly _priceFeedIsTestnet: boolean;
   readonly _uniTokenIsMock: boolean;
   readonly _isDev: boolean;
 }
@@ -248,13 +237,13 @@ export interface _LiquityDeploymentJSON {
 /** @internal */
 export const _connectToContracts = (
   signerOrProvider: EthersSigner | EthersProvider,
-  { addresses, _priceFeedIsTestnet, _uniTokenIsMock }: _LiquityDeploymentJSON
-): _LiquityContracts => {
+  { addresses, _priceFeedIsTestnet, _uniTokenIsMock }: _TrenDeploymentJSON
+): _TrenContracts => {
   const abi = getAbi(_priceFeedIsTestnet, _uniTokenIsMock);
 
-  return mapLiquityContracts(
+  return mapTrenContracts(
     addresses,
     (address, key) =>
-      new _LiquityContract(address, abi[key], signerOrProvider) as _TypedLiquityContract
-  ) as _LiquityContracts;
+      new _TrenContract(address, abi[key], signerOrProvider) as _TypedTrenContract
+  ) as _TrenContracts;
 };

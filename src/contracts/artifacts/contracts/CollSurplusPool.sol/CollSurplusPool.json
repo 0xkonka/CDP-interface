@@ -92,11 +92,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_newTroveManagerAddress",
+          "name": "_newModuleManagerAddress",
           "type": "address"
         }
       ],
-      "name": "TroveManagerAddressChanged",
+      "name": "ModuleManagerAddressChanged",
       "type": "event"
     },
     {
@@ -236,7 +236,7 @@
         },
         {
           "internalType": "address",
-          "name": "_troveManagerAddress",
+          "name": "_moduleManagerAddress",
           "type": "address"
         },
         {
@@ -252,7 +252,7 @@
     },
     {
       "inputs": [],
-      "name": "troveManagerAddress",
+      "name": "moduleManagerAddress",
       "outputs": [
         {
           "internalType": "address",

@@ -58,7 +58,7 @@
           "type": "address"
         }
       ],
-      "name": "withdrawETHGainToTrove",
+      "name": "withdrawETHGainToModule",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

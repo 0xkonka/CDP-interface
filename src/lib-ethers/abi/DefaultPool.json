@@ -44,11 +44,11 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "_LUSDDebt",
+        "name": "_TrenUSDDebt",
         "type": "uint256"
       }
     ],
-    "name": "DefaultPoolLUSDDebtUpdated",
+    "name": "DefaultPoolTrenUSDDebtUpdated",
     "type": "event"
   },
   {
@@ -93,7 +93,7 @@
         "type": "uint256"
       }
     ],
-    "name": "LUSDBalanceUpdated",
+    "name": "TrenUSDBalanceUpdated",
     "type": "event"
   },
   {
@@ -134,11 +134,11 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "_newTroveManagerAddress",
+        "name": "_newModuleManagerAddress",
         "type": "address"
       }
     ],
-    "name": "TroveManagerAddressChanged",
+    "name": "ModuleManagerAddressChanged",
     "type": "event"
   },
   {
@@ -175,7 +175,7 @@
         "type": "uint256"
       }
     ],
-    "name": "decreaseLUSDDebt",
+    "name": "decreaseTrenUSDDebt",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -195,7 +195,7 @@
   },
   {
     "inputs": [],
-    "name": "getLUSDDebt",
+    "name": "getTrenUSDDebt",
     "outputs": [
       {
         "internalType": "uint256",
@@ -214,7 +214,7 @@
         "type": "uint256"
       }
     ],
-    "name": "increaseLUSDDebt",
+    "name": "increaseTrenUSDDebt",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -262,7 +262,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_troveManagerAddress",
+        "name": "_moduleManagerAddress",
         "type": "address"
       },
       {
@@ -278,7 +278,7 @@
   },
   {
     "inputs": [],
-    "name": "troveManagerAddress",
+    "name": "moduleManagerAddress",
     "outputs": [
       {
         "internalType": "address",

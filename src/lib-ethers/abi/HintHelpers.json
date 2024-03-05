@@ -24,11 +24,11 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "_sortedTrovesAddress",
+        "name": "_sortedModulesAddress",
         "type": "address"
       }
     ],
-    "name": "SortedTrovesAddressChanged",
+    "name": "SortedModulesAddressChanged",
     "type": "event"
   },
   {
@@ -37,11 +37,11 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "_troveManagerAddress",
+        "name": "_moduleManagerAddress",
         "type": "address"
       }
     ],
-    "name": "TroveManagerAddressChanged",
+    "name": "ModuleManagerAddressChanged",
     "type": "event"
   },
   {
@@ -85,7 +85,7 @@
   },
   {
     "inputs": [],
-    "name": "LUSD_GAS_COMPENSATION",
+    "name": "TrenUSD_GAS_COMPENSATION",
     "outputs": [
       {
         "internalType": "uint256",
@@ -309,7 +309,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_LUSDamount",
+        "name": "_TrenUSDamount",
         "type": "uint256"
       },
       {
@@ -337,7 +337,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "truncatedLUSDamount",
+        "name": "truncatedTrenUSDamount",
         "type": "uint256"
       }
     ],
@@ -387,12 +387,12 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_sortedTrovesAddress",
+        "name": "_sortedModulesAddress",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "_troveManagerAddress",
+        "name": "_moduleManagerAddress",
         "type": "address"
       }
     ],
@@ -403,10 +403,10 @@
   },
   {
     "inputs": [],
-    "name": "sortedTroves",
+    "name": "sortedModules",
     "outputs": [
       {
-        "internalType": "contract ISortedTroves",
+        "internalType": "contract ISortedModules",
         "name": "",
         "type": "address"
       }
@@ -416,10 +416,10 @@
   },
   {
     "inputs": [],
-    "name": "troveManager",
+    "name": "moduleManager",
     "outputs": [
       {
-        "internalType": "contract ITroveManager",
+        "internalType": "contract IModuleManager",
         "name": "",
         "type": "address"
       }

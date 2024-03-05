@@ -104,7 +104,7 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_LUSDLoss",
+          "name": "_TrenUSDLoss",
           "type": "uint256"
         }
       ],
@@ -300,11 +300,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_newLUSDTokenAddress",
+          "name": "_newTrenUSDTokenAddress",
           "type": "address"
         }
       ],
-      "name": "LUSDTokenAddressChanged",
+      "name": "TrenUSDTokenAddressChanged",
       "type": "event"
     },
     {
@@ -377,11 +377,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_newSortedTrovesAddress",
+          "name": "_newSortedModulesAddress",
           "type": "address"
         }
       ],
-      "name": "SortedTrovesAddressChanged",
+      "name": "SortedModulesAddressChanged",
       "type": "event"
     },
     {
@@ -407,7 +407,7 @@
           "type": "uint256"
         }
       ],
-      "name": "StabilityPoolLUSDBalanceUpdated",
+      "name": "StabilityPoolTrenUSDBalanceUpdated",
       "type": "event"
     },
     {
@@ -416,11 +416,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_newTroveManagerAddress",
+          "name": "_newModuleManagerAddress",
           "type": "address"
         }
       ],
-      "name": "TroveManagerAddressChanged",
+      "name": "ModuleManagerAddressChanged",
       "type": "event"
     },
     {
@@ -469,7 +469,7 @@
           "type": "address"
         }
       ],
-      "name": "getCompoundedLUSDDeposit",
+      "name": "getCompoundedTrenUSDDeposit",
       "outputs": [
         {
           "internalType": "uint256",
@@ -552,7 +552,7 @@
     },
     {
       "inputs": [],
-      "name": "getTotalLUSDDeposits",
+      "name": "getTotalTrenUSDDeposits",
       "outputs": [
         {
           "internalType": "uint256",
@@ -621,7 +621,7 @@
         },
         {
           "internalType": "address",
-          "name": "_troveManagerAddress",
+          "name": "_moduleManagerAddress",
           "type": "address"
         },
         {
@@ -631,12 +631,12 @@
         },
         {
           "internalType": "address",
-          "name": "_lusdTokenAddress",
+          "name": "_trenUSDTokenAddress",
           "type": "address"
         },
         {
           "internalType": "address",
-          "name": "_sortedTrovesAddress",
+          "name": "_sortedModulesAddress",
           "type": "address"
         },
         {
@@ -668,7 +668,7 @@
           "type": "address"
         }
       ],
-      "name": "withdrawETHGainToTrove",
+      "name": "withdrawETHGainToModule",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

@@ -1,17 +1,17 @@
 // export {
 //   _connectByChainId,
-//   EthersLiquityConnection,
-//   EthersLiquityConnectionOptionalParams,
-//   EthersLiquityStoreOption,
+//   EthersTrenConnection,
+//   EthersTrenConnectionOptionalParams,
+//   EthersTrenStoreOption,
 //   UnsupportedNetworkError
-// } from "./src/EthersLiquityConnection";
+// } from "./src/EthersTrenConnection";
 
-export * from "./src/EthersLiquityConnection";
+export * from "./src/EthersTrenConnection";
 
 export * from "./src/types";
-export * from "./src/ReadableEthersLiquity";
-// export * from "./src/ObservableEthersLiquity";
-export * from "./src/BlockPolledLiquityStore";
-export * from "./src/PopulatableEthersLiquity";
-export * from "./src/SendableEthersLiquity";
-export * from "./src/EthersLiquity";
+export * from "./src/ReadableEthersTren";
+// export * from "./src/ObservableEthersTren";
+export * from "./src/BlockPolledTrenStore";
+export * from "./src/PopulatableEthersTren";
+export * from "./src/SendableEthersTren";
+export * from "./src/EthersTren";

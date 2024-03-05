@@ -104,7 +104,7 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_LUSDLoss",
+          "name": "_TrenUSDLoss",
           "type": "uint256"
         }
       ],
@@ -300,11 +300,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_newLUSDTokenAddress",
+          "name": "_newTrenUSDTokenAddress",
           "type": "address"
         }
       ],
-      "name": "LUSDTokenAddressChanged",
+      "name": "TrenUSDTokenAddressChanged",
       "type": "event"
     },
     {
@@ -396,11 +396,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_newSortedTrovesAddress",
+          "name": "_newSortedModulesAddress",
           "type": "address"
         }
       ],
-      "name": "SortedTrovesAddressChanged",
+      "name": "SortedModulesAddressChanged",
       "type": "event"
     },
     {
@@ -426,7 +426,7 @@
           "type": "uint256"
         }
       ],
-      "name": "StabilityPoolLUSDBalanceUpdated",
+      "name": "StabilityPoolTrenUSDBalanceUpdated",
       "type": "event"
     },
     {
@@ -435,11 +435,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_newTroveManagerAddress",
+          "name": "_newModuleManagerAddress",
           "type": "address"
         }
       ],
-      "name": "TroveManagerAddressChanged",
+      "name": "ModuleManagerAddressChanged",
       "type": "event"
     },
     {
@@ -502,7 +502,7 @@
     },
     {
       "inputs": [],
-      "name": "LUSD_GAS_COMPENSATION",
+      "name": "TrenUSD_GAS_COMPENSATION",
       "outputs": [
         {
           "internalType": "uint256",
@@ -902,7 +902,7 @@
           "type": "address"
         }
       ],
-      "name": "getCompoundedLUSDDeposit",
+      "name": "getCompoundedTrenUSDDeposit",
       "outputs": [
         {
           "internalType": "uint256",
@@ -1011,7 +1011,7 @@
     },
     {
       "inputs": [],
-      "name": "getTotalLUSDDeposits",
+      "name": "getTotalTrenUSDDeposits",
       "outputs": [
         {
           "internalType": "uint256",
@@ -1063,7 +1063,7 @@
     },
     {
       "inputs": [],
-      "name": "lastLUSDLossError_Offset",
+      "name": "lastTrenUSDLossError_Offset",
       "outputs": [
         {
           "internalType": "uint256",
@@ -1076,10 +1076,10 @@
     },
     {
       "inputs": [],
-      "name": "lusdToken",
+      "name": "trenUSDToken",
       "outputs": [
         {
-          "internalType": "contract ILUSDToken",
+          "internalType": "contract ITrenUSDToken",
           "name": "",
           "type": "address"
         }
@@ -1171,7 +1171,7 @@
         },
         {
           "internalType": "address",
-          "name": "_troveManagerAddress",
+          "name": "_moduleManagerAddress",
           "type": "address"
         },
         {
@@ -1181,12 +1181,12 @@
         },
         {
           "internalType": "address",
-          "name": "_lusdTokenAddress",
+          "name": "_trenUSDTokenAddress",
           "type": "address"
         },
         {
           "internalType": "address",
-          "name": "_sortedTrovesAddress",
+          "name": "_sortedModulesAddress",
           "type": "address"
         },
         {
@@ -1207,10 +1207,10 @@
     },
     {
       "inputs": [],
-      "name": "sortedTroves",
+      "name": "sortedModules",
       "outputs": [
         {
-          "internalType": "contract ISortedTroves",
+          "internalType": "contract ISortedModules",
           "name": "",
           "type": "address"
         }
@@ -1220,10 +1220,10 @@
     },
     {
       "inputs": [],
-      "name": "troveManager",
+      "name": "moduleManager",
       "outputs": [
         {
-          "internalType": "contract ITroveManager",
+          "internalType": "contract IModuleManager",
           "name": "",
           "type": "address"
         }
@@ -1244,7 +1244,7 @@
           "type": "address"
         }
       ],
-      "name": "withdrawETHGainToTrove",
+      "name": "withdrawETHGainToModule",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

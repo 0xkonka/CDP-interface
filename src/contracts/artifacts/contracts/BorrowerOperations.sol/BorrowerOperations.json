@@ -80,11 +80,11 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_LUSDFee",
+          "name": "_TrenUSDFee",
           "type": "uint256"
         }
       ],
-      "name": "LUSDBorrowingFeePaid",
+      "name": "TrenUSDBorrowingFeePaid",
       "type": "event"
     },
     {
@@ -93,11 +93,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_lusdTokenAddress",
+          "name": "_trenUSDTokenAddress",
           "type": "address"
         }
       ],
-      "name": "LUSDTokenAddressChanged",
+      "name": "TrenUSDTokenAddressChanged",
       "type": "event"
     },
     {
@@ -138,11 +138,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_sortedTrovesAddress",
+          "name": "_sortedModulesAddress",
           "type": "address"
         }
       ],
-      "name": "SortedTrovesAddressChanged",
+      "name": "SortedModulesAddressChanged",
       "type": "event"
     },
     {
@@ -174,7 +174,7 @@
           "type": "uint256"
         }
       ],
-      "name": "TroveCreated",
+      "name": "ModuleCreated",
       "type": "event"
     },
     {
@@ -183,11 +183,11 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "_newTroveManagerAddress",
+          "name": "_newModuleManagerAddress",
           "type": "address"
         }
       ],
-      "name": "TroveManagerAddressChanged",
+      "name": "ModuleManagerAddressChanged",
       "type": "event"
     },
     {
@@ -224,7 +224,7 @@
           "type": "uint8"
         }
       ],
-      "name": "TroveUpdated",
+      "name": "ModuleUpdated",
       "type": "event"
     },
     {
@@ -268,7 +268,7 @@
     },
     {
       "inputs": [],
-      "name": "LUSD_GAS_COMPENSATION",
+      "name": "TrenUSD_GAS_COMPENSATION",
       "outputs": [
         {
           "internalType": "uint256",
@@ -389,7 +389,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "_LUSDChange",
+          "name": "_TrenUSDChange",
           "type": "uint256"
         },
         {
@@ -408,7 +408,7 @@
           "type": "address"
         }
       ],
-      "name": "adjustTrove",
+      "name": "adjustModule",
       "outputs": [],
       "stateMutability": "payable",
       "type": "function"
@@ -422,7 +422,7 @@
     },
     {
       "inputs": [],
-      "name": "closeTrove",
+      "name": "closeModule",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -526,10 +526,10 @@
     },
     {
       "inputs": [],
-      "name": "lusdToken",
+      "name": "trenUSDToken",
       "outputs": [
         {
-          "internalType": "contract ILUSDToken",
+          "internalType": "contract ITrenUSDToken",
           "name": "",
           "type": "address"
         }
@@ -555,7 +555,7 @@
           "type": "address"
         }
       ],
-      "name": "moveETHGainToTrove",
+      "name": "moveETHGainToModule",
       "outputs": [],
       "stateMutability": "payable",
       "type": "function"
@@ -569,7 +569,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "_LUSDAmount",
+          "name": "_TrenUSDAmount",
           "type": "uint256"
         },
         {
@@ -583,7 +583,7 @@
           "type": "address"
         }
       ],
-      "name": "openTrove",
+      "name": "openModule",
       "outputs": [],
       "stateMutability": "payable",
       "type": "function"
@@ -618,7 +618,7 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "_LUSDAmount",
+          "name": "_TrenUSDAmount",
           "type": "uint256"
         },
         {
@@ -632,7 +632,7 @@
           "type": "address"
         }
       ],
-      "name": "repayLUSD",
+      "name": "repayTrenUSD",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -641,7 +641,7 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_troveManagerAddress",
+          "name": "_moduleManagerAddress",
           "type": "address"
         },
         {
@@ -676,12 +676,12 @@
         },
         {
           "internalType": "address",
-          "name": "_sortedTrovesAddress",
+          "name": "_sortedModulesAddress",
           "type": "address"
         },
         {
           "internalType": "address",
-          "name": "_lusdTokenAddress",
+          "name": "_trenUSDTokenAddress",
           "type": "address"
         },
         {
@@ -697,10 +697,10 @@
     },
     {
       "inputs": [],
-      "name": "sortedTroves",
+      "name": "sortedModules",
       "outputs": [
         {
-          "internalType": "contract ISortedTroves",
+          "internalType": "contract ISortedModules",
           "name": "",
           "type": "address"
         }
@@ -710,10 +710,10 @@
     },
     {
       "inputs": [],
-      "name": "troveManager",
+      "name": "moduleManager",
       "outputs": [
         {
-          "internalType": "contract ITroveManager",
+          "internalType": "contract IModuleManager",
           "name": "",
           "type": "address"
         }
@@ -753,7 +753,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "_LUSDAmount",
+          "name": "_TrenUSDAmount",
           "type": "uint256"
         },
         {
@@ -767,7 +767,7 @@
           "type": "address"
         }
       ],
-      "name": "withdrawLUSD",
+      "name": "withdrawTrenUSD",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

@@ -1,5 +1,5 @@
-export * from "./src/components/LiquityStoreProvider";
+export * from "./src/components/TrenStoreProvider";
 
-export * from "./src/hooks/useLiquityStore";
-export * from "./src/hooks/useLiquityReducer";
-export * from "./src/hooks/useLiquitySelector";
+export * from "./src/hooks/useTrenStore";
+export * from "./src/hooks/useTrenReducer";
+export * from "./src/hooks/useTrenSelector";
