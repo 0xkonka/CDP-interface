@@ -2,7 +2,7 @@ import { AddressZero } from '@ethersproject/constants'
 import { isAddress, getAddress } from '@ethersproject/address'
 import configData from './config.json'
 
-export type LiquityFrontendConfig = {
+export type TrenFrontendConfig = {
   frontendTag: string
   // infuraApiKey?: string;
   // alchemyApiKey?: string;
@@ -10,7 +10,7 @@ export type LiquityFrontendConfig = {
   // walletConnectProjectId: string;
 }
 
-const defaultConfig: LiquityFrontendConfig = {
+const defaultConfig: TrenFrontendConfig = {
   frontendTag: AddressZero,
   // walletConnectProjectId: "b16efb4fd41473c0f45dbad8efa15a00",
   testnetOnly: true
@@ -20,7 +20,7 @@ function hasKey<K extends string>(o: object, k: K): o is Record<K, unknown> {
   return k in o
 }
 
-const parseConfig = (json: unknown): LiquityFrontendConfig => {
+const parseConfig = (json: unknown): TrenFrontendConfig => {
   const config = { ...defaultConfig }
 
   if (typeof json === 'object' && json !== null) {
@@ -75,7 +75,7 @@ const parseConfig = (json: unknown): LiquityFrontendConfig => {
   return config
 }
 
-export const getConfig = (): LiquityFrontendConfig => {
+export const getConfig = (): TrenFrontendConfig => {
   try {
     // const response = await fetch("config.json");
 

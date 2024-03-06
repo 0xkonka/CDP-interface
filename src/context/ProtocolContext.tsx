@@ -4,16 +4,16 @@ import { Config, useAccount, useChainId, useClient, useWalletClient } from 'wagm
 import type { Account, Chain, Client, Transport } from 'viem'
 import { providers } from 'ethers'
 
-import { BlockPolledLiquityStore, EthersLiquity, EthersLiquityWithStore, _connectByChainId } from '@/lib-ethers'
+import { BlockPolledTrenStore, EthersTren, EthersTrenWithStore, _connectByChainId } from '@/lib-ethers'
 
-import { LiquityFrontendConfig, getConfig } from '../configs'
+import { TrenFrontendConfig, getConfig } from '../configs'
 import { BatchedProvider } from './providers/BatchingProvider'
 
 type ProtocolContextValue = {
-  config: LiquityFrontendConfig
+  config: TrenFrontendConfig
   account: string
   provider: Provider
-  protocol: EthersLiquityWithStore<BlockPolledLiquityStore>
+  protocol: EthersTrenWithStore<BlockPolledTrenStore>
 }
 
 const ProtocolContext = createContext<ProtocolContextValue | undefined>(undefined)
@@ -64,7 +64,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
   const { connector, address: account } = useAccount()
   const chainId = useChainId()
   // const [provider, setProvider] = useState<FallbackProvider | undefined>(undefined)
-  const [config, setConfig] = useState<LiquityFrontendConfig>()
+  const [config, setConfig] = useState<TrenFrontendConfig>()
   const provider = useEthersProvider()
   const { data: client } = useWalletClient()
   const signer = clientToSigner(client!)
@@ -93,7 +93,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
     return <></>
   }
 
-  const protocol = EthersLiquity._from(connection)
+  const protocol = EthersTren._from(connection)
   protocol.store.logging = true
 
   return (
