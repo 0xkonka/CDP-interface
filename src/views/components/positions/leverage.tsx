@@ -25,7 +25,7 @@ export const LeveragePosition = (props: LeveragePostionProps) => {
             </Typography>
             <Grid container spacing={8}>
                 <Grid item xs={12} lg={6}>
-                    <HealthFactor safety={75}/>
+                    <HealthFactor safety={4.42}/>
                 </Grid>
                 <Grid item xs={12} lg={6}>
                     <BorrowingPower percent={35} label='Leverage used' max={7500}/>
