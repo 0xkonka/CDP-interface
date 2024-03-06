@@ -73,6 +73,7 @@ import 'src/iconify-bundle/icons-bundle-react'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import '../../styles/rainbowwallet.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import { ProtocolProvider, useProtocol } from '@/context/ProtocolContext'
 import { LiquityStoreProvider } from '@/lib-react'
