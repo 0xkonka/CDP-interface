@@ -287,7 +287,7 @@ const Borrow = () => {
                 <Box sx={radiusBoxStyle}>
                     <Grid container spacing={8}>
                         <Grid item xs={12} lg={6}>
-                            <HealthFactor safety={24}/>
+                            <HealthFactor safety={1.42}/>
                         </Grid>
                         <Grid item xs={12} lg={6}>
                             <BorrowingPower percent={68} max={7500}/>

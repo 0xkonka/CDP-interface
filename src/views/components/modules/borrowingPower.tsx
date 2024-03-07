@@ -17,16 +17,17 @@ export const BorrowingPower = (props: Props) => {
         label = 'Borrowing power used'
     return (
         <Stack>
-            <Stack direction='row' sx={{mb:2, justifyContent: 'space-between'}}>
-                <Typography variant='subtitle1'>
-                    {label}
-                </Typography>
-                <Typography variant='subtitle1'>
-                    {percent == 0 ? '-' : `${percent}%`}
-                </Typography>
-            </Stack>
+            <Typography variant='subtitle1'>
+                {label}
+            </Typography>
+            <Typography variant='h5' textAlign='end'>
+                {percent == 0 ? '-' : `${percent}%`}
+            </Typography>
+            {/* <Stack direction='row' sx={{mb:2, justifyContent: 'space-between'}}>
+                
+            </Stack> */}
             <Box sx={{
-                mt: '22px',
+                mt: '19px',
                 width: '100%',
                 height: 6,
                 mb: 2,
@@ -41,11 +42,11 @@ export const BorrowingPower = (props: Props) => {
                 }}/>
             </Box>
             <Box sx={{display:'flex', justifyContent: 'space-between'}}>
-                <Typography variant='subtitle2' color='#707175'>
+                <Typography variant='subtitle1' color='#707175'>
                     $0
                 </Typography>
-                <Typography variant='subtitle2' color='#707175'>
-                    {formatToThousands(max)}
+                <Typography variant='subtitle1' color='#707175'>
+                    {formatToThousands(max).slice(0, -3)}
                 </Typography>
             </Box>
         </Stack>

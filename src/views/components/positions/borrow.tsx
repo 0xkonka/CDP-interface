@@ -25,7 +25,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
             </Typography>
             <Grid container spacing={8}>
                 <Grid item xs={12} lg={6}>
-                    <HealthFactor safety={53}/>
+                    <HealthFactor safety={7.24}/>
                 </Grid>
                 <Grid item xs={12} lg={6}>
                     <BorrowingPower percent={26} max={7500}/>
