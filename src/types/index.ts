@@ -1,7 +1,10 @@
 import { BigNumber } from 'ethers'
 
 export type CollateralParams = {
+    address: string
+    symbol: string
     decimals: number
+    price: BigNumber
     index: BigNumber
     active: boolean
     borrowingFee: BigNumber
@@ -13,6 +16,10 @@ export type CollateralParams = {
     percentDivisor: BigNumber
     redemptionFeeFloor: BigNumber
     redemptionBlockTimestamp: BigNumber
+    totalAssetDebt: BigNumber
+    LTV: number
+    interest: number
+    liquidation: number
 }
 
 type NoneView = 'NONE'

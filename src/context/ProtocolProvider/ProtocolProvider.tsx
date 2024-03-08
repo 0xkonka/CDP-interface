@@ -5,7 +5,8 @@ import { erc20Abi, type Account, type Chain, type Client, type Transport } from 
 import { BigNumber, providers } from 'ethers'
 import { multicall, readContract, getBalance } from '@wagmi/core'
 import ADMIN_CONTRACT_ABI from '@/abi/AdminContract.json'
-import { ADMIN_CONTRACT } from '@/configs/address'
+import PRICE_FEED_ABI from '@/abi/PriceFeed.json'
+import { ADMIN_CONTRACT, PRICE_FEED } from '@/configs/address'
 import { CollateralParams } from '@/types'
 import { wagmiConfig } from '@/pages/_app'
 import { ProtocolContext } from './ProtocolContext'
@@ -48,6 +49,11 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
         address: ADMIN_CONTRACT[chainId] as '0x{string}',
         abi: ADMIN_CONTRACT_ABI as any
       } as const
+
+      const PriceFeedContract = {
+        address: PRICE_FEED[chainId] as '0x{string}',
+        abi: PRICE_FEED_ABI as any
+      } as const
       // Get Protocol Config
       const getCollateralDetails = async () => {
         const _collateralDetails: CollateralParams[] = []
@@ -55,6 +61,12 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
         for (let i = 0; i < collaterals.length; i++) {
           const result = await multicall(wagmiConfig, {
             contracts: [
+              {
+                abi: erc20Abi,
+                address: collaterals[i] as '0x{string}',
+                functionName: 'symbol',
+                args: []
+              },
               {
                 abi: erc20Abi,
                 address: collaterals[i] as '0x{string}',
@@ -114,32 +126,42 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
               {
                 ...AdminContract,
                 functionName: 'getMintCap',
-                args: []
-              }
-              // {
-              //   ...AdminContract,
-              //   functionName: 'getTotalAssetDebt',
-              //   args: []
-              // }
+                args: [collaterals[i]]
+              },
+              {
+                ...AdminContract,
+                functionName: 'getTotalAssetDebt',
+                args: [collaterals[i]]
+              },
+              {
+                ...PriceFeedContract,
+                functionName: 'fetchPrice',
+                args:[collaterals[i]]
+              },
+
             ]
           })
-
           // console.log('result', result)
-
-          const decimals = result[0].result as number
-          const index = result[1].result as BigNumber
-          const active = result[2].result as boolean
-          const mcr = result[3].result as BigNumber
-          const ccr = result[4].result as BigNumber
-          const debtTokenGasCompensation = result[5].result as BigNumber
-          const minNetDebt = result[6].result as BigNumber
-          const percentDivisor = result[7].result as BigNumber
-          const borrowingFee = result[8].result as BigNumber
-          const redemptionFeeFloor = result[9].result as BigNumber
-          const redemptionBlockTimestamp = result[10].result as BigNumber
-          const mintCap = result[10].result as BigNumber
+          const address = collaterals[i] as string
+          const symbol = result[0].result as string
+          const decimals = result[1].result as number
+          const index = BigNumber.from(result[2].result)
+          const active = result[3].result as boolean
+          const mcr = BigNumber.from(result[4].result)
+          const ccr = BigNumber.from(result[5].result)
+          const debtTokenGasCompensation = BigNumber.from(result[6].result)
+          const minNetDebt = BigNumber.from(result[7].result)
+          const percentDivisor = BigNumber.from(result[8].result)
+          const borrowingFee = BigNumber.from(result[9].result)
+          const redemptionFeeFloor = BigNumber.from(result[10].result)
+          const redemptionBlockTimestamp = BigNumber.from(result[11].result)
+          const mintCap = BigNumber.from(result[12].result)
+          const totalAssetDebt = BigNumber.from(result[13].result)
+          const price = BigNumber.from(result[14].result)
 
           const _collateralDetail: CollateralParams = {
+            address,
+            symbol,
             decimals,
             index,
             active,
@@ -151,13 +173,18 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
             borrowingFee,
             redemptionFeeFloor,
             redemptionBlockTimestamp,
-            mintCap
+            mintCap,
+            totalAssetDebt,
+            price,
+            LTV: 95,
+            interest: 5,
+            liquidation: 80,
           }
 
           // console.log('_collateralDetail', _collateralDetail)
 
           _collateralDetails.push(_collateralDetail)
-          // const getTotalAssetDebt = result[0].result as BigNumber
+          // const getTotalAssetDebt = result[0].result)
         }
 
         setCollateralDetails(_collateralDetails)

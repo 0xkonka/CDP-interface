@@ -20,13 +20,9 @@ import { CollateralType } from '@/types/collateral/types'
 import { getOverView } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
-
-const collaterals = ['stETH']
-const initialRows: CollateralType[] = collaterals
-  .map((value, index) => {
-    return { id: index + 1, ...getOverView(value) }
-  })
-  .filter(collateral => collateral !== undefined) as CollateralType[]
+import { BigNumber } from 'ethers'
+import { CollateralParams } from '@/types'
+import { formatUnits } from 'ethers/lib/utils'
 
 const Modules = () => {
   const [filterText, setFilterText] = useState<string>('')
@@ -34,7 +30,6 @@ const Modules = () => {
   const [assetFilter, setAssetFilter] = useState<string>('All')
   const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
   const [sortBy, setSortBy] = useState<string>('+asset')
-  const [rows, setRows] = useState<CollateralType[]>(initialRows)
 
   const assetTypes: string[] = [
     'All',
@@ -50,11 +45,31 @@ const Modules = () => {
   ]
   const { isSmallScreen, isMediumScreen } = useGlobalValues()
 
-  const {collaterals} = useProtocol()
+  const { collaterals, collateralDetails } = useProtocol()
+
+  const [rows, setRows] = useState<CollateralType[]>([])
+
+  useEffect(() => {
+    if (collateralDetails && collateralDetails.length > 0) {
+      const _rows: CollateralType[] = collateralDetails
+        .map((collateral: CollateralParams, index) => {
+          console.log('value.symbol', collateral.symbol)
+          return {
+            id: index + 1,
+            ...getOverView(collateral.symbol),
+            tvl: +formatUnits(collateral.totalAssetDebt, collateral.decimals)
+          }
+        })
+        .filter(collateral => collateral !== undefined) as CollateralType[]
+      setRows(_rows)
+    }
+  }, [collateralDetails])
+
+  // console.log('initialRows', initialRows)
 
   console.log('collaterals', collaterals)
 
-  const {view} = useModuleView(collaterals[0])
+  const { view } = useModuleView(collaterals[0])
 
   console.log('view', view)
 
@@ -99,7 +114,7 @@ const Modules = () => {
 
   // Comprehensive filter function
   const filterRows = () => {
-    let newRows = initialRows.filter(row => row.asset.toLocaleLowerCase().includes(filterText.toLowerCase()))
+    let newRows = rows.filter(row => row.asset.toLocaleLowerCase().includes(filterText.toLowerCase()))
     if (assetFilter != 'All') {
       newRows = newRows.filter(row => row.type == assetFilter)
     }

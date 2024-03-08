@@ -127,11 +127,11 @@ export const useModuleView = (collateral: string) => {
       })
 
       const _moduleInfo: Module = {
-        debt: _module[0] as BigNumber,
-        coll: _module[1] as BigNumber,
-        stake: _module[2] as BigNumber,
+        debt: BigNumber.from(_module[0]),
+        coll: BigNumber.from(_module[1]),
+        stake: BigNumber.from(_module[2]),
         status: getUserModuleStatus(_module[3]) as UserModuleStatus,
-        arrayIndex: _module[4] as BigNumber
+        arrayIndex:BigNumber.from(_module[4])
       }
 
       setModuleStatus(_moduleInfo.status)

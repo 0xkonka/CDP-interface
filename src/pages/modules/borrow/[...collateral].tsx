@@ -1,5 +1,5 @@
 // React imports
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 // Next.js imports
 import { useRouter } from 'next/router'
@@ -26,10 +26,26 @@ import { HealthFactor } from '@/views/components/modules/healthFactor'
 import { BorrowingPower } from '@/views/components/modules/borrowingPower'
 import { Result } from '@/views/components/modules/result'
 import { BorrowPopup } from '@/views/components/modules/borrowPopup'
+import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
+import { getBalance } from '@wagmi/core'
+import { wagmiConfig } from '@/pages/_app'
+import { useAccount } from 'wagmi'
+import { BigNumber } from 'ethers'
+import { formatUnits } from 'ethers/lib/utils'
+
+interface userModuleInfoType {
+  userCollateralBal: BigNumber
+  userAvailableBorrowAmount: BigNumber
+}
+
+const RemoveComma = (amount: string) => {
+  return amount.replace(/,/g, '')
+}
 
 const Borrow = () => {
   const router = useRouter()
   const theme: Theme = useTheme()
+
   const [open, setOpen] = useState<boolean>(false)
   const [type, setType] = useState<string>('withdraw')
   const { radiusBoxStyle } = useGlobalValues()
@@ -38,6 +54,44 @@ const Borrow = () => {
   if (Array.isArray(collateral)) {
     collateral = collateral.join(' / ')
   }
+
+  const { address: account } = useAccount()
+  const { collateralDetails } = useProtocol()
+  const collateralDetail = useMemo(
+    () => collateralDetails.find(i => i.symbol === collateral),
+    [collateral, collateralDetails]
+  )
+  const { address, price, LTV, decimals } = collateralDetail || {}
+  const [userModuleInfo, setUserModuleInfo] = useState<userModuleInfoType>({
+    userCollateralBal: BigNumber.from(0),
+    userAvailableBorrowAmount: BigNumber.from(0)
+  })
+  const [depositAmount, setDepositAmount] = useState('0')
+  const [borrowAmount, setBorrowAmount] = useState('0')
+
+  useEffect(() => {
+    if (!account || !address) return
+    const getUserInfo = async () => {
+      const _userCollateralBal = await getBalance(wagmiConfig, {
+        address: account as '0x${string}',
+        token: address as '0x${string}'
+      })
+
+      setUserModuleInfo(prevState => ({
+        ...prevState,
+        userCollateralBal: BigNumber.from(_userCollateralBal.value)
+      }))
+    }
+    getUserInfo()
+  }, [account, address])
+
+  useEffect(() => {
+    const _depositAmount = RemoveComma(depositAmount)
+    if (price && LTV && +_depositAmount > 0) {
+      const userAvailableBorrowAmount = price.mul(+_depositAmount * LTV).div(100)
+      setUserModuleInfo(prevState => ({ ...prevState, userAvailableBorrowAmount }))
+    }
+  }, [depositAmount, LTV, price])
 
   const handleClickApprove = () => {
     setOpen(true)
@@ -104,13 +158,13 @@ const Borrow = () => {
                     Available:
                   </Typography>
                   <Typography variant='body2' sx={{ ml: 1 }}>
-                    8,9B {collateral}
+                    {Number(formatUnits(userModuleInfo.userCollateralBal, decimals))} {collateral}
                   </Typography>
                 </Stack>
                 <CleaveWrapper style={{ position: 'relative' }}>
                   <Cleave
                     id='collateral-assets-amount'
-                    placeholder='0.00'
+                    placeholder='0.0'
                     options={{
                       numeral: true,
                       numeralThousandsGroupStyle: 'thousand',
@@ -119,6 +173,8 @@ const Borrow = () => {
                       stripLeadingZeroes: false // Prevents stripping the leading zero before the decimal point
                     }}
                     style={{ paddingRight: 50 }}
+                    value={depositAmount}
+                    onChange={e => setDepositAmount(e.target.value)}
                   />
                   <Box
                     sx={{
@@ -131,12 +187,16 @@ const Borrow = () => {
                       pl: 1,
                       color: theme.palette.primary.main
                     }}
+                    onClick={() => {
+                      setDepositAmount(formatUnits(userModuleInfo.userCollateralBal, decimals))
+                    }}
                   >
                     MAX
                   </Box>
                 </CleaveWrapper>
                 <Typography variant='body1' sx={{ ml: 3, opacity: 0.5 }}>
-                  = $0.0
+                  = ${' '}
+                  {collateralDetail ? +RemoveComma(depositAmount) * +formatUnits(collateralDetail.price, decimals) : 1}
                 </Typography>
               </Grid>
             </Grid>
@@ -167,7 +227,7 @@ const Borrow = () => {
                     Available:
                   </Typography>
                   <Typography variant='body2' sx={{ ml: 1 }}>
-                    8,9B trenUSD
+                    {+formatUnits(userModuleInfo.userAvailableBorrowAmount, decimals)} trenUSD
                   </Typography>
                 </Stack>
                 <CleaveWrapper style={{ position: 'relative' }}>
@@ -181,6 +241,8 @@ const Borrow = () => {
                       numeralDecimalMark: '.', // Decimal mark is a period
                       stripLeadingZeroes: false // Prevents stripping the leading zero before the decimal point
                     }}
+                    value={borrowAmount}
+                    onChange={e => setBorrowAmount(e.target.value)}
                   />
                   <Box
                     sx={{
@@ -193,12 +255,15 @@ const Borrow = () => {
                       pl: 1,
                       color: theme.palette.primary.main
                     }}
+                    onClick={() => {
+                      setBorrowAmount(formatUnits(userModuleInfo.userAvailableBorrowAmount, decimals))
+                    }}
                   >
                     MAX
                   </Box>
                 </CleaveWrapper>
                 <Typography variant='body1' sx={{ ml: 3, opacity: 0.5 }}>
-                  = $0.0
+                  = ${borrowAmount}
                 </Typography>
               </Grid>
             </Grid>
@@ -331,7 +396,12 @@ const Borrow = () => {
         </Grid>
       </Grid>
       <Box sx={radiusBoxStyle}>
-        <Result liquidationPrice={0.000008} ltv={37.5} collateralValue={10000} loanValue={3750} />
+        <Result
+          liquidationPrice={0.000008}
+          ltv={37.5}
+          collateralValue={price ? +formatUnits(price, decimals) : 0}
+          loanValue={3750}
+        />
       </Box>
       <Stack direction='row' sx={{ justifyContent: 'center', py: 8 }}>
         <Button
@@ -347,7 +417,14 @@ const Borrow = () => {
           Approve
         </Button>
       </Stack>
-      <BorrowPopup open={open} setOpen={setOpen} type={type} collateral={String(collateral)} />
+      <BorrowPopup
+        open={open}
+        setOpen={setOpen}
+        type={type}
+        collateral={String(collateral)}
+        depositAmount={RemoveComma(depositAmount)}
+        borrowAmount={borrowAmount}
+      />
     </Box>
   )
 }
