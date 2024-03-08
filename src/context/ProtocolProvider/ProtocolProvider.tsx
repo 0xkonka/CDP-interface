@@ -141,7 +141,6 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
 
             ]
           })
-          // console.log('result', result)
           const address = collaterals[i] as string
           const symbol = result[0].result as string
           const decimals = result[1].result as number
@@ -180,8 +179,6 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
             interest: 5,
             liquidation: 80,
           }
-
-          // console.log('_collateralDetail', _collateralDetail)
 
           _collateralDetails.push(_collateralDetail)
           // const getTotalAssetDebt = result[0].result)

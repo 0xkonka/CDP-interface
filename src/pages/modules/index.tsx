@@ -53,7 +53,6 @@ const Modules = () => {
     if (collateralDetails && collateralDetails.length > 0) {
       const _rows: CollateralType[] = collateralDetails
         .map((collateral: CollateralParams, index) => {
-          console.log('value.symbol', collateral.symbol)
           return {
             id: index + 1,
             ...getOverView(collateral.symbol),
@@ -65,13 +64,7 @@ const Modules = () => {
     }
   }, [collateralDetails])
 
-  // console.log('initialRows', initialRows)
-
-  console.log('collaterals', collaterals)
-
   const { view } = useModuleView(collaterals[0])
-
-  console.log('view', view)
 
   const handleRowClick = (index: number) => {
     setOpenRowIndex(openRowIndex === index ? -1 : index)
