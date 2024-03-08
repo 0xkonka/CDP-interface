@@ -286,7 +286,7 @@ export const BorrowPopup = (props: Props) => {
             </Button>
           </Box>
         )}
-        <Typography>{error}</Typography>
+        {/* <Typography>{error}</Typography> */}
       </Dialog>
     </Fragment>
   )
