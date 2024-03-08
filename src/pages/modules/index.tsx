@@ -56,7 +56,10 @@ const Modules = () => {
           return {
             id: index + 1,
             ...getOverView(collateral.symbol),
-            tvl: +formatUnits(collateral.totalAssetDebt, collateral.decimals)
+            tvl: +formatUnits(collateral.totalAssetDebt, collateral.decimals),
+            LTVRatio: collateral.LTV,
+            interestRate: collateral.interest,
+            // borrowFee: collateral.borrowingFee
           }
         })
         .filter(collateral => collateral !== undefined) as CollateralType[]

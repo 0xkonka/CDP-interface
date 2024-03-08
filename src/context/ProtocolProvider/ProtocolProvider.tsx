@@ -6,10 +6,12 @@ import { BigNumber, providers } from 'ethers'
 import { multicall, readContract, getBalance } from '@wagmi/core'
 import ADMIN_CONTRACT_ABI from '@/abi/AdminContract.json'
 import PRICE_FEED_ABI from '@/abi/PriceFeed.json'
-import { ADMIN_CONTRACT, PRICE_FEED } from '@/configs/address'
+import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
+import { ADMIN_CONTRACT, PRICE_FEED, BORROWER_OPERATIONS } from '@/configs/address'
 import { CollateralParams } from '@/types'
 import { wagmiConfig } from '@/pages/_app'
 import { ProtocolContext } from './ProtocolContext'
+import { formatEther } from 'ethers/lib/utils'
 
 type ProtocolContextValue = {
   collaterals: string[]
@@ -53,6 +55,11 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
       const PriceFeedContract = {
         address: PRICE_FEED[chainId] as '0x{string}',
         abi: PRICE_FEED_ABI as any
+      } as const
+
+      const BorrowerOperationsContract = {
+        address: BORROWER_OPERATIONS[chainId] as '0x{string}',
+        abi: BORROWER_OPERATIONS_ABI as any
       } as const
       // Get Protocol Config
       const getCollateralDetails = async () => {
@@ -138,7 +145,11 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
                 functionName: 'fetchPrice',
                 args:[collaterals[i]]
               },
-
+              {
+                ...BorrowerOperationsContract,
+                functionName: 'getEntireSystemDebt',
+                args:[collaterals[i]]
+              }
             ]
           })
           const address = collaterals[i] as string
@@ -157,9 +168,11 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
           const mintCap = BigNumber.from(result[12].result)
           const totalAssetDebt = BigNumber.from(result[13].result)
           const price = BigNumber.from(result[14].result)
+          const entireSystemDebt = BigNumber.from(result[15].result)
 
           const _collateralDetail: CollateralParams = {
             address,
+            price,
             symbol,
             decimals,
             index,
@@ -174,14 +187,13 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
             redemptionBlockTimestamp,
             mintCap,
             totalAssetDebt,
-            price,
-            LTV: 95,
+            totalBorrowAvailable: mintCap.sub(entireSystemDebt),
+            LTV: 1 / +formatEther(mcr),
+            liquidation: 1 / +formatEther(ccr),
             interest: 5,
-            liquidation: 80,
           }
 
           _collateralDetails.push(_collateralDetail)
-          // const getTotalAssetDebt = result[0].result)
         }
 
         setCollateralDetails(_collateralDetails)
