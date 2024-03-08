@@ -21,7 +21,7 @@ import { getOverView } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
 import { BigNumber } from 'ethers'
-import { CollateralParams } from '@/types'
+import { CollateralParams } from '@/context/ModuleProvider/type'
 import { formatUnits } from 'ethers/lib/utils'
 
 const Modules = () => {
@@ -57,9 +57,9 @@ const Modules = () => {
             id: index + 1,
             ...getOverView(collateral.symbol),
             tvl: +formatUnits(collateral.totalAssetDebt, collateral.decimals),
-            LTVRatio: collateral.LTV,
-            interestRate: collateral.interest,
-            // borrowFee: collateral.borrowingFee
+            maxLeverage: +(+formatUnits(collateral.LTV) * 100).toFixed(2),
+            interestRate: +(+formatUnits(collateral.interest) * 100).toFixed(2),
+            borrowFee: +formatUnits(collateral.borrowingFee) * 100
           }
         })
         .filter(collateral => collateral !== undefined) as CollateralType[]

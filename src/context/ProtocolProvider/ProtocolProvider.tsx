@@ -8,10 +8,10 @@ import ADMIN_CONTRACT_ABI from '@/abi/AdminContract.json'
 import PRICE_FEED_ABI from '@/abi/PriceFeed.json'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
 import { ADMIN_CONTRACT, PRICE_FEED, BORROWER_OPERATIONS } from '@/configs/address'
-import { CollateralParams } from '@/types'
+import { CollateralParams } from '@/context/ModuleProvider/type'
 import { wagmiConfig } from '@/pages/_app'
 import { ProtocolContext } from './ProtocolContext'
-import { formatEther } from 'ethers/lib/utils'
+import { formatEther, parseEther } from 'ethers/lib/utils'
 
 type ProtocolContextValue = {
   collaterals: string[]
@@ -188,8 +188,8 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
             mintCap,
             totalAssetDebt,
             totalBorrowAvailable: mintCap.sub(entireSystemDebt),
-            LTV: 1 / +formatEther(mcr),
-            liquidation: 1 / +formatEther(ccr),
+            LTV: parseEther((1 / +formatEther(mcr)).toString()),
+            liquidation: parseEther((1 / +formatEther(ccr)).toString()),
             interest: 5,
           }
 

@@ -1,5 +1,5 @@
 // React imports
-import React, { Fragment, useState, Ref, forwardRef, ReactElement, useEffect } from 'react'
+import React, { Fragment, useState, Ref, forwardRef, ReactElement, useEffect, useMemo } from 'react'
 
 // MUI components
 import { Dialog, SlideProps, Slide, Box, Typography, Button, Theme, useTheme, Stack } from '@mui/material'
@@ -10,10 +10,15 @@ import { TransactionOverView } from './transactionOverview'
 import { ApproveDetailView } from './approveDetailView'
 import { AmountForm } from './amountForm'
 import { showToast } from '@/hooks/toasts'
-import { useChainId, useWriteContract } from 'wagmi'
-import { BORROWER_OPERATIONS } from '@/configs/address'
+import { useAccount, useChainId, useReadContract, useWriteContract } from 'wagmi'
+import { ACTIVE_POOL, BORROWER_OPERATIONS } from '@/configs/address'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
+import { erc20Abi } from 'viem'
+import { RemoveComma } from '@/hooks/utils'
+import { formatEther, formatUnits, parseEther, parseUnits } from 'ethers/lib/utils'
+import { BigNumber, ethers } from 'ethers'
+import useModules from '@/context/ModuleProvider/useModules'
 
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
@@ -68,18 +73,50 @@ const getButtonLabel = (type: string) => {
 export const BorrowPopup = (props: Props) => {
   const { open, setOpen, type, depositAmount, borrowAmount, withdrawAmount, repayAmount } = props
 
+  console.log('borrowAmount', borrowAmount)
+
   const [useWalletBalance, setUseWalletBalance] = useState(true)
   const [amount, setAmount] = useState('')
   const theme: Theme = useTheme()
-  let { collateral } = props
-  collateral = type == 'borrow' ? 'trenUSD' : collateral
+  const { collateral } = props
+  // collateral = type == 'borrow' ? 'trenUSD' : collateral
 
   const chainId = useChainId()
+  const { address: account } = useAccount()
   const { collateralDetails } = useProtocol()
-  const collateralDetail = collateralDetails.find(i => i.symbol === collateral)
-  const { data: txhash, writeContract, isPending, error } = useWriteContract()
+  const collateralDetail = useMemo(
+    () => collateralDetails.find(i => i.symbol === collateral),
+    [collateral, collateralDetails]
+  )
+  // const { data: txhash, writeContract, isPending, error } = useWriteContract()
+  const {
+    onApprove,
+    onOpen,
+    onDeposit,
+    onWithdraw,
+    onBorrow,
+    onRepay,
+    txhash,
+    isPending,
+    isConfirming,
+    isConfirmed,
+    error
+  } = useModules(collateral)
+
+  const { data: allowance } = useReadContract({
+    address: collateralDetail?.address as '0x{string}',
+    abi: erc20Abi,
+    functionName: 'allowance',
+    args: [account as '0x${string}', BORROWER_OPERATIONS[chainId] as '0x${string}']
+  })
+
+  console.log('allowance', allowance)
 
   const handleSubmit = () => {
+    const formatedAllowance = +formatUnits(BigNumber.from(allowance), collateralDetail?.decimals)
+    const formatedDepositAmount = BigInt(parseUnits(RemoveComma(depositAmount!), collateralDetail?.decimals).toString())
+    const formatedBorrowAmount = BigInt(parseEther(RemoveComma(borrowAmount!)).toString())
+
     if (type == 'withdraw') {
       initializePopupStates()
       showToast('success', 'Withdraw Success', `You have successfully withdrawn ${amount} ${collateral}`, 10000)
@@ -93,19 +130,19 @@ export const BorrowPopup = (props: Props) => {
       initializePopupStates()
       showToast('success', 'Repay Success', `You have successfully repaid ${amount} trenUSD`, 10000)
     } else if (type === 'approve') {
-
       try {
-        //     if(!collateralDetail) return
-        //     console.log('Approving')
-        //     writeContract({
-        //       address: BORROWER_OPERATIONS[chainId] as '0x{string}',
-        //       abi: BORROWER_OPERATIONS_ABI,
-        //       functionName: 'openModule',
-        //       args: [collateralDetail?.address[chainId] as '0x{string}', parseUnits(approveAmount, 6)]
-        //     })
+        if (+formatedAllowance < +RemoveComma(depositAmount!)) {
+          console.log('allowance < deposit amount')
+
+          onApprove(formatedDepositAmount)
+        } else {
+          if (!collateralDetail) return
+          console.log('Opening ')
+          onOpen(formatedDepositAmount, formatedBorrowAmount)
+        }
 
         initializePopupStates()
-        showToast('success', 'Borrow Success', `You have successfully borrow trenUSD`, 10000)
+        showToast('success', 'Borrow Success', txhash!, 10000)
       } catch (err) {
         console.log('err', err)
         showToast('error', 'Borrow Failed', '', 10000)
@@ -159,6 +196,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
+              disabled={isPending}
             >
               {getButtonLabel(type)}
             </Button>
@@ -177,8 +215,8 @@ export const BorrowPopup = (props: Props) => {
             />
             <ApproveDetailView
               collateral={String(collateral)}
-              depositAmount={+depositAmount!}
-              borrowAmount={+borrowAmount!}
+              depositAmount={depositAmount!}
+              borrowAmount={borrowAmount!}
             />
             <TransactionOverView healthTo={14.54} liquidationPrice={2520.78} gasFee={0.14} uptoFee={34.21} />
             <Button
@@ -191,6 +229,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
+              disabled={isPending}
             >
               {getButtonLabel(type)}
             </Button>
@@ -281,6 +320,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
+              disabled={isPending}
             >
               {getButtonLabel(type)}
             </Button>

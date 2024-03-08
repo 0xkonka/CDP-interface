@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react'
-import { multicall, readContract, getBalance } from '@wagmi/core'
-import { ModuleViewContext } from './ModuleViewContext'
-import { ModuleEvent, ModuleView } from '@/types'
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import { readContract } from '@wagmi/core'
+import { ModuleEvent, ModuleView } from '@/context/ModuleProvider/type'
 import MODULE_MANAGER_ABI from '@/abi/ModuleManager.json'
 import { MODULE_MANAGER } from '@/configs/address'
 import { wagmiConfig } from '@/pages/_app'
 import { useAccount, useChainId } from 'wagmi'
 import { BigNumber } from 'ethers'
+import { useProtocol } from '../ProtocolProvider/ProtocolContext'
 
 type ModuleEventTransitions = Record<ModuleView, Partial<Record<ModuleEvent, ModuleView>>>
 
@@ -116,14 +116,20 @@ export const useModuleView = (collateral: string) => {
   const [view, setView] = useState<ModuleView>(getInitialView(moduleStatus))
   const viewRef = useRef<ModuleView>(view)
 
+  const { collateralDetails } = useProtocol()
+  const collateralDetail = useMemo(
+    () => collateralDetails.find(i => i.symbol === collateral),
+    [collateral, collateralDetails]
+  )
+
   useEffect(() => {
-    if (!account || !chainId || !collateral) return
+    if (!account || !chainId || !collateralDetail) return
     const getModuleInfo = async () => {
       const _module: any = await readContract(wagmiConfig, {
         abi: MODULE_MANAGER_ABI,
         address: MODULE_MANAGER[chainId] as '0x{string}',
         functionName: 'Modules',
-        args: [account, collateral]
+        args: [account, collateralDetail.address]
       })
 
       const _moduleInfo: Module = {
@@ -133,12 +139,11 @@ export const useModuleView = (collateral: string) => {
         status: getUserModuleStatus(_module[3]) as UserModuleStatus,
         arrayIndex:BigNumber.from(_module[4])
       }
-
       setModuleStatus(_moduleInfo.status)
       setView(getInitialView(_moduleInfo.status))
     }
     getModuleInfo()
-  }, [chainId, account, collateral])
+  }, [chainId, account, collateralDetail])
 
   const dispatchEvent = useCallback((event: ModuleEvent) => {
     const nextView = transition(viewRef.current, event)

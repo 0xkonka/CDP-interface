@@ -50,7 +50,7 @@ export const ModuleOverView = (props: Props) => {
     {
       key: 'Max LTV',
       tooltip: 'Maximum loan-to-value',
-      value: formatPercent(LTV! * 100 || 0)
+      value: formatPercent(LTV ? +formatUnits(LTV) * 100 : 0)
     },
     {
       key: 'Interest',
@@ -65,7 +65,7 @@ export const ModuleOverView = (props: Props) => {
     {
       key: 'Liquidation',
       tooltip: 'the LTV at which the position will be flagged for liquidation',
-      value: formatPercent(liquidation! * 100 || 0)
+      value: formatPercent(liquidation ? +formatUnits(liquidation) * 100 : 0)
     },
     {
       key: 'Rate Type',

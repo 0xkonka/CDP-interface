@@ -31,15 +31,13 @@ import { getBalance } from '@wagmi/core'
 import { wagmiConfig } from '@/pages/_app'
 import { useAccount } from 'wagmi'
 import { BigNumber } from 'ethers'
-import { formatUnits } from 'ethers/lib/utils'
+import { formatUnits, parseUnits } from 'ethers/lib/utils'
+import { RemoveComma } from '@/hooks/utils'
+import { useModuleView } from '@/context/ModuleProvider/useModuleView'
 
 interface userModuleInfoType {
   userCollateralBal: BigNumber
   userAvailableBorrowAmount: BigNumber
-}
-
-const RemoveComma = (amount: string) => {
-  return amount.replace(/,/g, '')
 }
 
 const Borrow = () => {
@@ -62,6 +60,10 @@ const Borrow = () => {
     [collateral, collateralDetails]
   )
   const { address, price, LTV, decimals } = collateralDetail || {}
+
+  const { view } = useModuleView(collateral!)
+  console.log('view', view)
+
   const [userModuleInfo, setUserModuleInfo] = useState<userModuleInfoType>({
     userCollateralBal: BigNumber.from(0),
     userAvailableBorrowAmount: BigNumber.from(0)
@@ -88,7 +90,7 @@ const Borrow = () => {
   useEffect(() => {
     const _depositAmount = RemoveComma(depositAmount)
     if (price && LTV && +_depositAmount > 0) {
-      const userAvailableBorrowAmount = price.mul(+_depositAmount * LTV).div(100)
+      const userAvailableBorrowAmount = price.mul(LTV).mul(+_depositAmount).div(BigNumber.from(10).pow(18))
       setUserModuleInfo(prevState => ({ ...prevState, userAvailableBorrowAmount }))
     }
   }, [depositAmount, LTV, price])
@@ -422,7 +424,7 @@ const Borrow = () => {
         setOpen={setOpen}
         type={type}
         collateral={String(collateral)}
-        depositAmount={RemoveComma(depositAmount)}
+        depositAmount={depositAmount}
         borrowAmount={borrowAmount}
       />
     </Box>

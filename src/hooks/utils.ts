@@ -105,3 +105,7 @@ export const formatToThousands = (value: number) => {
     // return '$' + value.toLocaleString('en-US')
     return '$' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
+
+export const RemoveComma = (amount: string) => {
+    return amount.replace(/,/g, '')
+}

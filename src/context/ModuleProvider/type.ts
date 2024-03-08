@@ -18,9 +18,9 @@ export type CollateralParams = {
     redemptionBlockTimestamp: BigNumber
     totalAssetDebt: BigNumber
     totalBorrowAvailable: BigNumber
-    LTV: number
+    LTV: BigNumber
     interest: number
-    liquidation: number
+    liquidation: BigNumber
 }
 
 type NoneView = 'NONE'
