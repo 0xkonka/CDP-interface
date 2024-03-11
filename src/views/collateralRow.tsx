@@ -24,12 +24,14 @@ import { useGlobalValues } from '@/context/GlobalContext'
 
 // Third-party libraries
 import clsx from 'clsx'
+import { CollateralParams } from '@/context/ModuleProvider/type'
 
 // Define Props
 interface TableHeaderProps {
     isOpen: boolean,
     row: CollateralType
     onToogle: () => void;
+    collateralDetail: CollateralParams
 }
 
 const getChipTheme = (label: string) => {

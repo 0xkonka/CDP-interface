@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 
 export type SidebarType = {
   show: boolean
-  onOpen?: () => void
+  handleOpen?: () => void
   children: ReactNode
   onClose?: () => void
   hideBackdrop?: boolean

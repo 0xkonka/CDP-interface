@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react'
-import { multicall, readContract, getBalance } from '@wagmi/core'
-import { ModuleViewContext } from './ModuleViewContext'
-import { ModuleEvent, ModuleView } from '@/types'
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import { readContract } from '@wagmi/core'
+import { ModuleEvent, ModuleView } from '@/context/ModuleProvider/type'
 import MODULE_MANAGER_ABI from '@/abi/ModuleManager.json'
 import { MODULE_MANAGER } from '@/configs/address'
 import { wagmiConfig } from '@/pages/_app'
 import { useAccount, useChainId } from 'wagmi'
-import { BigNumber } from 'ethers'
+import { useProtocol } from '../ProtocolProvider/ProtocolContext'
+import { formatEther } from 'viem'
 
 type ModuleEventTransitions = Record<ModuleView, Partial<Record<ModuleEvent, ModuleView>>>
 
@@ -100,12 +100,19 @@ const getUserModuleStatus = (num: number): UserModuleStatus => {
 
 // const select = ({ module: { status } }: LiquityStoreState) => status
 
-export interface Module {
-  debt: BigNumber
-  coll: BigNumber
-  stake: BigNumber
+export interface ModuleInfo {
+  debt: bigint
+  coll: bigint
+  stake: bigint
   status: UserModuleStatus
-  arrayIndex: BigNumber
+  arrayIndex: bigint
+  collUSD: bigint
+  currentLTV: number
+  healthFactor: number
+  borrowingPower: number
+  maximumBorrowingPower: bigint
+  MRCV: number
+  liquidationPrice: number
 }
 
 export const useModuleView = (collateral: string) => {
@@ -113,32 +120,51 @@ export const useModuleView = (collateral: string) => {
   const { address: account } = useAccount()
 
   const [moduleStatus, setModuleStatus] = useState<UserModuleStatus>('active')
+  const [moduleInfo, setModuleInfo] = useState<ModuleInfo>()
   const [view, setView] = useState<ModuleView>(getInitialView(moduleStatus))
   const viewRef = useRef<ModuleView>(view)
 
+  const { collateralDetails } = useProtocol()
+  const collateralDetail = useMemo(
+    () => collateralDetails.find(i => i.symbol === collateral),
+    [collateral, collateralDetails]
+  )
+
   useEffect(() => {
-    if (!account || !chainId || !collateral) return
+    if (!account || !chainId || !collateralDetail) return
     const getModuleInfo = async () => {
       const _module: any = await readContract(wagmiConfig, {
         abi: MODULE_MANAGER_ABI,
         address: MODULE_MANAGER[chainId] as '0x{string}',
         functionName: 'Modules',
-        args: [account, collateral]
+        args: [account, collateralDetail.address]
       })
 
-      const _moduleInfo: Module = {
-        debt: BigNumber.from(_module[0]),
-        coll: BigNumber.from(_module[1]),
-        stake: BigNumber.from(_module[2]),
+      const collUSD = (_module[1] * collateralDetail.price) / BigInt(10 ** collateralDetail.decimals)
+      const currentLTV = Number(_module[0]) / Number(collUSD)
+      const MRCV = +formatEther(_module[0]) / +formatEther(collateralDetail.LTV);
+      const _moduleInfo: ModuleInfo = {
+        debt: _module[0] as bigint,
+        coll: _module[1] as bigint,
+        stake: _module[2] as bigint,
         status: getUserModuleStatus(_module[3]) as UserModuleStatus,
-        arrayIndex:BigNumber.from(_module[4])
+        arrayIndex: _module[4] as bigint,
+        collUSD,
+        currentLTV,
+        healthFactor: +formatEther(collateralDetail.liquidation) / currentLTV,
+        borrowingPower: currentLTV / +formatEther(collateralDetail.LTV),
+        maximumBorrowingPower: BigInt(formatEther(collUSD * collateralDetail.LTV)),
+        MRCV,
+        liquidationPrice : MRCV / +formatEther(_module[1])
       }
-
       setModuleStatus(_moduleInfo.status)
+      setModuleInfo(_moduleInfo)
       setView(getInitialView(_moduleInfo.status))
+
+      console.log('_moduleInfo', _moduleInfo)
     }
     getModuleInfo()
-  }, [chainId, account, collateral])
+  }, [chainId, account, collateralDetail])
 
   const dispatchEvent = useCallback((event: ModuleEvent) => {
     const nextView = transition(viewRef.current, event)
@@ -158,5 +184,5 @@ export const useModuleView = (collateral: string) => {
     }
   }, [moduleStatus, dispatchEvent])
 
-  return { view, dispatchEvent }
+  return { view, moduleInfo, dispatchEvent }
 }

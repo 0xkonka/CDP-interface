@@ -1,27 +1,20 @@
-import { BigNumber, utils } from 'ethers'
+import { parseEther } from 'viem'
 
-const toEther = (val: any): BigNumber => utils.parseEther(String(val))
+export const ETHERSCAN_BASE_URL = 'https://goerli.etherscan.io/address'
 
-const TX_CONFIRMATIONS = 2
-const ETHERSCAN_BASE_URL = 'https://goerli.etherscan.io/address'
-
-const CONTRACT_UPGRADES_ADMIN = '0x4Aa6Da4ca5d76e8d5e3ACD11B92Ab22D564F1fcb'
-const SYSTEM_PARAMS_ADMIN = '0x4Aa6Da4ca5d76e8d5e3ACD11B92Ab22D564F1fcb'
-const TREASURY_WALLET = '0x4Aa6Da4ca5d76e8d5e3ACD11B92Ab22D564F1fcb'
-
-const COLLATERAL = [
+export const COLLATERAL = [
     {
         name: 'wETH',
         address: '0x2df77eE5a6FcF23F666650ed53bE071E7288eCb6',
         oracleAddress: '0xC526a88daEEa6685E4D46C99512bEB0c85a8b1c7',
         oracleTimeoutMinutes: 1440,
         oracleIsEthIndexed: false,
-        MCR: toEther(1.111),
-        CCR: toEther(1.4),
-        borrowingFee: toEther(0.01),
-        minNetDebt: toEther(2_000),
-        gasCompensation: toEther(200),
-        mintCap: toEther(1_500_000)
+        MCR: parseEther('1.111'),
+        CCR: parseEther('1.4'),
+        borrowingFee: parseEther('0.01'),
+        minNetDebt: parseEther('2000'),
+        gasCompensation: parseEther('200'),
+        mintCap: parseEther('1500000')
     },
     {
         name: 'rETH',
@@ -29,12 +22,12 @@ const COLLATERAL = [
         oracleAddress: '0xbC204BDA3420D15AD526ec3B9dFaE88aBF267Aa9',
         oracleTimeoutMinutes: 1440,
         oracleIsEthIndexed: false,
-        MCR: toEther(1.176),
-        CCR: toEther(1.4),
-        borrowingFee: toEther(0.01),
-        minNetDebt: toEther(2_000),
-        gasCompensation: toEther(200),
-        mintCap: toEther(1_500_000)
+        MCR: parseEther('1.176'),
+        CCR: parseEther('1.4'),
+        borrowingFee: parseEther('0.01'),
+        minNetDebt: parseEther('2000'),
+        gasCompensation: parseEther('200'),
+        mintCap: parseEther('1500000')
     },
     {
         name: 'wstETH',
@@ -42,12 +35,12 @@ const COLLATERAL = [
         oracleAddress: '0x01fDd44216ec3284A7061Cc4e8Fb8d3a98AAcfa8',
         oracleTimeoutMinutes: 1440,
         oracleIsEthIndexed: false,
-        MCR: toEther(1.176),
-        CCR: toEther(1.4),
-        borrowingFee: toEther(0.01),
-        minNetDebt: toEther(2_000),
-        gasCompensation: toEther(200),
-        mintCap: toEther(1_500_000)
+        MCR: parseEther('1.176'),
+        CCR: parseEther('1.4'),
+        borrowingFee: parseEther('0.01'),
+        minNetDebt: parseEther('2000'),
+        gasCompensation: parseEther('200'),
+        mintCap: parseEther('1500000')
     },
     {
         name: 'bLUSD',
@@ -55,20 +48,12 @@ const COLLATERAL = [
         oracleAddress: '0xFf92957A8d0544922539c4EA30E7B32Fd6cEC5D3',
         oracleTimeoutMinutes: 1440,
         oracleIsEthIndexed: false,
-        MCR: toEther(1.01),
-        CCR: toEther(1),
-        borrowingFee: toEther(0.01),
-        minNetDebt: toEther(2_000),
-        gasCompensation: toEther(0),
-        mintCap: toEther(1_500_000)
+        MCR: parseEther('1.01'),
+        CCR: parseEther('1'),
+        borrowingFee: parseEther('0.01'),
+        minNetDebt: parseEther('2000'),
+        gasCompensation: parseEther('0'),
+        mintCap: parseEther('1500000')
     }
 ]
 
-module.exports = {
-    COLLATERAL,
-    CONTRACT_UPGRADES_ADMIN,
-    ETHERSCAN_BASE_URL,
-    SYSTEM_PARAMS_ADMIN,
-    TREASURY_WALLET,
-    TX_CONFIRMATIONS
-}

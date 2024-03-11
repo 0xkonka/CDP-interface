@@ -1,17 +1,15 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { Provider } from '@ethersproject/abstract-provider'
+
 import { Config, useAccount, useChainId, useClient, useReadContract, useWalletClient } from 'wagmi'
-import { erc20Abi, type Account, type Chain, type Client, type Transport } from 'viem'
-import { BigNumber, providers } from 'ethers'
+import { erc20Abi, formatEther, formatUnits, parseEther, type Account, type Chain, type Client, type Transport } from 'viem'
 import { multicall, readContract, getBalance } from '@wagmi/core'
 import ADMIN_CONTRACT_ABI from '@/abi/AdminContract.json'
 import PRICE_FEED_ABI from '@/abi/PriceFeed.json'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
 import { ADMIN_CONTRACT, PRICE_FEED, BORROWER_OPERATIONS } from '@/configs/address'
-import { CollateralParams } from '@/types'
+import { CollateralParams } from '@/context/ModuleProvider/type'
 import { wagmiConfig } from '@/pages/_app'
 import { ProtocolContext } from './ProtocolContext'
-import { formatEther } from 'ethers/lib/utils'
 
 type ProtocolContextValue = {
   collaterals: string[]
@@ -22,8 +20,6 @@ type ProtocolProviderProps = {
   children: React.ReactNode
   // loader?: React.ReactNode
 }
-
-// const initialConfig: CollateralParams = {}
 
 export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) => {
   const { address: account } = useAccount()
@@ -155,20 +151,20 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
           const address = collaterals[i] as string
           const symbol = result[0].result as string
           const decimals = result[1].result as number
-          const index = BigNumber.from(result[2].result)
+          const index = result[2].result as bigint
           const active = result[3].result as boolean
-          const mcr = BigNumber.from(result[4].result)
-          const ccr = BigNumber.from(result[5].result)
-          const debtTokenGasCompensation = BigNumber.from(result[6].result)
-          const minNetDebt = BigNumber.from(result[7].result)
-          const percentDivisor = BigNumber.from(result[8].result)
-          const borrowingFee = BigNumber.from(result[9].result)
-          const redemptionFeeFloor = BigNumber.from(result[10].result)
-          const redemptionBlockTimestamp = BigNumber.from(result[11].result)
-          const mintCap = BigNumber.from(result[12].result)
-          const totalAssetDebt = BigNumber.from(result[13].result)
-          const price = BigNumber.from(result[14].result)
-          const entireSystemDebt = BigNumber.from(result[15].result)
+          const mcr = result[4].result as bigint
+          const ccr = result[5].result as bigint
+          const debtTokenGasCompensation = result[6].result as bigint
+          const minNetDebt = result[7].result as bigint
+          const percentDivisor = result[8].result as bigint
+          const borrowingFee = result[9].result as bigint
+          const redemptionFeeFloor = result[10].result as bigint
+          const redemptionBlockTimestamp = result[11].result as bigint
+          const mintCap = result[12].result as bigint
+          const totalAssetDebt = result[13].result as bigint
+          const price = result[14].result as bigint
+          const entireSystemDebt = result[15].result as bigint
 
           const _collateralDetail: CollateralParams = {
             address,
@@ -187,15 +183,15 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
             redemptionBlockTimestamp,
             mintCap,
             totalAssetDebt,
-            totalBorrowAvailable: mintCap.sub(entireSystemDebt),
-            LTV: 1 / +formatEther(mcr),
-            liquidation: 1 / +formatEther(ccr),
+            totalBorrowAvailable: mintCap - entireSystemDebt,
+            LTV: parseEther((1 / +formatEther(mcr)).toString()),
+            liquidation: parseEther((1 / +formatEther(ccr)).toString()),
             interest: 5,
           }
 
           _collateralDetails.push(_collateralDetail)
         }
-
+        console.log('_collateralDetails', _collateralDetails)
         setCollateralDetails(_collateralDetails)
       }
 

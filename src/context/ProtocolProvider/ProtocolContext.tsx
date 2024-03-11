@@ -1,4 +1,4 @@
-import { CollateralParams } from '@/types'
+import { CollateralParams } from '@/context/ModuleProvider/type'
 import { createContext, useContext } from 'react'
 
 type ProtocolContextValue = {

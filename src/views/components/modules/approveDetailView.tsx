@@ -1,13 +1,14 @@
 import { useGlobalValues } from '@/context/GlobalContext'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
+import { RemoveComma } from '@/hooks/utils'
 import { formatToThousands } from '@/hooks/utils'
 import { Stack, Typography } from '@mui/material'
-import { BigNumber } from 'ethers'
-import { formatUnits } from 'ethers/lib/utils'
+import { useMemo } from 'react'
+import { formatUnits } from 'viem'
 
 interface Props {
-  depositAmount: number
-  borrowAmount: number
+  depositAmount: string
+  borrowAmount: string
   collateral: string
 }
 
@@ -16,7 +17,10 @@ export const ApproveDetailView = (props: Props) => {
   const { radiusBoxStyle } = useGlobalValues()
 
   const { collateralDetails } = useProtocol()
-  const collateralDetail = collateralDetails.find(i => i.symbol === collateral)
+  const collateralDetail = useMemo(
+    () => collateralDetails.find(i => i.symbol === collateral),
+    [collateral, collateralDetails]
+  )
   const collateralUSD = collateralDetail ? +formatUnits(collateralDetail.price, collateralDetail.decimals) : 0
   const trenUSD = 1.0
 
@@ -40,7 +44,7 @@ export const ApproveDetailView = (props: Props) => {
           </Stack>
         </Stack>
         <Typography color='#707175' fontWeight={500}>
-          {formatToThousands(depositAmount * collateralUSD)}
+          {formatToThousands(+RemoveComma(depositAmount) * collateralUSD)}
         </Typography>
       </Stack>
       <Stack gap={4} sx={radiusBoxStyle}>
@@ -57,7 +61,7 @@ export const ApproveDetailView = (props: Props) => {
           </Stack>
         </Stack>
         <Typography color='#707175' fontWeight={500}>
-          {formatToThousands(borrowAmount * trenUSD)}
+          {formatToThousands(+RemoveComma(borrowAmount) * trenUSD)}
         </Typography>
       </Stack>
     </Stack>

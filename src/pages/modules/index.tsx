@@ -20,9 +20,8 @@ import { CollateralType } from '@/types/collateral/types'
 import { getOverView } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
-import { BigNumber } from 'ethers'
-import { CollateralParams } from '@/types'
-import { formatUnits } from 'ethers/lib/utils'
+import { CollateralParams } from '@/context/ModuleProvider/type'
+import { formatEther, formatUnits } from 'viem'
 
 const Modules = () => {
   const [filterText, setFilterText] = useState<string>('')
@@ -56,10 +55,13 @@ const Modules = () => {
           return {
             id: index + 1,
             ...getOverView(collateral.symbol),
+            LTVRatio: +(+formatEther(collateral.LTV) * 100).toFixed(2),
+            liquidationThreshold: +(+formatEther(collateral.liquidation) * 100).toFixed(2),
+            totalTrenUSD: +formatUnits(collateral.mintCap, collateral.decimals),
+            availableTrenUSD: +formatUnits(collateral.totalBorrowAvailable, collateral.decimals),
             tvl: +formatUnits(collateral.totalAssetDebt, collateral.decimals),
-            LTVRatio: collateral.LTV,
+            borrowFee: +formatEther(collateral.borrowingFee) * 100,
             interestRate: collateral.interest,
-            // borrowFee: collateral.borrowingFee
           }
         })
         .filter(collateral => collateral !== undefined) as CollateralType[]
@@ -115,6 +117,7 @@ const Modules = () => {
       newRows = newRows.filter(row => row.type == assetFilter)
     }
     if (filterOnlyActive == true) newRows = newRows.filter(row => row.active)
+    
     setRows(newRows)
   }
 
@@ -243,22 +246,25 @@ const Modules = () => {
         </Stack>
       </Stack>
       {/* Collateral Group Stack*/}
-      <Stack sx={{ mt: 4 }} gap={isMediumScreen ? 5 : 0}>
-        {rows.length > 0 ? (
-          rows.map((row, index) => (
-            <CollateralRow
-              row={row}
-              onToogle={() => handleRowClick(index)}
-              isOpen={openRowIndex === index}
-              key={index}
-            />
-          ))
-        ) : (
-          <Box sx={{ p: 6, textAlign: 'center' }}>
-            <Typography variant='body1'>No matching collateral</Typography>
-          </Box>
-        )}
-      </Stack>
+      {collateralDetails && (
+        <Stack sx={{ mt: 4 }} gap={isMediumScreen ? 5 : 0}>
+          {rows.length > 0 ? (
+            rows.map((row, index) => (
+              <CollateralRow
+                row={row}
+                onToogle={() => handleRowClick(index)}
+                isOpen={openRowIndex === index}
+                key={index}
+                collateralDetail = {collateralDetails[index]}
+              />
+            ))
+          ) : (
+            <Box sx={{ p: 6, textAlign: 'center' }}>
+              <Typography variant='body1'>No matching collateral</Typography>
+            </Box>
+          )}
+        </Stack>
+      )}
     </Box>
   )
 }

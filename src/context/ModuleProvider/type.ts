@@ -1,26 +1,24 @@
-import { BigNumber } from 'ethers'
-
 export type CollateralParams = {
     address: string
     symbol: string
     decimals: number
-    price: BigNumber
-    index: BigNumber
+    price: bigint
+    index: bigint
     active: boolean
-    borrowingFee: BigNumber
-    ccr: BigNumber
-    mcr: BigNumber
-    debtTokenGasCompensation: BigNumber
-    minNetDebt: BigNumber
-    mintCap: BigNumber
-    percentDivisor: BigNumber
-    redemptionFeeFloor: BigNumber
-    redemptionBlockTimestamp: BigNumber
-    totalAssetDebt: BigNumber
-    totalBorrowAvailable: BigNumber
-    LTV: number
+    borrowingFee: bigint
+    ccr: bigint
+    mcr: bigint
+    debtTokenGasCompensation: bigint
+    minNetDebt: bigint
+    mintCap: bigint
+    percentDivisor: bigint
+    redemptionFeeFloor: bigint
+    redemptionBlockTimestamp: bigint
+    totalAssetDebt: bigint
+    totalBorrowAvailable: bigint
+    LTV: bigint
     interest: number
-    liquidation: number
+    liquidation: bigint
 }
 
 type NoneView = 'NONE'
