@@ -26,7 +26,7 @@ const useModules = (collateral: string) => {
     abi: BORROWER_OPERATIONS_ABI
   } as const
 
-  const onApprove = (approveAmount: bigint) => {
+  const handleApprove = (approveAmount: bigint) => {
     if (!collateralDetail) return
     try {
       writeContract({
@@ -40,7 +40,7 @@ const useModules = (collateral: string) => {
     }
   }
 
-  const onOpen = (depositAmount: bigint, borrowAmount: bigint) => {
+  const handleOpen = (depositAmount: bigint, borrowAmount: bigint) => {
     if (!collateralDetail) return
     try {
       writeContract({
@@ -59,7 +59,7 @@ const useModules = (collateral: string) => {
     }
   }
 
-  const onAdjust = (depositAmount: bigint, borrowAmount: bigint) => {
+  const handleAdjust = (depositAmount: bigint, borrowAmount: bigint) => {
     console.log('depositAmount', depositAmount)
     console.log('borrowAmount', borrowAmount)
     if (!collateralDetail) return
@@ -82,7 +82,7 @@ const useModules = (collateral: string) => {
     }
   }
 
-  const onDeposit = (depositAmount: bigint) => {
+  const handleDeposit = (depositAmount: bigint) => {
     if (!collateralDetail) return
     try {
       writeContract({
@@ -95,7 +95,7 @@ const useModules = (collateral: string) => {
     }
   }
 
-  const onWithdraw = (withdrawAmount: bigint) => {
+  const handleWithdraw = (withdrawAmount: bigint) => {
     if (!collateralDetail) return
     try {
       writeContract({
@@ -108,7 +108,7 @@ const useModules = (collateral: string) => {
     }
   }
 
-  const onBorrow = (borrowAmount: bigint) => {
+  const handleBorrow = (borrowAmount: bigint) => {
     if (!collateralDetail) return
     try {
       writeContract({
@@ -121,7 +121,7 @@ const useModules = (collateral: string) => {
     }
   }
 
-  const onRepay = (repayAmount: bigint) => {
+  const handleRepay = (repayAmount: bigint) => {
     if (!collateralDetail) return
     try {
       writeContract({
@@ -135,13 +135,13 @@ const useModules = (collateral: string) => {
   }
 
   return {
-    onApprove,
-    onOpen,
-    onAdjust,
-    onDeposit,
-    onWithdraw,
-    onBorrow,
-    onRepay,
+    handleApprove,
+    handleOpen,
+    handleAdjust,
+    handleDeposit,
+    handleWithdraw,
+    handleBorrow,
+    handleRepay,
     txhash,
     isPending,
     isConfirming,

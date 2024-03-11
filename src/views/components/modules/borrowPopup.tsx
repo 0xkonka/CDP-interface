@@ -14,7 +14,7 @@ import { BaseError, useAccount, useChainId } from 'wagmi'
 import { ACTIVE_POOL, BORROWER_OPERATIONS } from '@/configs/address'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
-import { erc20Abi, formatUnits } from 'viem'
+import { erc20Abi, formatEther, formatUnits } from 'viem'
 import { RemoveComma } from '@/hooks/utils'
 import { parseEther, parseUnits } from 'viem'
 
@@ -37,10 +37,9 @@ interface Props {
   collateral: string
   collateralDetail: CollateralParams
   allowance: bigint
+  userCollateralBal: bigint
   depositAmount?: string
   borrowAmount?: string
-  withdrawAmount?: string
-  repayAmount?: string
 }
 const getTitle = (type: string) => {
   switch (type) {
@@ -84,35 +83,31 @@ export const BorrowPopup = (props: Props) => {
     type,
     depositAmount,
     borrowAmount,
-    withdrawAmount,
-    repayAmount,
     allowance,
     collateral,
-    collateralDetail
+    collateralDetail,
+    userCollateralBal
   } = props
+  const { decimals } = collateralDetail
 
-  const [useWalletBalance, setUseWalletBalance] = useState(true)
-  const [amount, setAmount] = useState('')
   const theme: Theme = useTheme()
+  const chainId = useChainId()
+  const { address: account } = useAccount()
 
-  const { moduleInfo } = useModuleView(collateral)
-
-  const formattedAllowance = +formatUnits(allowance!, collateralDetail.decimals)
+  const formattedAllowance = +formatUnits(allowance!, decimals)
   const formattedDepositAmount = RemoveComma(depositAmount!)
   const formattedBorrowAmount = RemoveComma(borrowAmount!)
   const formattedWithdrawAmount = RemoveComma(depositAmount!)
   const formattedRepayAmount = RemoveComma(borrowAmount!)
 
-  const chainId = useChainId()
-  const { address: account } = useAccount()
   const {
-    onApprove,
-    onOpen,
-    onAdjust,
-    onDeposit,
-    onWithdraw,
-    onBorrow,
-    onRepay,
+    handleApprove,
+    handleOpen,
+    handleAdjust,
+    handleDeposit,
+    handleWithdraw,
+    handleBorrow,
+    handleRepay,
     txhash,
     isPending,
     isConfirming,
@@ -120,15 +115,39 @@ export const BorrowPopup = (props: Props) => {
     error
   } = useModules(collateral)
 
-  const { view: moduleView } = useModuleView(collateral)
+  const { view: moduleView, moduleInfo } = useModuleView(collateral)
+  const { debt: debtAmount, coll: depositedAmount } = moduleInfo || {}
+
+  const [useWalletBalance, setUseWalletBalance] = useState(true)
+  const [inputAmount, setInputAmount] = useState('')
+  const [availableBalance, setAvailableBalance] = useState(0)
 
   const initializePopupStates = () => {
     setOpen(false)
-    setAmount('')
+    setInputAmount('')
   }
+  useEffect(() => {
+    switch (type) {
+      case 'deposit':
+        console.log('deposit')
+        setInputAmount(formatUnits(userCollateralBal, decimals))
+        break
+      case 'withdraw':
+        console.log('withdraw')
+        setInputAmount(formatUnits(depositedAmount || BigInt(0), decimals))
+        break
+      case 'borrow':
+        console.log('borrow')
+        setInputAmount(formatEther(userCollateralBal))
+        break
+      case 'repay':
+        console.log('repay')
+        setInputAmount(formatEther(debtAmount || BigInt(0)))
+        break
+    }
+  }, [type, decimals, userCollateralBal, depositedAmount, debtAmount])
 
   useEffect(() => {
-    console.log('isConfirmed', isConfirmed)
     if (isConfirmed) {
       initializePopupStates()
       switch (type) {
@@ -140,30 +159,31 @@ export const BorrowPopup = (props: Props) => {
             <br/> txhash: ${ETHERSCAN_BASE_URL}/${txhash}`,
             10000
           )
+          break
         case 'deposit':
-          showToast('success', 'Deposit Success', `You have successfully deposit ${depositAmount} ${collateral}`, 10000)
+          showToast('success', 'Deposit Success', `You have successfully deposit ${inputAmount} ${collateral}`, 10000)
+          break
         case 'borrow':
-          showToast('success', 'Borrow Success', `You have successfully borrow ${borrowAmount} trenUSD`, 10000)
+          showToast('success', 'Borrow Success', `You have successfully borrow ${inputAmount} trenUSD`, 10000)
+          break
         case 'withdraw':
           showToast(
             'success',
             'Withdraw Success',
-            `You have successfully withdrawn ${withdrawAmount} ${collateral}`,
+            `You have successfully withdrawn ${inputAmount} ${collateral}`,
             10000
           )
+          break
         case 'repay':
-          showToast('success', 'Repay Success', `You have successfully repaid ${repayAmount} trenUSD`, 10000)
+          showToast('success', 'Repay Success', `You have successfully repaid ${inputAmount} trenUSD`, 10000)
+          break
       }
     }
-  }, [isConfirmed, depositAmount, borrowAmount, repayAmount, withdrawAmount, collateral, setOpen, txhash, type])
+  }, [isConfirmed, inputAmount, depositAmount, borrowAmount, collateral, txhash, type])
 
-  // useEffect(() => {
-  //   if (error) showToast('error', 'Error', (error as BaseError).shortMessage || error.message, 10000)
-  // }, [error])
-
-  // {error && (
-  //   <div>Error: {(error as BaseError).shortMessage || error.message}</div>
-  // )}
+  useEffect(() => {
+    if (error) showToast('error', 'Error', (error as BaseError).shortMessage || error.message, 10000)
+  }, [error])
 
   const handleSubmit = () => {
     if (!collateralDetail) return
@@ -171,40 +191,30 @@ export const BorrowPopup = (props: Props) => {
       try {
         if (+formattedAllowance < +RemoveComma(depositAmount!)) {
           // In case Approve amount is less than deposit amount , Should be approved first
-          onApprove(parseUnits(formattedDepositAmount, collateralDetail.decimals))
+          handleApprove(parseUnits(formattedDepositAmount, decimals))
         } else if (moduleView === 'ACTIVE') {
           if (!collateralDetail) return
-          onAdjust(
-            parseUnits(formattedDepositAmount, collateralDetail.decimals),
-            parseUnits(formattedBorrowAmount, collateralDetail.decimals)
-          )
-          showToast('success', 'Borrow Success', txhash!, 10000)
+          handleAdjust(parseUnits(formattedDepositAmount, decimals), parseUnits(formattedBorrowAmount, decimals))
         } else {
           if (!collateralDetail) return
-          onOpen(
-            parseUnits(formattedDepositAmount, collateralDetail.decimals),
-            parseUnits(formattedBorrowAmount, collateralDetail.decimals)
-          )
+          handleOpen(parseUnits(formattedDepositAmount, decimals), parseUnits(formattedBorrowAmount, decimals))
         }
       } catch (err) {
         console.log('err', err)
-        showToast('error', 'Borrow Failed', '', 10000)
       }
     } else if (type == 'deposit') {
       if (+formattedAllowance < +RemoveComma(depositAmount!)) {
         // In case Approve amount is less than deposit amount , Should be approved first
-        onApprove(parseUnits(formattedDepositAmount, collateralDetail.decimals))
+        handleApprove(parseUnits(inputAmount, decimals))
       } else if (moduleView === 'ACTIVE') {
-        if (!collateralDetail) return
-        onAdjust(
-          parseUnits(formattedDepositAmount, collateralDetail.decimals),
-          parseUnits(formattedBorrowAmount, collateralDetail.decimals)
-        )
-        showToast('success', 'Borrow Success', txhash!, 10000)
+        handleDeposit(parseUnits(inputAmount, decimals), parseEther(formattedBorrowAmount))
       }
     } else if (type == 'withdraw') {
+      handleWithdraw(parseUnits(inputAmount, decimals))
     } else if (type === 'borrow') {
+      handleBorrow(parseEther(inputAmount))
     } else if (type == 'repay') {
+      handleRepay(parseEther(inputAmount))
     }
   }
 
@@ -232,11 +242,11 @@ export const BorrowPopup = (props: Props) => {
               onClick={initializePopupStates}
             />
             <AmountForm
-              amount={amount}
-              setAmount={setAmount}
+              amount={inputAmount}
+              setAmount={setInputAmount}
               type={type}
               asset={String(collateral)}
-              available={12.78}
+              available={availableBalance}
             />
             <TransactionOverView healthFrom={14.54} healthTo={1.75} liquidationPrice={2520.78} gasFee={0.14} />
             <Button
@@ -249,7 +259,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
-              disabled={isPending}
+              disabled={isPending || isConfirming}
             >
               {getButtonLabel(type, formattedAllowance < +formattedDepositAmount)}
             </Button>
@@ -282,7 +292,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
-              disabled={isPending}
+              disabled={isPending || isConfirming}
             >
               {getButtonLabel(type, formattedAllowance < +formattedDepositAmount)}
             </Button>
@@ -353,7 +363,7 @@ export const BorrowPopup = (props: Props) => {
                 Collateral (coming soon)
               </Button>
             </Stack>
-            <AmountForm amount={amount} setAmount={setAmount} type={type} asset='trenUSD' available={20} />
+            <AmountForm amount={inputAmount} setAmount={setInputAmount} type={type} asset='trenUSD' available={20} />
             <TransactionOverView
               type={type}
               healthFrom={1.54}
@@ -361,7 +371,7 @@ export const BorrowPopup = (props: Props) => {
               liquidationPrice={149.34}
               gasFee={0.14}
               debt={30}
-              amount={amount}
+              amount={inputAmount}
             />
             <Button
               sx={{
@@ -373,7 +383,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
-              disabled={isPending}
+              disabled={isPending || isConfirming}
             >
               {getButtonLabel(type)}
             </Button>

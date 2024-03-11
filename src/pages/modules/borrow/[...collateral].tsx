@@ -71,7 +71,7 @@ const Borrow = () => {
 
   const { moduleInfo } = useModuleView(collateral!)
 
-  const { debt: debtAmount, coll: depositedAmount, stake: stakedAmount } = moduleInfo || {}
+  const { debt: debtAmount, coll: depositedAmount } = moduleInfo || {}
 
   const [userModuleInfo, setUserModuleInfo] = useState<userModuleInfoType>({
     userCollateralBal: BigInt(0),
@@ -411,9 +411,9 @@ const Borrow = () => {
       <Box sx={radiusBoxStyle}>
         <Result
           liquidationPrice={0.000008}
-          ltv={37.5}
+          ltv={price ? 1 / +formatUnits(price, decimals!) : 0 }
           collateralValue={price ? +formatUnits(price, decimals!) : 0}
-          loanValue={3750}
+          loanValue={1}
         />
       </Box>
       <Stack direction='row' sx={{ justifyContent: 'center', py: 8 }}>
@@ -438,6 +438,7 @@ const Borrow = () => {
           collateral={String(collateral)}
           collateralDetail={collateralDetail}
           allowance={allowance}
+          userCollateralBal = {userModuleInfo.userCollateralBal}
           depositAmount={depositAmount}
           borrowAmount={borrowAmount}
         />
