@@ -184,8 +184,8 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
             mintCap,
             totalAssetDebt,
             totalBorrowAvailable: mintCap - entireSystemDebt,
-            LTV: parseEther((1 / +formatEther(mcr)).toString()),
-            liquidation: parseEther((1 / +formatEther(ccr)).toString()),
+            liquidation : parseEther((1 / +formatEther(mcr)).toString()),
+            LTV : parseEther((1 / +formatEther(ccr)).toString()),
             interest: 5,
           }
 
