@@ -71,7 +71,15 @@ const Borrow = () => {
 
   const { moduleInfo } = useModuleView(collateral!)
 
-  const { debt: debtAmount, coll: depositedAmount , collUSD } = moduleInfo || {}
+  const {
+    debt: debtAmount,
+    coll: depositedAmount,
+    collUSD,
+    liquidationPrice,
+    healthFactor,
+    borrowingPower,
+    maximumBorrowingPower
+  } = moduleInfo || {}
 
   console.log('debtAmount', debtAmount)
   console.log('collUSD', collUSD)
@@ -402,10 +410,10 @@ const Borrow = () => {
           <Box sx={radiusBoxStyle}>
             <Grid container spacing={8}>
               <Grid item xs={12} lg={6}>
-                <HealthFactor safety={1.42} />
+                <HealthFactor safety={healthFactor || 1} />
               </Grid>
               <Grid item xs={12} lg={6}>
-                <BorrowingPower percent={68} max={7500} />
+                <BorrowingPower percent={(borrowingPower || 0) * 100} max={maximumBorrowingPower ? +formatEther(maximumBorrowingPower!) : 0} />
               </Grid>
             </Grid>
           </Box>
@@ -413,8 +421,8 @@ const Borrow = () => {
       </Grid>
       <Box sx={radiusBoxStyle}>
         <Result
-          liquidationPrice={0.000008}
-          ltv={debtAmount && collUSD ? Number(debtAmount) / Number(collUSD) : 0 }
+          liquidationPrice={liquidationPrice || 0}
+          ltv={debtAmount && collUSD ? Number(debtAmount) / Number(collUSD) : 0}
           collateralValue={price ? +formatUnits(price, decimals!) : 0}
           loanValue={1}
         />
@@ -441,7 +449,7 @@ const Borrow = () => {
           collateral={String(collateral)}
           collateralDetail={collateralDetail}
           allowance={allowance}
-          userCollateralBal = {userModuleInfo.userCollateralBal}
+          userCollateralBal={userModuleInfo.userCollateralBal}
           depositAmount={depositAmount}
           borrowAmount={borrowAmount}
         />

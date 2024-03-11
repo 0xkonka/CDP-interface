@@ -111,6 +111,8 @@ export interface ModuleInfo {
   healthFactor: number
   borrowingPower: number
   maximumBorrowingPower: bigint
+  MRCV: number
+  liquidationPrice: number
 }
 
 export const useModuleView = (collateral: string) => {
@@ -140,6 +142,7 @@ export const useModuleView = (collateral: string) => {
 
       const collUSD = (_module[1] * collateralDetail.price) / BigInt(10 ** collateralDetail.decimals)
       const currentLTV = Number(_module[0]) / Number(collUSD)
+      const MRCV = +formatEther(_module[0]) / +formatEther(collateralDetail.LTV);
       console.log('currentLTV', currentLTV)
       const _moduleInfo: ModuleInfo = {
         debt: _module[0] as bigint,
@@ -151,7 +154,9 @@ export const useModuleView = (collateral: string) => {
         currentLTV,
         healthFactor: +formatEther(collateralDetail.liquidation) / currentLTV,
         borrowingPower: currentLTV / +formatEther(collateralDetail.LTV),
-        maximumBorrowingPower: BigInt(formatEther(collUSD * collateralDetail.LTV))
+        maximumBorrowingPower: BigInt(formatEther(collUSD * collateralDetail.LTV)),
+        MRCV,
+        liquidationPrice : MRCV / +formatEther(_module[1])
       }
       setModuleStatus(_moduleInfo.status)
       setModuleInfo(_moduleInfo)
