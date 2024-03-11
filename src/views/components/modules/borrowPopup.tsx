@@ -15,7 +15,7 @@ import { ACTIVE_POOL, BORROWER_OPERATIONS } from '@/configs/address'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { erc20Abi, formatEther, formatUnits } from 'viem'
-import { RemoveComma } from '@/hooks/utils'
+import { removeComma } from '@/hooks/utils'
 import { parseEther, parseUnits } from 'viem'
 
 import useModules from '@/context/ModuleProvider/useModules'
@@ -95,10 +95,10 @@ export const BorrowPopup = (props: Props) => {
   const { address: account } = useAccount()
 
   const formattedAllowance = +formatUnits(allowance!, decimals)
-  const formattedDepositAmount = RemoveComma(depositAmount!)
-  const formattedBorrowAmount = RemoveComma(borrowAmount!)
-  const formattedWithdrawAmount = RemoveComma(depositAmount!)
-  const formattedRepayAmount = RemoveComma(borrowAmount!)
+  const formattedDepositAmount = removeComma(depositAmount!)
+  const formattedBorrowAmount = removeComma(borrowAmount!)
+  const formattedWithdrawAmount = removeComma(depositAmount!)
+  const formattedRepayAmount = removeComma(borrowAmount!)
 
   const {
     handleApprove,
@@ -185,7 +185,7 @@ export const BorrowPopup = (props: Props) => {
     if (!collateralDetail) return
     if (type === 'openOrAdjust') {
       try {
-        if (+formattedAllowance < +RemoveComma(depositAmount!)) {
+        if (+formattedAllowance < +removeComma(depositAmount!)) {
           // In case Approve amount is less than deposit amount , Should be approved first
           handleApprove(parseUnits(formattedDepositAmount, decimals))
         } else if (moduleView === 'ACTIVE') {
@@ -199,7 +199,7 @@ export const BorrowPopup = (props: Props) => {
         console.log('err', err)
       }
     } else if (type == 'deposit') {
-      if (+formattedAllowance < +RemoveComma(depositAmount!)) {
+      if (+formattedAllowance < +removeComma(depositAmount!)) {
         // In case Approve amount is less than deposit amount , Should be approved first
         handleApprove(parseUnits(inputAmount, decimals))
       } else if (moduleView === 'ACTIVE') {

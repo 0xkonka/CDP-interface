@@ -1,6 +1,6 @@
 import { useGlobalValues } from '@/context/GlobalContext'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
-import { RemoveComma } from '@/hooks/utils'
+import { removeComma } from '@/hooks/utils'
 import { formatToThousands } from '@/hooks/utils'
 import { Stack, Typography } from '@mui/material'
 import { useMemo } from 'react'
@@ -44,7 +44,7 @@ export const ApproveDetailView = (props: Props) => {
           </Stack>
         </Stack>
         <Typography color='#707175' fontWeight={500}>
-          {formatToThousands(+RemoveComma(depositAmount) * collateralUSD)}
+          {formatToThousands(+removeComma(depositAmount) * collateralUSD)}
         </Typography>
       </Stack>
       <Stack gap={4} sx={radiusBoxStyle}>
@@ -61,7 +61,7 @@ export const ApproveDetailView = (props: Props) => {
           </Stack>
         </Stack>
         <Typography color='#707175' fontWeight={500}>
-          {formatToThousands(+RemoveComma(borrowAmount) * trenUSD)}
+          {formatToThousands(+removeComma(borrowAmount) * trenUSD)}
         </Typography>
       </Stack>
     </Stack>

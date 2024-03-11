@@ -48,7 +48,7 @@ export const HealthFactor = (props: Props) => {
                 }}>
                     <Box sx={{position: 'absolute', left: `${Math.floor(1 * 100 / 5)}%`, top: -10}}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="2" height="26" viewBox="0 0 2 26" fill="#FFF">
-                            <path d="M1 0V26" stroke="white" stroke-width="0.5"/>
+                            <path d="M1 0V26" stroke="white" strokeWidth="0.5"/>
                         </svg>
                     </Box>
                 </Box>
