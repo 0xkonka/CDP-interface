@@ -106,6 +106,15 @@ export const formatToThousands = (value: number) => {
     return '$' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
-export const RemoveComma = (amount: string) => {
+export const removeComma = (amount: string) => {
     return amount.replace(/,/g, '')
+}
+
+export const shortenWalletAddress = (address: string, chars = 4) => {
+    if (typeof address !== 'string' || address.length < chars * 2) {
+        return address; // Return original address if it's too short to shorten
+      }
+    
+    // Take the first `chars` characters from the start, and `chars` from the end
+    return `${address.substring(0, chars + 2)}...${address.substring(address.length - chars)}`;
 }
