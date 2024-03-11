@@ -30,7 +30,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets'
 import { Chain } from '@rainbow-me/rainbowkit'
 
-import { http, createConfig, WagmiProvider } from 'wagmi'
+import { http, WagmiProvider } from 'wagmi'
 import { mainnet, goerli, sepolia } from 'wagmi/chains'
 
 // ** Loader Import
@@ -159,11 +159,6 @@ export default App
 const projectId = '2112f934dd189c5ea9c90e2d55b04bb5'
 const { wallets } = getDefaultWallets()
 
-export const publicClient = createPublicClient({
-  chain: goerli,
-  transport: http()
-})
-
 export const wagmiConfig = getDefaultConfig({
   appName: 'Tren Finance',
   projectId,
@@ -174,7 +169,10 @@ export const wagmiConfig = getDefaultConfig({
       wallets: [argentWallet, trustWallet, ledgerWallet]
     }
   ],
-  chains: [goerli]
+  chains: [goerli],
+  transports:{
+    [goerli.id]:  http('https://goerli.infura.io/v3/118cc3d82f0c4673bb11fef068b8c5d5'),  
+  }
   // ssr: true
 })
 const queryClient = new QueryClient()
