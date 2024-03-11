@@ -29,15 +29,15 @@ import { BorrowPopup } from '@/views/components/modules/borrowPopup'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { getBalance } from '@wagmi/core'
 import { wagmiConfig } from '@/pages/_app'
-import { useAccount } from 'wagmi'
-import { BigNumber } from 'ethers'
-import { formatUnits, parseUnits } from 'ethers/lib/utils'
+import { useAccount, useChainId, useReadContract } from 'wagmi'
 import { RemoveComma } from '@/hooks/utils'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
+import { erc20Abi, formatEther, formatUnits } from 'viem'
+import { BORROWER_OPERATIONS } from '@/configs/address'
 
 interface userModuleInfoType {
-  userCollateralBal: BigNumber
-  userAvailableBorrowAmount: BigNumber
+  userCollateralBal: bigint
+  userAvailableBorrowAmount: number
 }
 
 const Borrow = () => {
@@ -54,19 +54,28 @@ const Borrow = () => {
   }
 
   const { address: account } = useAccount()
+  const chainId = useChainId()
   const { collateralDetails } = useProtocol()
   const collateralDetail = useMemo(
     () => collateralDetails.find(i => i.symbol === collateral),
     [collateral, collateralDetails]
   )
-  const { address, price, LTV, decimals } = collateralDetail || {}
+  const { address, price, decimals, LTV } = collateralDetail || {}
 
-  const { view } = useModuleView(collateral!)
-  console.log('view', view)
+  const { data: allowance } = useReadContract({
+    address: collateralDetail?.address as '0x{string}',
+    abi: erc20Abi,
+    functionName: 'allowance',
+    args: [account as '0x${string}', BORROWER_OPERATIONS[chainId] as '0x${string}']
+  })
+
+  const { moduleInfo } = useModuleView(collateral!)
+
+  const { debt: debtAmount, coll: depositedAmount, stake: stakedAmount } = moduleInfo || {}
 
   const [userModuleInfo, setUserModuleInfo] = useState<userModuleInfoType>({
-    userCollateralBal: BigNumber.from(0),
-    userAvailableBorrowAmount: BigNumber.from(0)
+    userCollateralBal: BigInt(0),
+    userAvailableBorrowAmount: 0
   })
   const [depositAmount, setDepositAmount] = useState('0')
   const [borrowAmount, setBorrowAmount] = useState('0')
@@ -81,7 +90,7 @@ const Borrow = () => {
 
       setUserModuleInfo(prevState => ({
         ...prevState,
-        userCollateralBal: BigNumber.from(_userCollateralBal.value)
+        userCollateralBal: _userCollateralBal.value
       }))
     }
     getUserInfo()
@@ -90,14 +99,14 @@ const Borrow = () => {
   useEffect(() => {
     const _depositAmount = RemoveComma(depositAmount)
     if (price && LTV && +_depositAmount > 0) {
-      const userAvailableBorrowAmount = price.mul(LTV).mul(+_depositAmount).div(BigNumber.from(10).pow(18))
+      const userAvailableBorrowAmount = +formatEther(price) * +_depositAmount * +formatEther(LTV)
       setUserModuleInfo(prevState => ({ ...prevState, userAvailableBorrowAmount }))
     }
   }, [depositAmount, LTV, price])
 
   const handleClickApprove = () => {
     setOpen(true)
-    setType('approve')
+    setType('openOrAdjust')
   }
   const handleWithdraw = () => {
     setOpen(true)
@@ -160,7 +169,7 @@ const Borrow = () => {
                     Available:
                   </Typography>
                   <Typography variant='body2' sx={{ ml: 1 }}>
-                    {Number(formatUnits(userModuleInfo.userCollateralBal, decimals))} {collateral}
+                    {+formatUnits(userModuleInfo.userCollateralBal, decimals!)} {collateral}
                   </Typography>
                 </Stack>
                 <CleaveWrapper style={{ position: 'relative' }}>
@@ -190,15 +199,14 @@ const Borrow = () => {
                       color: theme.palette.primary.main
                     }}
                     onClick={() => {
-                      setDepositAmount(formatUnits(userModuleInfo.userCollateralBal, decimals))
+                      setDepositAmount(formatUnits(userModuleInfo.userCollateralBal, decimals!))
                     }}
                   >
                     MAX
                   </Box>
                 </CleaveWrapper>
                 <Typography variant='body1' sx={{ ml: 3, opacity: 0.5 }}>
-                  = ${' '}
-                  {collateralDetail ? +RemoveComma(depositAmount) * +formatUnits(collateralDetail.price, decimals) : 1}
+                  = $ {price ? +RemoveComma(depositAmount) * +formatUnits(price, decimals!) : 1}
                 </Typography>
               </Grid>
             </Grid>
@@ -229,7 +237,7 @@ const Borrow = () => {
                     Available:
                   </Typography>
                   <Typography variant='body2' sx={{ ml: 1 }}>
-                    {+formatUnits(userModuleInfo.userAvailableBorrowAmount, decimals)} trenUSD
+                    {userModuleInfo.userAvailableBorrowAmount} trenUSD
                   </Typography>
                 </Stack>
                 <CleaveWrapper style={{ position: 'relative' }}>
@@ -258,7 +266,7 @@ const Borrow = () => {
                       color: theme.palette.primary.main
                     }}
                     onClick={() => {
-                      setBorrowAmount(formatUnits(userModuleInfo.userAvailableBorrowAmount, decimals))
+                      setBorrowAmount(userModuleInfo.userAvailableBorrowAmount.toString())
                     }}
                   >
                     MAX
@@ -300,10 +308,13 @@ const Borrow = () => {
                     </Stack>
                     <Box>
                       <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
-                        20,000.00
+                        {decimals && depositedAmount ? +formatUnits(depositedAmount, decimals) : 0}
                       </Typography>
                       <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                        = $20,000.00
+                        $
+                        {decimals && depositedAmount
+                          ? +formatUnits(depositedAmount, decimals) * +formatEther(price!)
+                          : 0}
                       </Typography>
                     </Box>
                   </Stack>
@@ -348,10 +359,10 @@ const Borrow = () => {
                     </Stack>
                     <Box>
                       <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
-                        20,000.00
+                        {decimals && debtAmount ? +formatEther(debtAmount) : 0}
                       </Typography>
                       <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                        = $20,000.00
+                        ${decimals && debtAmount ? +formatEther(debtAmount) : 0}
                       </Typography>
                     </Box>
                   </Stack>
@@ -401,7 +412,7 @@ const Borrow = () => {
         <Result
           liquidationPrice={0.000008}
           ltv={37.5}
-          collateralValue={price ? +formatUnits(price, decimals) : 0}
+          collateralValue={price ? +formatUnits(price, decimals!) : 0}
           loanValue={3750}
         />
       </Box>
@@ -419,14 +430,18 @@ const Borrow = () => {
           Approve
         </Button>
       </Stack>
-      <BorrowPopup
-        open={open}
-        setOpen={setOpen}
-        type={type}
-        collateral={String(collateral)}
-        depositAmount={depositAmount}
-        borrowAmount={borrowAmount}
-      />
+      {collateralDetail && allowance !== undefined && (
+        <BorrowPopup
+          open={open}
+          setOpen={setOpen}
+          type={type}
+          collateral={String(collateral)}
+          collateralDetail={collateralDetail}
+          allowance={allowance}
+          depositAmount={depositAmount}
+          borrowAmount={borrowAmount}
+        />
+      )}
     </Box>
   )
 }

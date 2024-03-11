@@ -78,6 +78,7 @@ import '@rainbow-me/rainbowkit/styles.css'
 import { ProtocolProvider } from '@/context/ProtocolProvider/ProtocolProvider'
 import { GlobalProvider } from '@/context/GlobalContext'
 import { WalletConnector } from '@/views/components/WalletConnector'
+import { createPublicClient } from 'viem'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -155,8 +156,14 @@ export default App
 
 // Web3 Configs
 
-const projectId = 'e973a06523ca5ac45d042a4e0b9d73f7'
+const projectId = '2112f934dd189c5ea9c90e2d55b04bb5'
 const { wallets } = getDefaultWallets()
+
+export const publicClient = createPublicClient({
+  chain: goerli,
+  transport: http()
+})
+
 export const wagmiConfig = getDefaultConfig({
   appName: 'Tren Finance',
   projectId,

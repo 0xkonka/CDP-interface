@@ -5,7 +5,6 @@ import MODULE_MANAGER_ABI from '@/abi/ModuleManager.json'
 import { MODULE_MANAGER } from '@/configs/address'
 import { wagmiConfig } from '@/pages/_app'
 import { useAccount, useChainId } from 'wagmi'
-import { BigNumber } from 'ethers'
 import { useProtocol } from '../ProtocolProvider/ProtocolContext'
 
 type ModuleEventTransitions = Record<ModuleView, Partial<Record<ModuleEvent, ModuleView>>>
@@ -100,12 +99,12 @@ const getUserModuleStatus = (num: number): UserModuleStatus => {
 
 // const select = ({ module: { status } }: LiquityStoreState) => status
 
-export interface Module {
-  debt: BigNumber
-  coll: BigNumber
-  stake: BigNumber
+export interface ModuleInfo {
+  debt: bigint
+  coll: bigint
+  stake: bigint
   status: UserModuleStatus
-  arrayIndex: BigNumber
+  arrayIndex: bigint
 }
 
 export const useModuleView = (collateral: string) => {
@@ -113,6 +112,7 @@ export const useModuleView = (collateral: string) => {
   const { address: account } = useAccount()
 
   const [moduleStatus, setModuleStatus] = useState<UserModuleStatus>('active')
+  const [moduleInfo, setModuleInfo] = useState<ModuleInfo>()
   const [view, setView] = useState<ModuleView>(getInitialView(moduleStatus))
   const viewRef = useRef<ModuleView>(view)
 
@@ -132,14 +132,15 @@ export const useModuleView = (collateral: string) => {
         args: [account, collateralDetail.address]
       })
 
-      const _moduleInfo: Module = {
-        debt: BigNumber.from(_module[0]),
-        coll: BigNumber.from(_module[1]),
-        stake: BigNumber.from(_module[2]),
+      const _moduleInfo: ModuleInfo = {
+        debt: _module[0] as bigint,
+        coll: _module[1] as bigint,
+        stake: _module[2] as bigint,
         status: getUserModuleStatus(_module[3]) as UserModuleStatus,
-        arrayIndex:BigNumber.from(_module[4])
+        arrayIndex:_module[4] as bigint
       }
       setModuleStatus(_moduleInfo.status)
+      setModuleInfo(_moduleInfo);
       setView(getInitialView(_moduleInfo.status))
     }
     getModuleInfo()
@@ -163,5 +164,5 @@ export const useModuleView = (collateral: string) => {
     }
   }, [moduleStatus, dispatchEvent])
 
-  return { view, dispatchEvent }
+  return { view, moduleInfo, dispatchEvent }
 }

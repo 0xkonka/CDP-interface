@@ -3,9 +3,8 @@ import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { RemoveComma } from '@/hooks/utils'
 import { formatToThousands } from '@/hooks/utils'
 import { Stack, Typography } from '@mui/material'
-import { BigNumber } from 'ethers'
-import { formatUnits } from 'ethers/lib/utils'
 import { useMemo } from 'react'
+import { formatUnits } from 'viem'
 
 interface Props {
   depositAmount: string

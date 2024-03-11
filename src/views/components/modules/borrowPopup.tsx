@@ -1,5 +1,5 @@
 // React imports
-import React, { Fragment, useState, Ref, forwardRef, ReactElement, useEffect, useMemo } from 'react'
+import React, { Fragment, useState, Ref, forwardRef, ReactElement, useEffect, useMemo, useCallback } from 'react'
 
 // MUI components
 import { Dialog, SlideProps, Slide, Box, Typography, Button, Theme, useTheme, Stack } from '@mui/material'
@@ -10,15 +10,18 @@ import { TransactionOverView } from './transactionOverview'
 import { ApproveDetailView } from './approveDetailView'
 import { AmountForm } from './amountForm'
 import { showToast } from '@/hooks/toasts'
-import { useAccount, useChainId, useReadContract, useWriteContract } from 'wagmi'
+import { BaseError, useAccount, useChainId, useReadContract, useWriteContract } from 'wagmi'
 import { ACTIVE_POOL, BORROWER_OPERATIONS } from '@/configs/address'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
-import { erc20Abi } from 'viem'
+import { erc20Abi, formatUnits } from 'viem'
 import { RemoveComma } from '@/hooks/utils'
-import { formatEther, formatUnits, parseEther, parseUnits } from 'ethers/lib/utils'
-import { BigNumber, ethers } from 'ethers'
+import { parseEther, parseUnits } from 'viem'
+
 import useModules from '@/context/ModuleProvider/useModules'
+import { CollateralParams } from '@/context/ModuleProvider/type'
+import { useModuleView } from '@/context/ModuleProvider/useModuleView'
+import { ETHERSCAN_BASE_URL } from '@/configs/collaterals'
 
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
@@ -32,6 +35,8 @@ interface Props {
   setOpen: (open: boolean) => void
   type: string
   collateral: string
+  collateralDetail: CollateralParams
+  allowance: bigint
   depositAmount?: string
   borrowAmount?: string
   withdrawAmount?: string
@@ -47,23 +52,25 @@ const getTitle = (type: string) => {
       return 'Deposit Collateral'
     case 'repay':
       return 'Repay trenUSD'
-    case 'approve':
+    case 'openOrAdjust':
       return 'Add Collateral & Borrow'
     case 'default':
       return 'N/A'
   }
 }
-const getButtonLabel = (type: string) => {
+const getButtonLabel = (type: string, approve = false) => {
   switch (type) {
     case 'withdraw':
       return 'Withdraw Collateral'
     case 'borrow':
       return 'Borrow trenUSD'
     case 'deposit':
+      if (approve) return 'Approve'
       return 'Deposit Collateral'
     case 'repay':
       return 'Repay'
-    case 'approve':
+    case 'openOrAdjust':
+      if (approve) return 'Approve'
       return 'Borrow trenUSD'
     case 'default':
       return 'N/A'
@@ -71,27 +78,37 @@ const getButtonLabel = (type: string) => {
 }
 
 export const BorrowPopup = (props: Props) => {
-  const { open, setOpen, type, depositAmount, borrowAmount, withdrawAmount, repayAmount } = props
-
-  console.log('borrowAmount', borrowAmount)
+  const {
+    open,
+    setOpen,
+    type,
+    depositAmount,
+    borrowAmount,
+    withdrawAmount,
+    repayAmount,
+    allowance,
+    collateral,
+    collateralDetail
+  } = props
 
   const [useWalletBalance, setUseWalletBalance] = useState(true)
   const [amount, setAmount] = useState('')
   const theme: Theme = useTheme()
-  const { collateral } = props
-  // collateral = type == 'borrow' ? 'trenUSD' : collateral
+
+  const { moduleInfo } = useModuleView(collateral)
+
+  const formattedAllowance = +formatUnits(allowance!, collateralDetail.decimals)
+  const formattedDepositAmount = RemoveComma(depositAmount!)
+  const formattedBorrowAmount = RemoveComma(borrowAmount!)
+  const formattedWithdrawAmount = RemoveComma(depositAmount!)
+  const formattedRepayAmount = RemoveComma(borrowAmount!)
 
   const chainId = useChainId()
   const { address: account } = useAccount()
-  const { collateralDetails } = useProtocol()
-  const collateralDetail = useMemo(
-    () => collateralDetails.find(i => i.symbol === collateral),
-    [collateral, collateralDetails]
-  )
-  // const { data: txhash, writeContract, isPending, error } = useWriteContract()
   const {
     onApprove,
     onOpen,
+    onAdjust,
     onDeposit,
     onWithdraw,
     onBorrow,
@@ -103,56 +120,92 @@ export const BorrowPopup = (props: Props) => {
     error
   } = useModules(collateral)
 
-  const { data: allowance } = useReadContract({
-    address: collateralDetail?.address as '0x{string}',
-    abi: erc20Abi,
-    functionName: 'allowance',
-    args: [account as '0x${string}', BORROWER_OPERATIONS[chainId] as '0x${string}']
-  })
-
-  console.log('allowance', allowance)
-
-  const handleSubmit = () => {
-    const formatedAllowance = +formatUnits(BigNumber.from(allowance), collateralDetail?.decimals)
-    const formatedDepositAmount = BigInt(parseUnits(RemoveComma(depositAmount!), collateralDetail?.decimals).toString())
-    const formatedBorrowAmount = BigInt(parseEther(RemoveComma(borrowAmount!)).toString())
-
-    if (type == 'withdraw') {
-      initializePopupStates()
-      showToast('success', 'Withdraw Success', `You have successfully withdrawn ${amount} ${collateral}`, 10000)
-    } else if (type == 'borrow') {
-      initializePopupStates()
-      showToast('success', 'Borrow Success', `You have successfully borrow ${amount} trenUSD`, 10000)
-    } else if (type === 'deposit') {
-      initializePopupStates()
-      showToast('success', 'Deposit Success', `You have successfully deposit ${amount} ${collateral}`, 10000)
-    } else if (type == 'repay') {
-      initializePopupStates()
-      showToast('success', 'Repay Success', `You have successfully repaid ${amount} trenUSD`, 10000)
-    } else if (type === 'approve') {
-      try {
-        if (+formatedAllowance < +RemoveComma(depositAmount!)) {
-          console.log('allowance < deposit amount')
-
-          onApprove(formatedDepositAmount)
-        } else {
-          if (!collateralDetail) return
-          console.log('Opening ')
-          onOpen(formatedDepositAmount, formatedBorrowAmount)
-        }
-
-        initializePopupStates()
-        showToast('success', 'Borrow Success', txhash!, 10000)
-      } catch (err) {
-        console.log('err', err)
-        showToast('error', 'Borrow Failed', '', 10000)
-      }
-    }
-  }
+  const { view: moduleView } = useModuleView(collateral)
 
   const initializePopupStates = () => {
     setOpen(false)
     setAmount('')
+  }
+
+  useEffect(() => {
+    console.log('isConfirmed', isConfirmed)
+    if (isConfirmed) {
+      initializePopupStates()
+      switch (type) {
+        case 'openOrAdjust':
+          showToast(
+            'success',
+            'Borrow Success',
+            `You have successfully deposit ${depositAmount} ${collateral} and borrow ${borrowAmount} trenUSD. 
+            <br/> txhash: ${ETHERSCAN_BASE_URL}/${txhash}`,
+            10000
+          )
+        case 'deposit':
+          showToast('success', 'Deposit Success', `You have successfully deposit ${depositAmount} ${collateral}`, 10000)
+        case 'borrow':
+          showToast('success', 'Borrow Success', `You have successfully borrow ${borrowAmount} trenUSD`, 10000)
+        case 'withdraw':
+          showToast(
+            'success',
+            'Withdraw Success',
+            `You have successfully withdrawn ${withdrawAmount} ${collateral}`,
+            10000
+          )
+        case 'repay':
+          showToast('success', 'Repay Success', `You have successfully repaid ${repayAmount} trenUSD`, 10000)
+      }
+    }
+  }, [isConfirmed, depositAmount, borrowAmount, repayAmount, withdrawAmount, collateral, setOpen, txhash, type])
+
+  // useEffect(() => {
+  //   if (error) showToast('error', 'Error', (error as BaseError).shortMessage || error.message, 10000)
+  // }, [error])
+
+  // {error && (
+  //   <div>Error: {(error as BaseError).shortMessage || error.message}</div>
+  // )}
+
+  const handleSubmit = () => {
+    if (!collateralDetail) return
+    if (type === 'openOrAdjust') {
+      try {
+        if (+formattedAllowance < +RemoveComma(depositAmount!)) {
+          // In case Approve amount is less than deposit amount , Should be approved first
+          onApprove(parseUnits(formattedDepositAmount, collateralDetail.decimals))
+        } else if (moduleView === 'ACTIVE') {
+          if (!collateralDetail) return
+          onAdjust(
+            parseUnits(formattedDepositAmount, collateralDetail.decimals),
+            parseUnits(formattedBorrowAmount, collateralDetail.decimals)
+          )
+          showToast('success', 'Borrow Success', txhash!, 10000)
+        } else {
+          if (!collateralDetail) return
+          onOpen(
+            parseUnits(formattedDepositAmount, collateralDetail.decimals),
+            parseUnits(formattedBorrowAmount, collateralDetail.decimals)
+          )
+        }
+      } catch (err) {
+        console.log('err', err)
+        showToast('error', 'Borrow Failed', '', 10000)
+      }
+    } else if (type == 'deposit') {
+      if (+formattedAllowance < +RemoveComma(depositAmount!)) {
+        // In case Approve amount is less than deposit amount , Should be approved first
+        onApprove(parseUnits(formattedDepositAmount, collateralDetail.decimals))
+      } else if (moduleView === 'ACTIVE') {
+        if (!collateralDetail) return
+        onAdjust(
+          parseUnits(formattedDepositAmount, collateralDetail.decimals),
+          parseUnits(formattedBorrowAmount, collateralDetail.decimals)
+        )
+        showToast('success', 'Borrow Success', txhash!, 10000)
+      }
+    } else if (type == 'withdraw') {
+    } else if (type === 'borrow') {
+    } else if (type == 'repay') {
+    }
   }
 
   return (
@@ -198,11 +251,11 @@ export const BorrowPopup = (props: Props) => {
               onClick={handleSubmit}
               disabled={isPending}
             >
-              {getButtonLabel(type)}
+              {getButtonLabel(type, formattedAllowance < +formattedDepositAmount)}
             </Button>
           </Box>
         )}
-        {type == 'approve' && (
+        {type == 'openOrAdjust' && (
           <Box id={`modal-${type}`} p={6} position='relative'>
             <Typography mb={8} fontWeight={600} variant='h4' color='white'>
               {getTitle(type)}
@@ -231,7 +284,7 @@ export const BorrowPopup = (props: Props) => {
               onClick={handleSubmit}
               disabled={isPending}
             >
-              {getButtonLabel(type)}
+              {getButtonLabel(type, formattedAllowance < +formattedDepositAmount)}
             </Button>
           </Box>
         )}

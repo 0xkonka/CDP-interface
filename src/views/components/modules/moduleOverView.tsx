@@ -6,8 +6,8 @@ import Icon from '@/@core/components/icon'
 import { useGlobalValues } from '@/context/GlobalContext'
 import { formatMoney, formatPercent, getOverView } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
-import { formatUnits, parseUnits } from 'ethers/lib/utils'
 import { useMemo } from 'react'
+import { formatEther, formatUnits } from 'viem'
 
 interface Props {
   collateral: string
@@ -22,9 +22,11 @@ export const ModuleOverView = (props: Props) => {
     () => collateralDetails.find(i => i.symbol === collateral),
     [collateral, collateralDetails]
   )
-  const { totalAssetDebt, decimals, LTV, borrowingFee, interest, liquidation } = collateralDetail || {}
+  const { totalAssetDebt, decimals, LTV, borrowingFee, interest, liquidation, totalBorrowAvailable, mintCap } =
+    collateralDetail || {}
 
-  //   5 000 000 000 000 000
+  const formattedBorrowAvailable = totalBorrowAvailable ? +formatUnits(totalBorrowAvailable!, decimals!) : 0
+  const formattedMintCap = mintCap ? +formatUnits(mintCap!, decimals!) : 0
 
   const overview = getOverView(collateral)
   if (collateral == '' || !overview) return <></>
@@ -34,23 +36,23 @@ export const ModuleOverView = (props: Props) => {
       key: 'TVL',
       tooltip: 'Total value locked',
       value: formatMoney(
-        collateralDetail ? +formatUnits(collateralDetail.totalAssetDebt, collateralDetail.decimals) : 0
+        collateralDetail ? +formatUnits(totalAssetDebt!, decimals!) : 0
       )
     },
     {
       key: 'trenUSD Available',
       tooltip: 'trenUSD available to borrow/total trenUSD allocated',
-      value: `${formatMoney(overview.availableTrenUSD)}/${formatMoney(overview.totalTrenUSD)}`
+      value: `${formatMoney(formattedBorrowAvailable)} / ${formatMoney(formattedMintCap)}`
     },
     {
       key: 'Utilization',
       tooltip: 'Total borrowed trenUSD/total trenUSD allocated',
-      value: formatPercent((overview.availableTrenUSD / overview.totalTrenUSD) * 100, 2)
+      value: formatPercent((formattedBorrowAvailable / formattedMintCap) * 100, 2)
     },
     {
       key: 'Max LTV',
       tooltip: 'Maximum loan-to-value',
-      value: formatPercent(LTV ? +formatUnits(LTV) * 100 : 0)
+      value: formatPercent(LTV ? +formatEther(LTV) * 100 : 0)
     },
     {
       key: 'Interest',
@@ -60,12 +62,12 @@ export const ModuleOverView = (props: Props) => {
     {
       key: 'Borrow Fee',
       tooltip: 'A one time fee paid upon opening a position Tooltip',
-      value: formatPercent(borrowingFee ? +formatUnits(borrowingFee) * 100 : 0, 2)
+      value: formatPercent(borrowingFee ? +formatEther(borrowingFee) * 100 : 0, 2)
     },
     {
       key: 'Liquidation',
       tooltip: 'the LTV at which the position will be flagged for liquidation',
-      value: formatPercent(liquidation ? +formatUnits(liquidation) * 100 : 0)
+      value: formatPercent(liquidation ? +formatEther(liquidation) * 100 : 0)
     },
     {
       key: 'Rate Type',

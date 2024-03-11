@@ -43,7 +43,6 @@ const useModules = (collateral: string) => {
   const onOpen = (depositAmount: bigint, borrowAmount: bigint) => {
     if (!collateralDetail) return
     try {
-      console.log('Opening')
       writeContract({
         ...BorrowerOperationsContract,
         functionName: 'openModule',
@@ -51,8 +50,31 @@ const useModules = (collateral: string) => {
           collateralDetail.address as '0x{string}',
           depositAmount,
           borrowAmount,
-          ethers.constants.AddressZero,
-          ethers.constants.AddressZero
+          ethers.ZeroAddress,
+          ethers.ZeroAddress
+        ]
+      })
+    } catch (err) {
+      console.log('err', err)
+    }
+  }
+
+  const onAdjust = (depositAmount: bigint, borrowAmount: bigint) => {
+    console.log('depositAmount', depositAmount)
+    console.log('borrowAmount', borrowAmount)
+    if (!collateralDetail) return
+    try {
+      writeContract({
+        ...BorrowerOperationsContract,
+        functionName: 'adjustModule',
+        args: [
+          collateralDetail.address as '0x{string}',
+          depositAmount,
+          BigInt(0),
+          borrowAmount,
+          true,
+          ethers.ZeroAddress,
+          ethers.ZeroAddress
         ]
       })
     } catch (err) {
@@ -63,16 +85,10 @@ const useModules = (collateral: string) => {
   const onDeposit = (depositAmount: bigint) => {
     if (!collateralDetail) return
     try {
-      console.log('Depositing')
       writeContract({
         ...BorrowerOperationsContract,
         functionName: 'addColl',
-        args: [
-          collateralDetail.address as '0x{string}',
-          depositAmount,
-          ethers.constants.AddressZero,
-          ethers.constants.AddressZero
-        ]
+        args: [collateralDetail.address as '0x{string}', depositAmount, ethers.ZeroAddress, ethers.ZeroAddress]
       })
     } catch (err) {
       console.log('err', err)
@@ -82,16 +98,10 @@ const useModules = (collateral: string) => {
   const onWithdraw = (withdrawAmount: bigint) => {
     if (!collateralDetail) return
     try {
-      console.log('Withdrawing')
       writeContract({
         ...BorrowerOperationsContract,
         functionName: 'withdrawColl',
-        args: [
-          collateralDetail.address as '0x{string}',
-          withdrawAmount,
-          ethers.constants.AddressZero,
-          ethers.constants.AddressZero
-        ]
+        args: [collateralDetail.address as '0x{string}', withdrawAmount, ethers.ZeroAddress, ethers.ZeroAddress]
       })
     } catch (err) {
       console.log('err', err)
@@ -101,16 +111,10 @@ const useModules = (collateral: string) => {
   const onBorrow = (borrowAmount: bigint) => {
     if (!collateralDetail) return
     try {
-      console.log('Borrowing')
       writeContract({
         ...BorrowerOperationsContract,
         functionName: 'withdrawDebtTokens',
-        args: [
-          collateralDetail.address as '0x{string}',
-          borrowAmount,
-          ethers.constants.AddressZero,
-          ethers.constants.AddressZero
-        ]
+        args: [collateralDetail.address as '0x{string}', borrowAmount, ethers.ZeroAddress, ethers.ZeroAddress]
       })
     } catch (err) {
       console.log('err', err)
@@ -120,23 +124,30 @@ const useModules = (collateral: string) => {
   const onRepay = (repayAmount: bigint) => {
     if (!collateralDetail) return
     try {
-      console.log('Borrowing')
       writeContract({
         ...BorrowerOperationsContract,
         functionName: 'repayDebtTokens',
-        args: [
-          collateralDetail.address as '0x{string}',
-          repayAmount,
-          ethers.constants.AddressZero,
-          ethers.constants.AddressZero
-        ]
+        args: [collateralDetail.address as '0x{string}', repayAmount, ethers.ZeroAddress, ethers.ZeroAddress]
       })
     } catch (err) {
       console.log('err', err)
     }
   }
 
-  return { onApprove, onOpen, onDeposit, onWithdraw, onBorrow, onRepay, txhash, isPending, isConfirming, isConfirmed, error }
+  return {
+    onApprove,
+    onOpen,
+    onAdjust,
+    onDeposit,
+    onWithdraw,
+    onBorrow,
+    onRepay,
+    txhash,
+    isPending,
+    isConfirming,
+    isConfirmed,
+    error
+  }
 }
 
 export default useModules
