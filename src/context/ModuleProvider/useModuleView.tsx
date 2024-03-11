@@ -161,7 +161,7 @@ export const useModuleView = (collateral: string) => {
       setModuleInfo(_moduleInfo)
       setView(getInitialView(_moduleInfo.status))
 
-      // console.log('_moduleInfo', _moduleInfo)
+      console.log('_moduleInfo', _moduleInfo)
     }
     getModuleInfo()
   }, [chainId, account, collateralDetail])

@@ -55,10 +55,13 @@ const Modules = () => {
           return {
             id: index + 1,
             ...getOverView(collateral.symbol),
+            LTVRatio: +(+formatEther(collateral.LTV) * 100).toFixed(2),
+            liquidationThreshold: +(+formatEther(collateral.liquidation) * 100).toFixed(2),
+            totalTrenUSD: +formatUnits(collateral.mintCap, collateral.decimals),
+            availableTrenUSD: +formatUnits(collateral.totalBorrowAvailable, collateral.decimals),
             tvl: +formatUnits(collateral.totalAssetDebt, collateral.decimals),
-            maxLeverage: +(+formatEther(collateral.LTV) * 100).toFixed(2),
-            interestRate: +collateral.interest * 100,
-            borrowFee: +formatEther(collateral.borrowingFee) * 100
+            borrowFee: +formatEther(collateral.borrowingFee) * 100,
+            interestRate: collateral.interest,
           }
         })
         .filter(collateral => collateral !== undefined) as CollateralType[]

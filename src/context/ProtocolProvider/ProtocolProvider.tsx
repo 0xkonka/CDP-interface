@@ -191,7 +191,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
 
           _collateralDetails.push(_collateralDetail)
         }
-
+        console.log('_collateralDetails', _collateralDetails)
         setCollateralDetails(_collateralDetails)
       }
 
