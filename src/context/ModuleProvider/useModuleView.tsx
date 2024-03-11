@@ -143,7 +143,6 @@ export const useModuleView = (collateral: string) => {
       const collUSD = (_module[1] * collateralDetail.price) / BigInt(10 ** collateralDetail.decimals)
       const currentLTV = Number(_module[0]) / Number(collUSD)
       const MRCV = +formatEther(_module[0]) / +formatEther(collateralDetail.LTV);
-      console.log('currentLTV', currentLTV)
       const _moduleInfo: ModuleInfo = {
         debt: _module[0] as bigint,
         coll: _module[1] as bigint,
@@ -162,7 +161,7 @@ export const useModuleView = (collateral: string) => {
       setModuleInfo(_moduleInfo)
       setView(getInitialView(_moduleInfo.status))
 
-      console.log('_moduleInfo', _moduleInfo)
+      // console.log('_moduleInfo', _moduleInfo)
     }
     getModuleInfo()
   }, [chainId, account, collateralDetail])

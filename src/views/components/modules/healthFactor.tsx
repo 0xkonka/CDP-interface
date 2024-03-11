@@ -22,7 +22,6 @@ export const getHealthColor = (value: number) => {
 export const HealthFactor = (props: Props) => {
     const {safety} = props
 
-    console.log('safety', safety)
     return (
         <Stack>
             <Stack direction='row' sx={{mb:2, display:'flex', justifyContent: 'space-between'}}>

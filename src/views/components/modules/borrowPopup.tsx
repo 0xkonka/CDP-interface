@@ -129,19 +129,15 @@ export const BorrowPopup = (props: Props) => {
   useEffect(() => {
     switch (type) {
       case 'deposit':
-        console.log('deposit')
         setInputAmount(formatUnits(userCollateralBal, decimals))
         break
       case 'withdraw':
-        console.log('withdraw')
         setInputAmount(formatUnits(depositedAmount || BigInt(0), decimals))
         break
       case 'borrow':
-        console.log('borrow')
         setInputAmount(formatEther(userCollateralBal))
         break
       case 'repay':
-        console.log('repay')
         setInputAmount(formatEther(debtAmount || BigInt(0)))
         break
     }

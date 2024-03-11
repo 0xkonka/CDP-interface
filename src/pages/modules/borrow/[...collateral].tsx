@@ -81,9 +81,6 @@ const Borrow = () => {
     maximumBorrowingPower
   } = moduleInfo || {}
 
-  console.log('debtAmount', debtAmount)
-  console.log('collUSD', collUSD)
-
   const [userModuleInfo, setUserModuleInfo] = useState<userModuleInfoType>({
     userCollateralBal: BigInt(0),
     userAvailableBorrowAmount: 0

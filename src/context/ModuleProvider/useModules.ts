@@ -60,8 +60,6 @@ const useModules = (collateral: string) => {
   }
 
   const handleAdjust = (depositAmount: bigint, borrowAmount: bigint) => {
-    console.log('depositAmount', depositAmount)
-    console.log('borrowAmount', borrowAmount)
     if (!collateralDetail) return
     try {
       writeContract({
