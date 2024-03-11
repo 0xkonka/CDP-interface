@@ -71,7 +71,10 @@ const Borrow = () => {
 
   const { moduleInfo } = useModuleView(collateral!)
 
-  const { debt: debtAmount, coll: depositedAmount } = moduleInfo || {}
+  const { debt: debtAmount, coll: depositedAmount , collUSD } = moduleInfo || {}
+
+  console.log('debtAmount', debtAmount)
+  console.log('collUSD', collUSD)
 
   const [userModuleInfo, setUserModuleInfo] = useState<userModuleInfoType>({
     userCollateralBal: BigInt(0),
@@ -411,7 +414,7 @@ const Borrow = () => {
       <Box sx={radiusBoxStyle}>
         <Result
           liquidationPrice={0.000008}
-          ltv={price ? 1 / +formatUnits(price, decimals!) : 0 }
+          ltv={debtAmount && collUSD ? Number(debtAmount) / Number(collUSD) : 0 }
           collateralValue={price ? +formatUnits(price, decimals!) : 0}
           loanValue={1}
         />

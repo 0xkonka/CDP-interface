@@ -207,7 +207,7 @@ export const BorrowPopup = (props: Props) => {
         // In case Approve amount is less than deposit amount , Should be approved first
         handleApprove(parseUnits(inputAmount, decimals))
       } else if (moduleView === 'ACTIVE') {
-        handleDeposit(parseUnits(inputAmount, decimals), parseEther(formattedBorrowAmount))
+        handleDeposit(parseUnits(inputAmount, decimals))
       }
     } else if (type == 'withdraw') {
       handleWithdraw(parseUnits(inputAmount, decimals))

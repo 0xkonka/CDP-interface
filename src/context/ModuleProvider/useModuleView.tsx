@@ -6,6 +6,7 @@ import { MODULE_MANAGER } from '@/configs/address'
 import { wagmiConfig } from '@/pages/_app'
 import { useAccount, useChainId } from 'wagmi'
 import { useProtocol } from '../ProtocolProvider/ProtocolContext'
+import { formatEther } from 'viem'
 
 type ModuleEventTransitions = Record<ModuleView, Partial<Record<ModuleEvent, ModuleView>>>
 
@@ -105,6 +106,11 @@ export interface ModuleInfo {
   stake: bigint
   status: UserModuleStatus
   arrayIndex: bigint
+  collUSD: bigint
+  currentLTV: number
+  healthFactor: number
+  borrowingPower: number
+  maximumBorrowingPower: bigint
 }
 
 export const useModuleView = (collateral: string) => {
@@ -132,16 +138,26 @@ export const useModuleView = (collateral: string) => {
         args: [account, collateralDetail.address]
       })
 
+      const collUSD = (_module[1] * collateralDetail.price) / BigInt(10 ** collateralDetail.decimals)
+      const currentLTV = Number(_module[0]) / Number(collUSD)
+      console.log('currentLTV', currentLTV)
       const _moduleInfo: ModuleInfo = {
         debt: _module[0] as bigint,
         coll: _module[1] as bigint,
         stake: _module[2] as bigint,
         status: getUserModuleStatus(_module[3]) as UserModuleStatus,
-        arrayIndex:_module[4] as bigint
+        arrayIndex: _module[4] as bigint,
+        collUSD,
+        currentLTV,
+        healthFactor: +formatEther(collateralDetail.liquidation) / currentLTV,
+        borrowingPower: currentLTV / +formatEther(collateralDetail.LTV),
+        maximumBorrowingPower: BigInt(formatEther(collUSD * collateralDetail.LTV))
       }
       setModuleStatus(_moduleInfo.status)
-      setModuleInfo(_moduleInfo);
+      setModuleInfo(_moduleInfo)
       setView(getInitialView(_moduleInfo.status))
+
+      console.log('_moduleInfo', _moduleInfo)
     }
     getModuleInfo()
   }, [chainId, account, collateralDetail])
