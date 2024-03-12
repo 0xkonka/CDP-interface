@@ -2,6 +2,7 @@ export type CollateralParams = {
     address: string
     symbol: string
     decimals: number
+    baseAPY: number
     price: bigint
     index: bigint
     active: boolean

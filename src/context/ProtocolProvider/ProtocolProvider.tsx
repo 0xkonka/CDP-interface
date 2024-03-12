@@ -1,7 +1,16 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 import { Config, useAccount, useChainId, useClient, useReadContract, useWalletClient } from 'wagmi'
-import { erc20Abi, formatEther, formatUnits, parseEther, type Account, type Chain, type Client, type Transport } from 'viem'
+import {
+  erc20Abi,
+  formatEther,
+  formatUnits,
+  parseEther,
+  type Account,
+  type Chain,
+  type Client,
+  type Transport
+} from 'viem'
 import { multicall, readContract, getBalance } from '@wagmi/core'
 import ADMIN_CONTRACT_ABI from '@/abi/AdminContract.json'
 import PRICE_FEED_ABI from '@/abi/PriceFeed.json'
@@ -10,6 +19,7 @@ import { ADMIN_CONTRACT, PRICE_FEED, BORROWER_OPERATIONS } from '@/configs/addre
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { wagmiConfig } from '@/pages/_app'
 import { ProtocolContext } from './ProtocolContext'
+import { getDefillmaAPY } from '@/hooks/utils'
 
 type ProtocolContextValue = {
   collaterals: string[]
@@ -139,12 +149,12 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
               {
                 ...PriceFeedContract,
                 functionName: 'fetchPrice',
-                args:[collaterals[i]]
+                args: [collaterals[i]]
               },
               {
                 ...BorrowerOperationsContract,
                 functionName: 'getEntireSystemDebt',
-                args:[collaterals[i]]
+                args: [collaterals[i]]
               }
             ]
           })
@@ -166,11 +176,14 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
           const price = result[14].result as bigint
           const entireSystemDebt = result[15].result as bigint
 
+          const baseAPY : number = await getDefillmaAPY(symbol)
+          
           const _collateralDetail: CollateralParams = {
             address,
             price,
             symbol,
             decimals,
+            baseAPY,
             index,
             active,
             mcr,
@@ -184,9 +197,9 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
             mintCap,
             totalAssetDebt,
             totalBorrowAvailable: mintCap - entireSystemDebt,
-            liquidation : parseEther((1 / +formatEther(mcr)).toString()),
-            LTV : parseEther((1 / +formatEther(ccr)).toString()),
-            interest: 5,
+            liquidation: parseEther((1 / +formatEther(mcr)).toString()),
+            LTV: parseEther((1 / +formatEther(ccr)).toString()),
+            interest: 5
           }
 
           _collateralDetails.push(_collateralDetail)
@@ -201,4 +214,3 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
 
   return <ProtocolContext.Provider value={{ collaterals, collateralDetails }}>{children}</ProtocolContext.Provider>
 }
-
