@@ -45,7 +45,7 @@ const HeaderInfo = () => {
                         <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{fontWeight: 600}}>$50,000.00</Typography>
                     </Box>
                     <Box>
-                        <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{mb: 1}} color='#C6C6C7'>Net Worth</Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{mb: 1}} color='#C6C6C7'>TrenUSD Available</Typography>
                         <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{fontWeight: 600}}>$150,000.00</Typography>
                     </Box>
                 </Stack>
