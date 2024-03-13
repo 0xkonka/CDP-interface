@@ -50,7 +50,12 @@ const Borrow = () => {
   const [ableToApprove, setAbleToApprove] = useState(false)
   const [depositInputError, setDepositInputError] = useState('')
   const [borrowInputError, setBorrowInputError] = useState('')
-
+  const [userModuleInfo, setUserModuleInfo] = useState<userModuleInfoType>({
+    userCollateralBal: BigInt(0),
+    userAvailableBorrowAmount: 0
+  })
+  const [depositAmount, setDepositAmount] = useState('')
+  const [borrowAmount, setBorrowAmount] = useState('')
 
   let { collateral } = router.query
 
@@ -61,15 +66,12 @@ const Borrow = () => {
   const { address: account } = useAccount()
   const chainId = useChainId()
   const { collateralDetails } = useProtocol()
+
   const collateralDetail = useMemo(
     () => collateralDetails.find(i => i.symbol === collateral),
     [collateral, collateralDetails]
   )
-  const { address, decimals, liquidation } = collateralDetail || {}
-  let {price, LTV} = collateralDetail || {}
-  price = typeof price != 'undefined' ? BigInt(price) : BigInt(0)
-  LTV = typeof LTV != 'undefined' ? BigInt(LTV) : BigInt(100)
-
+  
   const { data: allowance } = useReadContract({
     address: collateralDetail?.address as '0x{string}',
     abi: erc20Abi,
@@ -77,29 +79,24 @@ const Borrow = () => {
     args: [account as '0x${string}', BORROWER_OPERATIONS[chainId] as '0x${string}']
   })
 
+
+  // if(!collateralDetail || collateralDetails.length === 0) return <div>Loading collateral detail...</div>   
+  console.log("MY COllateral Detail, ", collateralDetail)
+  const { address, decimals = 18, liquidation, price = BigInt(0), LTV = BigInt(0) } = collateralDetail || {}
+
   const minDeposit = parseFloat((200 / +formatUnits(price, decimals!) / +formatEther(LTV)).toFixed(2)) // Minium collater deposit input
   const minBorrow = 200
 
   const { moduleInfo } = useModuleView(collateral!)
 
   const {
-    debt: debtAmount,
-    coll: depositedAmount,
-    collUSD,
-    liquidationPrice,
-    healthFactor,
-    borrowingPower,
-    maximumBorrowingPower
+    debt: debtAmount = BigInt(0),
+    coll: depositedAmount = BigInt(0),
   } = moduleInfo || {}
-  console.log(debtAmount)
 
-  const [userModuleInfo, setUserModuleInfo] = useState<userModuleInfoType>({
-    userCollateralBal: BigInt(0),
-    userAvailableBorrowAmount: 0
-  })
-  const [depositAmount, setDepositAmount] = useState('')
-  const [borrowAmount, setBorrowAmount] = useState('')
-
+  // if(!debtAmount || !depositedAmount) return <div>Loading user module detail...</div>
+  // console.log('MY MODULE INFO:', debtAmount, depositedAmount)
+  
   useEffect(() => {
     if (!account || !address) return
     const getUserInfo = async () => {
@@ -133,6 +130,7 @@ const Borrow = () => {
         } else {
             setDepositInputError('')
         }
+        
     }
     if(borrowAmount != '') {
         if(+removeComma(borrowAmount) > userModuleInfo.userAvailableBorrowAmount) {
