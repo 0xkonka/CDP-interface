@@ -121,7 +121,6 @@ export const BorrowPopup = (props: Props) => {
   const [useWalletBalance, setUseWalletBalance] = useState(true)
   const [inputAmount, setInputAmount] = useState('')
   const [availableBalance, setAvailableBalance] = useState(0)
-
   const initializePopupStates = () => {
     setOpen(false)
     setInputAmount('')
@@ -129,16 +128,16 @@ export const BorrowPopup = (props: Props) => {
   useEffect(() => {
     switch (type) {
       case 'deposit':
-        setInputAmount(formatUnits(userCollateralBal, decimals))
+        setAvailableBalance(+formatUnits(userCollateralBal, decimals))
         break
       case 'withdraw':
-        setInputAmount(formatUnits(depositedAmount || BigInt(0), decimals))
+        setAvailableBalance(+formatUnits(depositedAmount || BigInt(0), decimals))
         break
       case 'borrow':
-        setInputAmount(formatEther(userCollateralBal))
+        // setAvailableBalance(+formatEther(userCollateralBal))
         break
       case 'repay':
-        setInputAmount(formatEther(debtAmount || BigInt(0)))
+        // setAvailableBalance(+formatEther(debtAmount || BigInt(0)))
         break
     }
   }, [type, decimals, userCollateralBal, depositedAmount, debtAmount])
@@ -151,38 +150,41 @@ export const BorrowPopup = (props: Props) => {
           showToast(
             'success',
             'Borrow Success',
-            `You have successfully deposit ${depositAmount} ${collateral} and borrow ${borrowAmount} trenUSD. 
-            <br/> txhash: ${ETHERSCAN_BASE_URL}/${txhash}`,
-            10000
+            `You have successfully deposit ${depositAmount} ${collateral} and borrow ${borrowAmount} trenUSD.`,
+            30000,
+            `${ETHERSCAN_BASE_URL}/${txhash}`,
           )
           break
         case 'deposit':
-          showToast('success', 'Deposit Success', `You have successfully deposit ${inputAmount} ${collateral}`, 10000)
+          showToast('success', 'Deposit Success', `You have successfully deposit ${inputAmount} ${collateral}`, 30000)
           break
         case 'borrow':
-          showToast('success', 'Borrow Success', `You have successfully borrow ${inputAmount} trenUSD`, 10000)
+          showToast('success', 'Borrow Success', `You have successfully borrow ${inputAmount} trenUSD`, 30000)
           break
         case 'withdraw':
           showToast(
             'success',
             'Withdraw Success',
             `You have successfully withdrawn ${inputAmount} ${collateral}`,
-            10000
+            30000
           )
           break
         case 'repay':
-          showToast('success', 'Repay Success', `You have successfully repaid ${inputAmount} trenUSD`, 10000)
+          showToast('success', 'Repay Success', `You have successfully repaid ${inputAmount} trenUSD`, 30000)
           break
       }
     }
+    // console.log('available:', availableBalance, 'amount:', inputAmount)
+    // console.log(+inputAmount > availableBalance)
   }, [isConfirmed, inputAmount, depositAmount, borrowAmount, collateral, txhash, type])
 
   useEffect(() => {
-    if (error) showToast('error', 'Error', (error as BaseError).shortMessage || error.message, 10000)
+    if (error) showToast('error', 'Error', (error as BaseError).shortMessage || error.message, 30000)
   }, [error])
 
   const handleSubmit = () => {
     if (!collateralDetail) return
+    if (+inputAmount > availableBalance) return
     if (type === 'openOrAdjust') {
       try {
         if (+formattedAllowance < +removeComma(depositAmount!)) {
@@ -199,6 +201,7 @@ export const BorrowPopup = (props: Props) => {
         console.log('err', err)
       }
     } else if (type == 'deposit') {
+      console.log('deposit')
       if (+formattedAllowance < +removeComma(depositAmount!)) {
         // In case Approve amount is less than deposit amount , Should be approved first
         handleApprove(parseUnits(inputAmount, decimals))
@@ -241,7 +244,7 @@ export const BorrowPopup = (props: Props) => {
               amount={inputAmount}
               setAmount={setInputAmount}
               type={type}
-              asset={String(collateral)}
+              asset={type =='borrow' ? 'trenUSD' : String(collateral)}
               available={availableBalance}
             />
             <TransactionOverView healthFrom={14.54} healthTo={1.75} liquidationPrice={2520.78} gasFee={0.14} />
@@ -255,7 +258,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
-              disabled={isPending || isConfirming}
+              disabled={isPending || isConfirming || (+inputAmount > availableBalance)}
             >
               {getButtonLabel(type, formattedAllowance < +formattedDepositAmount)}
             </Button>
@@ -288,7 +291,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
-              disabled={isPending || isConfirming}
+              disabled={isPending || isConfirming || (+inputAmount > availableBalance)}
             >
               {getButtonLabel(type, formattedAllowance < +formattedDepositAmount)}
             </Button>
@@ -379,7 +382,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
-              disabled={isPending || isConfirming}
+              disabled={isPending || isConfirming || (+inputAmount > availableBalance)}
             >
               {getButtonLabel(type)}
             </Button>

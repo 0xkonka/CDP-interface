@@ -479,8 +479,8 @@ const Borrow = () => {
               {
                 positionStatus != 'active' &&
                 <Typography variant='subtitle1' color='white' sx={{opacity: 0.2}}>
-                      No open positions
-                  </Typography>
+                  No open modules
+                </Typography>
               }  
             </Stack>
           </Stack>
@@ -509,7 +509,7 @@ const Borrow = () => {
           loanValue={loanValue}
         />
       </Box>
-      <Stack direction='row' sx={{ justifyContent: 'center', py: 8 }}>
+      <Stack direction='row' sx={{ justifyContent: 'center', py: 8}}>
         <Button
           sx={{
             ml: { xs: 2, sm: 2 },
@@ -521,7 +521,7 @@ const Borrow = () => {
           onClick={handleClickApprove}
           disabled={!ableToApprove}
         >
-          Approve
+          {positionStatus != 'active' ? 'Open Module' : 'Adjust Module'}
         </Button>
       </Stack>
       {collateralDetail && allowance !== undefined && (

@@ -6,7 +6,9 @@ import {
 import Icon from '@/@core/components/icon'
 import { useGlobalValues } from '@/context/GlobalContext'
 import { formatToThousands } from '@/hooks/utils'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
+import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
+import { formatEther } from 'viem'
 
 interface Props {
     asset: string
@@ -38,12 +40,20 @@ export const AmountForm = (props: Props) => {
     const [collateralUSD, setCollateralUSD] = useState(1)
     const {radiusBoxStyle} = useGlobalValues()
 
+    // === Get Collateral Detail === //
+    const { collateralDetails } = useProtocol()
+    const collateralDetail = useMemo(
+        () => collateralDetails.find(i => i.symbol === asset),
+        [asset, collateralDetails]
+    )
+    const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0) } = collateralDetail || {}
+
     const inputRef = useRef<HTMLInputElement>(null)
     useEffect(() => {   // Set border for input element as primrary.
         if (inputRef.current) {
             inputRef.current.focus()
         }
-        setCollateralUSD(asset == 'trenUSD' ? 1.001 : 3469.53)
+        setCollateralUSD(asset == 'trenUSD' ? 1 : +formatEther(price))
     }, [asset])
 
     const focusAmount = () => { // When the parent component clicked, it set focus for input
