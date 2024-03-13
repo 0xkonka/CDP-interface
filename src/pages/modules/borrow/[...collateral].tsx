@@ -91,6 +91,7 @@ const Borrow = () => {
     borrowingPower,
     maximumBorrowingPower
   } = moduleInfo || {}
+  console.log(debtAmount)
 
   const [userModuleInfo, setUserModuleInfo] = useState<userModuleInfoType>({
     userCollateralBal: BigInt(0),
@@ -469,14 +470,14 @@ const Borrow = () => {
               
                 {/* <HealthFactor safety={healthFactor || 1} /> */}
                 <HealthFactor 
-                  safety={(price && depositedAmount != undefined && decimals && liquidation && (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)) != 0) ? (+formatEther(liquidation) / ((Number(debtAmount) + +removeComma(borrowAmount)) / (+formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals))))) : 0 }
+                  safety={(price && depositedAmount != undefined && decimals && liquidation && (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)) != 0) ? (+formatEther(liquidation) / ((+formatUnits(debtAmount, decimals) + +removeComma(borrowAmount)) / (+formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals))))) : 0 }
                 />
               </Grid>
               <Grid item xs={12} lg={6}>
                 <BorrowingPower 
                   // percent={(borrowingPower || 0) * 100} 
                   // max={maximumBorrowingPower ? +formatEther(maximumBorrowingPower!) : 0} 
-                  percent={(price && depositedAmount != undefined  && decimals && (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)) != 0 && liquidation) ? ((Number(debtAmount) + +removeComma(borrowAmount)) / (+formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)))) * 100 /  +formatEther(LTV) : 0}
+                  percent={(price && depositedAmount != undefined  && decimals && (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)) != 0 && liquidation) ? ((+formatUnits(debtAmount, decimals) + +removeComma(borrowAmount)) / (+formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)))) * 100 /  +formatEther(LTV) : 0}
                   max={(price && depositedAmount != undefined && decimals) ? +formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)) * +formatEther(LTV) : 0}
                 />
               </Grid>
@@ -487,11 +488,11 @@ const Borrow = () => {
       <Box sx={radiusBoxStyle}>
         <Result
           // liquidationPrice={liquidationPrice || 0}
-          liquidationPrice={liquidation ? (Number(debtAmount) + +removeComma(borrowAmount)) / (+formatUnits(price, decimals!) * +formatEther(liquidation)) : 0}
-          // ltv={debtAmount && collUSD ? Number(debtAmount) / Number(collUSD) : 0}
-          ltv={(price && depositedAmount != undefined && decimals) ? (Number(debtAmount) + +removeComma(borrowAmount)) / (+formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals))) * 100 : 0}
+          liquidationPrice={liquidation ? (+formatUnits(debtAmount, decimals) + +removeComma(borrowAmount)) / (+formatUnits(price, decimals!) * +formatEther(liquidation)) : 0}
+          // ltv={debtAmount && collUSD ? +formatUnits(debtAmount, decimals) / Number(collUSD) : 0}
+          ltv={(price && depositedAmount != undefined && decimals) ? (+formatUnits(debtAmount, decimals) + +removeComma(borrowAmount)) / (+formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals))) * 100 : 0}
           collateralValue={(price && depositedAmount != undefined && decimals) ? +formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)) : 0}
-          loanValue={Number(debtAmount) + +removeComma(borrowAmount)}
+          loanValue={+formatUnits(debtAmount, decimals) + +removeComma(borrowAmount)}
         />
       </Box>
       <Stack direction='row' sx={{ justifyContent: 'center', py: 8 }}>
