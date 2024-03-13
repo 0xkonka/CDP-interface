@@ -3,9 +3,9 @@ import { defillamaTokens } from '@/configs/defillamaTokens'
 
 export const getOverView = (collateral: string) => {
     // Here we will get Detail values from <collateral> parameter (It is collateral asset name)
-    if (collateral == 'STAR') {
+    if (collateral == 'WETH') {
         return {
-            asset: 'STAR',
+            asset: 'WETH',
             type: 'Volatile',
             borrowAPY: 10,
             maxLeverage: 30,
@@ -24,69 +24,7 @@ export const getOverView = (collateral: string) => {
             rateType: 'Variable Rate'
         }
     }
-    if (collateral == 'rETH') {
-        return {
-            asset: 'rETH',
-            type: 'LST',
-            borrowAPY: 10,
-            maxLeverage: 30,
-            LTVRatio: 95,
-            maxDepositAPY: 30,
-            baseDepositAPY: 10,
-            active: true,
-            platform: 'Uniswap v3',
-            liquidationThreshold: 80,
-            totalTrenUSD: 800000,
-            tvlLeverage: 25,
-            tvl: 4300000,
-            borrowFee: 6.263,
-            availableTrenUSD: 500000,
-            interestRate: 5,
-            rateType: 'Variable Rate'
-        }
-    }
-    if (collateral == 'Mock wstETH') {
-        return {
-            asset: 'Mock wstETH',
-            type: 'LST',
-            borrowAPY: 10,
-            maxLeverage: 30,
-            LTVRatio: 95,
-            maxDepositAPY: 30,
-            baseDepositAPY: 10,
-            active: true,
-            platform: 'Uniswap v3',
-            liquidationThreshold: 80,
-            totalTrenUSD: 800000,
-            tvlLeverage: 25,
-            tvl: 4300000,
-            borrowFee: 6.263,
-            availableTrenUSD: 500000,
-            interestRate: 5,
-            rateType: 'Variable Rate'
-        }
-    }
-    if (collateral == 'Mock bLUSD') {
-        return {
-            asset: 'Mock bLUSD',
-            type: 'Stable',
-            borrowAPY: 10,
-            maxLeverage: 30,
-            LTVRatio: 95,
-            maxDepositAPY: 30,
-            baseDepositAPY: 10,
-            active: true,
-            platform: 'Uniswap v3',
-            liquidationThreshold: 80,
-            totalTrenUSD: 800000,
-            tvlLeverage: 25,
-            tvl: 4300000,
-            borrowFee: 6.263,
-            availableTrenUSD: 500000,
-            interestRate: 5,
-            rateType: 'Variable Rate'
-        }
-    }
+
     return
 }
 
@@ -126,11 +64,16 @@ import axios from 'axios'
 export const getDefillmaAPY = async (symbol: string) => {
     const POOL_ID = defillamaTokens.find(id => id.tokenSymbol === symbol)?.poolID
 
-    const { data } = await axios.get(`https://yields.llama.fi/chart/${POOL_ID}`)
+    try {
+        const { data } = await axios.get(`https://yields.llama.fi/chart/${POOL_ID}`)
 
-    if (data.status === 'success') {
-        const APYResultList = data.data
-        const length = data.data.length
-        return APYResultList[length - 1].apy
+        if (data.status === 'success') {
+            const APYResultList = data.data
+            const length = data.data.length
+            return APYResultList[length - 1].apy
+        }
+    } catch (err) {
+        console.log('err', err)
+        return 0
     }
 }

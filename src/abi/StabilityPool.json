@@ -49,7 +49,7 @@
                 "type": "address"
             }
         ],
-        "name": "StabilityPool__ModuleManagerOnly",
+        "name": "StabilityPool__VesselManagerOnly",
         "type": "error"
     },
     {
@@ -158,6 +158,25 @@
             }
         ],
         "name": "EpochUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_depositor",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_GRVT",
+                "type": "uint256"
+            }
+        ],
+        "name": "GRVTPaidToDepositor",
         "type": "event"
     },
     {
@@ -373,25 +392,6 @@
             }
         ],
         "name": "SystemSnapshotUpdated",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "_depositor",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "_TRENVT",
-                "type": "uint256"
-            }
-        ],
-        "name": "TRENVTPaidToDepositor",
         "type": "event"
     },
     {
@@ -766,6 +766,19 @@
     },
     {
         "inputs": [],
+        "name": "flashLoanAddress",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "gasPoolAddress",
         "outputs": [
             {
@@ -839,6 +852,25 @@
                 "internalType": "address",
                 "name": "_depositor",
                 "type": "address"
+            }
+        ],
+        "name": "getDepositorGRVTGain",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_depositor",
+                "type": "address"
             },
             {
                 "internalType": "address[]",
@@ -857,25 +889,6 @@
                 "internalType": "uint256[]",
                 "name": "",
                 "type": "uint256[]"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_depositor",
-                "type": "address"
-            }
-        ],
-        "name": "getDepositorTRENVTGain",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -927,6 +940,19 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "grvtStaking",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -986,38 +1012,12 @@
     },
     {
         "inputs": [],
-        "name": "lastTRENVTError",
+        "name": "lastGRVTError",
         "outputs": [
             {
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "moduleManager",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "moduleManagerOperations",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -1158,18 +1158,31 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_trenvtStaking",
+                "name": "_flashLoanAddress",
                 "type": "address"
             }
         ],
-        "name": "setTRENVTStaking",
+        "name": "setFlashLoan",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_grvtStaking",
+                "type": "address"
+            }
+        ],
+        "name": "setGRVTStaking",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
         "inputs": [],
-        "name": "sortedModules",
+        "name": "sortedVessels",
         "outputs": [
             {
                 "internalType": "address",
@@ -1233,19 +1246,6 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "trenvtStaking",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "address",
@@ -1274,6 +1274,32 @@
         "name": "upgradeToAndCall",
         "outputs": [],
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "vesselManager",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "vesselManagerOperations",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {

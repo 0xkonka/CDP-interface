@@ -125,27 +125,24 @@ const App = (props: ExtendedAppProps) => {
       </Head>
       <Web3Provider>
         {/* <WalletConnector> */}
-          <ProtocolProvider>
-              <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-                <SettingsConsumer>
-                  {({ settings }) => {
-                    return (
-                      <ThemeComponent settings={settings}>
-                        <GlobalProvider>
-                          {getLayout(<Component {...pageProps} />)}
-                          <ReactHotToast>
-                            <Toaster
-                              position={settings.toastPosition}
-                              toastOptions={{ className: 'react-hot-toast' }}
-                            />
-                          </ReactHotToast>
-                        </GlobalProvider>
-                      </ThemeComponent>
-                    )
-                  }}
-                </SettingsConsumer>
-              </SettingsProvider>
-          </ProtocolProvider>
+        <ProtocolProvider>
+          <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+            <SettingsConsumer>
+              {({ settings }) => {
+                return (
+                  <ThemeComponent settings={settings}>
+                    <GlobalProvider>
+                      {getLayout(<Component {...pageProps} />)}
+                      <ReactHotToast>
+                        <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                      </ReactHotToast>
+                    </GlobalProvider>
+                  </ThemeComponent>
+                )
+              }}
+            </SettingsConsumer>
+          </SettingsProvider>
+        </ProtocolProvider>
         {/* </WalletConnector> */}
       </Web3Provider>
     </CacheProvider>
@@ -169,9 +166,10 @@ export const wagmiConfig = getDefaultConfig({
       wallets: [argentWallet, trustWallet, ledgerWallet]
     }
   ],
-  chains: [goerli],
-  transports:{
-    [goerli.id]:  http('https://goerli.infura.io/v3/118cc3d82f0c4673bb11fef068b8c5d5'),  
+  chains: [sepolia],
+  transports: {
+    [goerli.id]: http('https://goerli.infura.io/v3/118cc3d82f0c4673bb11fef068b8c5d5'),
+    [sepolia.id]: http('https://rpc-sepolia.rockx.com')
   }
   // ssr: true
 })

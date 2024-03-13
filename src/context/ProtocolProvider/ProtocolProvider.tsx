@@ -175,7 +175,8 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
         const price = result[14].result as bigint
         const entireSystemDebt = result[15].result as bigint
 
-        const baseAPY: number = await getDefillmaAPY(symbol)
+        let baseAPY = 0
+        if (symbol) baseAPY = await getDefillmaAPY(symbol)
 
         const _collateralDetail: CollateralParams = {
           address,

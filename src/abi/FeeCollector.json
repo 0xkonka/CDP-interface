@@ -38,12 +38,12 @@
                 "type": "address"
             }
         ],
-        "name": "FeeCollector__BorrowerOperationsOrModuleManagerOnly",
+        "name": "FeeCollector__BorrowerOperationsOrVesselManagerOnly",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "FeeCollector__InvalidTRENVTStakingAddress",
+        "name": "FeeCollector__InvalidGRVTStakingAddress",
         "type": "error"
     },
     {
@@ -59,7 +59,7 @@
                 "type": "address"
             }
         ],
-        "name": "FeeCollector__ModuleManagerOnly",
+        "name": "FeeCollector__VesselManagerOnly",
         "type": "error"
     },
     {
@@ -515,6 +515,19 @@
     },
     {
         "inputs": [],
+        "name": "flashLoanAddress",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "gasPoolAddress",
         "outputs": [
             {
@@ -529,6 +542,19 @@
     {
         "inputs": [],
         "name": "getProtocolRevenueDestination",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "grvtStaking",
         "outputs": [
             {
                 "internalType": "address",
@@ -620,32 +646,6 @@
     },
     {
         "inputs": [],
-        "name": "moduleManager",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "moduleManagerOperations",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "owner",
         "outputs": [
             {
@@ -692,7 +692,7 @@
     },
     {
         "inputs": [],
-        "name": "routeToTRENVTStaking",
+        "name": "routeToGRVTStaking",
         "outputs": [
             {
                 "internalType": "bool",
@@ -733,11 +733,24 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_trenvtStaking",
+                "name": "_flashLoanAddress",
                 "type": "address"
             }
         ],
-        "name": "setTRENVTStaking",
+        "name": "setFlashLoan",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_grvtStaking",
+                "type": "address"
+            }
+        ],
+        "name": "setGRVTStaking",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -773,7 +786,7 @@
     },
     {
         "inputs": [],
-        "name": "sortedModules",
+        "name": "sortedVessels",
         "outputs": [
             {
                 "internalType": "address",
@@ -837,19 +850,6 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "trenvtStaking",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "address",
@@ -878,6 +878,32 @@
         "name": "upgradeToAndCall",
         "outputs": [],
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "vesselManager",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "vesselManagerOperations",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     }
 ]

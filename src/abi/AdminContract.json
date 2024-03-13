@@ -128,6 +128,63 @@
         "inputs": [
             {
                 "indexed": false,
+                "internalType": "uint256",
+                "name": "oldFee",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "newFee",
+                "type": "uint256"
+            }
+        ],
+        "name": "FlashLoanFeeChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "oldMaxDebt",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "newMaxDebt",
+                "type": "uint256"
+            }
+        ],
+        "name": "FlashLoanMaxDebtChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "oldMinDebt",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "newMinDebt",
+                "type": "uint256"
+            }
+        ],
+        "name": "FlashLoanMinDebtChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
                 "internalType": "uint8",
                 "name": "version",
                 "type": "uint8"
@@ -567,6 +624,42 @@
     },
     {
         "inputs": [],
+        "name": "flashLoanAddress",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "flashLoanParams",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "flashLoanFee",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "flashLoanMinDebt",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "flashLoanMaxDebt",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "gasPoolAddress",
         "outputs": [
             {
@@ -644,6 +737,45 @@
             }
         ],
         "name": "getDecimals",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getFlashLoanFee",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getFlashLoanMaxNetDebt",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getFlashLoanMinNetDebt",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -859,6 +991,19 @@
     },
     {
         "inputs": [],
+        "name": "grvtStaking",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "initialize",
         "outputs": [],
         "stateMutability": "nonpayable",
@@ -885,32 +1030,6 @@
                 "internalType": "bool",
                 "name": "",
                 "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "moduleManager",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "moduleManagerOperations",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -1075,6 +1194,45 @@
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "_flashLoanFee",
+                "type": "uint256"
+            }
+        ],
+        "name": "setFeeForFlashLoan",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_flashLoanAddress",
+                "type": "address"
+            }
+        ],
+        "name": "setFlashLoan",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_grvtStaking",
+                "type": "address"
+            }
+        ],
+        "name": "setGRVTStaking",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "address",
                 "name": "_collateral",
                 "type": "address"
@@ -1104,6 +1262,32 @@
             }
         ],
         "name": "setMCR",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_flashLoanMaxDebt",
+                "type": "uint256"
+            }
+        ],
+        "name": "setMaxDebtForFlashLoan",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_flashLoanMinDebt",
+                "type": "uint256"
+            }
+        ],
+        "name": "setMinDebtForFlashLoan",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -1206,21 +1390,8 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_trenvtStaking",
-                "type": "address"
-            }
-        ],
-        "name": "setTRENVTStaking",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
         "inputs": [],
-        "name": "sortedModules",
+        "name": "sortedVessels",
         "outputs": [
             {
                 "internalType": "address",
@@ -1284,19 +1455,6 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "trenvtStaking",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "address",
@@ -1336,6 +1494,32 @@
             }
         ],
         "name": "validCollateral",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "vesselManager",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "vesselManagerOperations",
         "outputs": [
             {
                 "internalType": "address",
