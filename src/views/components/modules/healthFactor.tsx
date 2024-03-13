@@ -32,7 +32,7 @@ export const HealthFactor = (props: Props) => {
             <Box className='gradientProgress'>
                 <Typography variant='subtitle2' color={getHealthColor(safety)} fontWeight={400}
                     style={{marginLeft: `${Math.min(100, Math.floor(safety * 100 / 5))}%`, marginBottom: -6, width: 'fit-content', transform: 'translate(-50%, 0)'}}>
-                    {safety}
+                    {safety.toFixed(2)}
                 </Typography>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"
                     style={{marginLeft: `calc(-8px + ${Math.min(100, Math.floor(safety * 100 / 5))}%`, marginBottom: -6}}>
