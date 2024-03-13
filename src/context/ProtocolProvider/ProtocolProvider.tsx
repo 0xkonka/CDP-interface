@@ -10,6 +10,7 @@ import { ADMIN_CONTRACT, PRICE_FEED, BORROWER_OPERATIONS } from '@/configs/addre
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { wagmiConfig } from '@/pages/_app'
 import { ProtocolContext } from './ProtocolContext'
+import { Loader } from '@/views/components/Loader'
 
 type ProtocolContextValue = {
   collaterals: string[]
@@ -198,7 +199,9 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
       getCollateralDetails()
     }
   }, [chainId, collaterals])
-
-  return <ProtocolContext.Provider value={{ collaterals, collateralDetails }}>{children}</ProtocolContext.Provider>
+  
+  return <ProtocolContext.Provider value={{ collaterals, collateralDetails }}>
+    {children}
+  </ProtocolContext.Provider>
 }
 

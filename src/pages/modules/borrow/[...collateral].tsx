@@ -32,73 +32,87 @@ import { wagmiConfig } from '@/pages/_app'
 import { useAccount, useChainId, useReadContract } from 'wagmi'
 import { formatToThousands, removeComma } from '@/hooks/utils'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
-import { erc20Abi, formatEther, formatUnits } from 'viem'
+import { erc20Abi, formatEther, formatUnits, parseUnits } from 'viem'
 import { BORROWER_OPERATIONS } from '@/configs/address'
+import { Loader } from '@/views/components/Loader'
 
 interface userModuleInfoType {
-  userCollateralBal: bigint
+  userTotalCollateralAmount: number
   userAvailableBorrowAmount: number
+  minDepositAmount: number
+  minBorrowAmount: number
 }
 
 const Borrow = () => {
   const router = useRouter()
   const theme: Theme = useTheme()
-
-  const [open, setOpen] = useState<boolean>(false)
-  const [type, setType] = useState<string>('withdraw')
-  const { radiusBoxStyle } = useGlobalValues()
-  const [ableToApprove, setAbleToApprove] = useState(false)
-  const [depositInputError, setDepositInputError] = useState('')
-  const [borrowInputError, setBorrowInputError] = useState('')
-
-
+  // Get collateral name from router
   let { collateral } = router.query
-
   if (Array.isArray(collateral)) {
     collateral = collateral.join(' / ')
   }
+  // Modal Props
+  const [open, setOpen] = useState<boolean>(false)
+  const [type, setType] = useState<string>('withdraw')
+  const { radiusBoxStyle } = useGlobalValues()
+  // Validation status for deposit/borrow
+  const [ableToApprove, setAbleToApprove] = useState(false)
+  const [depositInputError, setDepositInputError] = useState('')
+  const [borrowInputError, setBorrowInputError] = useState('')
+  // User balance, deposit, borrow amount
+  const [userModuleInfo, setUserModuleInfo] = useState<userModuleInfoType>({
+    userTotalCollateralAmount: 0,
+    userAvailableBorrowAmount: 0,
+    minDepositAmount: 0,
+    minBorrowAmount: 0,
+  })
+  const [depositAmount, setDepositAmount] = useState('')
+  const [borrowAmount, setBorrowAmount] = useState('')
 
+  // Hook data fetching
   const { address: account } = useAccount()
-  const chainId = useChainId()
+  // === Get Collateral Detail === //
   const { collateralDetails } = useProtocol()
   const collateralDetail = useMemo(
     () => collateralDetails.find(i => i.symbol === collateral),
     [collateral, collateralDetails]
   )
-  const { address, decimals, liquidation } = collateralDetail || {}
-  let {price, LTV} = collateralDetail || {}
-  price = typeof price != 'undefined' ? BigInt(price) : BigInt(0)
-  LTV = typeof LTV != 'undefined' ? BigInt(LTV) : BigInt(100)
+  const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0) } = collateralDetail || {}
 
+  // === User Trove management === //
+  const { moduleInfo } = useModuleView(collateral!)
+  const {
+    debt: debtAmount = BigInt(0),
+    coll: depositedAmount = BigInt(0),
+    status: positionStatus = 'nonExistent'
+  } = moduleInfo || {}
+  
+  // Get Allowance
+  const chainId = useChainId()
   const { data: allowance } = useReadContract({
     address: collateralDetail?.address as '0x{string}',
     abi: erc20Abi,
     functionName: 'allowance',
     args: [account as '0x${string}', BORROWER_OPERATIONS[chainId] as '0x${string}']
   })
+  
+  // Calculate minimum deposit & borrow amount
+  useEffect(() => {
+    const _minBorrow = +formatEther(minNetDebt)
+    const _minDeposit = parseFloat((_minBorrow / +formatUnits(price, decimals!) / +formatEther(LTV)).toFixed(2))
 
-  const minDeposit = parseFloat((200 / +formatUnits(price, decimals!) / +formatEther(LTV)).toFixed(2)) // Minium collater deposit input
-  const minBorrow = 200
+    setUserModuleInfo(prevState => ({
+      ...prevState,
+      minBorrowAmount: _minBorrow,
+      minDepositAmount: _minDeposit
+    }))
+  }, [minNetDebt])
 
-  const { moduleInfo } = useModuleView(collateral!)
+  // useEffect(()=>{
+  //   console.log(debtAmount)
+  // }, [debtAmount, depositedAmount])
 
-  const {
-    debt: debtAmount,
-    coll: depositedAmount,
-    collUSD,
-    liquidationPrice,
-    healthFactor,
-    borrowingPower,
-    maximumBorrowingPower
-  } = moduleInfo || {}
-
-  const [userModuleInfo, setUserModuleInfo] = useState<userModuleInfoType>({
-    userCollateralBal: BigInt(0),
-    userAvailableBorrowAmount: 0
-  })
-  const [depositAmount, setDepositAmount] = useState('')
-  const [borrowAmount, setBorrowAmount] = useState('')
-
+  // Setup user collateral value for state
   useEffect(() => {
     if (!account || !address) return
     const getUserInfo = async () => {
@@ -106,29 +120,30 @@ const Borrow = () => {
         address: account as '0x${string}',
         token: address as '0x${string}'
       })
-
       setUserModuleInfo(prevState => ({
         ...prevState,
-        userCollateralBal: _userCollateralBal.value
+        userTotalCollateralAmount: +formatUnits(_userCollateralBal.value, decimals!)
       }))
     }
     getUserInfo()
   }, [account, address])
 
+  // Adjust available borrowing amount regarding deposit amount
   useEffect(() => {
     const _depositAmount = removeComma(depositAmount)
-    if (price && LTV && +_depositAmount > 0) {
+    if (+_depositAmount > 0) {
       const userAvailableBorrowAmount = +formatEther(price) * +_depositAmount * +formatEther(LTV)
       setUserModuleInfo(prevState => ({ ...prevState, userAvailableBorrowAmount }))
     }
-  }, [depositAmount, LTV, price])
+  }, [depositAmount])
 
+  // Validation checking for deposit/borrow inputs
   useEffect(() => {
     if(depositAmount != '') {
-        if(+removeComma(depositAmount) > +formatUnits(userModuleInfo.userCollateralBal, decimals!)) {
+        if(+removeComma(depositAmount) > userModuleInfo.userTotalCollateralAmount) {
             setDepositInputError(`Insufficient ${collateral} balance.`)
-        } else if(+removeComma(depositAmount) < minDeposit) {
-            setDepositInputError(`Minimum deposit amount is ${minDeposit} ${collateral}.`)
+        } else if(+removeComma(depositAmount) < userModuleInfo.minDepositAmount) {
+            setDepositInputError(`Minimum deposit amount is ${userModuleInfo.minDepositAmount} ${collateral}.`)
         } else {
             setDepositInputError('')
         }
@@ -136,19 +151,29 @@ const Borrow = () => {
     if(borrowAmount != '') {
         if(+removeComma(borrowAmount) > userModuleInfo.userAvailableBorrowAmount) {
             setBorrowInputError(`Available balance is ${formatToThousands(userModuleInfo.userAvailableBorrowAmount)} trenUSD.`)
-        } else if(+removeComma(borrowAmount) < minBorrow) {
-            setBorrowInputError(`Minimum borrow amount is ${minBorrow} trenUSD.`)
+        } else if(+removeComma(borrowAmount) < userModuleInfo.minBorrowAmount) {
+            setBorrowInputError(`Minimum borrow amount is ${userModuleInfo.minBorrowAmount} trenUSD.`)
         } else {
             setBorrowInputError('')
         }
     }
-    setAbleToApprove(depositAmount != '' && borrowAmount != '' && depositInputError == '' && borrowInputError == '')
   }, [depositAmount, borrowAmount, userModuleInfo])
 
+  // Aprove borrowing if there is no error.
   useEffect(() => {
     setAbleToApprove(depositAmount != '' && borrowAmount != '' && depositInputError == '' && borrowInputError == '')
-  }, [depositInputError, borrowInputError])
+  }, [depositAmount, borrowAmount, depositInputError, borrowInputError])
 
+  // Calculation View
+  const collateralValue = +formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals))
+  const loanValue = +formatUnits(debtAmount, decimals) + +removeComma(borrowAmount)
+  const currentLTV = (collateralValue == 0) ? 0 : (loanValue / collateralValue * 100)
+  const liquidationPrice = loanValue / (+formatEther(liquidation) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)))
+  const healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
+  const borrowingPowerPercent = currentLTV / +formatEther(LTV)
+  const maxBorrowingValue = collateralValue * +formatEther(LTV)
+
+  // Handle click for poups
   const handleClickApprove = () => {
     setOpen(true)
     setType('openOrAdjust')
@@ -170,6 +195,9 @@ const Borrow = () => {
     setType('repay')
   }
 
+  if(!collateralDetail || collateralDetails.length === 0) return <Loader content='Loading collateral detail...'/>
+  if(!moduleInfo) return <Loader content='Loading user module detail...'/>
+
   return (
     <Box>
       <Stack direction='row' sx={{ alignItems: 'center', width: 'fit-content', cursor: 'pointer', mb: 4 }}>
@@ -189,7 +217,7 @@ const Borrow = () => {
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
           <Switcher page='borrow' collateral={collateral || ''} />
-          <Box sx={radiusBoxStyle}>
+          <Box sx={radiusBoxStyle} id='deposit-box'>
             <Typography variant='subtitle1' sx={{ mb: 4, fontWeight: 600 }}>
               Deposit
             </Typography>
@@ -214,7 +242,7 @@ const Borrow = () => {
                     Available:
                   </Typography>
                   <Typography variant='body2' sx={{ ml: 1 }}>
-                    {formatToThousands(+formatUnits(userModuleInfo.userCollateralBal, decimals!))} {collateral}
+                    {formatToThousands(userModuleInfo.userTotalCollateralAmount)} {collateral}
                   </Typography>
                 </Stack>
                 <CleaveWrapper style={{ position: 'relative' }}>
@@ -245,7 +273,7 @@ const Borrow = () => {
                       color: theme.palette.primary.main
                     }}
                     onClick={() => {
-                      setDepositAmount(formatUnits(userModuleInfo.userCollateralBal, decimals!))
+                      setDepositAmount(userModuleInfo.userTotalCollateralAmount.toString())
                     }}
                   >
                     MAX
@@ -255,7 +283,7 @@ const Borrow = () => {
                     <Stack direction='row' gap={1} alignItems='center'>
                         <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
                         <Typography variant='subtitle2' fontWeight={400} sx={{opacity: 0.5}} color='white'>
-                          {formatToThousands(price ? +removeComma(depositAmount) * +formatUnits(price, decimals!) : 1)}
+                          {formatToThousands(+removeComma(depositAmount) * +formatUnits(price, decimals!))}
                         </Typography>
                     </Stack>
                     <Typography variant='subtitle2' color='white' fontWeight={300} textAlign='end'>{depositInputError}</Typography>
@@ -263,7 +291,7 @@ const Borrow = () => {
               </Grid>
             </Grid>
           </Box>
-          <Box sx={radiusBoxStyle}>
+          <Box sx={radiusBoxStyle} id='borrow-box'>
             <Typography variant='subtitle1' sx={{ mb: 4, fontWeight: 600 }}>
               Borrow
             </Typography>
@@ -342,13 +370,9 @@ const Borrow = () => {
           <Stack sx={{ ...radiusBoxStyle, height: 1, mb: 10, justifyContent: 'center' }}>
             <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
               {
-                ((decimals && depositedAmount != undefined && +formatUnits(depositedAmount, decimals) != 0) ||
-                (decimals && debtAmount != undefined && +formatUnits(debtAmount, decimals) != 0)) &&
+                positionStatus == 'active' &&
                 <Grid container sx={{ height: '100%' }}>
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
+                  <Grid item xs={12} md={6}
                     sx={{
                       pr: { xs: 0, md: 4 },
                       borderBottom: { xs: 'solid 1px #2D3131', md: 0 },
@@ -370,13 +394,11 @@ const Borrow = () => {
                       </Stack>
                       <Box>
                         <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
-                          {decimals && depositedAmount ? +formatUnits(depositedAmount, decimals) : 0}
+                          {+formatUnits(depositedAmount, decimals)}
                         </Typography>
                         <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
                           $
-                          {decimals && depositedAmount
-                            ? +formatUnits(depositedAmount, decimals) * +formatEther(price!)
-                            : 0}
+                          {+formatUnits(depositedAmount, decimals) * +formatEther(price!)}
                         </Typography>
                       </Box>
                     </Stack>
@@ -421,10 +443,10 @@ const Borrow = () => {
                       </Stack>
                       <Box>
                         <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
-                          {decimals && debtAmount ? +formatEther(debtAmount) : 0}
+                          {+formatEther(debtAmount)}
                         </Typography>
                         <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                          ${decimals && debtAmount ? +formatEther(debtAmount) : 0}
+                          ${+formatEther(debtAmount)}
                         </Typography>
                       </Box>
                     </Stack>
@@ -455,8 +477,7 @@ const Borrow = () => {
                 </Grid>
               }
               {
-                ((decimals && depositedAmount != undefined && +formatUnits(depositedAmount, decimals) == 0) &&
-                (decimals && debtAmount != undefined && +formatUnits(debtAmount, decimals) == 0)) &&
+                positionStatus != 'active' &&
                 <Typography variant='subtitle1' color='white' sx={{opacity: 0.2}}>
                       No open positions
                   </Typography>
@@ -466,18 +487,14 @@ const Borrow = () => {
           <Box sx={radiusBoxStyle}>
             <Grid container spacing={8}>
               <Grid item xs={12} lg={6}>
-              
-                {/* <HealthFactor safety={healthFactor || 1} /> */}
                 <HealthFactor 
-                  safety={(price && depositedAmount != undefined && decimals && liquidation && (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)) != 0) ? (+formatEther(liquidation) / ((Number(debtAmount) + +removeComma(borrowAmount)) / (+formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals))))) : 0 }
+                  safety={healthFactor}
                 />
               </Grid>
               <Grid item xs={12} lg={6}>
                 <BorrowingPower 
-                  // percent={(borrowingPower || 0) * 100} 
-                  // max={maximumBorrowingPower ? +formatEther(maximumBorrowingPower!) : 0} 
-                  percent={(price && depositedAmount != undefined  && decimals && (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)) != 0 && liquidation) ? ((Number(debtAmount) + +removeComma(borrowAmount)) / (+formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)))) * 100 /  +formatEther(LTV) : 0}
-                  max={(price && depositedAmount != undefined && decimals) ? +formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)) * +formatEther(LTV) : 0}
+                  percent={borrowingPowerPercent}
+                  max={maxBorrowingValue}
                 />
               </Grid>
             </Grid>
@@ -486,12 +503,10 @@ const Borrow = () => {
       </Grid>
       <Box sx={radiusBoxStyle}>
         <Result
-          // liquidationPrice={liquidationPrice || 0}
-          liquidationPrice={liquidation ? (Number(debtAmount) + +removeComma(borrowAmount)) / (+formatUnits(price, decimals!) * +formatEther(liquidation)) : 0}
-          // ltv={debtAmount && collUSD ? Number(debtAmount) / Number(collUSD) : 0}
-          ltv={(price && depositedAmount != undefined && decimals) ? (Number(debtAmount) + +removeComma(borrowAmount)) / (+formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals))) * 100 : 0}
-          collateralValue={(price && depositedAmount != undefined && decimals) ? +formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)) : 0}
-          loanValue={Number(debtAmount) + +removeComma(borrowAmount)}
+          liquidationPrice={liquidationPrice}
+          ltv={currentLTV}
+          collateralValue={collateralValue}
+          loanValue={loanValue}
         />
       </Box>
       <Stack direction='row' sx={{ justifyContent: 'center', py: 8 }}>
@@ -517,7 +532,7 @@ const Borrow = () => {
           collateral={String(collateral)}
           collateralDetail={collateralDetail}
           allowance={allowance}
-          userCollateralBal={userModuleInfo.userCollateralBal}
+          userCollateralBal={parseUnits(userModuleInfo.userTotalCollateralAmount.toString(), decimals)}
           depositAmount={depositAmount}
           borrowAmount={borrowAmount}
         />
