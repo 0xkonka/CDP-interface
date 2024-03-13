@@ -131,7 +131,6 @@ export const getDefillmaAPY = async (symbol: string) => {
     if (data.status === 'success') {
         const APYResultList = data.data
         const length = data.data.length
-        console.log('APYResultList[length - 1]', APYResultList[length - 1])
         return APYResultList[length - 1].apy
     }
 }

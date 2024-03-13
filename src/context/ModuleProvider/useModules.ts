@@ -15,11 +15,18 @@ const useModules = (collateral: string) => {
     [collateral, collateralDetails]
   )
 
+  const { refresh } = useProtocol()
+
   const { data: txhash, writeContract, isPending, error } = useWriteContract()
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash: txhash
   })
+
+  useEffect(() => {
+    console.log('isConfirmed', isConfirmed)
+    if (isConfirmed) refresh()
+  }, [isConfirmed, refresh])
 
   const BorrowerOperationsContract = {
     address: BORROWER_OPERATIONS[chainId] as '0x{string}',
