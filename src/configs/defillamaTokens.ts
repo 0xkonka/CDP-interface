@@ -1,6 +1,6 @@
 export const defillamaTokens = [
   {
-    tokenSymbol: 'STAR',
+    tokenSymbol: 'WETH',
     poolID: 'ddd25534-e3d5-4e4e-9b99-d3102323ac61'
   },
   {

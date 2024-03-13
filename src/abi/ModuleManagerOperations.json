@@ -1,7 +1,7 @@
 [
     {
         "inputs": [],
-        "name": "ModuleManagerOperations__EmptyAmount",
+        "name": "VesselManagerOperations__EmptyAmount",
         "type": "error"
     },
     {
@@ -17,7 +17,7 @@
                 "type": "uint256"
             }
         ],
-        "name": "ModuleManagerOperations__FeePercentOutOfBounds",
+        "name": "VesselManagerOperations__FeePercentOutOfBounds",
         "type": "error"
     },
     {
@@ -28,42 +28,37 @@
                 "type": "uint256"
             }
         ],
-        "name": "ModuleManagerOperations__InsufficientDebtTokenBalance",
+        "name": "VesselManagerOperations__InsufficientDebtTokenBalance",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "ModuleManagerOperations__InvalidArraySize",
+        "name": "VesselManagerOperations__InvalidArraySize",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "ModuleManagerOperations__InvalidParam",
+        "name": "VesselManagerOperations__InvalidParam",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "ModuleManagerOperations__ModuleNotActive",
+        "name": "VesselManagerOperations__NotTimelock",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "ModuleManagerOperations__NotTimelock",
+        "name": "VesselManagerOperations__NothingToLiquidate",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "ModuleManagerOperations__NothingToLiquidate",
+        "name": "VesselManagerOperations__OnlyVesselManager",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "ModuleManagerOperations__OnlyModuleManager",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "ModuleManagerOperations__RedemptionIsBlocked",
+        "name": "VesselManagerOperations__RedemptionIsBlocked",
         "type": "error"
     },
     {
@@ -79,12 +74,17 @@
                 "type": "uint256"
             }
         ],
-        "name": "ModuleManagerOperations__TCRMustBeAboveMCR",
+        "name": "VesselManagerOperations__TCRMustBeAboveMCR",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "ModuleManagerOperations__UnableToRedeemAnyAmount",
+        "name": "VesselManagerOperations__UnableToRedeemAnyAmount",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "VesselManagerOperations__VesselNotActive",
         "type": "error"
     },
     {
@@ -175,43 +175,6 @@
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "_asset",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "_borrower",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "_debt",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "_coll",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "enum IModuleManager.ModuleManagerOperation",
-                "name": "_operation",
-                "type": "uint8"
-            }
-        ],
-        "name": "ModuleLiquidated",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
                 "name": "previousOwner",
                 "type": "address"
             },
@@ -286,6 +249,43 @@
             }
         ],
         "name": "Upgraded",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_borrower",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_debt",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_coll",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "enum IVesselManager.VesselManagerOperation",
+                "name": "_operation",
+                "type": "uint8"
+            }
+        ],
+        "name": "VesselLiquidated",
         "type": "event"
     },
     {
@@ -388,11 +388,11 @@
             },
             {
                 "internalType": "address[]",
-                "name": "_moduleArray",
+                "name": "_vesselArray",
                 "type": "address[]"
             }
         ],
-        "name": "batchLiquidateModules",
+        "name": "batchLiquidateVessels",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -489,6 +489,19 @@
     {
         "inputs": [],
         "name": "feeCollector",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "flashLoanAddress",
         "outputs": [
             {
                 "internalType": "address",
@@ -640,6 +653,19 @@
     },
     {
         "inputs": [],
+        "name": "grvtStaking",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "initialize",
         "outputs": [],
         "stateMutability": "nonpayable",
@@ -689,35 +715,9 @@
                 "type": "uint256"
             }
         ],
-        "name": "liquidateModules",
+        "name": "liquidateVessels",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "moduleManager",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "moduleManagerOperations",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -856,6 +856,32 @@
     {
         "inputs": [
             {
+                "internalType": "address",
+                "name": "_flashLoanAddress",
+                "type": "address"
+            }
+        ],
+        "name": "setFlashLoan",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_grvtStaking",
+                "type": "address"
+            }
+        ],
+        "name": "setGRVTStaking",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint256",
                 "name": "_redemptionSofteningParam",
                 "type": "uint256"
@@ -867,21 +893,8 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_trenvtStaking",
-                "type": "address"
-            }
-        ],
-        "name": "setTRENVTStaking",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
         "inputs": [],
-        "name": "sortedModules",
+        "name": "sortedVessels",
         "outputs": [
             {
                 "internalType": "address",
@@ -945,19 +958,6 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "trenvtStaking",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "address",
@@ -986,6 +986,32 @@
         "name": "upgradeToAndCall",
         "outputs": [],
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "vesselManager",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "vesselManagerOperations",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     }
 ]
