@@ -4,6 +4,7 @@ import { createContext, useContext } from 'react'
 type ProtocolContextValue = {
   collaterals: string[]
   collateralDetails: CollateralParams[]
+  refresh: () => Promise<any>
 }
 export const ProtocolContext = createContext<ProtocolContextValue | undefined>(undefined)
 export const useProtocol = () => {
