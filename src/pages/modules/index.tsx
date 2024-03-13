@@ -62,6 +62,8 @@ const Modules = () => {
             tvl: +formatUnits(collateral.totalAssetDebt, collateral.decimals),
             borrowFee: +formatEther(collateral.borrowingFee) * 100,
             interestRate: collateral.interest,
+            baseDepositAPY: +collateral.baseAPY.toFixed(3),
+            maxDepositAPY: +collateral.baseAPY.toFixed(3) + 30
           }
         })
         .filter(collateral => collateral !== undefined) as CollateralType[]
@@ -117,7 +119,7 @@ const Modules = () => {
       newRows = newRows.filter(row => row.type == assetFilter)
     }
     if (filterOnlyActive == true) newRows = newRows.filter(row => row.active)
-    
+
     setRows(newRows)
   }
 
@@ -255,7 +257,7 @@ const Modules = () => {
                 onToogle={() => handleRowClick(index)}
                 isOpen={openRowIndex === index}
                 key={index}
-                collateralDetail = {collateralDetails[index]}
+                collateralDetail={collateralDetails[index]}
               />
             ))
           ) : (

@@ -1,4 +1,5 @@
 import { CollateralType } from '@/types/collateral/types'
+import { defillamaTokens } from '@/configs/defillamaTokens'
 
 export const getOverView = (collateral: string) => {
     // Here we will get Detail values from <collateral> parameter (It is collateral asset name)
@@ -112,9 +113,25 @@ export const removeComma = (amount: string) => {
 
 export const shortenWalletAddress = (address: string, chars = 4) => {
     if (typeof address !== 'string' || address.length < chars * 2) {
-        return address; // Return original address if it's too short to shorten
-      }
-    
+        return address // Return original address if it's too short to shorten
+    }
+
     // Take the first `chars` characters from the start, and `chars` from the end
-    return `${address.substring(0, chars + 2)}...${address.substring(address.length - chars)}`;
+    return `${address.substring(0, chars + 2)}...${address.substring(address.length - chars)}`
+}
+
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+
+export const getDefillmaAPY = async (symbol: string) => {
+    const POOL_ID = defillamaTokens.find(id => id.tokenSymbol === symbol)?.poolID
+
+    const { data } = await axios.get(`https://yields.llama.fi/chart/${POOL_ID}`)
+
+    if (data.status === 'success') {
+        const APYResultList = data.data
+        const length = data.data.length
+        console.log('APYResultList[length - 1]', APYResultList[length - 1])
+        return APYResultList[length - 1].apy
+    }
 }
