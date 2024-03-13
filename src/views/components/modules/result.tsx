@@ -36,7 +36,7 @@ export const Result = (props: Props) => {
                         Liquidation Price
                     </Typography>
                     <Typography variant='body1'>
-                        {liquidationPrice}
+                        {liquidationPrice.toFixed(8)}
                     </Typography>
                 </Stack>
             </Grid>
@@ -46,7 +46,7 @@ export const Result = (props: Props) => {
                         LTV
                     </Typography>
                     <Typography variant='body1'>
-                        {ltv}%
+                        {ltv.toFixed(2)}%
                     </Typography>
                 </Stack>
             </Grid>
