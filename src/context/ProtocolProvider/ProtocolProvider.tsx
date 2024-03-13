@@ -200,9 +200,6 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
     }
   }, [chainId, collaterals])
   
-  if(collaterals.length === 0 || collateralDetails.length === 0)
-    return <Loader content='Loading collateral detail..'/>
-    
   return <ProtocolContext.Provider value={{ collaterals, collateralDetails }}>
     {children}
   </ProtocolContext.Provider>
