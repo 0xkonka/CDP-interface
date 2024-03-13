@@ -211,6 +211,8 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
       getCollateralDetails()
     }
   }, [chainId, collaterals])
-
-  return <ProtocolContext.Provider value={{ collaterals, collateralDetails }}>{children}</ProtocolContext.Provider>
+  
+  return <ProtocolContext.Provider value={{ collaterals, collateralDetails }}>
+    {children}
+  </ProtocolContext.Provider>
 }
