@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { type BaseError, useAccount, useChainId, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
-import { erc20Abi, parseUnits } from 'viem'
+import { erc20Abi, parseUnits, parseGwei } from 'viem'
 import { useProtocol } from '../ProtocolProvider/ProtocolContext'
 import { BORROWER_OPERATIONS } from '@/configs/address'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
@@ -33,7 +33,8 @@ const useModules = (collateral: string) => {
         address: collateralDetail.address as '0x{string}',
         abi: erc20Abi,
         functionName: 'approve',
-        args: [BORROWER_OPERATIONS[chainId] as '0x{string}', approveAmount]
+        args: [BORROWER_OPERATIONS[chainId] as '0x{string}', approveAmount],
+        // gas: parseGwei('20'), 
       })
     } catch (err) {
       console.log('err', err)
