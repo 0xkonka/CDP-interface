@@ -7,6 +7,9 @@ import { wagmiConfig } from '@/pages/_app'
 import { useAccount, useChainId } from 'wagmi'
 import { useProtocol } from '../ProtocolProvider/ProtocolContext'
 import { formatEther } from 'viem'
+import { usePolling } from '@/hooks/use-polling'
+
+const POLLING_INTERVAL = 3000 * 1000 //default
 
 type ModuleEventTransitions = Record<ModuleView, Partial<Record<ModuleEvent, ModuleView>>>
 
@@ -130,44 +133,45 @@ export const useModuleView = (collateral: string) => {
     [collateral, collateralDetails]
   )
 
-  useEffect(() => {
-    if (!account || !chainId || !collateralDetail) return
-    const getModuleInfo = async () => {
-      const _module: any = await readContract(wagmiConfig, {
-        abi: MODULE_MANAGER_ABI,
-        address: MODULE_MANAGER[chainId] as '0x{string}',
-        functionName: 'Vessels',
-        args: [account, collateralDetail.address]
-      })
-      // if(collateralDetail.price == undefined) {
-      //   throw new Error('Collateral price fetching failed.')
-      // }
-      collateralDetail.price = BigInt(3948) * BigInt(10 ** collateralDetail.decimals) // This is temporary - Jordan
-      const collUSD = (_module[1] * collateralDetail.price) / BigInt(10 ** collateralDetail.decimals)
-      const currentLTV = Number(_module[0]) / Number(collUSD)
-      const MRCV = +formatEther(_module[0]) / +formatEther(collateralDetail.LTV);
-      const _moduleInfo: ModuleInfo = {
-        debt: _module[0] as bigint,
-        coll: _module[1] as bigint,
-        stake: _module[2] as bigint,
-        status: getUserModuleStatus(_module[3]) as UserModuleStatus,
-        arrayIndex: _module[4] as bigint,
-        collUSD,
-        currentLTV,
-        healthFactor: +formatEther(collateralDetail.liquidation) / currentLTV,
-        borrowingPower: currentLTV / +formatEther(collateralDetail.LTV),
-        maximumBorrowingPower: BigInt(formatEther(collUSD * collateralDetail.LTV)),
-        MRCV,
-        liquidationPrice : MRCV / +formatEther(_module[1])
-      }
-      setModuleStatus(_moduleInfo.status)
-      setModuleInfo(_moduleInfo)
-      setView(getInitialView(_moduleInfo.status))
+  // useEffect(() => {
 
-      console.log('_moduleInfo', _moduleInfo)
+  const getModuleInfo = async () => {
+    if (!account || !chainId || !collateralDetail) return
+    const _module: any = await readContract(wagmiConfig, {
+      abi: MODULE_MANAGER_ABI,
+      address: MODULE_MANAGER[chainId] as '0x{string}',
+      functionName: 'Vessels',
+      args: [account, collateralDetail.address]
+    })
+    // if(collateralDetail.price == undefined) {
+    //   throw new Error('Collateral price fetching failed.')
+    // }
+    collateralDetail.price = BigInt(3948) * BigInt(10 ** collateralDetail.decimals) // This is temporary - Jordan
+    const collUSD = (_module[1] * collateralDetail.price) / BigInt(10 ** collateralDetail.decimals)
+    const currentLTV = Number(_module[0]) / Number(collUSD)
+    const MRCV = +formatEther(_module[0]) / +formatEther(collateralDetail.LTV)
+    const _moduleInfo: ModuleInfo = {
+      debt: _module[0] as bigint,
+      coll: _module[1] as bigint,
+      stake: _module[2] as bigint,
+      status: getUserModuleStatus(_module[3]) as UserModuleStatus,
+      arrayIndex: _module[4] as bigint,
+      collUSD,
+      currentLTV,
+      healthFactor: +formatEther(collateralDetail.liquidation) / currentLTV,
+      borrowingPower: currentLTV / +formatEther(collateralDetail.LTV),
+      maximumBorrowingPower: BigInt(formatEther(collUSD * collateralDetail.LTV)),
+      MRCV,
+      liquidationPrice: MRCV / +formatEther(_module[1])
     }
-    getModuleInfo()
-  }, [chainId, account, collateralDetail])
+    setModuleStatus(_moduleInfo.status)
+    setModuleInfo(_moduleInfo)
+    setView(getInitialView(_moduleInfo.status))
+
+    console.log('_moduleInfo', _moduleInfo)
+  }
+  // getModuleInfo()
+  // }, [chainId, account, collateralDetail])
 
   const dispatchEvent = useCallback((event: ModuleEvent) => {
     const nextView = transition(viewRef.current, event)
@@ -187,5 +191,14 @@ export const useModuleView = (collateral: string) => {
     }
   }, [moduleStatus, dispatchEvent])
 
-  return { view, moduleInfo, dispatchEvent }
+  usePolling(getModuleInfo, POLLING_INTERVAL, false, [chainId, account, collateralDetail])
+
+  return {
+    view,
+    moduleInfo,
+    dispatchEvent,
+    refresh: () => {
+      return Promise.all([getModuleInfo()])
+    }
+  }
 }
