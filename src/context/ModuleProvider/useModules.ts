@@ -6,6 +6,7 @@ import { useProtocol } from '../ProtocolProvider/ProtocolContext'
 import { BORROWER_OPERATIONS } from '@/configs/address'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
 import { ethers } from 'ethers'
+import { useModuleView } from './useModuleView'
 
 const useModules = (collateral: string) => {
   const chainId = useChainId()
@@ -15,9 +16,10 @@ const useModules = (collateral: string) => {
     [collateral, collateralDetails]
   )
 
-  const { refresh } = useProtocol()
+  const { refresh: refreshProtocol } = useProtocol()
+  const { refresh: refreshModule } = useModuleView(collateral)
 
-  const { data: txhash, writeContract, isPending, error } = useWriteContract()
+  const { data: txhash, writeContract, isPending, error, reset } = useWriteContract()
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash: txhash
@@ -25,8 +27,12 @@ const useModules = (collateral: string) => {
 
   useEffect(() => {
     console.log('isConfirmed', isConfirmed)
-    if (isConfirmed) refresh()
-  }, [isConfirmed, refresh])
+    if (isConfirmed) {
+      refreshProtocol()
+      refreshModule()
+      reset()
+    }
+  }, [isConfirmed])
 
   const BorrowerOperationsContract = {
     address: BORROWER_OPERATIONS[chainId] as '0x{string}',
@@ -40,8 +46,8 @@ const useModules = (collateral: string) => {
         address: collateralDetail.address as '0x{string}',
         abi: erc20Abi,
         functionName: 'approve',
-        args: [BORROWER_OPERATIONS[chainId] as '0x{string}', approveAmount],
-        // gas: parseGwei('20'), 
+        args: [BORROWER_OPERATIONS[chainId] as '0x{string}', approveAmount]
+        // gas: parseGwei('20'),
       })
     } catch (err) {
       console.log('err', err)

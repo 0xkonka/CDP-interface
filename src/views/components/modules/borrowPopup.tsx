@@ -143,7 +143,7 @@ export const BorrowPopup = (props: Props) => {
   }, [type, decimals, userCollateralBal, depositedAmount, debtAmount])
 
   useEffect(() => {
-    if (isConfirmed) {
+    if (isConfirmed && !isPending) {
       initializePopupStates()
       switch (type) {
         case 'openOrAdjust':
@@ -176,7 +176,7 @@ export const BorrowPopup = (props: Props) => {
     }
     // console.log('available:', availableBalance, 'amount:', inputAmount)
     // console.log(+inputAmount > availableBalance)
-  }, [isConfirmed, inputAmount, depositAmount, borrowAmount, collateral, txhash, type])
+  }, [isConfirmed, isPending, inputAmount, depositAmount, borrowAmount, collateral, txhash, type])
 
   useEffect(() => {
     if (error) showToast('error', 'Error', (error as BaseError).shortMessage || error.message, 30000)
