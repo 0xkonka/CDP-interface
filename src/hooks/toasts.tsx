@@ -110,7 +110,7 @@ const SuccessContent = ({t, header, content, duration, hyperLink='#'}: ContentPr
   )
 }
 
-export const showToast = (type: 'success' | 'error', header: string, content: string, duration: number, hyperLink: string = '#') => {
+export const showToast = (type: 'success' | 'error', header: string, content: string, duration: number, hyperLink?: string) => {
   if( type == 'success') {
     return toast((t) => <SuccessContent t={t} header={header} content={content} duration={duration} hyperLink={hyperLink}/>, {
       duration: duration,
