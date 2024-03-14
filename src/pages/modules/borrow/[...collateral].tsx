@@ -168,7 +168,8 @@ const Borrow = () => {
   const collateralValue = +formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals))
   const loanValue = +formatUnits(debtAmount, decimals) + +removeComma(borrowAmount)
   const currentLTV = (collateralValue == 0) ? 0 : (loanValue / collateralValue * 100)
-  const liquidationPrice = loanValue / (+formatEther(liquidation) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)))
+  const totalCollateralQuantity = +removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)
+  const liquidationPrice = totalCollateralQuantity == 0 ? 0 : loanValue / totalCollateralQuantity
   const healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
   const borrowingPowerPercent = currentLTV / +formatEther(LTV)
   const maxBorrowingValue = collateralValue * +formatEther(LTV)
