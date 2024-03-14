@@ -368,7 +368,7 @@ const Borrow = () => {
           </Box>
         </Grid>
         <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Stack sx={{ ...radiusBoxStyle, height: 1, mb: 10, justifyContent: 'center' }}>
+          <Stack sx={{ ...radiusBoxStyle, height: 1, justifyContent: 'center' }}>
             <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
               {
                 positionStatus == 'active' &&
