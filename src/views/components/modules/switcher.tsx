@@ -11,6 +11,7 @@ import Icon from '@/@core/components/icon'
 
 import { useRouter } from 'next/router';
 import { shortenWalletAddress } from '@/hooks/utils';
+import { Copy } from '../Copy';
 
 interface Props {
     page: string
@@ -26,8 +27,8 @@ export const Switcher = (props: Props) => {
         return <></>
 
     return (
-        <Stack direction={isMediumScreen ? 'column' : 'row'} sx={{alignItems: 'center', justifyContent: 'space-between', gap: 4, py: 4, mb: {xs: 4, lg: 0}}}>
-            <Stack direction='row' sx={{alignItems: 'center', justifyContent: 'space-between', borderRadius: 2, border: 'solid 1px #C6C6C74D', width : {xs: 1, lg: 'auto'}}}>
+        <Stack direction={isMediumScreen ? 'column' : 'row'} sx={{alignItems: 'center', justifyContent: 'end', gap: 4, py: 4, mb: {xs: 4, lg: 0}}}>
+            {/* <Stack direction='row' sx={{alignItems: 'center', justifyContent: 'space-between', borderRadius: 2, border: 'solid 1px #C6C6C74D', width : {xs: 1, lg: 'auto'}}}>
                 <Button variant='outlined' onClick={() => {
                     if(page == 'leverage')
                         router.push(`/modules/borrow/${collateral?.toString().trim().replace(/\s+/g, '')}`)
@@ -51,7 +52,7 @@ export const Switcher = (props: Props) => {
                         }}}>
                         Leverage
                 </Button>
-            </Stack>
+            </Stack> */}
             <Stack direction='row' style={{alignItems: 'center'}} gap={3}>
                 <Link href='https://goerli.etherscan.io/address/0xA98AF95c2abcF7EE108ed0aeFf85b7992717e787' sx={{display: 'flex', alignItems: 'center'}}>
                     <Typography variant='h5' color='primary' sx={{fontWeight: 400}}>{shortenWalletAddress('0xA98AF95c2abcF7EE108ed0aeFf85b7992717e787')}</Typography>
@@ -66,7 +67,7 @@ export const Switcher = (props: Props) => {
                         </defs>
                     </svg>
                 </Link>
-                <Icon icon='tabler:copy' style={{cursor: 'pointer'}} fontSize={22}/>
+                <Copy text="0xA98AF95c2abcF7EE108ed0aeFf85b7992717e787" />
                 <Icon icon='iconoir:refresh' style={{cursor: 'pointer'}} fontSize={18}/>
                 <Icon icon='tabler:settings' style={{cursor: 'pointer'}} fontSize={22} onClick={() => {setOpenSlippage(true)}}/>
             </Stack>
