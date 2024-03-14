@@ -25,6 +25,9 @@ import { useGlobalValues } from '@/context/GlobalContext'
 // Third-party libraries
 import clsx from 'clsx'
 import { CollateralParams } from '@/context/ModuleProvider/type'
+import { useRouter } from 'next/router'
+import { useAccount } from 'wagmi'
+import { showToast } from '@/hooks/toasts'
 
 // Define Props
 interface TableHeaderProps {
@@ -60,15 +63,25 @@ const getChipTheme = (label: string) => {
 }
 
 const CollateralRow = (props: TableHeaderProps) => {
+    const router = useRouter()
     const {isOpen, row, onToogle} = props
     const theme: Theme = useTheme()
     const {isMediumScreen, isSmallScreen} = useGlobalValues()
     const hasBorrowPosition = true // We will get this value from collateral asset - Jordan
     const hasLeveragePosition = false
+    const {isConnected} = useAccount()
 
     if (!row || typeof row.asset === 'undefined') {
         console.error('CollateralRow component received undefined "row" or "row.asset" property.');
         return <div>Missing data</div>; // You can customize this message or behavior as needed.
+    }
+
+    const goToPosition = () => {
+        if(!isConnected) {
+            showToast('success', 'Confirm', 'Please connect wallet to check your module.', 5000)
+            return
+        }
+        router.replace(`/modules/borrow/${row.asset}`)
     }
 
     return (
@@ -102,10 +115,15 @@ const CollateralRow = (props: TableHeaderProps) => {
             {isMediumScreen ? (
             <Stack sx={{p: {xs: 3, sm: 6}}} onClick={
                 (event) => {
-                    if(event.target instanceof HTMLElement && event.target.className.includes('open-button'))
+                    if(event.target instanceof HTMLElement && event.target.className.includes('open-button') ||
+                        event.target instanceof SVGElement && event.target.className.baseVal.includes('arrow-right')) {
+                        if(!isConnected) {
+                            showToast('success', 'Confirm', 'Please connect wallet to check your module.', 5000)
+                            return
+                        }
+                        router.replace(`/modules/borrow/${row.asset}`)
                         return
-                    if(event.target instanceof SVGElement && event.target.className.baseVal.includes('arrow-right'))
-                        return
+                    }
                     onToogle()
                 }
             }>
@@ -173,10 +191,15 @@ const CollateralRow = (props: TableHeaderProps) => {
                 }
             }} onClick={
                 (event) => {
-                    if(event.target instanceof HTMLElement && event.target.className.includes('open-button'))
+                    if(event.target instanceof HTMLElement && event.target.className.includes('open-button') ||
+                        event.target instanceof SVGElement && event.target.className.baseVal.includes('arrow-right')) {
+                        if(!isConnected) {
+                            showToast('success', 'Confirm', 'Please connect wallet to check your module.', 5000)
+                            return
+                        }
+                        router.replace(`/modules/borrow/${row.asset}`)
                         return
-                    if(event.target instanceof SVGElement && event.target.className.baseVal.includes('arrow-right'))
-                        return
+                    }
                     onToogle()
                 }
             }>
@@ -206,8 +229,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                     </Typography>
                 </Stack>
                 <Stack direction='row' sx={{flex: '1.25 1 0%', justifyContent:'space-between', alignItems: 'center'}}>
-                    <Link href={`/modules/borrow/${row.asset}`} sx={{color: 'white'}}>
-                    {/* <Link> */}
+                    {/* <Link href={`/modules/borrow/${row.asset}`} sx={{color: 'white'}}> */}
                         <Stack direction='row' sx={{cursor: 'pointer', alignItems: 'center'}} className={clsx('open-button active-hover', {
                             'active-open': isOpen
                         })}>
@@ -219,7 +241,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                                 <path d="M12.5778 6.3154L6.89681 0.432587C6.82109 0.354182 6.71734 0.309067 6.60836 0.307164C6.49938 0.305262 6.39411 0.346729 6.3157 0.422444C6.2373 0.498158 6.19218 0.601917 6.19028 0.710895C6.18838 0.819874 6.22985 0.925144 6.30556 1.00355L11.2989 6.17427L0.72658 5.98973C0.672827 5.98879 0.619416 5.99845 0.569396 6.01816C0.519376 6.03786 0.473727 6.06722 0.435055 6.10457C0.396383 6.14191 0.365445 6.18651 0.344008 6.23581C0.322571 6.28511 0.311055 6.33815 0.310117 6.39191C0.309179 6.44566 0.318837 6.49907 0.33854 6.54909C0.358243 6.59911 0.387606 6.64476 0.424951 6.68343C0.462296 6.7221 0.506893 6.75304 0.556195 6.77448C0.605497 6.79591 0.658538 6.80743 0.712291 6.80837L11.2851 6.99239L6.11386 11.9862C6.03545 12.0619 5.99034 12.1657 5.98844 12.2747C5.98653 12.3836 6.028 12.4889 6.10371 12.5673C6.17943 12.6457 6.28319 12.6908 6.39217 12.6927C6.50115 12.6946 6.60642 12.6532 6.68482 12.5775L12.5687 6.89546C12.6467 6.81964 12.6914 6.71602 12.6931 6.6073C12.6948 6.49858 12.6533 6.39361 12.5778 6.3154Z" fill="#67DAB1"/>
                             </svg>
                         </Stack>
-                    </Link>
+                    {/* </Link> */}
 
                     <Box>
                         <Typography color='primary'>{row.active ? 'Active' : ''}</Typography>
@@ -246,7 +268,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                 </Box>
             </Collapse>
             <Stack direction='row' sx={{mt: 6, p: {xs: 3, sm: 6}, display: {xs: 'flex' , lg: 'none'}}}>
-                <Button href={`/modules/borrow/${row.asset}`} color={isOpen ? 'primary' : 'secondary'} sx={{ 
+                <Button onClick={goToPosition} color={isOpen ? 'primary' : 'secondary'} sx={{ 
                         minWidth: isSmallScreen ? 1 : 160
                     }} 
                     variant='outlined'

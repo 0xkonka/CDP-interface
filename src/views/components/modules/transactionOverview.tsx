@@ -18,7 +18,6 @@ import { useRouter } from 'next/router'
 import {useMemo} from 'react'
 
 interface Props {
-    liquidationPrice: number
     gasFee: number
     uptoFee?: number
     type: string
@@ -29,7 +28,7 @@ export const TransactionOverView = (props: Props) => {
     const {radiusBoxStyle} = useGlobalValues()
     const theme:Theme = useTheme()
     const router = useRouter()
-    const {liquidationPrice, gasFee, uptoFee, type, amount} = props
+    const {gasFee, uptoFee, type, amount} = props
 
     // Get collateral name from router
     let { collateral } = router.query
@@ -64,6 +63,9 @@ export const TransactionOverView = (props: Props) => {
     const new_CurrentLTV = (new_collateralValue == 0) ? 0 : (new_loanValue / new_collateralValue * 100)
     const old_healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
     const new_healthFactor = (new_CurrentLTV == 0) ? 0 : (+formatEther(liquidation) / new_CurrentLTV * 100)
+    console.log(new_loanValue)
+    console.log((new_collateralValue * +formatEther(liquidation)))
+    const liquidationPrice = (+formatUnits(depositedAmount, decimals) + plusColl) == 0 ? 0 : new_loanValue / ((+formatUnits(depositedAmount, decimals) + plusColl) * +formatEther(liquidation))
   
     return (
         <Stack>
@@ -75,7 +77,7 @@ export const TransactionOverView = (props: Props) => {
                     type == 'repay' &&
                     <Stack direction='row' justifyContent='space-between' alignItems='center'>
                         <Typography variant='h5' fontWeight={400}>Remaining debt</Typography>
-                        <Stack direction='row' gap={3} alignItems='center'>
+                        <Stack direction='row' gap={2} alignItems='center'>
                             <Stack direction='row' gap={1} alignItems='end'>
                                 <Typography variant='h5'>{formatToThousands(loanValue).substring(1)}</Typography>
                                 <Typography variant='body2' color='#FFF'>trenUSD</Typography>

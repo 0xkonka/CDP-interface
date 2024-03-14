@@ -58,7 +58,7 @@ export const Switcher = (props: Props) => {
                 </Button>
             </Stack> */}
             <Stack direction='row' style={{alignItems: 'center'}} gap={3}>
-                <Link href={`https://goerli.etherscan.io/address/${borrowContractAddr}`} target='_blank' sx={{display: 'flex', alignItems: 'center'}}>
+                <Link href={`https://sepolia.etherscan.io/address/${borrowContractAddr}`} target='_blank' sx={{display: 'flex', alignItems: 'center'}}>
                     <Typography variant='h5' color='primary' sx={{fontWeight: 400}}>{shortenWalletAddress(borrowContractAddr)}</Typography>
                     <svg style={{marginLeft: 4, marginBottom: 4}} xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
                         <g clipPath="url(#clip0_719_13657)">
@@ -72,7 +72,6 @@ export const Switcher = (props: Props) => {
                     </svg>
                 </Link>
                 <Copy text={borrowContractAddr} />
-                <Icon icon='iconoir:refresh' style={{cursor: 'pointer'}} fontSize={18}/>
                 <Icon icon='tabler:settings' style={{cursor: 'pointer'}} fontSize={22} onClick={() => {setOpenSlippage(true)}}/>
             </Stack>
         </Stack>

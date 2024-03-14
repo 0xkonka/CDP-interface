@@ -245,7 +245,7 @@ export const BorrowPopup = (props: Props) => {
               asset={type =='borrow' ? 'trenUSD' : String(collateral)}
               available={availableBalance}
             />
-            <TransactionOverView type={type} amount={inputAmount} liquidationPrice={2520.78} gasFee={0.14} />
+            <TransactionOverView type={type} amount={inputAmount} gasFee={0.14} />
             <Button
               sx={{
                 color: 'white',
@@ -278,7 +278,7 @@ export const BorrowPopup = (props: Props) => {
               depositAmount={depositAmount!}
               borrowAmount={borrowAmount!}
             />
-            <TransactionOverView type={type} amount={inputAmount} liquidationPrice={2520.78} gasFee={0.14} uptoFee={34.21} />
+            <TransactionOverView type={type} amount={inputAmount} gasFee={0.14} uptoFee={34.21} />
             <Button
               sx={{
                 color: 'white',
@@ -363,7 +363,6 @@ export const BorrowPopup = (props: Props) => {
             <AmountForm amount={inputAmount} setAmount={setInputAmount} type={type} asset='trenUSD' available={availableBalance} />
             <TransactionOverView
               type={type}
-              liquidationPrice={149.34}
               gasFee={0.14}
               amount={inputAmount}
             />
