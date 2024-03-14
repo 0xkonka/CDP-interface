@@ -5,22 +5,8 @@ export const getOverView = (collateral: string) => {
     // Here we will get Detail values from <collateral> parameter (It is collateral asset name)
     if (collateral == 'WETH') {
         return {
-            asset: 'WETH',
             type: 'Volatile',
-            borrowAPY: 10,
-            maxLeverage: 30,
-            LTVRatio: 95,
-            maxDepositAPY: 30,
-            baseDepositAPY: 10,
-            active: true,
             platform: 'Uniswap v3',
-            liquidationThreshold: 80,
-            totalTrenUSD: 800000,
-            tvlLeverage: 25,
-            tvl: 4300000,
-            borrowFee: 6.263,
-            availableTrenUSD: 500000,
-            interestRate: 5,
             rateType: 'Variable Rate'
         }
     }

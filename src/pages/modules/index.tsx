@@ -53,9 +53,12 @@ const Modules = () => {
       const _rows: CollateralType[] = collateralDetails
         .map((collateral: CollateralParams, index) => {
           return {
-            id: index + 1,
             ...getOverView(collateral.symbol),
+            id: index + 1,
+            active: collateral.active,
+            asset: collateral.symbol,
             LTVRatio: +(+formatEther(collateral.LTV) * 100).toFixed(2),
+            maxLeverage: +(1 / (1 - +formatEther(collateral.LTV))).toFixed(2),
             liquidationThreshold: +(+formatEther(collateral.liquidation) * 100).toFixed(2),
             totalTrenUSD: +formatUnits(collateral.mintCap, collateral.decimals),
             availableTrenUSD: +formatUnits(collateral.totalBorrowAvailable, collateral.decimals),
@@ -63,7 +66,9 @@ const Modules = () => {
             borrowFee: +formatEther(collateral.borrowingFee) * 100,
             interestRate: collateral.interest,
             baseDepositAPY: +collateral.baseAPY.toFixed(3),
-            maxDepositAPY: +collateral.baseAPY.toFixed(3) + 30
+            maxDepositAPY: +((+collateral.baseAPY + collateral.rewardAPY) * +formatEther(collateral.LTV)).toFixed(2),
+            borrowAPY: 10,
+            tvlLeverage: 25
           }
         })
         .filter(collateral => collateral !== undefined) as CollateralType[]
