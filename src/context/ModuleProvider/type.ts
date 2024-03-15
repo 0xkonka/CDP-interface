@@ -5,6 +5,7 @@ export type CollateralParams = {
     symbol: string
     decimals: number
     baseAPY: number
+    rewardAPY: number
     price: bigint
     index: bigint
     active: boolean

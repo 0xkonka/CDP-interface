@@ -185,6 +185,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
           decimals,
           baseAPY,
           price,
+          rewardAPY: 2,
           index,
           active,
           borrowingFee,
