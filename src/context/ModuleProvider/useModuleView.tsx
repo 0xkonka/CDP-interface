@@ -176,7 +176,6 @@ export const useModuleView = (collateral: string) => {
   const dispatchEvent = useCallback((event: ModuleEvent) => {
     const nextView = transition(viewRef.current, event)
 
-    // console.log('dispatchEvent() [current-view, event, next-view]', viewRef.current, event, nextView)
     setView(nextView)
   }, [])
 

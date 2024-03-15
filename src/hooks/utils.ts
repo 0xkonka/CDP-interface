@@ -1,16 +1,17 @@
-import { CollateralType } from '@/types/collateral/types'
 import { defillamaTokens } from '@/configs/defillamaTokens'
 
 export const getOverView = (collateral: string) => {
-    // Here we will get Detail values from <collateral> parameter (It is collateral asset name)
+    // Here we have some static overview for collateral. (Jordan)
+    // In future, we will remove this one and all values will be replaced with dynamic one which comes from contract.
     if (collateral == 'WETH') {
         return {
             type: 'Volatile',
+            borrowAPY: 10,
+            maxLeverage: 30,
             platform: 'Uniswap v3',
             rateType: 'Variable Rate'
         }
     }
-
     return
 }
 
