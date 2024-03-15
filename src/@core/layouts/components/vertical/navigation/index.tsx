@@ -57,7 +57,7 @@ interface Props {
   menuUnlockedIcon: LayoutProps['verticalLayoutProps']['navMenu']['unlockedIcon']
   afterNavMenuContent: LayoutProps['verticalLayoutProps']['navMenu']['afterContent']
   beforeNavMenuContent: LayoutProps['verticalLayoutProps']['navMenu']['beforeContent']
-footerProps?: FooterProps
+  footerProps?: FooterProps
 }
 
 const StyledBoxForShadow = styled(Box)<BoxProps>(({ theme }) => ({

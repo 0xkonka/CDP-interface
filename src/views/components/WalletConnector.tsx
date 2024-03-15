@@ -1,5 +1,5 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
+import { LandingView } from '../landingView'
 
 type WalletConnectorProps = {
   children: React.ReactNode
@@ -11,7 +11,9 @@ export const WalletConnector: React.FC<WalletConnectorProps> = ({ children }) =>
 
   return (
     <div>
-      <div className='flex w-full flex-col items-center'>{isConnected ? children : <ConnectButton />}</div>
+      <div className='wallet-connect-wrapper'>
+        {isConnected ? children : <LandingView />}
+      </div>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-// ** React Imports
+// ** React Imports 0xd012930642103A5C4EC173eC47E6412DbCA4D158
 import { ReactNode, useEffect, useState } from 'react'
 
 // ** Next Imports
@@ -30,7 +30,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets'
 import { Chain } from '@rainbow-me/rainbowkit'
 
-import { http, createConfig, WagmiProvider } from 'wagmi'
+import { http, WagmiProvider } from 'wagmi'
 import { mainnet, goerli, sepolia } from 'wagmi/chains'
 
 // ** Loader Import
@@ -73,12 +73,12 @@ import 'src/iconify-bundle/icons-bundle-react'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import '../../styles/rainbowwallet.css'
 import '@rainbow-me/rainbowkit/styles.css'
-import { ProtocolProvider, useProtocol } from '@/context/ProtocolContext'
-import { LiquityStoreProvider } from '@/lib-react'
-import Web3Wrapper from '@/context/Web3Wrapper'
+import { ProtocolProvider } from '@/context/ProtocolProvider/ProtocolProvider'
 import { GlobalProvider } from '@/context/GlobalContext'
 import { WalletConnector } from '@/views/components/WalletConnector'
+import { createPublicClient } from 'viem'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -124,31 +124,26 @@ const App = (props: ExtendedAppProps) => {
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
       <Web3Provider>
-        <WalletConnector>
-          <ProtocolProvider>
-            <Web3Wrapper>
-              <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-                <SettingsConsumer>
-                  {({ settings }) => {
-                    return (
-                      <ThemeComponent settings={settings}>
-                        <GlobalProvider>
-                          {getLayout(<Component {...pageProps} />)}
-                          <ReactHotToast>
-                            <Toaster
-                              position={settings.toastPosition}
-                              toastOptions={{ className: 'react-hot-toast' }}
-                            />
-                          </ReactHotToast>
-                        </GlobalProvider>
-                      </ThemeComponent>
-                    )
-                  }}
-                </SettingsConsumer>
-              </SettingsProvider>
-            </Web3Wrapper>
-          </ProtocolProvider>
-        </WalletConnector>
+        {/* <WalletConnector> */}
+        <ProtocolProvider>
+          <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+            <SettingsConsumer>
+              {({ settings }) => {
+                return (
+                  <ThemeComponent settings={settings}>
+                    <GlobalProvider>
+                      {getLayout(<Component {...pageProps} />)}
+                      <ReactHotToast>
+                        <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                      </ReactHotToast>
+                    </GlobalProvider>
+                  </ThemeComponent>
+                )
+              }}
+            </SettingsConsumer>
+          </SettingsProvider>
+        </ProtocolProvider>
+        {/* </WalletConnector> */}
       </Web3Provider>
     </CacheProvider>
   )
@@ -158,9 +153,10 @@ export default App
 
 // Web3 Configs
 
-const projectId = 'e973a06523ca5ac45d042a4e0b9d73f7'
+const projectId = '2112f934dd189c5ea9c90e2d55b04bb5'
 const { wallets } = getDefaultWallets()
-const config = getDefaultConfig({
+
+export const wagmiConfig = getDefaultConfig({
   appName: 'Tren Finance',
   projectId,
   wallets: [
@@ -170,7 +166,11 @@ const config = getDefaultConfig({
       wallets: [argentWallet, trustWallet, ledgerWallet]
     }
   ],
-  chains: [goerli]
+  chains: [sepolia],
+  transports: {
+    [goerli.id]: http('https://goerli.infura.io/v3/118cc3d82f0c4673bb11fef068b8c5d5'),
+    [sepolia.id]: http('https://rpc-sepolia.rockx.com')
+  }
   // ssr: true
 })
 const queryClient = new QueryClient()
@@ -183,7 +183,7 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
   if (!mounted) return null
 
   return (
-    <WagmiProvider config={config}>
+    <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider theme={darkTheme()} initialChain={5}>
           {children}

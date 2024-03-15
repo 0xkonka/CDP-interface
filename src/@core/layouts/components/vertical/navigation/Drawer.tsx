@@ -62,7 +62,7 @@ const Drawer = (props: Props) => {
   // Drawer Props for Mobile & Tablet screens
   const MobileDrawerProps = {
     open: navVisible,
-    onOpen: () => setNavVisible(true),
+    handleOpen: () => setNavVisible(true),
     onClose: () => setNavVisible(false),
     ModalProps: {
       keepMounted: true // Better open performance on mobile.
@@ -72,7 +72,7 @@ const Drawer = (props: Props) => {
   // Drawer Props for Laptop & Desktop screens
   const DesktopDrawerProps = {
     open: true,
-    onOpen: () => null,
+    handleOpen: () => null,
     onClose: () => null,
     onMouseEnter: () => {
       // Declared flag to resolve first time flicker issue while trying to collapse the menu

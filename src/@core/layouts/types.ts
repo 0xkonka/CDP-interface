@@ -84,7 +84,7 @@ export type VerticalLayoutProps = {
     branding?: (props?: any) => ReactNode
     afterContent?: (props?: any) => ReactNode
     beforeContent?: (props?: any) => ReactNode
-    componentProps?: Omit<SwipeableDrawerProps, 'open' | 'onOpen' | 'onClose'>
+    componentProps?: Omit<SwipeableDrawerProps, 'open' | 'handleOpen' | 'onClose'>
   }
 }
 

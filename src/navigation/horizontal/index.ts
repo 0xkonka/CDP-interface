@@ -9,9 +9,14 @@ const navigation = (): HorizontalNavItemsType => {
       path: '/modules'
     },
     {
-      title: 'Stake',
-      icon: 'stake',
-      path: '/stake'
+      title: 'Earn',
+      icon: 'earn',
+      path: '/earn'
+    },
+    {
+      title: 'Points',
+      icon: 'points',
+      path: '/points'
     },
     {
       title: 'Swap',
