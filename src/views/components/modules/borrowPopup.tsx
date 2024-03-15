@@ -88,7 +88,7 @@ export const BorrowPopup = (props: Props) => {
     collateralDetail,
     userCollateralBal
   } = props
-  const { decimals } = collateralDetail
+  const { decimals, LTV, price = BigInt(0) } = collateralDetail
 
   const theme: Theme = useTheme()
   const chainId = useChainId()
@@ -116,7 +116,7 @@ export const BorrowPopup = (props: Props) => {
   } = useModules(collateral)
 
   const { view: moduleView, moduleInfo } = useModuleView(collateral)
-  const { debt: debtAmount, coll: depositedAmount } = moduleInfo || {}
+  const { debt: debtAmount = BigInt(0), coll: depositedAmount = BigInt(0) } = moduleInfo || {}
 
   const [useWalletBalance, setUseWalletBalance] = useState(true)
   const [inputAmount, setInputAmount] = useState('')
@@ -131,13 +131,13 @@ export const BorrowPopup = (props: Props) => {
         setAvailableBalance(+formatUnits(userCollateralBal, decimals))
         break
       case 'withdraw':
-        setAvailableBalance(+formatUnits(depositedAmount || BigInt(0), decimals))
+        setAvailableBalance(+formatUnits(depositedAmount, decimals))
         break
       case 'borrow':
-        // setAvailableBalance(+formatEther(userCollateralBal))
+        setAvailableBalance(+formatUnits(depositedAmount, decimals) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount)))
         break
       case 'repay':
-        // setAvailableBalance(+formatEther(debtAmount || BigInt(0)))
+        setAvailableBalance(+formatEther(debtAmount))
         break
     }
   }, [type, decimals, userCollateralBal, depositedAmount, debtAmount])
@@ -174,8 +174,6 @@ export const BorrowPopup = (props: Props) => {
           break
       }
     }
-    // console.log('available:', availableBalance, 'amount:', inputAmount)
-    // console.log(+inputAmount > availableBalance)
   }, [isConfirmed, inputAmount, depositAmount, borrowAmount, collateral, txhash, type])
 
   useEffect(() => {
@@ -184,7 +182,7 @@ export const BorrowPopup = (props: Props) => {
 
   const handleSubmit = () => {
     if (!collateralDetail) return
-    if (+inputAmount > availableBalance) return
+    if (+inputAmount > availableBalance || +inputAmount == 0) return
     if (type === 'openOrAdjust') {
       try {
         if (+formattedAllowance < +removeComma(depositAmount!)) {
@@ -247,7 +245,7 @@ export const BorrowPopup = (props: Props) => {
               asset={type =='borrow' ? 'trenUSD' : String(collateral)}
               available={availableBalance}
             />
-            <TransactionOverView healthFrom={14.54} healthTo={1.75} liquidationPrice={2520.78} gasFee={0.14} />
+            <TransactionOverView type={type} amount={inputAmount} liquidationPrice={2520.78} gasFee={0.14} />
             <Button
               sx={{
                 color: 'white',
@@ -258,7 +256,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
-              disabled={isPending || isConfirming || (+inputAmount > availableBalance)}
+              disabled={isPending || isConfirming || (+inputAmount > availableBalance) || +inputAmount == 0}
             >
               {getButtonLabel(type, formattedAllowance < +formattedDepositAmount)}
             </Button>
@@ -280,7 +278,7 @@ export const BorrowPopup = (props: Props) => {
               depositAmount={depositAmount!}
               borrowAmount={borrowAmount!}
             />
-            <TransactionOverView healthTo={14.54} liquidationPrice={2520.78} gasFee={0.14} uptoFee={34.21} />
+            <TransactionOverView type={type} amount={inputAmount} liquidationPrice={2520.78} gasFee={0.14} uptoFee={34.21} />
             <Button
               sx={{
                 color: 'white',
@@ -291,7 +289,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
-              disabled={isPending || isConfirming || (+inputAmount > availableBalance)}
+              disabled={isPending || isConfirming || (+inputAmount > availableBalance) || +inputAmount == 0}
             >
               {getButtonLabel(type, formattedAllowance < +formattedDepositAmount)}
             </Button>
@@ -362,14 +360,11 @@ export const BorrowPopup = (props: Props) => {
                 Collateral (coming soon)
               </Button>
             </Stack>
-            <AmountForm amount={inputAmount} setAmount={setInputAmount} type={type} asset='trenUSD' available={20} />
+            <AmountForm amount={inputAmount} setAmount={setInputAmount} type={type} asset='trenUSD' available={availableBalance} />
             <TransactionOverView
               type={type}
-              healthFrom={1.54}
-              healthTo={13.42}
               liquidationPrice={149.34}
               gasFee={0.14}
-              debt={30}
               amount={inputAmount}
             />
             <Button
@@ -382,7 +377,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
-              disabled={isPending || isConfirming || (+inputAmount > availableBalance)}
+              disabled={isPending || isConfirming || (+inputAmount > availableBalance) || +inputAmount == 0}
             >
               {getButtonLabel(type)}
             </Button>
