@@ -107,7 +107,6 @@ const Modules = () => {
 
   // Comprehensive filter function
   const filterRows = () => {
-    console.log(filterText.toLocaleLowerCase())
     let newRows = rows.filter(row => row.symbol.toLocaleLowerCase().includes(filterText.toLowerCase()))
     if (assetFilter != 'All') {
       newRows = newRows.filter(row => row.type == assetFilter)
