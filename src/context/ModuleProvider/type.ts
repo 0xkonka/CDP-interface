@@ -1,4 +1,6 @@
 export type CollateralParams = {
+    [key: string]: any
+    id?: number
     address: string
     symbol: string
     decimals: number
@@ -20,6 +22,15 @@ export type CollateralParams = {
     LTV: bigint
     interest: number
     liquidation: bigint
+    maxDepositAPY: number
+
+    // Merged By Jordan. (CollateralType -> CollateralParams)
+    // Below fields will be replaced with dynamic data later (except id : it is just for row in Grid). FYI: Quinn
+    type: string // This is token type like 'volatile'
+    platform: string
+    rateType: string
+    borrowAPY: number
+    maxLeverage: number
 }
 
 type NoneView = 'NONE'

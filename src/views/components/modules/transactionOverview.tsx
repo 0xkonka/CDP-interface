@@ -63,8 +63,6 @@ export const TransactionOverView = (props: Props) => {
     const new_CurrentLTV = (new_collateralValue == 0) ? 0 : (new_loanValue / new_collateralValue * 100)
     const old_healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
     const new_healthFactor = (new_CurrentLTV == 0) ? 0 : (+formatEther(liquidation) / new_CurrentLTV * 100)
-    console.log(new_loanValue)
-    console.log((new_collateralValue * +formatEther(liquidation)))
     const liquidationPrice = (+formatUnits(depositedAmount, decimals) + plusColl) == 0 ? 0 : new_loanValue / ((+formatUnits(depositedAmount, decimals) + plusColl) * +formatEther(liquidation))
   
     return (

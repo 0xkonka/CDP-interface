@@ -1,43 +1,51 @@
 //@ MUI components
 import { Box, Typography, Grid, Stack, Button } from '@mui/material'
-//@ Types
-import { CollateralType } from '@/types/collateral/types'
+
 //@ Contexts
 import { useGlobalValues } from '@/context/GlobalContext'
 import { HealthFactor } from '../modules/healthFactor'
 import { BorrowingPower } from '../modules/borrowingPower'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
-import { formatEther } from 'viem'
+import { formatEther, formatUnits } from 'viem'
+import { CollateralParams } from '@/context/ModuleProvider/type'
+import { formatToThousands } from '@/hooks/utils'
 
 interface BorrowPostionProps {
-  hasBorrowPosition: boolean
-  row: CollateralType
+  row: CollateralParams
 }
 
 export const BorrowPosition = (props: BorrowPostionProps) => {
-  const { hasBorrowPosition, row } = props
+  const { row } = props
   const { isSmallScreen } = useGlobalValues()
 
-  const { moduleInfo } = useModuleView(row.asset)
+  const { moduleInfo } = useModuleView(row.symbol)
+  const {
+    healthFactor = 0,
+    borrowingPower = 0,
+    maximumBorrowingPower = BigInt(0),
+    status: positionStatus = 'nonExistent',
+    debt: debtAmount = BigInt(0),
+    coll: depositedAmount = BigInt(0),
+  } = moduleInfo || {}
 
   return (
-    <Box className='borrow-position' sx={{ display: hasBorrowPosition ? 'block' : 'none' }}>
+    <Box className='borrow-position' sx={{ display: positionStatus === 'active' ? 'block' : 'none' }}>
       <Typography variant='subtitle1' sx={{ my: 4, fontWeight: 600 }}>
         Borrow Position
       </Typography>
       <Grid container spacing={8}>
         <Grid item xs={12} lg={6}>
-          <HealthFactor safety={moduleInfo?.healthFactor || 1} />
+          <HealthFactor safety={healthFactor} />
         </Grid>
         <Grid item xs={12} lg={6}>
           <BorrowingPower
-            percent={moduleInfo ? moduleInfo?.borrowingPower * 100 : 0}
-            max={moduleInfo ? +formatEther(moduleInfo?.maximumBorrowingPower) : 0}
+            percent={borrowingPower * 100}
+            max={+formatEther(maximumBorrowingPower)}
           />
         </Grid>
         <Grid item xs={12} lg={6}>
           <Typography variant='subtitle1' sx={{ my: 4, fontWeight: 600 }}>
-            Deposit
+            Collateral
           </Typography>
           <Stack
             direction='row'
@@ -46,18 +54,23 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
             <Stack direction='row' sx={{ width: { xs: 1, md: 'auto' }, justifyContent: 'space-between' }}>
               <Stack direction='row' sx={{ alignItems: 'center' }}>
                 <img
-                  src={`/images/tokens/${row.asset.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
-                  alt={row.asset}
+                  src={`/images/tokens/${row.symbol.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
+                  alt={row.symbol}
                   height={isSmallScreen ? 36 : 42}
                   style={{ marginRight: 10 }}
                 />
-                {row.asset}
+                {row.symbol}
               </Stack>
               <Stack sx={{ ml: isSmallScreen ? 0 : 12, alignItems: 'flex-end' }}>
-                <Typography variant='subtitle1'>17.2B</Typography>
-                <Typography variant='subtitle2' sx={{ color: '#707175' }}>
-                  = $20,000.00
+                <Typography variant='subtitle1'>
+                  {formatToThousands(+formatUnits(depositedAmount, row.decimals)).substring(1)}
                 </Typography>
+                <Stack direction='row' alignItems='center' gap={1}>
+                  <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
+                  <Typography variant='subtitle2' sx={{ color: '#707175' }}>
+                    {formatToThousands(+formatUnits(depositedAmount, row.decimals) * +formatEther(row.price))}
+                  </Typography>
+                </Stack>
               </Stack>
             </Stack>
             <Stack direction='row'>
@@ -85,7 +98,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
         </Grid>
         <Grid item xs={12} lg={6}>
           <Typography variant='subtitle1' sx={{ my: 4, fontWeight: 600 }}>
-            Borrow
+            Debt
           </Typography>
           <Stack
             direction='row'
@@ -101,10 +114,15 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
                 trenUSD
               </Stack>
               <Stack sx={{ ml: isSmallScreen ? 0 : 12, alignItems: 'flex-end' }}>
-                <Typography variant='subtitle1'>16.000.00</Typography>
-                <Typography variant='subtitle2' sx={{ color: '#707175' }}>
-                  = $16,000.00
+                <Typography variant='subtitle1'>
+                  {formatToThousands(+formatEther(debtAmount)).substring(1)}
                 </Typography>
+                <Stack direction='row' alignItems='center' gap={1}>
+                  <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
+                  <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
+                    {formatToThousands(+formatEther(debtAmount))}
+                  </Typography>
+                </Stack>
               </Stack>
             </Stack>
             <Stack direction='row'>

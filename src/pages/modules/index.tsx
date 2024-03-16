@@ -14,7 +14,6 @@ import { ToggleOnButton, ToggleOffButton } from '@/views/components/buttons'
 
 // Contexts & Types
 import { useGlobalValues } from '@/context/GlobalContext'
-import { CollateralType } from '@/types/collateral/types'
 
 // Utilities
 import { getOverView } from '@/hooks/utils'
@@ -46,27 +45,21 @@ const Modules = () => {
 
   const { collaterals, collateralDetails } = useProtocol()
 
-  const [rows, setRows] = useState<CollateralType[]>([])
+  const [rows, setRows] = useState<CollateralParams[]>([])
 
   useEffect(() => {
     if (collateralDetails && collateralDetails.length > 0) {
-      const _rows: CollateralType[] = collateralDetails
+      const _rows: CollateralParams[] = collateralDetails
         .map((collateral: CollateralParams, index) => {
           return {
             id: index + 1,
+            ...collateral,
             ...getOverView(collateral.symbol),
-            LTVRatio: +(+formatEther(collateral.LTV) * 100).toFixed(2),
-            liquidationThreshold: +(+formatEther(collateral.liquidation) * 100).toFixed(2),
-            totalTrenUSD: +formatUnits(collateral.mintCap, collateral.decimals),
-            availableTrenUSD: +formatUnits(collateral.totalBorrowAvailable, collateral.decimals),
-            tvl: +formatUnits(collateral.totalAssetDebt, collateral.decimals),
-            borrowFee: +formatEther(collateral.borrowingFee) * 100,
-            interestRate: collateral.interest,
-            baseDepositAPY: +collateral.baseAPY.toFixed(3),
             maxDepositAPY: +collateral.baseAPY.toFixed(3) + 30
           }
         })
-        .filter(collateral => collateral !== undefined) as CollateralType[]
+        .filter(collateral => collateral !== undefined) as CollateralParams[]
+
       setRows(_rows)
     }
   }, [collateralDetails])
@@ -114,7 +107,8 @@ const Modules = () => {
 
   // Comprehensive filter function
   const filterRows = () => {
-    let newRows = rows.filter(row => row.asset.toLocaleLowerCase().includes(filterText.toLowerCase()))
+    console.log(filterText.toLocaleLowerCase())
+    let newRows = rows.filter(row => row.symbol.toLocaleLowerCase().includes(filterText.toLowerCase()))
     if (assetFilter != 'All') {
       newRows = newRows.filter(row => row.type == assetFilter)
     }
@@ -181,9 +175,9 @@ const Modules = () => {
               { key: 'asset', label: 'Name' },
               { key: 'borrowAPY', label: 'borrow APY' },
               { key: 'maxLeverage', label: 'Max Leverage' },
-              { key: 'LTVRatio', label: 'LTV Ratio' },
+              { key: 'LTV', label: 'LTV Ratio' },
               { key: 'maxDepositAPY', label: 'Max Deposit APY' },
-              { key: 'baseDepositAPY', label: 'Base Deposit APY' }
+              { key: 'baseAPY', label: 'Base Deposit APY' }
             ]}
           />
         </Stack>
@@ -257,7 +251,6 @@ const Modules = () => {
                 onToogle={() => handleRowClick(index)}
                 isOpen={openRowIndex === index}
                 key={index}
-                collateralDetail={collateralDetails[index]}
               />
             ))
           ) : (

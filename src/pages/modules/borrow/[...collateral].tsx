@@ -35,6 +35,7 @@ import { useModuleView } from '@/context/ModuleProvider/useModuleView'
 import { erc20Abi, formatEther, formatUnits, parseUnits } from 'viem'
 import { BORROWER_OPERATIONS } from '@/configs/address'
 import { Loader } from '@/views/components/Loader'
+import { AmountForm } from '@/views/components/modules/amountForm'
 
 interface userModuleInfoType {
   userTotalCollateralAmount: number
@@ -70,7 +71,8 @@ const Borrow = () => {
   const [borrowAmount, setBorrowAmount] = useState('')
 
   // Hook data fetching
-  const { address: account } = useAccount()
+  const { address: account, isConnected } = useAccount()
+  
   // === Get Collateral Detail === //
   const { collateralDetails } = useProtocol()
   const collateralDetail = useMemo(
@@ -108,10 +110,6 @@ const Borrow = () => {
     }))
   }, [minNetDebt])
 
-  // useEffect(()=>{
-  //   console.log(debtAmount)
-  // }, [debtAmount, depositedAmount])
-
   // Setup user collateral value for state
   useEffect(() => {
     if (!account || !address) return
@@ -127,6 +125,7 @@ const Borrow = () => {
     }
     getUserInfo()
   }, [account, address])
+
 
   // Adjust available borrowing amount regarding deposit amount
   useEffect(() => {
@@ -195,7 +194,8 @@ const Borrow = () => {
     setOpen(true)
     setType('repay')
   }
-
+  
+  if(!isConnected) return <Loader content='Please connect wallet to check your module....'/>
   if(!collateralDetail || collateralDetails.length === 0) return <Loader content='Loading collateral detail...'/>
   if(!moduleInfo) return <Loader content='Loading user module detail...'/>
 
@@ -218,154 +218,18 @@ const Borrow = () => {
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
           <Switcher page='borrow' collateral={collateral || ''} />
-          <Box sx={radiusBoxStyle} id='deposit-box'>
-            <Typography variant='subtitle1' sx={{ mb: 4, fontWeight: 600 }}>
-              Deposit
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={5}>
-                <Stack direction='row' sx={{ alignItems: 'center', mb: 2 }}>
-                  <img
-                    src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
-                    alt='LinkedIn'
-                    height={42}
-                    style={{ marginRight: 10 }}
-                  />
-                  {collateral}
-                </Stack>
-                <Typography variant='body1' color='#707175'>
-                  {collateral}
-                </Typography>
-              </Grid>
-              <Grid item xs={7}>
-                <Stack direction='row' sx={{ justifyContent: 'end', alignItems: 'center', mb: 1 }}>
-                  <Typography variant='body2' color='#707175'>
-                    Available:
-                  </Typography>
-                  <Typography variant='body2' sx={{ ml: 1 }}>
-                    {formatToThousands(userModuleInfo.userTotalCollateralAmount)} {collateral}
-                  </Typography>
-                </Stack>
-                <CleaveWrapper style={{ position: 'relative' }}>
-                  <Cleave
-                    id='collateral-assets-amount'
-                    placeholder='0.00'
-                    options={{
-                      numeral: true,
-                      numeralThousandsGroupStyle: 'thousand',
-                      numeralDecimalScale: 2, // Always show two decimal points
-                      numeralDecimalMark: '.', // Decimal mark is a period
-                      stripLeadingZeroes: false // Prevents stripping the leading zero before the decimal point
-                    }}
-                    style={{ paddingRight: 50 }}
-                    value={depositAmount}
-                    onChange={e => setDepositAmount(e.target.value)}
-                    autoComplete='off'
-                  />
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      right: 10,
-                      top: 10,
-                      cursor: 'pointer',
-                      borderLeft: 'solid 1px #12201F',
-                      fontSize: 12,
-                      pl: 1,
-                      color: theme.palette.primary.main
-                    }}
-                    onClick={() => {
-                      setDepositAmount(userModuleInfo.userTotalCollateralAmount.toString())
-                    }}
-                  >
-                    MAX
-                  </Box>
-                </CleaveWrapper>
-                <Stack direction='row' justifyContent='space-between' mt={1}>
-                    <Stack direction='row' gap={1} alignItems='center'>
-                        <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
-                        <Typography variant='subtitle2' fontWeight={400} sx={{opacity: 0.5}} color='white'>
-                          {formatToThousands(+removeComma(depositAmount) * +formatUnits(price, decimals!))}
-                        </Typography>
-                    </Stack>
-                    <Typography variant='subtitle2' color='white' fontWeight={300} textAlign='end'>{depositInputError}</Typography>
-                </Stack>
-              </Grid>
-            </Grid>
-          </Box>
-          <Box sx={radiusBoxStyle} id='borrow-box'>
-            <Typography variant='subtitle1' sx={{ mb: 4, fontWeight: 600 }}>
-              Borrow
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={5}>
-                <Stack direction='row' sx={{ alignItems: 'center', mb: 2 }}>
-                  <Image
-                    src={`/images/tokens/trenUSD.png`}
-                    alt='LinkedIn'
-                    width={32}
-                    height={32}
-                    style={{ borderRadius: '100%', marginRight: 24 }}
-                  />
-                  <Typography variant='body1'>trenUSD</Typography>
-                </Stack>
-                <Typography variant='body1' color='#707175'>
-                  Tren Finance USD
-                </Typography>
-              </Grid>
-              <Grid item xs={7}>
-                <Stack direction='row' sx={{ justifyContent: 'end', alignItems: 'center', mb: 1 }}>
-                  <Typography variant='body2' color='#707175'>
-                    Available:
-                  </Typography>
-                  <Typography variant='body2' sx={{ ml: 1 }}>
-                    {formatToThousands(userModuleInfo.userAvailableBorrowAmount)} trenUSD
-                  </Typography>
-                </Stack>
-                <CleaveWrapper style={{ position: 'relative' }}>
-                  <Cleave
-                    id='tren-usd-amount'
-                    placeholder='0.00'
-                    options={{
-                      numeral: true,
-                      numeralThousandsGroupStyle: 'thousand',
-                      numeralDecimalScale: 2, // Always show two decimal points
-                      numeralDecimalMark: '.', // Decimal mark is a period
-                      stripLeadingZeroes: false // Prevents stripping the leading zero before the decimal point
-                    }}
-                    value={borrowAmount}
-                    onChange={e => setBorrowAmount(e.target.value)}
-                    autoComplete='off'
-                  />
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      right: 10,
-                      top: 10,
-                      cursor: 'pointer',
-                      borderLeft: 'solid 1px #12201F',
-                      fontSize: 12,
-                      pl: 1,
-                      color: theme.palette.primary.main
-                    }}
-                    onClick={() => {
-                      setBorrowAmount(userModuleInfo.userAvailableBorrowAmount.toString())
-                    }}
-                  >
-                    MAX
-                  </Box>
-                </CleaveWrapper>
-                <Stack direction='row' justifyContent='space-between' mt={1}>
-                    <Stack direction='row' gap={1} alignItems='center'>
-                        <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
-                        <Typography variant='subtitle2' fontWeight={400} sx={{opacity: 0.5}} color='white'>
-                          {formatToThousands(+removeComma(borrowAmount))}
-                        </Typography>
-                    </Stack>
-                    <Typography variant='subtitle2' color='white' fontWeight={300} textAlign='end'>{borrowInputError}</Typography>
-                </Stack>
-              </Grid>
-            </Grid>
-          </Box>
+          <Stack direction='column-reverse'>
+            <AmountForm amount={borrowAmount} setAmount={setBorrowAmount} type='borrow' asset='trenUSD' available={userModuleInfo.userAvailableBorrowAmount} showTooltip={false}/>
+            <Stack direction='row' justifyContent='space-between' alignItems='center' mb={3}>
+              <Typography variant='subtitle1' sx={{fontWeight: 600 }}>Borrow</Typography>
+              <Typography variant='subtitle2' color='white' fontWeight={300} textAlign='end'>{borrowInputError}</Typography>
+            </Stack>
+            <AmountForm amount={depositAmount} setAmount={setDepositAmount} type='deposit' asset={collateral!} available={userModuleInfo.userTotalCollateralAmount} showTooltip={false}/>
+            <Stack direction='row' justifyContent='space-between' alignItems='center' mb={3}>
+              <Typography variant='subtitle1' sx={{fontWeight: 600 }}>Deposit</Typography>
+              <Typography variant='subtitle2' color='white' fontWeight={300} textAlign='end'>{depositInputError}</Typography>
+            </Stack>
+          </Stack>
         </Grid>
         <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column' }}>
           <Stack sx={{ ...radiusBoxStyle, height: 1, justifyContent: 'center' }}>
@@ -395,12 +259,14 @@ const Borrow = () => {
                       </Stack>
                       <Box>
                         <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
-                          {+formatUnits(depositedAmount, decimals)}
+                          {formatToThousands(+formatUnits(depositedAmount, decimals)).substring(1)}
                         </Typography>
-                        <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                          $
-                          {+formatUnits(depositedAmount, decimals) * +formatEther(price!)}
-                        </Typography>
+                        <Stack direction='row' alignItems='center' gap={1}>
+                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
+                          <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
+                            {formatToThousands(+formatUnits(depositedAmount, decimals) * +formatEther(price!))}
+                          </Typography>
+                        </Stack>
                       </Box>
                     </Stack>
                     <Stack direction='row' sx={{ mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 } }}>
@@ -444,11 +310,14 @@ const Borrow = () => {
                       </Stack>
                       <Box>
                         <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
-                          {+formatEther(debtAmount)}
+                          {formatToThousands(+formatEther(debtAmount)).substring(1)}
                         </Typography>
-                        <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                          ${+formatEther(debtAmount)}
-                        </Typography>
+                        <Stack direction='row' alignItems='center' gap={1}>
+                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
+                          <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
+                            {formatToThousands(+formatEther(debtAmount))}
+                          </Typography>
+                        </Stack>
                       </Box>
                     </Stack>
                     <Stack direction='row' sx={{ mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 } }}>
@@ -502,7 +371,7 @@ const Borrow = () => {
           </Box>
         </Grid>
       </Grid>
-      <Box sx={radiusBoxStyle}>
+      <Box sx={{...radiusBoxStyle, pt: 6, pb: 6}} >
         <Result
           liquidationPrice={liquidationPrice}
           ltv={currentLTV}

@@ -181,26 +181,32 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
 
         const _collateralDetail: CollateralParams = {
           address,
-          price,
           symbol,
           decimals,
           baseAPY,
+          price,
           index,
           active,
-          mcr,
+          borrowingFee,
           ccr,
+          mcr,
           debtTokenGasCompensation,
           minNetDebt,
+          mintCap,
           percentDivisor,
-          borrowingFee,
           redemptionFeeFloor,
           redemptionBlockTimestamp,
-          mintCap,
           totalAssetDebt,
           totalBorrowAvailable: mintCap - entireSystemDebt,
-          liquidation: parseEther((1 / +formatEther(mcr)).toString()),
           LTV: parseEther((1 / +formatEther(ccr)).toString()),
-          interest: 5
+          interest: 5,
+          liquidation: parseEther((1 / +formatEther(mcr)).toString()),
+          type: 'token_type_here',
+          borrowAPY: 0,
+          maxLeverage: 0,
+          maxDepositAPY: 0,
+          platform: 'platform',
+          rateType: 'collateral rate tye here'
         }
 
         _collateralDetails.push(_collateralDetail)

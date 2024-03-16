@@ -2,16 +2,16 @@
 import {
     Box, Typography, Grid, Stack, Button,
 } from '@mui/material'
-//@ Types
-import { CollateralType } from '@/types/collateral/types'
+
 //@ Contexts
 import { useGlobalValues } from '@/context/GlobalContext'
 import { HealthFactor } from '../modules/healthFactor'
 import { BorrowingPower } from '../modules/borrowingPower'
+import { CollateralParams } from '@/context/ModuleProvider/type'
 
 interface LeveragePostionProps {
     hasLeveragePosition: boolean
-    row: CollateralType
+    row: CollateralParams
 }
 
 export const LeveragePosition = (props: LeveragePostionProps) => {
@@ -38,11 +38,11 @@ export const LeveragePosition = (props: LeveragePostionProps) => {
                         <Stack direction='row' sx={{width: {xs: 1, md: 'auto'}, justifyContent: 'space-between'}}>
                             <Stack direction='row' sx={{alignItems: 'center'}}>
                                 <img 
-                                    src={`/images/tokens/${row.asset.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
-                                    alt={row.asset} height={isSmallScreen ? 36 : 42}
+                                    src={`/images/tokens/${row.symbol.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
+                                    alt={row.symbol} height={isSmallScreen ? 36 : 42}
                                     style={{ marginRight: 10 }}
                                 />
-                                {row.asset}
+                                {row.symbol}
                             </Stack>
                             <Stack sx={{ml: isSmallScreen ? 0 : 12, alignItems: 'flex-end'}}>
                                 <Typography variant='subtitle1'>
@@ -83,11 +83,11 @@ export const LeveragePosition = (props: LeveragePostionProps) => {
                         <Stack direction='row' sx={{width: {xs: 1, md: 'auto'}, justifyContent: 'space-between'}}>
                             <Stack direction='row' sx={{alignItems: 'center'}}>
                                 <img 
-                                    src={`/images/tokens/${row.asset.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
-                                    alt={row.asset} height={isSmallScreen ? 36 : 42}
+                                    src={`/images/tokens/${row.symbol.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
+                                    alt={row.symbol} height={isSmallScreen ? 36 : 42}
                                     style={{ marginRight: 10 }}
                                 />
-                                {row.asset}
+                                {row.symbol}
                             </Stack>
                             <Stack sx={{ml: isSmallScreen ? 0 : 12, alignItems: 'flex-end'}}>
                                 <Typography variant='subtitle1'>
