@@ -19,6 +19,8 @@ export type CollateralParams = {
     redemptionFeeFloor: bigint
     redemptionBlockTimestamp: bigint
     totalAssetDebt: bigint
+    entireSystemDebt: bigint
+    totalCollDeposited: bigint
     totalBorrowAvailable: bigint
     LTV: bigint
     interest: number
