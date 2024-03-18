@@ -1,5 +1,5 @@
 // External libraries
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Typography, Box, InputAdornment, Switch, Stack } from '@mui/material'
 
 // Core template components
@@ -18,7 +18,9 @@ import { useGlobalValues } from '@/context/GlobalContext'
 // Utilities
 import { getOverView } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
+import { useModuleView } from '@/context/ModuleProvider/useModuleView'
 import { CollateralParams } from '@/context/ModuleProvider/type'
+import { formatEther, formatUnits } from 'viem'
 
 const Modules = () => {
   const [filterText, setFilterText] = useState<string>('')
@@ -41,12 +43,9 @@ const Modules = () => {
   ]
   const { isSmallScreen, isMediumScreen } = useGlobalValues()
 
-  const { collateralDetails } = useProtocol()
+  const { collaterals, collateralDetails } = useProtocol()
 
-  const [rows, setRows] = useState<CollateralParams[]>([])
-  const [totalRows, setTotalRows] = useState<CollateralParams[]>([])
-
-  useEffect(() => {
+  const rows = useMemo(() => {
     if (collateralDetails && collateralDetails.length > 0) {
       const _rows: CollateralParams[] = collateralDetails
         .map((collateral: CollateralParams, index) => {
@@ -58,11 +57,14 @@ const Modules = () => {
           }
         })
         .filter(collateral => collateral !== undefined) as CollateralParams[]
-
-      setRows(_rows)
-      setTotalRows(_rows)
+      return _rows
     }
+    return []
   }, [collateralDetails])
+
+  const [filteredRows, setRows] = useState<CollateralParams[]>(rows)
+
+  const { view } = useModuleView(collaterals[0])
 
   const handleRowClick = (index: number) => {
     setOpenRowIndex(openRowIndex === index ? -1 : index)
@@ -70,13 +72,12 @@ const Modules = () => {
 
   useEffect(() => {
     filterRows()
-  }, [filterText, filterOnlyActive, assetFilter])
+  }, [filterText, filterOnlyActive, assetFilter, rows])
 
   // Sory by different specs
   useEffect(() => {
     const direction = sortBy[0]
     const sortKey = sortBy.substring(1)
-
     setRows(rows => {
       const sortedRows = [...rows]
       if (direction == '-') {
@@ -105,12 +106,11 @@ const Modules = () => {
 
   // Comprehensive filter function
   const filterRows = () => {
-    let newRows = totalRows.filter(row => row.symbol.toLocaleLowerCase().includes(filterText.toLowerCase()))
+    let newRows = rows.filter(row => row.symbol.toLocaleLowerCase().includes(filterText.toLowerCase()))
     if (assetFilter != 'All') {
       newRows = newRows.filter(row => row.type == assetFilter)
     }
     if (filterOnlyActive == true) newRows = newRows.filter(row => row.active)
-
     setRows(newRows)
   }
 
@@ -169,12 +169,12 @@ const Modules = () => {
             sortBy={sortBy}
             setSortBy={setSortBy}
             fields={[
-              { key: 'symbol', label: 'Name' },
-              { key: 'totalAssetDebt', label: 'TVL' },
-              { key: 'borrowAPY', label: 'Borrow APY' },
-              { key: 'totalBorrowAvailable', label: 'Available trenUSD' },
-              { key: 'mintCap', label: 'Total trenUSD' },
-              { key: 'LTV', label: 'LTV' }
+              { key: 'asset', label: 'Name' },
+              { key: 'borrowAPY', label: 'borrow APY' },
+              { key: 'maxLeverage', label: 'Max Leverage' },
+              { key: 'LTV', label: 'LTV Ratio' },
+              { key: 'maxDepositAPY', label: 'Max Deposit APY' },
+              { key: 'baseAPY', label: 'Base Deposit APY' }
             ]}
           />
         </Stack>
@@ -198,7 +198,7 @@ const Modules = () => {
                 setAssetFilter(value)
               }}
             >
-              {value + ' ' + rows.length}
+              {value + ' ' + filteredRows.length}
             </ToggleOnButton>
           ) : (
             <ToggleOffButton
@@ -241,8 +241,8 @@ const Modules = () => {
       {/* Collateral Group Stack*/}
       {collateralDetails && (
         <Stack sx={{ mt: 4 }} gap={isMediumScreen ? 5 : 0}>
-          {rows.length > 0 ? (
-            rows.map((row, index) => (
+          {filteredRows.length > 0 ? (
+            filteredRows.map((row, index) => (
               <CollateralRow
                 row={row}
                 onToogle={() => handleRowClick(index)}
