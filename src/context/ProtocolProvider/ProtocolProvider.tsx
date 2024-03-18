@@ -15,7 +15,7 @@ import { multicall, readContract, getBalance } from '@wagmi/core'
 import ADMIN_CONTRACT_ABI from '@/abi/AdminContract.json'
 import PRICE_FEED_ABI from '@/abi/PriceFeed.json'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
-import { ADMIN_CONTRACT, PRICE_FEED, BORROWER_OPERATIONS } from '@/configs/address'
+import { ADMIN_CONTRACT, PRICE_FEED, BORROWER_OPERATIONS, ACTIVE_POOL } from '@/configs/address'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { wagmiConfig } from '@/pages/_app'
 import { ProtocolContext } from './ProtocolContext'
@@ -154,7 +154,13 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
               ...BorrowerOperationsContract,
               functionName: 'getEntireSystemDebt',
               args: [collaterals[i]]
-            }
+            },
+            {
+              abi: erc20Abi,
+              address: collaterals[i] as '0x{string}',
+              functionName: 'balanceOf',
+              args: [ACTIVE_POOL[chainId] as '0x{string}']
+            },
           ]
         })
         const address = collaterals[i] as string
@@ -175,6 +181,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
         // const price = result[14].result as bigint
         const price = BigInt(3948) * BigInt(10 ** decimals) // This is temporary - Jordan
         const entireSystemDebt = result[15].result as bigint
+        const totalCollDeposited = result[16].result as bigint
 
         let baseAPY = 0
         if (symbol) baseAPY = await getDefillmaAPY(symbol)
@@ -198,6 +205,8 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
           redemptionFeeFloor,
           redemptionBlockTimestamp,
           totalAssetDebt,
+          entireSystemDebt,
+          totalCollDeposited,
           totalBorrowAvailable: mintCap - entireSystemDebt,
           LTV: parseEther((1 / +formatEther(ccr)).toString()),
           interest: 5,
