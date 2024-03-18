@@ -169,12 +169,12 @@ const Modules = () => {
             sortBy={sortBy}
             setSortBy={setSortBy}
             fields={[
-              { key: 'asset', label: 'Name' },
-              { key: 'borrowAPY', label: 'borrow APY' },
-              { key: 'maxLeverage', label: 'Max Leverage' },
-              { key: 'LTV', label: 'LTV Ratio' },
-              { key: 'maxDepositAPY', label: 'Max Deposit APY' },
-              { key: 'baseAPY', label: 'Base Deposit APY' }
+              { key: 'symbol', label: 'Name' },
+              { key: 'totalAssetDebt', label: 'TVL' },
+              { key: 'borrowAPY', label: 'Borrow APY' },
+              { key: 'totalBorrowAvailable', label: 'Available trenUSD' },
+              { key: 'mintCap', label: 'Total trenUSD' },
+              { key: 'LTV', label: 'LTV' }
             ]}
           />
         </Stack>
