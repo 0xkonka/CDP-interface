@@ -244,7 +244,7 @@ const Borrow = () => {
                       <Stack direction='row' sx={{ alignItems: 'center' }}>
                         <img
                           src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
-                          alt='LinkedIn'
+                          alt={collateral}
                           height={42}
                           style={{ marginRight: 10 }}
                         />
@@ -255,7 +255,7 @@ const Borrow = () => {
                           {formatToThousands(+formatUnits(depositedAmount, decimals)).substring(1)}
                         </Typography>
                         <Stack direction='row' alignItems='center' gap={1}>
-                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
+                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                           <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
                             {formatToThousands(+formatUnits(depositedAmount, decimals) * +formatEther(price!))}
                           </Typography>
@@ -294,7 +294,7 @@ const Borrow = () => {
                       <Stack direction='row' sx={{ alignItems: 'center' }}>
                         <Image
                           src={`/images/tokens/trenUSD.png`}
-                          alt='LinkedIn'
+                          alt='TrenUSD'
                           width={32}
                           height={32}
                           style={{ borderRadius: '100%', marginRight: 10 }}
@@ -306,7 +306,7 @@ const Borrow = () => {
                           {formatToThousands(+formatEther(debtAmount)).substring(1)}
                         </Typography>
                         <Stack direction='row' alignItems='center' gap={1}>
-                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
+                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                           <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
                             {formatToThousands(+formatEther(debtAmount))}
                           </Typography>
