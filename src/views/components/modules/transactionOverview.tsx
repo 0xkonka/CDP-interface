@@ -18,6 +18,7 @@ import { useRouter } from 'next/router'
 import {useMemo} from 'react'
 
 interface Props {
+    collateral: string
     gasFee: number
     uptoFee?: number
     type: string
@@ -27,14 +28,7 @@ interface Props {
 export const TransactionOverView = (props: Props) => {
     const {radiusBoxStyle} = useGlobalValues()
     const theme:Theme = useTheme()
-    const router = useRouter()
-    const {gasFee, uptoFee, type, amount} = props
-
-    // Get collateral name from router
-    let { collateral } = router.query
-    if (Array.isArray(collateral)) {
-        collateral = collateral.join(' / ')
-    }
+    const {collateral, gasFee, uptoFee, type, amount} = props
     
     // Fetch detail from hook.
     const { collateralDetails } = useProtocol()
