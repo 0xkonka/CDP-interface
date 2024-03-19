@@ -130,7 +130,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
                   {formatToThousands(+formatUnits(depositedAmount, row.decimals)).substring(1)}
                 </Typography>
                 <Stack direction='row' alignItems='center' gap={1}>
-                  <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
+                  <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                   <Typography variant='subtitle2' sx={{ color: '#707175' }}>
                     {formatToThousands(+formatUnits(depositedAmount, row.decimals) * +formatEther(row.price))}
                   </Typography>
@@ -174,7 +174,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
               <Stack direction='row' sx={{ alignItems: 'center' }}>
                 <img
                   src='/images/tokens/trenUSD.png'
-                  alt='LinkedIn'
+                  alt='TrenUSD'
                   style={{ borderRadius: '100%', marginRight: 10 }}
                 />
                 trenUSD
@@ -184,7 +184,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
                   {formatToThousands(+formatEther(debtAmount)).substring(1)}
                 </Typography>
                 <Stack direction='row' alignItems='center' gap={1}>
-                  <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
+                  <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                   <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
                     {formatToThousands(+formatEther(debtAmount))}
                   </Typography>
