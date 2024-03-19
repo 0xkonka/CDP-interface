@@ -2,7 +2,7 @@ import { Stack, Typography, Box, Link, Grid, Button} from '@mui/material'
 import Icon from 'src/@core/components/icon'
 
 import Image from 'next/image'
-import { ActiveTask } from './activetask'
+import { ActiveTask } from '@/views/components/points/ActiveTask'
 import { useGlobalValues } from '@/context/GlobalContext'
 
 const Points = () => {
