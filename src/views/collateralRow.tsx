@@ -68,7 +68,6 @@ const CollateralRow = (props: TableHeaderProps) => {
     const {isOpen, row, onToogle} = props
     const theme: Theme = useTheme()
     const {isMediumScreen, isSmallScreen} = useGlobalValues()
-    const {isConnected} = useAccount()
 
     const { moduleInfo } = useModuleView(row.symbol)
     const {
@@ -81,10 +80,6 @@ const CollateralRow = (props: TableHeaderProps) => {
     }
 
     const goToPosition = () => {
-        if(!isConnected) {
-            showToast('success', 'Confirm', 'Please connect wallet to check your module.', 5000)
-            return
-        }
         router.replace(`/modules/borrow/${row.symbol}`)
     }
 
@@ -121,10 +116,6 @@ const CollateralRow = (props: TableHeaderProps) => {
                 (event) => {
                     if(event.target instanceof HTMLElement && event.target.className.includes('open-button') ||
                         event.target instanceof SVGElement && event.target.className.baseVal.includes('arrow-right')) {
-                        if(!isConnected) {
-                            showToast('success', 'Confirm', 'Please connect wallet to check your module.', 5000)
-                            return
-                        }
                         router.replace(`/modules/borrow/${row.symbol}`)
                         return
                     }
@@ -197,10 +188,6 @@ const CollateralRow = (props: TableHeaderProps) => {
                 (event) => {
                     if(event.target instanceof HTMLElement && event.target.className.includes('open-button') ||
                         event.target instanceof SVGElement && event.target.className.baseVal.includes('arrow-right')) {
-                        if(!isConnected) {
-                            showToast('success', 'Confirm', 'Please connect wallet to check your module.', 5000)
-                            return
-                        }
                         router.replace(`/modules/borrow/${row.symbol}`)
                         return
                     }

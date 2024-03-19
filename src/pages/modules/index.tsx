@@ -18,9 +18,7 @@ import { useGlobalValues } from '@/context/GlobalContext'
 // Utilities
 import { getOverView } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
-import { useModuleView } from '@/context/ModuleProvider/useModuleView'
 import { CollateralParams } from '@/context/ModuleProvider/type'
-import { formatEther, formatUnits } from 'viem'
 
 const Modules = () => {
   const [filterText, setFilterText] = useState<string>('')
@@ -43,9 +41,10 @@ const Modules = () => {
   ]
   const { isSmallScreen, isMediumScreen } = useGlobalValues()
 
-  const { collaterals, collateralDetails } = useProtocol()
+  const { collateralDetails } = useProtocol()
 
   const [rows, setRows] = useState<CollateralParams[]>([])
+  const [totalRows, setTotalRows] = useState<CollateralParams[]>([])
 
   useEffect(() => {
     if (collateralDetails && collateralDetails.length > 0) {
@@ -61,10 +60,9 @@ const Modules = () => {
         .filter(collateral => collateral !== undefined) as CollateralParams[]
 
       setRows(_rows)
+      setTotalRows(_rows)
     }
   }, [collateralDetails])
-
-  const { view } = useModuleView(collaterals[0])
 
   const handleRowClick = (index: number) => {
     setOpenRowIndex(openRowIndex === index ? -1 : index)
@@ -107,7 +105,7 @@ const Modules = () => {
 
   // Comprehensive filter function
   const filterRows = () => {
-    let newRows = rows.filter(row => row.symbol.toLocaleLowerCase().includes(filterText.toLowerCase()))
+    let newRows = totalRows.filter(row => row.symbol.toLocaleLowerCase().includes(filterText.toLowerCase()))
     if (assetFilter != 'All') {
       newRows = newRows.filter(row => row.type == assetFilter)
     }
@@ -171,12 +169,12 @@ const Modules = () => {
             sortBy={sortBy}
             setSortBy={setSortBy}
             fields={[
-              { key: 'asset', label: 'Name' },
-              { key: 'borrowAPY', label: 'borrow APY' },
-              { key: 'maxLeverage', label: 'Max Leverage' },
-              { key: 'LTV', label: 'LTV Ratio' },
-              { key: 'maxDepositAPY', label: 'Max Deposit APY' },
-              { key: 'baseAPY', label: 'Base Deposit APY' }
+              { key: 'symbol', label: 'Name' },
+              { key: 'totalAssetDebt', label: 'TVL' },
+              { key: 'borrowAPY', label: 'Borrow APY' },
+              { key: 'totalBorrowAvailable', label: 'Available trenUSD' },
+              { key: 'mintCap', label: 'Total trenUSD' },
+              { key: 'LTV', label: 'LTV' }
             ]}
           />
         </Stack>

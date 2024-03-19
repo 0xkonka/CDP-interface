@@ -120,7 +120,7 @@ export interface ModuleInfo {
 
 export const useModuleView = (collateral: string) => {
   const chainId = useChainId()
-  const { address: account } = useAccount()
+  const { address: account = '0x0000000000000000000000000000000000000000' } = useAccount()
 
   const [moduleStatus, setModuleStatus] = useState<UserModuleStatus>('active')
   const [moduleInfo, setModuleInfo] = useState<ModuleInfo>()
@@ -136,6 +136,7 @@ export const useModuleView = (collateral: string) => {
   // useEffect(() => {
 
   const getModuleInfo = async () => {
+    console.log('_collateralDetail', collateralDetail)
     if (!account || !chainId || !collateralDetail) return
     const _module: any = await readContract(wagmiConfig, {
       abi: MODULE_MANAGER_ABI,

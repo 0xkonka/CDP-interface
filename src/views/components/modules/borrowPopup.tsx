@@ -199,7 +199,6 @@ export const BorrowPopup = (props: Props) => {
         console.log('err', err)
       }
     } else if (type == 'deposit') {
-      console.log('deposit')
       if (+formattedAllowance < +removeComma(depositAmount!)) {
         // In case Approve amount is less than deposit amount , Should be approved first
         handleApprove(parseUnits(inputAmount, decimals))

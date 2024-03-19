@@ -11,13 +11,6 @@ import { Box, Typography, Button, Grid, Theme, useTheme, Stack, Link } from '@mu
 // Core Components Imports
 import Icon from '@/@core/components/icon'
 
-// Styled Component Import
-import CleaveWrapper from '@/@core/styles/libs/react-cleave'
-
-// CleaveJS for input formatting
-import Cleave from 'cleave.js/react'
-import 'cleave.js/dist/addons/cleave-phone.us'
-
 // Context imports
 import { useGlobalValues } from '@/context/GlobalContext'
 import { ModuleOverView } from '@/views/components/modules/moduleOverView'
@@ -195,7 +188,7 @@ const Borrow = () => {
     setType('repay')
   }
   
-  if(!isConnected) return <Loader content='Please connect wallet to check your module....'/>
+  // if(!isConnected) return <Loader content='Please connect wallet to check your module....'/>
   if(!collateralDetail || collateralDetails.length === 0) return <Loader content='Loading collateral detail...'/>
   if(!moduleInfo) return <Loader content='Loading user module detail...'/>
 
