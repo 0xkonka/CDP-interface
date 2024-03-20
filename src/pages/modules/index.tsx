@@ -18,9 +18,7 @@ import { useGlobalValues } from '@/context/GlobalContext'
 // Utilities
 import { getOverView } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
-import { useModuleView } from '@/context/ModuleProvider/useModuleView'
 import { CollateralParams } from '@/context/ModuleProvider/type'
-import { formatEther, formatUnits } from 'viem'
 
 const Modules = () => {
   const [filterText, setFilterText] = useState<string>('')
@@ -43,7 +41,7 @@ const Modules = () => {
   ]
   const { isSmallScreen, isMediumScreen } = useGlobalValues()
 
-  const { collaterals, collateralDetails } = useProtocol()
+  const { collateralDetails } = useProtocol()
 
   const rows = useMemo(() => {
     if (collateralDetails && collateralDetails.length > 0) {
@@ -63,8 +61,6 @@ const Modules = () => {
   }, [collateralDetails])
 
   const [filteredRows, setRows] = useState<CollateralParams[]>(rows)
-
-  const { view } = useModuleView(collaterals[0])
 
   const handleRowClick = (index: number) => {
     setOpenRowIndex(openRowIndex === index ? -1 : index)
@@ -214,11 +210,8 @@ const Modules = () => {
       </Box>
 
       {/* Collateral Table Header */}
-      <Stack
-        direction='row'
-        sx={{
-          px: 6,
-          pt: 2,
+      <Stack direction='row' sx={{
+          px: 6, pt: 2, 
           display: {
             xs: 'none',
             lg: 'flex'

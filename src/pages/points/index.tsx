@@ -7,12 +7,6 @@ import { useGlobalValues } from '@/context/GlobalContext'
 
 const Points = () => {
     const {isSmallScreen} = useGlobalValues()
-    const textStyle = {
-        background: 'linear-gradient(180deg, #B7BCBC 0%, #FFFFFF 100%)',
-        backgroundClip: 'text',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent'
-    }
 
     return (
         <Box>
@@ -23,9 +17,7 @@ const Points = () => {
             </Box>
             <Box id='active-tasks' mt={30}>
                 <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                    <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} style={textStyle} sx={{
-                        fontSize: {xs: 32, lg: 40}
-                    }}>
+                    <Typography className='header-gradient' sx={{ fontSize: {xs: 32, lg: 40}}}>
                         Active Tasks
                     </Typography>
                     <Link href='#'>
