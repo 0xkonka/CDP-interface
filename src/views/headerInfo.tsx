@@ -9,13 +9,6 @@ import { formatEther, formatUnits } from 'viem'
 
 const HeaderInfo = () => {
   const { isSmallScreen } = useGlobalValues()
-  const textStyle = {
-    background: 'linear-gradient(180deg, #B7BCBC 0%, #FFF 100%)',
-    backgroundClip: 'text',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent'
-  }
-
   const { collateralDetails } = useProtocol()
 
   const ProtocolInfo = useMemo(() => {
@@ -36,21 +29,14 @@ const HeaderInfo = () => {
 
   return (
     <Box>
-      <Typography
-        variant='h1'
-        sx={{
-          mb: { xs: 2, md: 8 },
-          mt: 8,
+      <Typography className='header-gradient' variant='h1' sx={{
+          mb: { xs: 4, md: 8 }, mt: 8,
           fontSize: { xs: 36, md: 64, xl: 72 },
-          fontWeight: 400,
-          fontFamily: `'Britanica-HeavySemiExpanded', sans-serif`
         }}
-        style={textStyle}
       >
         Isolated Modules
       </Typography>
-      <Typography
-        variant={isSmallScreen ? 'subtitle1' : 'h5'}
+      <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'}
         color='#F3F3F3'
         sx={{ mb: { xs: 8, md: 16 }, fontWeight: 300, width: 730, maxWidth: '100%', lineHeight: { xs: 1.25, sm: 1.7 } }}
       >
@@ -68,7 +54,7 @@ const HeaderInfo = () => {
           sx={{ width: { xs: 1, md: 'auto' }, justifyContent: 'space-between', gap: { xs: 4, md: 16 } }}
         >
           <Box>
-            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{ mb: 1 }} color='#C6C6C7'>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{ mb: 1 }} color='#C6C6C7' fontWeight={400}>
               Total Collateral
             </Typography>
             <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 600 }}>
@@ -76,7 +62,7 @@ const HeaderInfo = () => {
             </Typography>
           </Box>
           <Box>
-            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{ mb: 1 }} color='#C6C6C7'>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{ mb: 1 }} color='#C6C6C7' fontWeight={400}>
               Total Debts
             </Typography>
             <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 600 }}>
@@ -84,7 +70,7 @@ const HeaderInfo = () => {
             </Typography>
           </Box>
           <Box>
-            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{ mb: 1 }} color='#C6C6C7'>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{ mb: 1 }} color='#C6C6C7' fontWeight={400}>
               TrenUSD Available
             </Typography>
             <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 600 }}>

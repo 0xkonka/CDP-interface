@@ -40,6 +40,16 @@ code[class*='language-'] {
   padding: 0;
 }
 
+/* Britanica Header Gradient */
+.header-gradient {
+  font-family: 'Britanica-HeavySemiExpanded', sans-serif;
+  background: linear-gradient(180deg, #B7BCBC 0%, #FFFFFF 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 400;
+}
+
 @font-face {
   font-family: 'Britanica-HeavySemiExpanded';
   src: url('/fonts/britanica-heavy-semi-expanded/britanica-heavy-semi-expanded.ttf') format('truetype');
