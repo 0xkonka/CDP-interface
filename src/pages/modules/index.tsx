@@ -19,6 +19,7 @@ import { useGlobalValues } from '@/context/GlobalContext'
 import { getOverView } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { CollateralParams } from '@/context/ModuleProvider/type'
+import { formatEther } from 'viem'
 
 const Modules = () => {
   const [filterText, setFilterText] = useState<string>('')
@@ -51,6 +52,7 @@ const Modules = () => {
             id: index + 1,
             ...collateral,
             ...getOverView(collateral.symbol),
+            maxLeverage: (1 / (1 - +formatEther(collateral.LTV))),
             maxDepositAPY: +collateral.baseAPY.toFixed(3) + 30
           }
         })

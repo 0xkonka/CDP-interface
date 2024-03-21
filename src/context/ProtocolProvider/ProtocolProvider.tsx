@@ -178,8 +178,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
         const redemptionBlockTimestamp = result[11].result as bigint
         const mintCap = result[12].result as bigint
         const totalAssetDebt = result[13].result as bigint
-        // const price = result[14].result as bigint
-        const price = BigInt(3948) * BigInt(10 ** decimals) // This is temporary - Jordan
+        const price = result[14].result as bigint
         const entireSystemDebt = result[15].result as bigint
         const totalCollDeposited = result[16].result as bigint
 

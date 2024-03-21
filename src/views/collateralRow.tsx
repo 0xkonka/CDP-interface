@@ -152,7 +152,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                         <Typography variant='h5' sx={{fontWeight: 400}}>{row.borrowAPY}%</Typography>
                     </Stack>
                     <Stack direction='row' sx={{flex: '1 1 0%'}}>
-                        <Typography variant='h5' sx={{fontWeight: 400}}>{row.maxLeverage}x&nbsp;</Typography>
+                        <Typography variant='h5' sx={{fontWeight: 400}}>{row.maxLeverage.toFixed(2)}x&nbsp;</Typography>
                     </Stack>
                     <Stack direction='row' sx={{flex: '1.3 1 0%', alignItems: 'center'}}>
                         <Typography variant='h5' sx={{fontWeight: 400}} color='primary'>{row.maxDepositAPY}%&nbsp;</Typography>
@@ -204,7 +204,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                     <Typography variant='h5' sx={{fontWeight: 400}}>{row.borrowAPY}%</Typography>
                 </Stack>
                 <Stack direction='row' sx={{flex: '1 1 0%', alignItems: 'center'}}>
-                    <Typography variant='h5' sx={{fontWeight: 400}}>{row.maxLeverage}x&nbsp;</Typography>
+                    <Typography variant='h5' sx={{fontWeight: 400}}>{row.maxLeverage.toFixed(2)}x&nbsp;</Typography>
                     <Typography variant='subtitle1' color='#98999D'>{formatPercent(+formatEther(row.LTV) * 100, 2)} LTV</Typography>
                 </Stack>
                 <Stack direction='row' sx={{flex: '1.25 1 0%', alignItems: 'center'}}>

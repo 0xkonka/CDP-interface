@@ -6,10 +6,16 @@ export const getOverView = (collateral: string) => {
     if (collateral == 'WETH') {
         return {
             type: 'Volatile',
-            borrowAPY: 10,
-            maxLeverage: 30,
+            borrowAPY: 0,
             platform: 'Uniswap v3',
             rateType: 'Variable Rate'
+        }
+    } else if (collateral == 'TST') {
+        return {
+            type: 'Stable',
+            borrowAPY: 0,
+            platform: 'Uniswap v3',
+            rateType: 'Stable Rate'
         }
     }
     return
@@ -43,6 +49,10 @@ export const shortenWalletAddress = (address: string, chars = 4) => {
 
     // Take the first `chars` characters from the start, and `chars` from the end
     return `${address.substring(0, chars + 2)}...${address.substring(address.length - chars)}`
+}
+
+export const getAssetPath = (str: string) => {
+    return str.toLowerCase().replace(/\s+/g, '_');
 }
 
 import { useEffect, useState } from 'react'
