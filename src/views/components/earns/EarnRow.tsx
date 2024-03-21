@@ -83,35 +83,21 @@ export const EarnRow = (props: TableHeaderProps) => {
         <Stack sx={{borderRadius:  2, border: `solid 1px ${isOpen ? theme.palette.primary.main : 'transparent'}`, cursor: 'pointer',
             '& .active-open': {
                 color: theme.palette.primary.main,
-                '& .arrow-diagonal': {
-                    display: 'none'
-                },
-                '& .arrow-right': {
-                    display: 'block'
-                }
-            },
-            '& .arrow-right': {
-                display: 'none'
+                // color: 'black',
             },
             [theme.breakpoints.up('md')] : {
+                '& .active-open': {
+                    color: 'black !important',
+                },
                 '&:hover': {
                     borderColor: theme.palette.primary.main,
-                    '& .active-hover': {
-                        color: theme.palette.primary.main,
-                        '& .arrow-diagonal': {
-                            display: 'none'
-                        },
-                        '& .arrow-right': {
-                            display: 'block'
-                        }
-                    },
                 }
             }}}>
             {isMediumScreen ? (
             <Stack zIndex={1} sx={{p: {xs: 3, sm: 6}}} onClick={
                 (event) => {
                     if(event.target instanceof HTMLElement && event.target.className.includes('open-button')) {
-                        router.replace(`/modules/borrow/${row.symbol}`)
+                        showToast('success', 'Deposit', 'Deposit Action Here', 1000)
                         return
                     }
                     onToogle()
@@ -175,13 +161,9 @@ export const EarnRow = (props: TableHeaderProps) => {
             </Stack>
             ) : (
             <Stack zIndex={1} direction='row' sx={{alignItems: 'center', 
-                p: {xs: 3, sm: 6},
-                '& .arrow-right': {
-                    display: 'none'
-                }
+                p: {xs: 3, sm: 6}
             }} onClick={
                 (event) => {
-                    console.log(event.target)
                     if(event.target instanceof HTMLElement && event.target.className.includes('open-button')) {
                         showToast('success', 'Deposit', 'Deposit Action Here', 1000)
                         return
@@ -216,9 +198,9 @@ export const EarnRow = (props: TableHeaderProps) => {
                 </Stack>
                 <Stack direction='row' sx={{flex: '1 1 0%', justifyContent:'space-between', alignItems: 'center'}}>
                     <Stack direction='row' sx={{cursor: 'pointer', alignItems: 'center'}}>
-                        <Button variant={isOpen ? 'contained' : 'outlined'} color='primary' sx={{color: isOpen ? '#0D1313' : '#FFFFFF', fontWeight: 600}} className={clsx('open-button active-hover', {
-                        'active-open': isOpen
-                    })}>
+                        <Button variant={isOpen ? 'contained' : 'outlined'} color='primary' sx={{color: isOpen ? '#0D1313' : '#FFFFFF', fontWeight: 600}} className={clsx('open-button', {
+                            'active-open': isOpen
+                        })}>
                             Deposit
                         </Button>
                     </Stack>
@@ -233,11 +215,10 @@ export const EarnRow = (props: TableHeaderProps) => {
              {/* Collapsible Content */}
             <Collapse in={isOpen}>
                 <Box sx={{px: {xs: 3, sm: 6}, pb: {xs: 0, sm: 6}}}>
-
                     <Box sx={{
                         borderTop: 'solid 1px #36373D',
+                        px: {xs: 0, md: 12}
                     }}>
-                        {/* <CollateralOverview row={row}/> */}
                         <Grid container spacing={isSmallScreen ? 6 : 12} pt={6}>
                             <Grid item xs={12} md={6}>
                                 <StakeCard/>
@@ -253,12 +234,11 @@ export const EarnRow = (props: TableHeaderProps) => {
                 <Button onClick={goToPosition} color={isOpen ? 'primary' : 'secondary'} sx={{ 
                         py: 2,
                         borderRadius: '10px',
-                        minWidth: isSmallScreen ? 1 : 160
+                        minWidth: isSmallScreen ? 1 : 160,
+                        // color: 'white'
                     }} 
                     variant='outlined'
-                    className={clsx('active-hover', {
-                        'active-open': isOpen
-                    })}
+                    className={isOpen ? 'active-open': ''}
                 >
                     Deposit
                 </Button>
