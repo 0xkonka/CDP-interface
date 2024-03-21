@@ -10,7 +10,7 @@ export const StakeCardTren = () => {
             <CustomChip label='Staked' color='secondary' variant='filled' sx={{px: 3, mb: 6}}/>
             <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} variant='h2' color='white' mb={4}>2 TREN</Typography>
             <Typography color='#98999D' mb={6}>~ $300USD</Typography>
-            <Button variant='outlined' color='secondary' sx={{maxWidth: '100%', width: 450, py: 3, color: 'white', mb: 6, fontSize: 18, fontWeight: 400}}>
+            <Button variant='outlined' color='secondary' sx={{maxWidth: '100%', width: 450, py: {xs: 2, lg: 3}, color: 'white', mb: 6, fontSize: {xs: 16, md: 18}, fontWeight: 400, borderRadius: '10px'}}>
                 Claim Rewards
             </Button>
             <Stack direction='row' alignItems='center' justifyContent='space-between' pt={6} borderTop='solid 1px #C6C6C74D' sx={{maxWidth: '100%', width: 450}}>

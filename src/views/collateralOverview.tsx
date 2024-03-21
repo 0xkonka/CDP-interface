@@ -7,7 +7,7 @@ import {
 import { useGlobalValues } from '@/context/GlobalContext'
 
 // Utilities
-import { formatMoney, formatPercent } from '@/hooks/utils';
+import { formatMoney, formatPercent, getAssetPath } from '@/hooks/utils';
 import { CollateralParams } from '@/context/ModuleProvider/type';
 import { formatEther, formatUnits } from 'viem';
 
@@ -34,7 +34,7 @@ export const CollateralOverview = (props: Props) => {
                 <Stack direction='row' sx={{justifyContent: 'space-between', alignItems: 'center'}} >
                     <Typography variant='subtitle1' color='#D4D4D4'>Platform</Typography>
                     <Stack direction='row' sx={{gap: 2}}>
-                        <img width={26} src='/images/platforms/uniswap.png' alt={row.platform}/>
+                        <img width={26} src={`/images/platforms/${getAssetPath(row.platform)}.png`} alt={row.platform}/>
                         <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} fontWeight={400}>{row.platform}</Typography>
                     </Stack>
                 </Stack>

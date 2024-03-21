@@ -7,7 +7,7 @@ import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { getOverView } from '@/hooks/utils'
 
-import React, {useState, useMemo} from'react'
+import React, {useState, useMemo, useEffect} from'react'
 import { EarnRow } from '@/views/components/earns/EarnRow'
 
 const Earn = () => {
@@ -40,6 +40,10 @@ const Earn = () => {
     const handleRowClick = (index: number) => {
         setOpenRowIndex(openRowIndex === index ? -1 : index)
     }
+
+    useEffect(() => {
+        setRows(rows)
+    }, [rows])
 
     return (
         <Box>
@@ -137,7 +141,7 @@ const Earn = () => {
                     ))
                 ) : (
                     <Box sx={{ p: 6, textAlign: 'center' }}>
-                    <Typography variant='body1'>No matching collateral</Typography>
+                        <Typography variant='body1'>No matching collateral</Typography>
                     </Box>
                 )}
                 </Stack>

@@ -21,7 +21,7 @@ import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
 import { showToast } from '@/hooks/toasts'
 import { formatEther } from 'viem'
-import { formatPercent, formatToThousands } from '@/hooks/utils'
+import { formatPercent, formatToThousands, getAssetPath } from '@/hooks/utils'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
 import { StakeCard } from './StakeCard'
 import {StakeCardTren} from './StakeCardTren'
@@ -75,43 +75,29 @@ export const EarnRow = (props: TableHeaderProps) => {
     }
 
     const goToPosition = () => {
-        router.replace(`/modules/borrow/${row.symbol}`)
+        showToast('success', 'Deposit', 'Deposit Action Here', 1000)
+        // router.replace(`/modules/borrow/${row.symbol}`)
     }
 
     return (
         <Stack sx={{borderRadius:  2, border: `solid 1px ${isOpen ? theme.palette.primary.main : 'transparent'}`, cursor: 'pointer',
             '& .active-open': {
                 color: theme.palette.primary.main,
-                '& .arrow-diagonal': {
-                    display: 'none'
-                },
-                '& .arrow-right': {
-                    display: 'block'
-                }
-            },
-            '& .arrow-right': {
-                display: 'none'
+                // color: 'black',
             },
             [theme.breakpoints.up('md')] : {
+                '& .active-open': {
+                    color: 'black !important',
+                },
                 '&:hover': {
                     borderColor: theme.palette.primary.main,
-                    '& .active-hover': {
-                        color: theme.palette.primary.main,
-                        '& .arrow-diagonal': {
-                            display: 'none'
-                        },
-                        '& .arrow-right': {
-                            display: 'block'
-                        }
-                    },
                 }
             }}}>
             {isMediumScreen ? (
-            <Stack sx={{p: {xs: 3, sm: 6}}} onClick={
+            <Stack zIndex={1} sx={{p: {xs: 3, sm: 6}}} onClick={
                 (event) => {
-                    if(event.target instanceof HTMLElement && event.target.className.includes('open-button') ||
-                        event.target instanceof SVGElement && event.target.className.baseVal.includes('arrow-right')) {
-                        router.replace(`/modules/borrow/${row.symbol}`)
+                    if(event.target instanceof HTMLElement && event.target.className.includes('open-button')) {
+                        showToast('success', 'Deposit', 'Deposit Action Here', 1000)
                         return
                     }
                     onToogle()
@@ -147,7 +133,7 @@ export const EarnRow = (props: TableHeaderProps) => {
                 </Stack>
                 <Stack direction='row' sx={{mt: 2, alignItems: 'center'}}>
                     <Stack direction='row' sx={{flex: '1.25 1 0%'}}>
-                        <img width={26} src='/images/platforms/uniswap.png' alt={row.platform}/>
+                        <img width={26} src={`/images/platforms/${getAssetPath(row.platform)}.png`} alt={row.platform}/>
                     </Stack>
                     <Stack direction='row' sx={{flex: '2 1 0%'}}>
                         <Typography variant='h5' sx={{fontWeight: 400}} color='primary'>{row.maxDepositAPY}%&nbsp;</Typography>
@@ -174,16 +160,12 @@ export const EarnRow = (props: TableHeaderProps) => {
                 </Stack>
             </Stack>
             ) : (
-            <Stack direction='row' sx={{alignItems: 'center', 
-                p: {xs: 3, sm: 6},
-                '& .arrow-right': {
-                    display: 'none'
-                }
+            <Stack zIndex={1} direction='row' sx={{alignItems: 'center', 
+                p: {xs: 3, sm: 6}
             }} onClick={
                 (event) => {
-                    if(event.target instanceof HTMLElement && event.target.className.includes('open-button') ||
-                        event.target instanceof SVGElement && event.target.className.baseVal.includes('arrow-right')) {
-                        router.replace(`/modules/borrow/${row.symbol}`)
+                    if(event.target instanceof HTMLElement && event.target.className.includes('open-button')) {
+                        showToast('success', 'Deposit', 'Deposit Action Here', 1000)
                         return
                     }
                     onToogle()
@@ -199,7 +181,7 @@ export const EarnRow = (props: TableHeaderProps) => {
                     <CustomChip label={row.type} skin='light' color={getChipTheme(row.type)} style={{marginLeft: 16}}/>
                 </Stack>
                 <Stack direction='row' sx={{flex: '1 1 0%', gap: 2}}>
-                    <img width={26} src='/images/platforms/uniswap.png' alt={row.platform}/>
+                    <img width={26} src={`/images/platforms/${getAssetPath(row.platform)}.png`} alt={row.platform}/>
                     <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} fontWeight={400}>{row.platform}</Typography>
                 </Stack>
                 <Stack direction='row' sx={{flex: '1.5 1 0%', alignItems: 'center'}}>
@@ -215,10 +197,10 @@ export const EarnRow = (props: TableHeaderProps) => {
                     <Typography variant='h5' fontWeight={400} color='white'>{formatToThousands(500000).slice(1)} trenUSD</Typography>
                 </Stack>
                 <Stack direction='row' sx={{flex: '1 1 0%', justifyContent:'space-between', alignItems: 'center'}}>
-                    <Stack direction='row' sx={{cursor: 'pointer', alignItems: 'center'}} className={clsx('open-button active-hover', {
-                        'active-open': isOpen
-                    })}>
-                        <Button variant={isOpen ? 'contained' : 'outlined'} color='primary' sx={{color: isOpen ? '#0D1313' : '#FFFFFF', fontWeight: 600}} >
+                    <Stack direction='row' sx={{cursor: 'pointer', alignItems: 'center'}}>
+                        <Button variant={isOpen ? 'contained' : 'outlined'} color='primary' sx={{color: isOpen ? '#0D1313' : '#FFFFFF', fontWeight: 600}} className={clsx('open-button', {
+                            'active-open': isOpen
+                        })}>
                             Deposit
                         </Button>
                     </Stack>
@@ -233,11 +215,10 @@ export const EarnRow = (props: TableHeaderProps) => {
              {/* Collapsible Content */}
             <Collapse in={isOpen}>
                 <Box sx={{px: {xs: 3, sm: 6}, pb: {xs: 0, sm: 6}}}>
-
                     <Box sx={{
                         borderTop: 'solid 1px #36373D',
+                        px: {xs: 0, md: 12}
                     }}>
-                        {/* <CollateralOverview row={row}/> */}
                         <Grid container spacing={isSmallScreen ? 6 : 12} pt={6}>
                             <Grid item xs={12} md={6}>
                                 <StakeCard/>
@@ -251,12 +232,13 @@ export const EarnRow = (props: TableHeaderProps) => {
             </Collapse>
             <Stack direction='row' sx={{mt: 6, p: {xs: 3, sm: 6}, display: {xs: 'flex' , lg: 'none'}}}>
                 <Button onClick={goToPosition} color={isOpen ? 'primary' : 'secondary'} sx={{ 
-                        minWidth: isSmallScreen ? 1 : 160
+                        py: 2,
+                        borderRadius: '10px',
+                        minWidth: isSmallScreen ? 1 : 160,
+                        // color: 'white'
                     }} 
                     variant='outlined'
-                    className={clsx('active-hover', {
-                        'active-open': isOpen
-                    })}
+                    className={isOpen ? 'active-open': ''}
                 >
                     Deposit
                 </Button>
