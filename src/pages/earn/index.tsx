@@ -10,6 +10,7 @@ import { getOverView } from '@/hooks/utils'
 import React, {useState, useMemo, useEffect} from'react'
 import { EarnRow } from '@/views/components/earns/EarnRow'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
+import { BarChart } from '@/views/components/earns/BarChart'
 
 const Earn = () => {
     const { isSmallScreen, isMediumScreen } = useGlobalValues()
@@ -120,6 +121,11 @@ const Earn = () => {
                     </Box>
                 </Stack>
             </Stack>
+
+            <Box sx={{width: 1/2}} mb={12}>
+                <BarChart title='Daily revenue fees distributed over time'/>
+            </Box>
+
             <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', pb: 10 }}>
                 {networkTypes.map((value, index) => {
                     return value == networkFilter ? (
@@ -163,7 +169,7 @@ const Earn = () => {
                     />
                 ))}
             </Stack>
-            
+
             {/* Collateral Group Stack*/}
             {collateralDetails && (
                 <Stack sx={{ mt: 4 }} gap={isMediumScreen ? 5 : 0}>
