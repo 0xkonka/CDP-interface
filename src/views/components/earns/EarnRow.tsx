@@ -221,10 +221,10 @@ export const EarnRow = (props: TableHeaderProps) => {
                     }}>
                         <Grid container spacing={isSmallScreen ? 6 : 12} pt={6}>
                             <Grid item xs={12} md={6}>
-                                <StakeCard/>
+                                <StakeCard balanceUSD={400} poolShare={2} txHash='https://sepolia.etherscan.io/tx/0x1c36dc0dc64bf5e690f021464c2b5ca86d7e6ffcf5a0cb95e04d3adf4a3b3fbe'/>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <StakeCardTren/>
+                                <StakeCardTren balanceTren={2} balanceUSD={300} txHash='https://sepolia.etherscan.io/tx/0x1c36dc0dc64bf5e690f021464c2b5ca86d7e6ffcf5a0cb95e04d3adf4a3b3fbe'/>
                             </Grid>
                         </Grid>
                     </Box>

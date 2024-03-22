@@ -9,15 +9,52 @@ import { getOverView } from '@/hooks/utils'
 
 import React, {useState, useMemo, useEffect} from'react'
 import { EarnRow } from '@/views/components/earns/EarnRow'
+import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
+import { BarChart } from '@/views/components/earns/BarChart'
 
 const Earn = () => {
     const { isSmallScreen, isMediumScreen } = useGlobalValues()
     const [networkFilter, setNetworkFilter] = useState<string>('All')
     const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
+    const [sortBy, setSortBy]= useState('symbol')
+    const [direction, setDirection] = useState('asc')
+
     const networkTypes: string[] = [
         'All', 'Ethereum', 'Binance', 'Polygon', 'Avalanche', 'Solana'
     ];
     const { collateralDetails } = useProtocol()
+    const headerItems = [
+        {
+            label: 'Pools',
+            key: 'symbol',  // This is sort key.
+            flexWidth: 2,
+            sortable: true
+        },
+        {
+            label: 'Platform',
+            key: 'platform',
+            flexWidth: 1,
+            sortable: true
+        },
+        {
+            label: 'APY',
+            key: 'borrowAPY',
+            flexWidth: 1.5,
+            sortable: true
+        },
+        {
+            label: 'Liquidity',
+            key: 'liquidity',
+            flexWidth: 1.25,
+            sortable: true
+        },
+        {
+            label: '',
+            key: '',
+            flexWidth: 1,
+            sortable: false
+        },
+    ]
 
     const rows = useMemo(() => {
         if (collateralDetails && collateralDetails.length > 0) {
@@ -39,6 +76,11 @@ const Earn = () => {
     const [filteredRows, setRows] = useState<CollateralParams[]>(rows)
     const handleRowClick = (index: number) => {
         setOpenRowIndex(openRowIndex === index ? -1 : index)
+    }
+    
+    const setSortDetail = (sortBy: string, direction: string) => {
+        setSortBy(sortBy)
+        setDirection(direction)
     }
 
     useEffect(() => {
@@ -79,6 +121,11 @@ const Earn = () => {
                     </Box>
                 </Stack>
             </Stack>
+
+            <Box sx={{width: 1/2}} mb={12}>
+                <BarChart title='Daily revenue fees distributed over time'/>
+            </Box>
+
             <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', pb: 10 }}>
                 {networkTypes.map((value, index) => {
                     return value == networkFilter ? (
@@ -109,24 +156,20 @@ const Earn = () => {
                     xs: 'none',
                     lg: 'flex'
                 }
-                }}
-            >
-                <Stack sx={{ flex: '2 1 0%', alignItems: 'center', cursor: 'pointer' }} direction='row'>
-                    Pool
-                </Stack>
-                <Stack sx={{ flex: '1 1 0%', alignItems: 'center', cursor: 'pointer' }} direction='row'>
-                    Platform
-                </Stack>
-                <Stack sx={{ flex: '1.5 1 0%', alignItems: 'center', cursor: 'pointer' }} direction='row'>
-                    APY
-                </Stack>
-                <Stack sx={{ flex: '1.25 1 0%', alignItems: 'center', cursor: 'pointer' }} direction='row'>
-                    Liquidity
-                </Stack>
-                <Stack sx={{ flex: '1 1 0%', alignItems: 'center', cursor: 'pointer' }} direction='row'>
-
-                </Stack>
+            }}>
+                {headerItems.map((item, index) => (
+                    <SortableHeaderItem 
+                        key={index}
+                        label={item.label}
+                        flexWidth={item.flexWidth}
+                        sortBy={item.key}
+                        direction={item.key == sortBy ? direction : 'none'}
+                        onSort={setSortDetail}
+                        sortable={item.sortable}
+                    />
+                ))}
             </Stack>
+
             {/* Collateral Group Stack*/}
             {collateralDetails && (
                 <Stack sx={{ mt: 4 }} gap={isMediumScreen ? 5 : 0}>
