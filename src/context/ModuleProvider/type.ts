@@ -31,6 +31,7 @@ export type CollateralParams = {
     // Below fields will be replaced with dynamic data later (except id : it is just for row in Grid). FYI: Quinn
     type: string // This is token type like 'volatile'
     platform: string
+    network: string
     rateType: string
     borrowAPY: number
     maxLeverage: number

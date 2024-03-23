@@ -83,9 +83,18 @@ const Earn = () => {
         setDirection(direction)
     }
 
+    // Comprehensive filter function
+    const filterRows = () => {
+        let newRows = rows
+        if (networkFilter != 'All') {
+            newRows = newRows.filter(row => row.network == networkFilter)
+        }
+        setRows(newRows)
+    }
+    
     useEffect(() => {
-        setRows(rows)
-    }, [rows])
+        filterRows()
+    }, [rows, networkFilter])
 
     return (
         <Box>
@@ -130,21 +139,21 @@ const Earn = () => {
                 {networkTypes.map((value, index) => {
                     return value == networkFilter ? (
                         <ToggleOnButton
-                        key={index}
-                        onClick={() => {
-                            setNetworkFilter(value)
-                        }}
+                            key={index}
+                            onClick={() => {
+                                setNetworkFilter(value)
+                            }}
                         >
-                        {value + ' ' + filteredRows.length}
+                            {value + ' ' + filteredRows.length}
                         </ToggleOnButton>
                     ) : (
                         <ToggleOffButton
-                        key={index}
-                        onClick={() => {
-                            setNetworkFilter(value)
-                        }}
+                            key={index}
+                            onClick={() => {
+                                setNetworkFilter(value)
+                            }}
                         >
-                        {value}
+                            {value}
                         </ToggleOffButton>
                     )
                     })}
