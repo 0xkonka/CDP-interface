@@ -7,6 +7,7 @@ export const getOverView = (collateral: string) => {
         return {
             type: 'Volatile',
             borrowAPY: 0,
+            network: 'Ethereum',
             platform: 'Uniswap v3',
             rateType: 'Variable Rate'
         }
@@ -14,6 +15,7 @@ export const getOverView = (collateral: string) => {
         return {
             type: 'Stable',
             borrowAPY: 0,
+            network: 'Solana',
             platform: 'Uniswap v3',
             rateType: 'Stable Rate'
         }

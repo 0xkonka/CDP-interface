@@ -214,6 +214,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
           borrowAPY: 0,
           maxLeverage: 0,
           maxDepositAPY: 0,
+          network: 'network',
           platform: 'platform',
           rateType: 'collateral rate tye here'
         }

@@ -35,24 +35,16 @@ interface TableHeaderProps {
 
 const getChipTheme = (label: string) => {
     switch(label) {
-        case 'LRT':
+        case 'Ethereum':
             return 'secondary';
-        case 'LST':
-            return 'secondary';
-        case 'RWA':
-            return 'error';
-        case 'LP Token':
-            return 'primary';
-        case 'Vault':
-            return 'info';
-        case 'PT Tokens':
-            return 'secondary';
-        case 'Meme':
-            return 'secondary';
-        case 'Volatile':
+        case 'Binance':
             return 'warning';
-        case 'Stable':
-            return 'success';
+        case 'Polygon':
+            return 'error';
+        case 'Avalanche':
+            return 'primary';
+        case 'Solana':
+            return 'info';
         default:
             return 'secondary';
     }
@@ -111,7 +103,7 @@ export const EarnRow = (props: TableHeaderProps) => {
                             style={{ width: 'auto' }}
                         />
                         <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} sx={{fontWeight: 400, ml: 2}}>{row.symbol}</Typography>
-                        <CustomChip label={row.type} skin='light' color={getChipTheme(row.type)} style={{marginLeft: 16}}/>
+                        <CustomChip label={row.network} skin='light' color={getChipTheme(row.network)} style={{marginLeft: 16}}/>
                     </Stack>
                     <Stack direction='row' sx={{justifyContent:'space-between', alignItems: 'center'}}>
                         {
@@ -178,7 +170,7 @@ export const EarnRow = (props: TableHeaderProps) => {
                         style={{ width: 'auto' }}
                     />
                     <Typography variant='h5' sx={{fontWeight: 400, ml: 2}}>{row.symbol}</Typography>
-                    <CustomChip label={row.type} skin='light' color={getChipTheme(row.type)} style={{marginLeft: 16}}/>
+                    <CustomChip label={row.network} skin='light' color={getChipTheme(row.network)} style={{marginLeft: 16}}/>
                 </Stack>
                 <Stack direction='row' sx={{flex: '1 1 0%', gap: 2}}>
                     <img width={26} src={`/images/platforms/${getAssetPath(row.platform)}.png`} alt={row.platform}/>
