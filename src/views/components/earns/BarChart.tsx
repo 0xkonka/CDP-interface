@@ -3,10 +3,11 @@ import {
 } from '@mui/material'
 
 import ReactApexcharts from '@/@core/components/react-apexcharts';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** Third Party Imports
 import { ApexOptions } from 'apexcharts'
+import { formatToThousands } from '@/hooks/utils';
 
 interface Props {
     title: string;
@@ -17,12 +18,22 @@ export const BarChart = (props: Props) => {
     const {title} = props
     const theme = useTheme()
     const [period, setPeriod] = useState(30)
+    const [series, setSeries] = useState<number[]>([])
+    const [categories, setCategories] = useState<string[]>([])
 
-    const categories = generateCategories();
+    useEffect(()=>{
+      if (categories.length === 0) {
+        setCategories(generateCategories())
+      }
+      if(series.length === 0) {
+        setSeries(Array.from({ length: 90 }, () => Math.floor(Math.random() * (70000 - 2000 + 1)) + 2000))
+      }
+    }, [])
+
     function generateCategories() {
       const tempCategories = [];
       const endDate = new Date();
-      for (let i = 30; i >= 0; i--) {
+      for (let i = 90; i >= 0; i--) {
         const date = new Date();
         date.setDate(endDate.getDate() - i);
         const dateString = date.toISOString().split('T')[0];
@@ -43,7 +54,7 @@ export const BarChart = (props: Props) => {
       dataLabels: { enabled: false },
       plotOptions: {
         bar: {
-          borderRadius: 8,
+          borderRadius: period == 30 ? 8 : 0,
           barHeight: '30%',
           horizontal: false,
           startingShape: 'rounded'
@@ -66,7 +77,7 @@ export const BarChart = (props: Props) => {
       xaxis: {
         tickAmount: 10,
         // axisTicks: { color: theme.palette.divider },
-        categories: categories,
+        categories: categories.slice(Math.max(categories.length - period, 0)),
         type: 'datetime',
         labels: {
           formatter: function(value, timestamp) {
@@ -78,11 +89,25 @@ export const BarChart = (props: Props) => {
                                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             return `${monthNames[date.getMonth()]} ${('0' + date.getDate()).slice(-2)}`;
           }
-        }
-        // labels: {
-        //   style: { colors: theme.palette.text.disabled }
-        // }
+        },
       },
+      tooltip: {
+        theme: 'dark', // or 'light'
+        style: {
+          fontSize: '16px',
+          fontFamily: undefined,
+          // backgroundColor: '#f4f4f4', // Custom background color for tooltip
+          // any other CSS properties
+        },
+        x: {
+          format: 'dd MMM yyyy' // Format date for x-axis tooltip
+        },
+        y: {
+          formatter: function (value) {
+            return '$ ' + formatToThousands(value).slice(1)
+          }
+        }
+      }
     }
 
     return (
@@ -111,7 +136,8 @@ export const BarChart = (props: Props) => {
             options={options}
             // series={[{ data: [72000, 36000, 4200, 65000, 2100, 3500, 15000] }]}
             series={[{
-              data: Array.from({ length: 30 }, () => Math.floor(Math.random() * (80000 - 2000 + 1)) + 2000)
+              name: 'revenue',
+              data: series.slice(Math.max(series.length - period, 0))
             }]}
         />
       </Box>
