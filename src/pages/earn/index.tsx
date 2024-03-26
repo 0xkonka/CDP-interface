@@ -11,6 +11,7 @@ import React, {useState, useMemo, useEffect} from'react'
 import { EarnRow } from '@/views/components/earns/EarnRow'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
 import { BarChart } from '@/views/components/earns/BarChart'
+import { StabilityPool } from '@/views/components/earns/StabilityPool'
 
 const Earn = () => {
     const { isSmallScreen, isMediumScreen } = useGlobalValues()
@@ -96,6 +97,39 @@ const Earn = () => {
         filterRows()
     }, [rows, networkFilter])
 
+      // Sory by different specs
+  useEffect(() => {
+    const sortKey = sortBy
+    console.log(sortKey, direction)
+
+    setRows(rows => {
+      const sortedRows = [...rows]
+      if (direction == 'desc') {
+        return sortedRows.sort((a, b) => {
+          if (a[sortKey] > b[sortKey]) {
+            return -1
+          }
+          if (a[sortKey] < b[sortKey]) {
+            return 1
+          }
+          return 0
+        })
+      } else if (direction == 'asc') {
+        return sortedRows.sort((a, b) => {
+          if (a[sortKey] < b[sortKey]) {
+            return -1
+          }
+          if (a[sortKey] > b[sortKey]) {
+            return 1
+          }
+          return 0
+        })
+      } else {
+        return sortedRows
+      }
+    })
+  }, [sortBy, direction])
+
     return (
         <Box>
             <Typography className='header-gradient' variant='h1'sx={{
@@ -130,12 +164,8 @@ const Earn = () => {
                     </Box>
                 </Stack>
             </Stack>
-
-            <Box sx={{width: 1/2}} mb={12}>
-                <BarChart title='Daily revenue fees distributed over time'/>
-            </Box>
-
-            <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', pb: 10 }}>
+            <StabilityPool/>
+            <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: 10 }}>
                 {networkTypes.map((value, index) => {
                     return value == networkFilter ? (
                         <ToggleOnButton
