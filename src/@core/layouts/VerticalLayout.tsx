@@ -32,6 +32,7 @@ const MainContentWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   display: 'flex',
   minHeight: '100vh',
   flexDirection: 'column',
+  backgroundColor: '#080B0B',
 }))
 
 const ContentWrapper = styled('main')(({ theme }) => ({
