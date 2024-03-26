@@ -92,12 +92,10 @@ export const BarChart = (props: Props) => {
         },
       },
       tooltip: {
-        theme: 'dark', // or 'light'
+        theme: 'dark',
         style: {
           fontSize: '16px',
           fontFamily: undefined,
-          // backgroundColor: '#f4f4f4', // Custom background color for tooltip
-          // any other CSS properties
         },
         x: {
           format: 'dd MMM yyyy' // Format date for x-axis tooltip
