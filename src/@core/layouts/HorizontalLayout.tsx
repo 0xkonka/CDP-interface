@@ -26,6 +26,7 @@ import { hexToRGBA } from '../utils/hex-to-rgba'
 const HorizontalLayoutWrapper = styled('div')({
   height: '100%',
   display: 'flex',
+  backgroundColor: '#080B0B',
   ...(themeConfig.horizontalMenuAnimation && { overflow: 'clip' })
 })
 
@@ -110,7 +111,8 @@ const HorizontalLayout = (props: LayoutProps) => {
             ...(appBar === 'static' && { zIndex: 13 }),
             transition: 'border-bottom 0.2s ease-in-out',
             ...(appBarBlur && { backdropFilter: 'blur(6px)' }),
-            // backgroundColor: '#080B0B',
+            //backgroundColor: trigger ? '#101818' : 'transparent',       // Topbar background - DesktopView.
+            backgroundColor: 'transparent',
             ...(skin === 'bordered' && { borderBottom: theme => `1px solid ${theme.palette.divider}` }),
             ...userAppBarStyle
           }}
