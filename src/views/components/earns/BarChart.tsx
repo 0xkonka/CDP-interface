@@ -48,6 +48,9 @@ export const BarChart = (props: Props) => {
         toolbar: { show: false },
         zoom: {
           enabled: false
+        },
+        animations: {
+          enabled: false,
         }
       },
       colors: ['#67DAB1'],
