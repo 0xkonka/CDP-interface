@@ -110,8 +110,7 @@ const HorizontalLayout = (props: LayoutProps) => {
             ...(appBar === 'static' && { zIndex: 13 }),
             transition: 'border-bottom 0.2s ease-in-out',
             ...(appBarBlur && { backdropFilter: 'blur(6px)' }),
-            //backgroundColor: trigger ? '#101818' : 'transparent',       // Topbar background - DesktopView.
-            backgroundColor: 'transparent',
+            // backgroundColor: '#080B0B',
             ...(skin === 'bordered' && { borderBottom: theme => `1px solid ${theme.palette.divider}` }),
             ...userAppBarStyle
           }}

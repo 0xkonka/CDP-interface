@@ -111,8 +111,9 @@ const Drawer = (props: Props) => {
       {...(hidden ? { ...MobileDrawerProps } : { ...DesktopDrawerProps })}
       PaperProps={{
         sx: {
-          // backgroundColor: 'transparent',
-          background: 'linear-gradient(180deg, #172726 -41.9%, #0B0D0E 50%)',
+          backgroundColor: 'transparent',
+          background: '#080B0B',
+          // background: 'linear-gradient(180deg, #172726 -41.9%, #0B0D0E 50%)',
           ...(!hidden && skin !== 'bordered' && { boxShadow: 2 }),
           width: navCollapsed && !navHover ? collapsedNavWidth : navWidth,
           borderRight: theme =>

@@ -23,7 +23,8 @@ const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme }) => ({
   transition: 'none',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: 'transparent',
+  // backgroundColor: 'transparent',
+  // backgroundColor: theme.palette.background.default,
   color: theme.palette.text.primary,
   minHeight: 58,
 }))
