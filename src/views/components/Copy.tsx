@@ -29,9 +29,9 @@ export const Copy = ({ text }: { text: string }) => {
         }
     }
     return (
-        <Stack position='relative'>
-            <Icon icon={copySuccess ? 'tabler:check' : 'tabler:copy'} style={{cursor: 'pointer'}} fontSize={22} onClick={copyToClipboard}/>
-            <Typography variant='subtitle2' color='#707175' fontWeight={400} position='absolute' top={-20} left={-10} display={copySuccess == true ? 'block' : 'none'}>Copied</Typography>
+        <Stack position='relative' alignItems='center' justifyContent='center' width='100%' height='100%'>
+            <Icon icon={copySuccess ? 'tabler:check' : 'tabler:copy'} style={{cursor: 'pointer', width: '100%', height: '100%'}} fontSize={22} onClick={copyToClipboard}/>
+            <Typography variant='caption' color='#707175' fontWeight={400} position='absolute' top={-25} left={-10} display={copySuccess == true ? 'block' : 'none'} zIndex={9999} sx={{background: '#080b0b', borderRadius: 0.5, border: 'solid 1px #FFFFFF33', px: 1, py: 0.5}}>Copied</Typography>
         </Stack>
     )
 }

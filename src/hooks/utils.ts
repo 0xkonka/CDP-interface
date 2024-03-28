@@ -40,6 +40,11 @@ export const formatToThousands = (value: number) => {
     return '$' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
+export const formatToThousandsInt = (value: number) => {
+    // return '$' + value.toLocaleString('en-US')
+    return value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',').slice(0, -3)
+}
+
 export const removeComma = (amount: string) => {
     return amount.replace(/,/g, '')
 }

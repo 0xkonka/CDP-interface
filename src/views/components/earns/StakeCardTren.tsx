@@ -30,7 +30,9 @@ export const StakeCardTren = (props: Props) => {
                         {txHash}
                     </Typography>
                 </Link>
-                <Copy text={txHash} />
+                <Stack>
+                    <Copy text={txHash} />
+                </Stack>
             </Stack>
         </Stack>
     )

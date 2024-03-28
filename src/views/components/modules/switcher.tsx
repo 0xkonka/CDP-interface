@@ -14,6 +14,7 @@ import Icon from '@/@core/components/icon'
 import { useRouter } from 'next/router';
 import { shortenWalletAddress } from '@/hooks/utils';
 import { Copy } from '../Copy';
+import { Box } from '@mui/system'
 
 interface Props {
     page: string
@@ -71,7 +72,9 @@ export const Switcher = (props: Props) => {
                         </defs>
                     </svg>
                 </Link>
-                <Copy text={borrowContractAddr} />
+                <Box>
+                    <Copy text={borrowContractAddr} />
+                </Box>
                 <Icon icon='tabler:settings' style={{cursor: 'pointer'}} fontSize={22} onClick={() => {setOpenSlippage(true)}}/>
             </Stack>
         </Stack>
