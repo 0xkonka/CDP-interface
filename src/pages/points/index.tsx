@@ -24,12 +24,24 @@ const Points = () => {
                         Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop 
                         your assets in one click to leverage exposure for your spot assets. Pay back your loan later using trenUSD or your collateral.
                     </Typography>
-                    <Box sx={{backgroundColor: {xs: '#0C0E0F', md: 'transparent'}}} paddingX={2}>
-                        <Grid container mt={20} spacing={4} alignItems='center'>
+                    <Box mt={20} position='relative' sx={{backgroundColor: {xs: '#0C0E0F', md: 'transparent'}, p: 4}}>
+                        {/* <div style={{
+                            content: '',
+                            position: 'absolute',
+                            left: '50%',
+                            right: 0,
+                            top: 0,
+                            // transform: 'translateY(-50%)',
+                            width: '0.5px',
+                            height: '60%',
+                            background: 'white'
+                        }} /> */}
+                        <Grid container spacing={4} alignItems='center'>
                             <Grid item xs={6} lg={2.3}>
                                 <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>Total XP Gained</Typography>
                                 <Typography variant='h1'sx={{
                                         fontSize: { xs: 16, md: 32, xl: 46 },
+                                        mt: {xs: 2, lg: 0}
                                     }}
                                     fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`}
                                 >
@@ -40,6 +52,7 @@ const Points = () => {
                                 <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>XP Gained / 24 hrs </Typography>
                                 <Typography variant='h1'sx={{
                                         fontSize: { xs: 16, md: 32, xl: 46 },
+                                        mt: {xs: 2, lg: 0}
                                     }}
                                     fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`}
                                 >
@@ -50,6 +63,7 @@ const Points = () => {
                                 <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>Rank</Typography>
                                 <Typography variant='h1'sx={{
                                         fontSize: { xs: 16, md: 32, xl: 46 },
+                                        mt: {xs: 2, lg: 0}
                                     }}
                                     fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`}
                                 >
@@ -60,6 +74,7 @@ const Points = () => {
                                 <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>Referrals</Typography>
                                     <Typography variant='h1'sx={{
                                             fontSize: { xs: 16, md: 32, xl: 46 },
+                                            mt: {xs: 2, lg: 0}
                                         }}
                                         fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`}
                                     >
@@ -67,8 +82,8 @@ const Points = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} lg={2.8}>
-                                <Stack gap={2} width='fit-content' justifyContent='flex-end'>
-                                    <Stack direction='row' justifyContent='space-between'>
+                                <Stack gap={2} width='fit-content' marginLeft={isMediumScreen ? 0 : 'auto'}>
+                                    <Stack direction='row' justifyContent='space-between' gap={3}>
                                         <Typography variant='h4' fontWeight={700}>Next Update</Typography>
                                         <Typography variant='h4' fontWeight={700} color='primary'>08:51:58</Typography>
                                     </Stack>
@@ -77,60 +92,10 @@ const Points = () => {
                             </Grid>
                         </Grid>
                     </Box>
-                    
-                    {/* <Stack direction='row' justifyContent='space-between' alignItems='center' mt={20} sx={{backgroundColor: {xs: '#0C0E0F', md: 'transparent'}}}>
-                        <Box>
-                            <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>Total XP Gained</Typography>
-                            <Typography variant='h1'sx={{
-                                    fontSize: { xs: 16, md: 32, xl: 46 },
-                                }}
-                                fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`}
-                            >
-                                232.2 XP
-                            </Typography>
-                        </Box>
-                        <Box>
-                            <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>XP Gained / 24 hrs </Typography>
-                            <Typography variant='h1'sx={{
-                                    fontSize: { xs: 16, md: 32, xl: 46 },
-                                }}
-                                fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`}
-                            >
-                                24.1
-                            </Typography>
-                        </Box>
-                        <Box>
-                            <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>Rank</Typography>
-                            <Typography variant='h1'sx={{
-                                    fontSize: { xs: 16, md: 32, xl: 46 },
-                                }}
-                                fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`}
-                            >
-                                #1,321
-                            </Typography>
-                        </Box>
-                        <Box>
-                            <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>Referrals</Typography>
-                            <Typography variant='h1'sx={{
-                                    fontSize: { xs: 16, md: 32, xl: 46 },
-                                }}
-                                fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`}
-                            >
-                                50 XP
-                            </Typography>
-                        </Box>
-                        <Stack gap={2}>
-                            <Stack direction='row' justifyContent='space-between'>
-                                <Typography variant='h4' fontWeight={700}>Next Update</Typography>
-                                <Typography variant='h4' fontWeight={700} color='primary'>08:51:58</Typography>
-                            </Stack>
-                            <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400}>Last Update: 3/3/2024 - 22:19:19</Typography>
-                        </Stack>
-                    </Stack> */}
                 </Box>
                 
                 <video autoPlay muted loop id="background-video" style={{ width: '100%', position: 'absolute', zIndex: '1', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
-                    <source src={isSmallScreen ? '/videos/tren-points-3d-mobile.mp4' : '/videos/tren-points-3d.mp4'} type="video/mp4" />
+                    <source src={isMediumScreen ? '/videos/tren-points-3d-mobile.mp4' : '/videos/tren-points-3d.mp4'} type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
             </Box>
