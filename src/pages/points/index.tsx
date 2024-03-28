@@ -4,9 +4,51 @@ import Icon from 'src/@core/components/icon'
 import Image from 'next/image'
 import { ActiveTask } from '@/views/components/points/ActiveTask'
 import { useGlobalValues } from '@/context/GlobalContext'
+import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
+import { useState } from 'react'
 
 const Points = () => {
-    const {isSmallScreen, isMediumScreen} = useGlobalValues()
+    const {isSmallScreen, isMediumScreen, radiusBoxStyle} = useGlobalValues()
+    const [sortBy, setSortBy]= useState('symbol')
+    const [direction, setDirection] = useState('asc')
+
+    const setSortDetail = (sortBy: string, direction: string) => {
+        setSortBy(sortBy)
+        setDirection(direction)
+    }
+
+    const headerItems = [
+        {
+            label: 'Rank',
+            key: 'id',  // This is sort key.
+            flexWidth: 4.5,
+            sortable: true
+        },
+        {
+            label: 'User Address',
+            key: 'address',
+            flexWidth: 7,
+            sortable: true
+        },
+        {
+            label: 'Total XP',
+            key: 'totalXP',
+            flexWidth: 5,
+            sortable: true
+        },
+        {
+            label: 'XP gained per day',
+            key: 'dailyXP',
+            flexWidth: 6.5,
+            sortable: true
+        },
+        {
+            label: 'Referral XP',
+            key: 'referralXP',
+            flexWidth: 5,
+            sortable: true
+        },
+    ]
 
     return (
         <Box>
@@ -99,6 +141,8 @@ const Points = () => {
                     Your browser does not support the video tag.
                 </video>
             </Box>
+
+            {/* Active Tasks Section */}
             <Box id='active-tasks' mt={20}>
                 <Stack direction='row' justifyContent='space-between' alignItems='center'>
                     <Typography className='header-gradient' sx={{ fontSize: {xs: 32, lg: 40}}}>
@@ -132,6 +176,42 @@ const Points = () => {
                     </Grid>
                 </Grid>
             </Box>
+
+            {/* Leaderboard and Referrals */}
+            <Grid container spacing={4} mt={12}>
+                <Grid item xs={12} sm={6} lg={8}>
+                    <Typography className='header-gradient' sx={{ fontSize: {xs: 32, lg: 40}}}>
+                        Leaderboard
+                    </Typography>
+                    <Box sx={{...radiusBoxStyle, mt: 8}}>
+                        {/* Leaderboard Table Header */}
+                        <Stack direction='row' sx={{
+                            px: 6, pt: 2, 
+                            display: {
+                                xs: 'none',
+                                lg: 'flex'
+                            }
+                        }}>
+                            {headerItems.map((item, index) => (
+                                <SortableHeaderItem
+                                    key={index}
+                                    label={item.label}
+                                    flexWidth={item.flexWidth}
+                                    sortBy={item.key}
+                                    direction={item.key == sortBy ? direction : 'none'}
+                                    onSort={setSortDetail}
+                                    sortable={item.sortable}
+                                />
+                            ))}
+                        </Stack>
+                    </Box>
+                </Grid>
+                <Grid item xs={12} sm={6} lg={4}>
+                    <Typography className='header-gradient' sx={{ fontSize: {xs: 32, lg: 40}}}>
+                        Referrals
+                    </Typography>
+                </Grid>
+            </Grid>
         </Box>
     )
 }
