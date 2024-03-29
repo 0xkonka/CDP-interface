@@ -1,4 +1,4 @@
-import { Stack, Typography, Box, Link, Grid, useTheme} from '@mui/material'
+import { Stack, Typography, Box, Link, Grid, useTheme, Input, Button} from '@mui/material'
 import Icon from 'src/@core/components/icon'
 
 import Image from 'next/image'
@@ -7,11 +7,14 @@ import { useGlobalValues } from '@/context/GlobalContext'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
 import { useState } from 'react'
 import { formatToThousands, formatToThousandsInt, shortenWalletAddress } from '@/hooks/utils'
+import CustomTextField from '@/@core/components/mui/text-field'
+import { Copy } from '@/views/components/Copy'
 
 const Points = () => {
     const {isSmallScreen, isMediumScreen, radiusBoxStyle} = useGlobalValues()
     const [sortBy, setSortBy]= useState('symbol')
     const [direction, setDirection] = useState('asc')
+    const [referralLink, setReferralLink] = useState('')
     const theme = useTheme()
 
     const setSortDetail = (sortBy: string, direction: string) => {
@@ -192,7 +195,7 @@ const Points = () => {
                     <Box sx={{...radiusBoxStyle, mt: 8}}>
                         {/* Leaderboard Table Header */}
                         <Stack direction='row' sx={{
-                            px: 6, pt: 2, 
+                            px: 6, pt: 6,
                             display: {
                                 xs: 'none',
                                 lg: 'flex'
@@ -213,66 +216,100 @@ const Points = () => {
                         
                         {/* Leaderboard Table Body */}
                         <Stack mt={4}>
-                            <Stack direction='row' alignItems='center' sx={{
-                                border: 'solid 1px transparent',
-                                borderRadius: '16px',
-                                '&:hover': {
-                                    borderColor: theme.palette.primary.main,
-                                },
-                                p: {xs: 3, sm: 5}
-                            }}>
-                                <Stack flex='3.5'>
-                                    <Typography variant='h5' fontWeight={400} marginLeft={4}>1</Typography>
+                            {Array.from({ length: 5 }, (_, index) => (
+                                <Stack direction='row' alignItems='center' sx={{
+                                    border: 'solid 1px transparent',
+                                    borderRadius: '16px',
+                                    '&:hover': {
+                                        borderColor: theme.palette.primary.main,
+                                    },
+                                    p: {xs: 3, sm: 5}
+                                }}>
+                                    <Stack flex='3.5'>
+                                        <Typography variant='h5' fontWeight={400} marginLeft={4}>{index + 1}</Typography>
+                                    </Stack>
+                                    <Stack flex='7.5' direction='row' alignItems='center' gap={3}>
+                                        <img alt='Gradient Circle' src='/images/icons/customized-icons/gradient-circle.png' />
+                                        <Typography variant='h5' fontWeight={400}>{shortenWalletAddress('0xD88Cc271583b0019DdA08666fF2DB78B2A0172cC')}</Typography>
+                                    </Stack>
+                                    <Stack flex='6'>
+                                        <Typography variant='h5' fontWeight={400}>{formatToThousandsInt(123000)} XP</Typography>
+                                    </Stack>
+                                    <Stack flex='5.5'>
+                                        <Typography variant='h5' fontWeight={400}>{formatToThousandsInt(4500)} XP</Typography>
+                                    </Stack>
+                                    <Stack flex='4.5'>
+                                        <Typography variant='h5' fontWeight={400}>{formatToThousandsInt(3000)} XP</Typography>
+                                    </Stack>
                                 </Stack>
-                                <Stack flex='7.5' direction='row' alignItems='center' gap={3}>
-                                    <img alt='Gradient Circle' src='/images/icons/customized-icons/gradient-circle.png' />
-                                    <Typography variant='h5' fontWeight={400}>{shortenWalletAddress('0xD88Cc271583b0019DdA08666fF2DB78B2A0172cC')}</Typography>
-                                </Stack>
-                                <Stack flex='6'>
-                                    <Typography variant='h5' fontWeight={400}>{formatToThousandsInt(123000)} XP</Typography>
-                                </Stack>
-                                <Stack flex='5.5'>
-                                    <Typography variant='h5' fontWeight={400}>{formatToThousandsInt(4500)} XP</Typography>
-                                </Stack>
-                                <Stack flex='4.5'>
-                                    <Typography variant='h5' fontWeight={400}>{formatToThousandsInt(3000)} XP</Typography>
-                                </Stack>
-                            </Stack>
-                            <Stack direction='row' alignItems='center' sx={{
-                                border: 'solid 1px transparent',
-                                borderRadius: '16px',
-                                '&:hover': {
-                                    borderColor: theme.palette.primary.main,
-                                },
-                                p: {xs: 3, sm: 5}
-                            }}>
-                                <Stack flex='3.5'>
-                                    <Typography variant='h5' fontWeight={400} marginLeft={4}>2</Typography>
-                                </Stack>
-                                <Stack flex='7.5' direction='row' alignItems='center' gap={3}>
-                                    <img alt='Gradient Circle' src='/images/icons/customized-icons/gradient-circle.png' />
-                                    <Typography variant='h5' fontWeight={400}>{shortenWalletAddress('0xD88Cc271583b0019DdA08666fF2DB78B2A0172cC')}</Typography>
-                                </Stack>
-                                <Stack flex='6'>
-                                    <Typography variant='h5' fontWeight={400}>{formatToThousandsInt(123000)} XP</Typography>
-                                </Stack>
-                                <Stack flex='5.5'>
-                                    <Typography variant='h5' fontWeight={400}>{formatToThousandsInt(4500)} XP</Typography>
-                                </Stack>
-                                <Stack flex='4.5'>
-                                    <Typography variant='h5' fontWeight={400}>{formatToThousandsInt(3000)} XP</Typography>
-                                </Stack>
-                            </Stack>
+                            ))}
                         </Stack>
                     </Box>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={4}>
-                    <Stack sx={{height: 1}}>
+                    <Stack>
                         <Typography className='header-gradient' sx={{ fontSize: {xs: 32, lg: 40}}}>
                             Referrals
                         </Typography>
-                        <Box sx={{...radiusBoxStyle, mt: 8, height: 1}}>
-                            Referral contents
+                        <Box sx={{...radiusBoxStyle, mt: 8, py: 6}}>
+                            <Typography color='#C6C6C7'>
+                                Invite your friends to Tren Finance to gain additional XP. Along with earning 1,000 XP per referral, you will also receive 15% of the points earned by the referred member.
+                            </Typography>
+                            <Box sx={{border: 'solid 1px #2D3131', borderRadius: '10px', mt: 4}}>
+                                <Stack direction='row' borderBottom='solid 1px #2D3131' px={6} py={4}>
+                                    <Stack flex={1}>
+                                        <Typography variant='subtitle2' fontWeight={400} color='#D4D4D4'>XP from Referrals</Typography>
+                                    </Stack>
+                                    <Stack flex={1}>
+                                        <Typography variant='subtitle2' fontWeight={400} color='#D4D4D4'>Invited People</Typography>
+                                    </Stack>
+                                    <Stack flex={1}>
+                                        <Typography variant='subtitle2' fontWeight={400} color='#D4D4D4'>XP share from referred members</Typography>
+                                    </Stack>
+                                </Stack>
+                                <Stack direction='row' px={6} py={4}>
+                                    <Stack flex={1}>
+                                        <Typography variant='h5' fontWeight={400} color='white'>{formatToThousandsInt(12000)} XP</Typography>
+                                    </Stack>
+                                    <Stack flex={1}>
+                                        <Typography variant='h5' fontWeight={400} color='white'>12</Typography>
+                                    </Stack>
+                                    <Stack flex={1}>
+                                        <Typography variant='h5' fontWeight={400} color='white'>{formatToThousandsInt(3600)} XP / Day</Typography>
+                                    </Stack>
+                                </Stack>
+                            </Box>
+                            <Typography variant='h5' fontWeight={400} mt={6}>Generate Link</Typography>
+                            <Box position='relative' mt={3}>
+                                <CustomTextField sx={{ fontSize: 18, width: 1,
+                                    '& .MuiInputBase-root': {
+                                        width: 1,
+                                        height: 1,
+                                        '& input': {
+                                            fontSize: isSmallScreen ? 16 : 18,
+                                            padding: '14px !important',
+                                            backgroundColor: 'transparent',
+                                        }
+                                      }
+                                    }}
+                                    value={referralLink}
+                                    placeholder='http://'
+                                    disabled={true}
+                                />
+                                <Box position='absolute' right={4} top={2} borderLeft='solid 1px #171717' sx={{
+                                        width: '37px', height: '37px', paddingLeft: 2,
+                                        top: '50%', transform: 'translateY(-50%)',
+                                        right: 10
+                                    }}>
+                                    <Copy text={referralLink} />
+                                </Box>
+                            </Box>
+                            
+                            <Button variant='outlined' sx={{width: 1, color: 'white', mt: 8, py: 3, fontSize: 18, fontWeight: 400}} onClick={() => {
+                                setReferralLink(`https://tren.finance/invite/${Math.random().toString(36).substring(2, 15)}`)
+                            }}>
+                                Generate
+                            </Button>
                         </Box>
                     </Stack>
                 </Grid>
