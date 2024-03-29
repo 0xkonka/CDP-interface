@@ -112,7 +112,7 @@ export const AmountForm = (props: Props) => {
                             options={{
                                 numeral: true,
                                 numeralThousandsGroupStyle: 'thousand',
-                                numeralDecimalScale: 2, // Always show two decimal points
+                                numeralDecimalScale: 5, // Always show two decimal points
                                 numeralDecimalMark: '.', // Decimal mark is a period
                                 stripLeadingZeroes: false // Prevents stripping the leading zero before the decimal point
                             }}

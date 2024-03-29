@@ -192,7 +192,7 @@ const Points = () => {
                     <Typography className='header-gradient' sx={{ fontSize: {xs: 32, lg: 40}}}>
                         Leaderboard
                     </Typography>
-                    <Box sx={{...radiusBoxStyle, mt: 8}}>
+                    <Box sx={{...radiusBoxStyle, mt: 8}} id='leaderboard'>
                         {/* Leaderboard Table Header */}
                         <Stack direction='row' sx={{
                             px: 6, pt: 6,
@@ -216,7 +216,7 @@ const Points = () => {
                         
                         {/* Leaderboard Table Body */}
                         <Stack mt={4}>
-                            {Array.from({ length: 5 }, (_, index) => (
+                            {Array.from({ length: 10 }, (_, index) => (
                                 <Stack key={index} direction='row' alignItems='center' sx={{
                                     border: 'solid 1px transparent',
                                     borderRadius: '16px',
