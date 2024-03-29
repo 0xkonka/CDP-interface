@@ -217,7 +217,7 @@ const Points = () => {
                         {/* Leaderboard Table Body */}
                         <Stack mt={4}>
                             {Array.from({ length: 5 }, (_, index) => (
-                                <Stack direction='row' alignItems='center' sx={{
+                                <Stack key={index} direction='row' alignItems='center' sx={{
                                     border: 'solid 1px transparent',
                                     borderRadius: '16px',
                                     '&:hover': {
