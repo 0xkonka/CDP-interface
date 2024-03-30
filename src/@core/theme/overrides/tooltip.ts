@@ -11,10 +11,13 @@ const Tooltip = () => {
         tooltip: ({ theme }: OwnerStateThemeType) => ({
           padding: theme.spacing(1, 3),
           fontSize: theme.typography.body1.fontSize,
-          backgroundColor:
-            theme.palette.mode === 'light'
-              ? `rgba(${theme.palette.customColors.main}, 0.9)`
-              : hexToRGBA(theme.palette.customColors.trackBg, 0.9)
+          fontWeight: 400,
+          backgroundColor: '#080B0B',
+          border: 'solid 0.1px #FFFFFF80',
+          // backgroundColor:
+          //   theme.palette.mode === 'light'
+          //     ? `rgba(${theme.palette.customColors.main}, 0.9)`
+          //     : hexToRGBA(theme.palette.customColors.trackBg, 0.9)
         }),
         arrow: ({ theme }: OwnerStateThemeType) => ({
           color:

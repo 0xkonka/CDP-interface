@@ -258,7 +258,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                 <Box sx={{px: {xs: 3, sm: 6}, pb: {xs: 0, sm: 6}}}>
                     <Box sx={{
                         borderTop: 'solid 1px #36373D',
-                        borderBottom: 'solid 1px #36373D',
+                        borderBottom: positionStatus == 'active' ? 'solid 1px #36373D' : 'none',
                     }}>
                         <CollateralOverview row={row}/>
                     </Box>
