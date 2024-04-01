@@ -10,7 +10,6 @@ import { getOverView } from '@/hooks/utils'
 import React, {useState, useMemo, useEffect} from'react'
 import { EarnRow } from '@/views/components/earns/EarnRow'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
-import { BarChart } from '@/views/components/earns/BarChart'
 import { StabilityPool } from '@/views/components/earns/StabilityPool'
 
 const Earn = () => {
