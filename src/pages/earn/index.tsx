@@ -164,7 +164,7 @@ const Earn = () => {
                 </Stack>
             </Stack>
             <StabilityPool/>
-            <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: 10 }}>
+            <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: {xs: 4, md: 10} }}>
                 {networkTypes.map((value, index) => {
                     return value == networkFilter ? (
                         <ToggleOnButton

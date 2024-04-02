@@ -11,6 +11,7 @@ body {
 
 ::-webkit-scrollbar {
   width: 6px;
+  height: 2px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
