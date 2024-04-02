@@ -9,7 +9,7 @@ import { StakeCard } from './StakeCard'
 import { StakeCardTren } from './StakeCardTren'
 
 export const StabilityPool = () => {
-    const { radiusBoxStyle, isSmallScreen } = useGlobalValues()
+    const { radiusBoxStyle, isSmallScreen, isMobileScreen } = useGlobalValues()
     const theme: Theme = useTheme()
 
     return (
@@ -35,8 +35,8 @@ export const StabilityPool = () => {
                             </Typography>
                         </Stack>
                     </Stack>
-                    <Stack direction={isSmallScreen ? 'column' : 'row'} justifyContent='space-between' alignItems='center' mt={8} gap={6}>
-                        <Stack direction='row' sx={{ width: { xs: 1, md: 'auto' }, gap: { xs: 4, md: 8 } }}>
+                    <Stack direction={isMobileScreen ? 'column' : 'row'} justifyContent='space-between' alignItems='center' mt={8} gap={6}>
+                        <Stack direction='row' sx={{ width: { xs: 1, sm: 'auto' }, gap: { xs: 4, md: 8 } }}>
                             <Box>
                                 <Typography variant={isSmallScreen ? 'caption' : 'subtitle2'} sx={{ mb: 1 }} color='#D4D4D47D' fontWeight={400}>
                                     Total Staked trenUSD
@@ -68,7 +68,7 @@ export const StabilityPool = () => {
                                 </Typography>
                             </Box>
                         </Stack>
-                        <Button sx={{width: {xs: 1, lg: 'auto'}, px: 6, py: 2, color: 'black', fontSize: 18}} variant='contained' color='primary'>
+                        <Button sx={{width: {xs: 1, sm: 'auto'}, px: 6, py: 2, color: 'black', fontSize: 18}} variant='contained' color='primary'>
                             Deposit
                         </Button>
                     </Stack>

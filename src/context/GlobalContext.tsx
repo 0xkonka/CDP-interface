@@ -35,6 +35,7 @@ import 'cleave.js/dist/addons/cleave-phone.us'
 interface GlobaContextValue {
     slippageTolerance: number;
     setOpenSlippage: (value: boolean) => void; 
+    isMobileScreen: boolean;
     isSmallScreen: boolean;
     isMediumScreen: boolean;
     isLargeScreen: boolean;
@@ -45,6 +46,7 @@ const defaultValues: GlobaContextValue = {
     slippageTolerance: 0.5,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     setOpenSlippage: () => {},
+    isMobileScreen: false,
     isSmallScreen: false,
     isMediumScreen: false,
     isLargeScreen: false,
@@ -69,6 +71,7 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
     const [modeAuto, setModeAuto] = useState<boolean>(true)
     const [openSlippage, setOpenSlippage] = useState<boolean>(false)
     const theme: Theme = useTheme()
+    const isMobileScreen = useMediaQuery(theme.breakpoints.down('sm')) 
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
     const isLargeScreen = useMediaQuery(theme.breakpoints.down('xl'))
@@ -95,6 +98,7 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
     const value = {
         slippageTolerance,
         setOpenSlippage,
+        isMobileScreen,
         isSmallScreen,
         isMediumScreen,
         isLargeScreen,
