@@ -9,13 +9,13 @@ body {
   font-family: 'Work Sans', sans-serif;
 }
 
-body::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 6px;
 }
-body::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: transparent;
 }
-body::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background-color: #67DAB1;
   border-radius: 20px;
 }
