@@ -1,7 +1,7 @@
 html,
 body {
   min-height: 100%;
-  background: linear-gradient(180deg, #172726 -41.9%, #0B0D0E 50%);
+  background: #080B0B;
   font-family: 'Work Sans', sans-serif;
   margin: 0;
 }
@@ -9,13 +9,14 @@ body {
   font-family: 'Work Sans', sans-serif;
 }
 
-body::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 6px;
+  height: 2px;
 }
-body::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: transparent;
 }
-body::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background-color: #67DAB1;
   border-radius: 20px;
 }
@@ -38,6 +39,16 @@ code:not([class*='language-']):after {
 }
 code[class*='language-'] {
   padding: 0;
+}
+
+/* Britanica Header Gradient */
+.header-gradient {
+  font-family: 'Britanica-HeavySemiExpanded', sans-serif;
+  background: linear-gradient(180deg, #B7BCBC 0%, #FFFFFF 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 400;
 }
 
 @font-face {

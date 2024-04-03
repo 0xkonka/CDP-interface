@@ -109,7 +109,7 @@ export const LeveragePosition = (props: LeveragePostionProps) => {
                             <Stack direction='row' sx={{alignItems: 'center'}}>
                                 <img 
                                     src='/images/tokens/trenUSD.png'
-                                    alt='LinkedIn'
+                                    alt='TrenUSD'
                                     style={{ borderRadius: '100%', marginRight: 10 }}
                                 />
                                 trenUSD

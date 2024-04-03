@@ -10,11 +10,8 @@ import { TransactionOverView } from './transactionOverview'
 import { ApproveDetailView } from './approveDetailView'
 import { AmountForm } from './amountForm'
 import { showToast } from '@/hooks/toasts'
-import { BaseError, useAccount, useChainId } from 'wagmi'
-import { ACTIVE_POOL, BORROWER_OPERATIONS } from '@/configs/address'
-import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
-import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
-import { erc20Abi, formatEther, formatUnits } from 'viem'
+import { BaseError } from 'wagmi'
+import { formatEther, formatUnits } from 'viem'
 import { removeComma } from '@/hooks/utils'
 import { parseEther, parseUnits } from 'viem'
 
@@ -91,8 +88,6 @@ export const BorrowPopup = (props: Props) => {
   const { decimals, LTV, price = BigInt(0) } = collateralDetail
 
   const theme: Theme = useTheme()
-  const chainId = useChainId()
-  const { address: account } = useAccount()
 
   const formattedAllowance = +formatUnits(allowance!, decimals)
   const formattedDepositAmount = removeComma(depositAmount!)
@@ -199,7 +194,6 @@ export const BorrowPopup = (props: Props) => {
         console.log('err', err)
       }
     } else if (type == 'deposit') {
-      console.log('deposit')
       if (+formattedAllowance < +removeComma(depositAmount!)) {
         // In case Approve amount is less than deposit amount , Should be approved first
         handleApprove(parseUnits(inputAmount, decimals))
@@ -245,7 +239,7 @@ export const BorrowPopup = (props: Props) => {
               asset={type =='borrow' ? 'trenUSD' : String(collateral)}
               available={availableBalance}
             />
-            <TransactionOverView type={type} amount={inputAmount} gasFee={0.14} />
+            <TransactionOverView collateral={collateralDetail.symbol} type={type} amount={inputAmount} gasFee={0.14} />
             <Button
               sx={{
                 color: 'white',
@@ -278,7 +272,7 @@ export const BorrowPopup = (props: Props) => {
               depositAmount={depositAmount!}
               borrowAmount={borrowAmount!}
             />
-            <TransactionOverView type={type} amount={inputAmount} gasFee={0.14} uptoFee={34.21} />
+            <TransactionOverView collateral={collateralDetail.symbol} type={type} amount={inputAmount} gasFee={0.14} uptoFee={34.21} />
             <Button
               sx={{
                 color: 'white',
@@ -362,6 +356,7 @@ export const BorrowPopup = (props: Props) => {
             </Stack>
             <AmountForm amount={inputAmount} setAmount={setInputAmount} type={type} asset='trenUSD' available={availableBalance} />
             <TransactionOverView
+              collateral={collateralDetail.symbol}
               type={type}
               gasFee={0.14}
               amount={inputAmount}

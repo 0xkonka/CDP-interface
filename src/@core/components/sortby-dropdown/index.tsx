@@ -4,9 +4,6 @@ import {useState, useEffect, useRef} from 'react';
 //@ MUI components
 import {
     Menu, Box, Typography, Button, Stack,
-    useMediaQuery,
-    Theme, useTheme
-
 } from '@mui/material';
 
 //@ Template Core

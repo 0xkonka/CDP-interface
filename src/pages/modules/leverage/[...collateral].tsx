@@ -67,7 +67,7 @@ const Leverage = () => {
                             <Stack direction='row' sx={{alignItems: 'center', mb: 2}}>
                                 <img 
                                     src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
-                                    alt='LinkedIn' height={42}
+                                    alt={collateral} height={42}
                                     style={{ marginRight: 10 }}
                                 />
                                 {collateral}
@@ -201,7 +201,7 @@ const Leverage = () => {
                                     <Stack direction='row' sx={{alignItems: 'center'}}>
                                         <Image 
                                             src={`/images/tokens/trenUSD.png`}
-                                            alt='LinkedIn' width={32} height={32}
+                                            alt='TrenUSD' width={32} height={32}
                                             style={{ borderRadius: '100%', marginRight: 10 }}
                                         />
                                         trenUSD

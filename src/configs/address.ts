@@ -79,7 +79,7 @@ export const GAS_POOL: AddressMap = {
 
 export const PRICE_FEED: AddressMap = {
     [SupportedChainId.GOERLI]: '0xd1e4bf40e0A3102d0377da4f432b272715b29A2B',
-    [SupportedChainId.SEPOLIA]: '0xfbA488F93Db429ED3AE91082416f434f8Ec9bC9b'
+    [SupportedChainId.SEPOLIA]: '0xE2E304462E25f6b5262F9fAfea4cdC8cB991413c'
 }
 
 export const TIME_LOCK_TESTOR: AddressMap = {

@@ -24,8 +24,8 @@ export const ToggleOffButton = styled(Button)<ButtonProps>(({ theme }) => ({
     color: '#FFFFFF', 
     border: 'solid 1px #2D3131',
     minWidth: 'fit-content',
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: 26,
+    paddingRight: 26,
     height: 35,
     '&:hover': {
         color: 'black',

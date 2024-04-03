@@ -6,10 +6,18 @@ export const getOverView = (collateral: string) => {
     if (collateral == 'WETH') {
         return {
             type: 'Volatile',
-            borrowAPY: 10,
-            maxLeverage: 30,
+            borrowAPY: 0,
+            network: 'Ethereum',
             platform: 'Uniswap v3',
             rateType: 'Variable Rate'
+        }
+    } else if (collateral == 'TST') {
+        return {
+            type: 'Stable',
+            borrowAPY: 0,
+            network: 'Solana',
+            platform: 'Uniswap v3',
+            rateType: 'Stable Rate'
         }
     }
     return
@@ -32,6 +40,11 @@ export const formatToThousands = (value: number) => {
     return '$' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
+export const formatToThousandsInt = (value: number) => {
+    // return '$' + value.toLocaleString('en-US')
+    return value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',').slice(0, -3)
+}
+
 export const removeComma = (amount: string) => {
     return amount.replace(/,/g, '')
 }
@@ -43,6 +56,10 @@ export const shortenWalletAddress = (address: string, chars = 4) => {
 
     // Take the first `chars` characters from the start, and `chars` from the end
     return `${address.substring(0, chars + 2)}...${address.substring(address.length - chars)}`
+}
+
+export const getAssetPath = (str: string) => {
+    return str.toLowerCase().replace(/\s+/g, '_');
 }
 
 import { useEffect, useState } from 'react'

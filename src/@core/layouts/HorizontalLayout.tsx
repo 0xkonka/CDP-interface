@@ -26,6 +26,7 @@ import { hexToRGBA } from '../utils/hex-to-rgba'
 const HorizontalLayoutWrapper = styled('div')({
   height: '100%',
   display: 'flex',
+  backgroundColor: '#080B0B',
   ...(themeConfig.horizontalMenuAnimation && { overflow: 'clip' })
 })
 

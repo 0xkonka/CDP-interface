@@ -112,7 +112,7 @@ export const AmountForm = (props: Props) => {
                             options={{
                                 numeral: true,
                                 numeralThousandsGroupStyle: 'thousand',
-                                numeralDecimalScale: 2, // Always show two decimal points
+                                numeralDecimalScale: 5, // Always show two decimal points
                                 numeralDecimalMark: '.', // Decimal mark is a period
                                 stripLeadingZeroes: false // Prevents stripping the leading zero before the decimal point
                             }}
@@ -132,7 +132,7 @@ export const AmountForm = (props: Props) => {
                 </Stack>
                 <Stack direction='row' justifyContent='space-between'>
                     <Stack direction='row' gap={1} alignItems='center'>
-                        <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
+                        <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                         <Typography variant='subtitle1' color='white' fontWeight={500} sx={{opacity: 0.5}}>{formatToThousands(+removeComma(amount) * collateralUSD)}</Typography>
                     </Stack>
                     <Stack direction='row' gap={2} alignItems='center'>

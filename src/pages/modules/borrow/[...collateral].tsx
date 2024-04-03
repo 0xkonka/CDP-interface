@@ -11,13 +11,6 @@ import { Box, Typography, Button, Grid, Theme, useTheme, Stack, Link } from '@mu
 // Core Components Imports
 import Icon from '@/@core/components/icon'
 
-// Styled Component Import
-import CleaveWrapper from '@/@core/styles/libs/react-cleave'
-
-// CleaveJS for input formatting
-import Cleave from 'cleave.js/react'
-import 'cleave.js/dist/addons/cleave-phone.us'
-
 // Context imports
 import { useGlobalValues } from '@/context/GlobalContext'
 import { ModuleOverView } from '@/views/components/modules/moduleOverView'
@@ -195,7 +188,7 @@ const Borrow = () => {
     setType('repay')
   }
   
-  if(!isConnected) return <Loader content='Please connect wallet to check your module....'/>
+  // if(!isConnected) return <Loader content='Please connect wallet to check your module....'/>
   if(!collateralDetail || collateralDetails.length === 0) return <Loader content='Loading collateral detail...'/>
   if(!moduleInfo) return <Loader content='Loading user module detail...'/>
 
@@ -251,7 +244,7 @@ const Borrow = () => {
                       <Stack direction='row' sx={{ alignItems: 'center' }}>
                         <img
                           src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
-                          alt='LinkedIn'
+                          alt={collateral}
                           height={42}
                           style={{ marginRight: 10 }}
                         />
@@ -262,7 +255,7 @@ const Borrow = () => {
                           {formatToThousands(+formatUnits(depositedAmount, decimals)).substring(1)}
                         </Typography>
                         <Stack direction='row' alignItems='center' gap={1}>
-                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
+                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                           <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
                             {formatToThousands(+formatUnits(depositedAmount, decimals) * +formatEther(price!))}
                           </Typography>
@@ -301,7 +294,7 @@ const Borrow = () => {
                       <Stack direction='row' sx={{ alignItems: 'center' }}>
                         <Image
                           src={`/images/tokens/trenUSD.png`}
-                          alt='LinkedIn'
+                          alt='TrenUSD'
                           width={32}
                           height={32}
                           style={{ borderRadius: '100%', marginRight: 10 }}
@@ -313,7 +306,7 @@ const Borrow = () => {
                           {formatToThousands(+formatEther(debtAmount)).substring(1)}
                         </Typography>
                         <Stack direction='row' alignItems='center' gap={1}>
-                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content'/>
+                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                           <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
                             {formatToThousands(+formatEther(debtAmount))}
                           </Typography>

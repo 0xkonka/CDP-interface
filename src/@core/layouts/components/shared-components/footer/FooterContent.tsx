@@ -9,72 +9,62 @@ import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import Button, {ButtonProps} from '@mui/material/Button'
 import useMediaQuery from '@mui/material/useMediaQuery'
-
-import Image from 'next/image'
-
-const StyledCompanyName = styled(Link)(({ theme }) => ({
-  fontWeight: 500,
-  textDecoration: 'none',
-  color: `${theme.palette.primary.main} !important`
-}))
+import { useGlobalValues } from '@/context/GlobalContext'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
-  color: `${theme.palette.text.secondary} !important`,
+  color: '#C6C6C7 !important',
   '&:hover': {
-    color: `${theme.palette.primary.main} !important`
+    color: `white !important`
   }
-}))
-
-const SquareSocialButton = styled(Button)<ButtonProps>(() => ({
-  padding: 4,
-  marginLeft: 8,
-  marginRight: 8,
-  minWidth: 34,
-  minHeight: 34,
-  border: 'solid 1px #53545F',
-  borderRadius: 10,
 }))
 
 const FooterContent = () => {
   // ** Var
-  const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
+  const {isSmallScreen, isMediumScreen} = useGlobalValues()
 
   return (
     <Box>
-      <Box sx={{ display: {xs: 'none', sm: 'flex'}, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', mb: 7.5 }}>
-        <Box sx={{display: 'flex'}}>
-          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://policy.com'>
+      {/* Desktop version */}
+      <Stack direction={isSmallScreen ? 'column' : 'row'} justifyContent='space-between' alignItems='center' sx={{ mb: 6 }} gap={10}>
+        <Stack direction='row' gap={8}>
+          <Box sx={{display: {xs: 'none', md: 'block'}}}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="25" viewBox="0 0 23 25" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M10.8646 10.1136C9.51354 10.1468 8.16435 10.5644 7.31839 11.7606C6.14641 13.4177 3.84975 17.1474 1.98907 20.1692C1.28064 21.3196 0.635403 22.3675 0.139504 23.1592C-0.0160448 23.4076 0.0901856 23.7335 0.373347 23.809C2.28801 24.3191 5.76751 24.1204 6.78446 22.5668L12.9032 13.219C15.0928 16.5141 17.7396 20.4046 19.3573 22.7643C19.5267 23.0114 19.8777 23.0382 20.0741 22.8119C21.5512 21.1108 23.5755 17.8944 22.1837 15.8136L12.0636 0.683663C11.8952 0.431811 11.5387 0.403015 11.347 0.637734C9.94056 2.36067 8.17155 5.82998 10.0912 8.89881C10.3163 9.25863 10.5765 9.66701 10.8646 10.1136Z" fill="white"/>
+            </svg>
+          </Box>
+          <Stack direction={isSmallScreen ? 'column' : 'row'} justifyContent='center' alignItems='center' sx={{ gap: {xs: 8, md: 3, lg: 12} }}>
+            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/modules'>
+              Pools
+            </Typography>
+            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/earn'>
+              Earn
+            </Typography>
+            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/points'>
+              Points
+            </Typography>
+            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled}  href='/swap'>
+              Swap
+            </Typography>
+            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/farm'>
+              Farm
+            </Typography>
+            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/governance'>
+              Governance
+            </Typography>
+            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/analytics-1'>
+              Analytics
+            </Typography>
+          </Stack>
+        </Stack>
+        <Stack direction='row' sx={{ display: {xs: 'flex', 'md': 'none'} }} mt={5} gap={6}>
+          <Typography fontSize={12} fontWeight={500} component={LinkStyled} target='_blank' href='https://policy.com'>
             Privacy Policy
           </Typography>
-          <Typography variant='subtitle1' sx={{px: 4}}>/</Typography>
-          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://terms.com'>
+          <Typography fontSize={12} fontWeight={500} component={LinkStyled} target='_blank' href='https://terms.com'>
             Terms of Use
           </Typography>
-        </Box>
-        <Box sx={{display: 'flex', flexWrap: 'wrap'}}>
-          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://discord.com'>
-            Discord
-          </Typography>
-          <Typography variant='subtitle1' sx={{px: 4}}>/</Typography>
-          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://twitter.com'>
-            Twitter
-          </Typography>
-          <Typography variant='subtitle1' sx={{px: 4}}>/</Typography>
-          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://instagram.com'>
-            Instagram
-          </Typography>
-          <Typography variant='subtitle1' sx={{px: 4}}>/</Typography>
-          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://telegram.com'>
-            Telegram
-          </Typography>
-          <Typography variant='subtitle1' sx={{px: 4}}>/</Typography>
-          <Typography variant='subtitle1' component={LinkStyled}  target='_blank' href='https://linkedin.com'>
-            Linkedin
-          </Typography>
-        </Box>
-      </Box>
-      <Stack sx={{ display: {xs: 'flex', 'sm': 'none'}}}>
+        </Stack>
         <Stack direction='row' sx={{justifyContent: 'center', alignItems: 'center', gap: 6}}>
           <Link href='https://twitter.com/TrenFinance' target='_blank'>
             <svg width="26" height="26" viewBox="0 0 25 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -102,25 +92,24 @@ const FooterContent = () => {
             </svg>
           </Link>
         </Stack>
-        <Stack direction='row' sx={{py: 6, mx: 2.5, justifyContent: 'center', alignItems: 'center', gap: 2}}>
-          <Typography variant='body2' component={LinkStyled}  target='_blank' href='https://policy.com'>
+      </Stack>
+      
+      <Stack direction='row' justifyContent={isSmallScreen ? 'center' : 'space-between'} alignItems='center' sx={{ borderTop: 'solid 1px #414141', pt: 6}}>
+        <Stack direction='row' sx={{ gap: {xs: 8, md: 4, lg: 12}, display: {xs: 'none', 'md': 'flex'} }}>
+          <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} target='_blank' href='https://policy.com' ml={13}>
             Privacy Policy
           </Typography>
-          <Typography variant='body2' sx={{px: 1}}>/</Typography>
-          <Typography variant='body2' component={LinkStyled}  target='_blank' href='https://terms.com'>
+          <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} target='_blank' href='https://terms.com'>
             Terms of Use
           </Typography>
         </Stack>
-      </Stack>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: {xs: 'center', md: 'end'}, borderTop: 'solid 1px #414141', pt: 7.5}}>
-        <Typography variant='subtitle2' sx={{display: 'flex', alignItems: 'center', fontWeight: 400, color: 'text.secondary' }}>
+        <Typography fontSize={isSmallScreen ? 12 : 14} sx={{display: 'flex', alignItems: 'center', fontWeight: 400, color: '#979899' }}>
           Tren Finance Protocol
-          <Typography sx={{ml:2, color: (theme) => theme.palette.primary.main}}>
+          <Typography fontSize={isSmallScreen ? 12 : 14} sx={{ml:2, color: (theme) => theme.palette.primary.main}}>
           {`© ${new Date().getFullYear()} All Right Reserved `}
           </Typography>
         </Typography>
-      </Box>
-      
+      </Stack>
     </Box>
   )
 }
