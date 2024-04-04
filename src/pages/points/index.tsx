@@ -11,7 +11,7 @@ import { Copy } from '@/views/components/Copy'
 import {useRef, useEffect} from 'react'
 
 const Points = () => {
-    const {isSmallScreen, isMediumScreen, radiusBoxStyle} = useGlobalValues()
+    const {isSmallScreen, isMediumScreen, radiusBoxStyle, isMediumLargeScreen} = useGlobalValues()
     const [sortBy, setSortBy]= useState('symbol')
     const [direction, setDirection] = useState('asc')
     const [referralLink, setReferralLink] = useState('')
@@ -24,7 +24,6 @@ const Points = () => {
       const updateHeight = () => {
         if (secondItemRef.current) {
           const height = secondItemRef.current.clientHeight;
-          console.log('New Height: ', height)
           setFirstItemHeight(`${height}px`);
         }
       };
@@ -84,20 +83,22 @@ const Points = () => {
     return (
         <Box>
             <Box mt={10} position='relative' borderRadius={2.5} border='solid 2px #2D3131' overflow='hidden' sx={{px: {xs: 4, md: 15}, py: {xs: 4, md: 9}}}>
-                <Box className="content" zIndex={10} position='relative'>
-                    <Typography className='header-gradient' variant='h1'sx={{
-                            mb: { xs: 4, md: 8 }, mt: 4,
-                            fontSize: { xs: 36, md: 64, xl: 72 }
-                        }}
-                    >
-                        Tren XP
-                    </Typography>
-                    <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} color='#F3F3F3'
-                        sx={{ fontWeight: 300, width: isSmallScreen ? 1 : 1/2, lineHeight: { xs: 1.25, sm: 1.7 } }}>
-                        Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop 
-                        your assets in one click to leverage exposure for your spot assets. Pay back your loan later using trenUSD or your collateral.
-                    </Typography>
-                    <Box position='relative' sx={{mt: {xs: 5, md: 20}, p: 4}}>
+                <Stack className="content" zIndex={10} position='relative'>
+                    <Box>
+                        <Typography className='header-gradient' variant='h1'sx={{
+                                mb: { xs: 4, md: 8 }, mt: 4,
+                                fontSize: { xs: 36, md: 64, xl: 72 }
+                            }}
+                        >
+                            Tren XP
+                        </Typography>
+                        <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} color='#F3F3F3'
+                            sx={{ fontWeight: 300, width: isMediumScreen ? 1 : 1/2, lineHeight: { xs: 1.25, sm: 1.7 } }}>
+                            Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop 
+                            your assets in one click to leverage exposure for your spot assets. Pay back your loan later using trenUSD or your collateral.
+                        </Typography>
+                    </Box>
+                    <Box position='relative' sx={{mt: {xs: 5, lg: 20}, p: 4}}>
                         <Grid container spacing={4} alignItems='center' ml={-8}>
                             <Grid item xs={6} lg={2.3}>
                                 <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>Total XP Gained</Typography>
@@ -154,10 +155,10 @@ const Points = () => {
                             </Grid>
                         </Grid>
                     </Box>
-                </Box>
-                <Box sx={{ display: {xs: 'none', md: 'block'}, width: '100%', position: 'absolute', zIndex: '1', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+                </Stack>
+                <Box sx={{ display: {xs: 'none', lg: 'block'}, width: '100%', position: 'absolute', zIndex: '1', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
                     <video autoPlay muted loop id="background-video" style={{ width: '100%' }}>
-                        <source src={isMediumScreen ? '/videos/tren-points-3d-mobile.mp4' : '/videos/tren-points-3d.mp4'} type="video/mp4" />
+                        <source src={isMediumLargeScreen ? '/videos/tren-points-3d-mobile.mp4' : '/videos/tren-points-3d.mp4'} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
                 </Box>
