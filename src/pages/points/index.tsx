@@ -83,7 +83,7 @@ const Points = () => {
 
     return (
         <Box>
-            <Box mt={10} position='relative' borderRadius={2.5} border='solid 1px #2D3131' overflow='hidden' sx={{px: {xs: 4, md: 15}, py: {xs: 4, md: 9}}}>
+            <Box mt={10} position='relative' borderRadius={2.5} border='solid 2px #2D3131' overflow='hidden' sx={{px: {xs: 4, md: 15}, py: {xs: 4, md: 9}}}>
                 <Box className="content" zIndex={10} position='relative'>
                     <Typography className='header-gradient' variant='h1'sx={{
                             mb: { xs: 4, md: 8 }, mt: 4,
@@ -156,7 +156,7 @@ const Points = () => {
                     </Box>
                 </Box>
                 <Box sx={{ display: {xs: 'none', md: 'block'}, width: '100%', position: 'absolute', zIndex: '1', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
-                    <video autoPlay muted loop id="background-video" >
+                    <video autoPlay muted loop id="background-video" style={{ width: '100%' }}>
                         <source src={isMediumScreen ? '/videos/tren-points-3d-mobile.mp4' : '/videos/tren-points-3d.mp4'} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
