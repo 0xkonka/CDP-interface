@@ -196,7 +196,10 @@ const Modules = () => {
                 setAssetFilter(value)
               }}
             >
-              {value + ' ' + filteredRows.length}
+              <span style={{ marginLeft: -6 }}>{value}</span>
+              <span style={{ position: 'absolute', right: 19 }}>
+                {filteredRows.length}
+              </span>
             </ToggleOnButton>
           ) : (
             <ToggleOffButton

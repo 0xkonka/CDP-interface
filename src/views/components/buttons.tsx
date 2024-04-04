@@ -9,8 +9,8 @@ export const ToggleOnButton = styled(Button)<ButtonProps>(({ theme }) => ({
     backgroundColor: theme.palette.primary.main, 
     color: '#101617',
     minWidth: 'fit-content',
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: 26,
+    paddingRight: 33,
     height: 35,
     '&:hover': {
         backgroundColor: theme.palette.primary.main
