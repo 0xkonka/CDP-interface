@@ -97,19 +97,8 @@ const Points = () => {
                         Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop 
                         your assets in one click to leverage exposure for your spot assets. Pay back your loan later using trenUSD or your collateral.
                     </Typography>
-                    <Box mt={20} position='relative' sx={{backgroundColor: {xs: '#0C0E0F', md: 'transparent'}, p: 4}}>
-                        {/* <div style={{
-                            content: '',
-                            position: 'absolute',
-                            left: '50%',
-                            right: 0,
-                            top: 0,
-                            // transform: 'translateY(-50%)',
-                            width: '0.5px',
-                            height: '60%',
-                            background: 'white'
-                        }} /> */}
-                        <Grid container spacing={4} alignItems='center'>
+                    <Box position='relative' sx={{mt: {xs: 5, md: 20}, p: 4}}>
+                        <Grid container spacing={4} alignItems='center' ml={-8}>
                             <Grid item xs={6} lg={2.3}>
                                 <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>Total XP Gained</Typography>
                                 <Typography variant='h1'sx={{
@@ -166,11 +155,12 @@ const Points = () => {
                         </Grid>
                     </Box>
                 </Box>
-                
-                <video autoPlay muted loop id="background-video" style={{ width: '100%', position: 'absolute', zIndex: '1', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
-                    <source src={isMediumScreen ? '/videos/tren-points-3d-mobile.mp4' : '/videos/tren-points-3d.mp4'} type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
+                <Box sx={{ display: {xs: 'none', md: 'block'}, width: '100%', position: 'absolute', zIndex: '1', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+                    <video autoPlay muted loop id="background-video" >
+                        <source src={isMediumScreen ? '/videos/tren-points-3d-mobile.mp4' : '/videos/tren-points-3d.mp4'} type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                </Box>
             </Box>
 
             {/* Active Tasks Section */}
