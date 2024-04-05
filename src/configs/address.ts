@@ -17,6 +17,8 @@ export enum SupportedChainId {
 
 type AddressMap = { [chainId: number]: string }
 
+export const ETHERSCAN_BASE_URL = 'https://sepolia.etherscan.io'
+
 export const ACTIVE_POOL: AddressMap = {
     [SupportedChainId.GOERLI]: '0x53De404DE4a3bC176fC63f2ec7b8A1bc2015B5eA',
     [SupportedChainId.SEPOLIA]: '0xbFdb028468c3f3E9DC74D260fD1B9fe58d3351d3'
@@ -79,7 +81,7 @@ export const GAS_POOL: AddressMap = {
 
 export const PRICE_FEED: AddressMap = {
     [SupportedChainId.GOERLI]: '0xd1e4bf40e0A3102d0377da4f432b272715b29A2B',
-    [SupportedChainId.SEPOLIA]: '0xfbA488F93Db429ED3AE91082416f434f8Ec9bC9b'
+    [SupportedChainId.SEPOLIA]: '0x8C00258A5f9c6a28fB2349ffF4a1111581376c53'
 }
 
 export const TIME_LOCK_TESTOR: AddressMap = {
