@@ -177,7 +177,7 @@ export const BorrowPopup = (props: Props) => {
 
   const handleSubmit = () => {
     if (!collateralDetail) return
-    if (+inputAmount > availableBalance || +inputAmount == 0) return
+    if (type != 'openOrAdjust' &&  (+inputAmount > availableBalance || +inputAmount == 0)) return
     if (type === 'openOrAdjust') {
       try {
         if (+formattedAllowance < +removeComma(depositAmount!)) {
@@ -283,7 +283,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
-              disabled={isPending || isConfirming || (+inputAmount > availableBalance) || +inputAmount == 0}
+              disabled={isPending || isConfirming || (+inputAmount > availableBalance)}
             >
               {getButtonLabel(type, formattedAllowance < +formattedDepositAmount)}
             </Button>
