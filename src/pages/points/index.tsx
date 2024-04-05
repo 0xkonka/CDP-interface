@@ -82,7 +82,7 @@ const Points = () => {
 
     return (
         <Box>
-            <Box mt={10} position='relative' borderRadius={2.5} border='solid 2px #2D3131' overflow='hidden' sx={{px: {xs: 4, md: 15}, py: {xs: 4, md: 9}}}>
+            <Box mt={10} position='relative' borderRadius={2.5} border='solid 2px #2D3131' overflow='hidden' sx={{px: {xs: 4, md: 8, xl: 15}, py: {xs: 4, md: 9}}}>
                 <Stack className="content" zIndex={10} position='relative'>
                     <Box>
                         <Typography className='header-gradient' variant='h1'sx={{
@@ -150,7 +150,7 @@ const Points = () => {
                                         <Typography variant='h4' fontWeight={700}>Next Update</Typography>
                                         <Typography variant='h4' fontWeight={700} color='primary'>08:51:58</Typography>
                                     </Stack>
-                                    <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400}>Last Update: 3/3/2024 - 22:19:19</Typography>
+                                    <Typography sx={{fontSize: {xs: 14, md: 16, xl: 18}}} fontWeight={400}>Last Update: 3/3/2024 - 22:19:19</Typography>
                                 </Stack>
                             </Grid>
                         </Grid>
@@ -158,7 +158,7 @@ const Points = () => {
                 </Stack>
                 <Box sx={{ display: {xs: 'none', lg: 'block'}, width: '100%', position: 'absolute', zIndex: '1', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
                     <video autoPlay muted loop id="background-video" style={{ width: '100%' }}>
-                        <source src={isMediumLargeScreen ? '/videos/tren-points-3d-mobile.mp4' : '/videos/tren-points-3d.mp4'} type="video/mp4" />
+                        <source src={isMediumLargeScreen ? '/videos/tren-points-3d-laptop.mp4' : '/videos/tren-points-3d.mp4'} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
                 </Box>
