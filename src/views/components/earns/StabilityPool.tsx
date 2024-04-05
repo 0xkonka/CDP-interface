@@ -9,7 +9,7 @@ import { StakeCard } from './StakeCard'
 import { StakeCardTren } from './StakeCardTren'
 
 export const StabilityPool = () => {
-    const { radiusBoxStyle, isSmallScreen, isMobileScreen } = useGlobalValues()
+    const { radiusBoxStyle, isSmallScreen, isMediumScreen, isLargeScreen, isMobileScreen } = useGlobalValues()
     const theme: Theme = useTheme()
 
     return (
@@ -38,12 +38,12 @@ export const StabilityPool = () => {
                     <Stack direction={isMobileScreen ? 'column' : 'row'} justifyContent='space-between' alignItems='center' mt={8} gap={6}>
                         <Stack direction='row' sx={{ width: { xs: 1, sm: 'auto' }, gap: { xs: 4, md: 8 } }}>
                             <Box>
-                                <Typography variant={isSmallScreen ? 'caption' : 'subtitle2'} sx={{ mb: 1 }} color='#D4D4D47D' fontWeight={400}>
+                                <Typography variant={isSmallScreen ? 'caption' : 'subtitle2'} sx={{ mb: 1 }} color='#D4D4D47D' fontWeight={400} >
                                     Total Staked trenUSD
                                 </Typography>
-                                <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 400, lineHeight: 1.3, mt: {xs: 2, lg: 0} }}>
+                                <Typography sx={{ fontWeight: 400, lineHeight: 1.3, mt: {xs: 2, lg: 0}, fontSize: {xs: 16, lg: 18, xl: 24} }}>
                                     {formatToThousands(500000).slice(1).slice(0, -3)} <span style={{marginRight: 2}}></span>
-                                    <br style={{display: isSmallScreen ? 'inline-block' : 'none'}}/>
+                                    <br style={{display: isMobileScreen ? 'inline-block' : 'none'}}/>
                                     trenUSD
                                 </Typography>
                             </Box>
@@ -51,9 +51,9 @@ export const StabilityPool = () => {
                                 <Typography variant={isSmallScreen ? 'caption' : 'subtitle2'} sx={{ mb: 1 }} color='#D4D4D47D' fontWeight={400}>
                                     Total Fees Accrues
                                 </Typography>
-                                <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 400, lineHeight: 1.3, mt: {xs: 2, lg: 0} }}>
+                                <Typography sx={{ fontWeight: 400, lineHeight: 1.3, mt: {xs: 2, lg: 0}, fontSize: {xs: 16, lg: 18, xl: 24} }}>
                                     {formatToThousands(200).slice(1).slice(0, -3)} <span style={{marginRight: 2}}></span>
-                                    <br style={{display: isSmallScreen ? 'inline-block' : 'none'}}/>
+                                    <br style={{display: isMobileScreen ? 'inline-block' : 'none'}}/>
                                     trenUSD
                                 </Typography>
                             </Box>
@@ -61,9 +61,9 @@ export const StabilityPool = () => {
                                 <Typography variant={isSmallScreen ? 'caption' : 'subtitle2'} sx={{ mb: 1 }} color='#D4D4D47D' fontWeight={400}>
                                     Wallet Balance
                                 </Typography>
-                                <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 400, lineHeight: 1.3, mt: {xs: 2, lg: 0} }}>
+                                <Typography sx={{ fontWeight: 400, lineHeight: 1.3, mt: {xs: 2, lg: 0}, fontSize: {xs: 16, lg: 18, xl: 24} }}>
                                     {formatToThousands(200).slice(1).slice(0, -3)} <span style={{marginRight: 2}}></span>
-                                    <br style={{display: isSmallScreen ? 'inline-block' : 'none'}}/>
+                                    <br style={{display: isMobileScreen ? 'inline-block' : 'none'}}/>
                                     trenUSD
                                 </Typography>
                             </Box>
@@ -85,8 +85,9 @@ export const StabilityPool = () => {
                     </Grid>
                 </Box>
             </Grid>
+            {/* We have hidden this Stake TREN card for now, because we don't have the data for it yet. */}
             <Grid item xs={12} lg={6} position='relative'>
-                <Box sx={{...radiusBoxStyle, opacity: 0.3}}>
+                <Box sx={{...radiusBoxStyle, opacity: 0}}>
                     <Stack direction='row' justifyContent='space-between' mt={4}>
                         <Stack direction='row' gap={3} alignItems='center'>
                             <Box sx={{ width: {xs: 16, lg: 25}, height: {xs: 16, lg: 25} }}>
