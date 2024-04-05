@@ -138,7 +138,7 @@ const Earn = () => {
             >
                 Earn
             </Typography>
-            <Stack direction={isSmallScreen ? 'column' : 'row'} justifyContent='space-between' sx={{mb: { xs: 8, md: 16 }}} gap={8}>
+            <Stack direction={isMediumScreen ? 'column' : 'row'} justifyContent='space-between' sx={{mb: { xs: 8, md: 16 }}} gap={8}>
                 <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} color='#F3F3F3'
                     sx={{ fontWeight: 300, width: 730, maxWidth: '100%', lineHeight: { xs: 1.25, sm: 1.7 } }}>
                     Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop 

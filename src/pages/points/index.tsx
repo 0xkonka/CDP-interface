@@ -47,34 +47,34 @@ const Points = () => {
         {
             label: 'Rank',
             key: 'id',  // This is sort key.
-            flexWidth: 5,
+            flexWidth: 6.5,
             sortable: false
         },
         {
             label: 'User Address',
             key: 'address',
-            flexWidth: 8,
+            flexWidth: 8.5,
             sortable: false
 
         },
         {
             label: 'Total XP',
             key: 'totalXP',
-            flexWidth: 6,
+            flexWidth: 5.5,
             sortable: false
 
         },
         {
             label: 'XP gained per day',
             key: 'dailyXP',
-            flexWidth: 6.5,
+            flexWidth: 8.5,
             sortable: false
 
         },
         {
             label: 'Referral XP',
             key: 'referralXP',
-            flexWidth: 5,
+            flexWidth: 6,
             sortable: false
 
         },
@@ -201,7 +201,7 @@ const Points = () => {
 
             {/* Leaderboard and Referrals */}
             <Grid container spacing={4} mt={12}>
-                <Grid item xs={12} md={6} lg={8}>
+                <Grid item xs={12} lg={7}>
                     <Typography className='header-gradient' sx={{ fontSize: {xs: 32, lg: 40}}}>
                         Leaderboard
                     </Typography>
@@ -298,7 +298,7 @@ const Points = () => {
                         </Stack>
                     </Box>
                 </Grid>
-                <Grid item xs={12} md={6} lg={4}>
+                <Grid item xs={12} lg={5}>
                     <Typography className='header-gradient' sx={{ fontSize: {xs: 32, lg: 40}}}>
                         Referrals
                     </Typography>
@@ -307,7 +307,7 @@ const Points = () => {
                             Invite your friends to Tren Finance to gain additional XP. Along with earning 1,000 XP per referral, you will also receive 15% of the points earned by the referred member.
                         </Typography>
                         <Box sx={{border: 'solid 1px #2D3131', borderRadius: '10px', mt: 4}}>
-                            <Stack direction='row' borderBottom='solid 1px #2D3131' px={6} py={4}>
+                            <Stack direction='row' borderBottom='solid 1px #2D3131' px={6} py={4} alignItems='center'>
                                 <Stack flex={1}>
                                     <Typography variant='subtitle2' fontWeight={400} color='#D4D4D4'>XP from Referrals</Typography>
                                 </Stack>
