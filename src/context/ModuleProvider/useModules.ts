@@ -59,7 +59,7 @@ const useModules = (collateral: string) => {
     try {
       writeContract({
         ...BorrowerOperationsContract,
-        functionName: 'openVessel',
+        functionName: 'openTrenBox',
         args: [
           collateralDetail.address as '0x{string}',
           depositAmount,
@@ -78,7 +78,7 @@ const useModules = (collateral: string) => {
     try {
       writeContract({
         ...BorrowerOperationsContract,
-        functionName: 'adjustVessel',
+        functionName: 'adjustTrenBox',
         args: [
           collateralDetail.address as '0x{string}',
           depositAmount,

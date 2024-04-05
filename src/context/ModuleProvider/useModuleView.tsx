@@ -141,7 +141,7 @@ export const useModuleView = (collateral: string) => {
     const _module: any = await readContract(wagmiConfig, {
       abi: MODULE_MANAGER_ABI,
       address: MODULE_MANAGER[chainId] as '0x{string}',
-      functionName: 'Vessels',
+      functionName: 'TrenBoxes',
       args: [account, collateralDetail.address]
     })
     if(collateralDetail.price == undefined) {

@@ -3,6 +3,97 @@
         "inputs": [
             {
                 "internalType": "address",
+                "name": "target",
+                "type": "address"
+            }
+        ],
+        "name": "AddressEmptyCode",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "AddressInsufficientBalance",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "implementation",
+                "type": "address"
+            }
+        ],
+        "name": "ERC1967InvalidImplementation",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ERC1967NonPayable",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "FailedInnerCall",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "InvalidInitialization",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "NotInitializing",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnableInvalidOwner",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "OwnableUnauthorizedAccount",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ReentrancyGuardReentrantCall",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+            }
+        ],
+        "name": "SafeERC20FailedOperation",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
                 "name": "sender",
                 "type": "address"
             },
@@ -49,27 +140,24 @@
                 "type": "address"
             }
         ],
-        "name": "StabilityPool__VesselManagerOnly",
+        "name": "StabilityPool__TrenBoxManagerOnly",
         "type": "error"
     },
     {
-        "anonymous": false,
+        "inputs": [],
+        "name": "UUPSUnauthorizedCallContext",
+        "type": "error"
+    },
+    {
         "inputs": [
             {
-                "indexed": false,
-                "internalType": "address",
-                "name": "previousAdmin",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "address",
-                "name": "newAdmin",
-                "type": "address"
+                "internalType": "bytes32",
+                "name": "slot",
+                "type": "bytes32"
             }
         ],
-        "name": "AdminChanged",
-        "type": "event"
+        "name": "UUPSUnsupportedProxiableUUID",
+        "type": "error"
     },
     {
         "anonymous": false,
@@ -94,19 +182,6 @@
             }
         ],
         "name": "AssetSent",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "beacon",
-                "type": "address"
-            }
-        ],
-        "name": "BeaconUpgraded",
         "type": "event"
     },
     {
@@ -158,25 +233,6 @@
             }
         ],
         "name": "EpochUpdated",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "_depositor",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "_GRVT",
-                "type": "uint256"
-            }
-        ],
-        "name": "GRVTPaidToDepositor",
         "type": "event"
     },
     {
@@ -240,9 +296,9 @@
         "inputs": [
             {
                 "indexed": false,
-                "internalType": "uint8",
+                "internalType": "uint64",
                 "name": "version",
-                "type": "uint8"
+                "type": "uint64"
             }
         ],
         "name": "Initialized",
@@ -400,6 +456,25 @@
             {
                 "indexed": true,
                 "internalType": "address",
+                "name": "_depositor",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_TREN",
+                "type": "uint256"
+            }
+        ],
+        "name": "TRENPaidToDepositor",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
                 "name": "implementation",
                 "type": "address"
             }
@@ -497,6 +572,19 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "UPGRADE_INTERFACE_VERSION",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
             }
         ],
         "stateMutability": "view",
@@ -766,19 +854,6 @@
     },
     {
         "inputs": [],
-        "name": "flashLoanAddress",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "gasPoolAddress",
         "outputs": [
             {
@@ -852,25 +927,6 @@
                 "internalType": "address",
                 "name": "_depositor",
                 "type": "address"
-            }
-        ],
-        "name": "getDepositorGRVTGain",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_depositor",
-                "type": "address"
             },
             {
                 "internalType": "address[]",
@@ -889,6 +945,25 @@
                 "internalType": "uint256[]",
                 "name": "",
                 "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_depositor",
+                "type": "address"
+            }
+        ],
+        "name": "getDepositorTRENGain",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -940,19 +1015,6 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "grvtStaking",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -1012,7 +1074,7 @@
     },
     {
         "inputs": [],
-        "name": "lastGRVTError",
+        "name": "lastTRENError",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1158,31 +1220,18 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_flashLoanAddress",
+                "name": "_trenStaking",
                 "type": "address"
             }
         ],
-        "name": "setFlashLoan",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_grvtStaking",
-                "type": "address"
-            }
-        ],
-        "name": "setGRVTStaking",
+        "name": "setTRENStaking",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
         "inputs": [],
-        "name": "sortedVessels",
+        "name": "sortedTrenBoxes",
         "outputs": [
             {
                 "internalType": "address",
@@ -1246,16 +1295,42 @@
         "type": "function"
     },
     {
-        "inputs": [
+        "inputs": [],
+        "name": "trenBoxManager",
+        "outputs": [
             {
                 "internalType": "address",
-                "name": "newImplementation",
+                "name": "",
                 "type": "address"
             }
         ],
-        "name": "upgradeTo",
-        "outputs": [],
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "trenBoxManagerOperations",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "trenStaking",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -1274,32 +1349,6 @@
         "name": "upgradeToAndCall",
         "outputs": [],
         "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "vesselManager",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "vesselManagerOperations",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {
