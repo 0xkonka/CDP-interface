@@ -11,9 +11,9 @@ interface Props {
   balanceUSD: number
   poolShare: number
   txHash: string
-  handleWithdraw: (amount: bigint) => void
-  isPending: boolean
-  isConfirming:boolean
+  handleWithdraw?: (amount: bigint) => void
+  isPending?: boolean
+  isConfirming?:boolean
 }
 
 export const StakeCard = (props: Props) => {
@@ -41,7 +41,7 @@ export const StakeCard = (props: Props) => {
           fontWeight: 400,
           borderRadius: '10px'
         }}
-        onClick={() => handleWithdraw(parseEther('100'))}
+        onClick={() => handleWithdraw && handleWithdraw(parseEther('100'))}
         disabled={isPending || isConfirming}
       >
         Withdraw
