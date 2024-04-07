@@ -103,12 +103,14 @@ const FooterContent = () => {
             Terms of Use
           </Typography>
         </Stack>
-        <Typography fontSize={isSmallScreen ? 12 : 14} sx={{display: 'flex', alignItems: 'center', fontWeight: 400, color: '#979899' }}>
-          Tren Finance Protocol
-          <Typography fontSize={isSmallScreen ? 12 : 14} sx={{ml:2, color: (theme) => theme.palette.primary.main}}>
-          {`© ${new Date().getFullYear()} All Right Reserved `}
+        <Stack direction='row'>
+          <Typography fontSize={isSmallScreen ? 12 : 14} sx={{display: 'flex', alignItems: 'center', fontWeight: 400, color: '#979899' }}>
+            Tren Finance Protocol
           </Typography>
-        </Typography>
+          <Typography fontSize={isSmallScreen ? 12 : 14} sx={{ml:2, color: (theme) => theme.palette.primary.main}}>
+            {`© ${new Date().getFullYear()} All Right Reserved `}
+          </Typography>
+        </Stack>
       </Stack>
     </Box>
   )

@@ -57,7 +57,7 @@ export const BarChart = (props: Props) => {
       dataLabels: { enabled: false },
       plotOptions: {
         bar: {
-          borderRadius: period == 30 ? 8 : 0,
+          // borderRadius: period == 30 ? 8 : 0,
           barHeight: '30%',
           horizontal: false,
           startingShape: 'rounded'
