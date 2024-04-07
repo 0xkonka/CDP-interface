@@ -8,7 +8,7 @@
             },
             {
                 "internalType": "address",
-                "name": "_admin",
+                "name": "_adminAddress",
                 "type": "address"
             }
         ],

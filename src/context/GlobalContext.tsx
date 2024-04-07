@@ -38,6 +38,7 @@ interface GlobaContextValue {
     isMobileScreen: boolean;
     isSmallScreen: boolean;
     isMediumScreen: boolean;
+    isMediumLargeScreen: boolean;
     isLargeScreen: boolean;
     radiusBoxStyle: any;
 }
@@ -49,6 +50,7 @@ const defaultValues: GlobaContextValue = {
     isMobileScreen: false,
     isSmallScreen: false,
     isMediumScreen: false,
+    isMediumLargeScreen: false,
     isLargeScreen: false,
     radiusBoxStyle: {}
 }
@@ -74,6 +76,7 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
     const isMobileScreen = useMediaQuery(theme.breakpoints.down('sm')) 
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'))
+    const isMediumLargeScreen = useMediaQuery(theme.breakpoints.down(1440))
     const isLargeScreen = useMediaQuery(theme.breakpoints.down('xl'))
 
     const radiusBoxStyle = {
@@ -101,6 +104,7 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
         isMobileScreen,
         isSmallScreen,
         isMediumScreen,
+        isMediumLargeScreen,
         isLargeScreen,
         radiusBoxStyle
     }

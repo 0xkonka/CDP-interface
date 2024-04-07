@@ -4,6 +4,7 @@ const breakpoints = () => ({
     sm: 600,
     md: 900,
     lg: 1200,
+    xlg: 1440, 
     xl: 1920
   }
 })
