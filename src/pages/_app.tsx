@@ -79,6 +79,7 @@ import { ProtocolProvider } from '@/context/ProtocolProvider/ProtocolProvider'
 import { GlobalProvider } from '@/context/GlobalContext'
 import { WalletConnector } from '@/views/components/WalletConnector'
 import { createPublicClient } from 'viem'
+import { StabilityPoolProvider } from '@/context/StabilityPoolProvider/StabilityPoolProvider'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -126,22 +127,24 @@ const App = (props: ExtendedAppProps) => {
       <Web3Provider>
         {/* <WalletConnector> */}
         <ProtocolProvider>
-          <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-            <SettingsConsumer>
-              {({ settings }) => {
-                return (
-                  <ThemeComponent settings={settings}>
-                    <GlobalProvider>
-                      {getLayout(<Component {...pageProps} />)}
-                      <ReactHotToast>
-                        <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-                      </ReactHotToast>
-                    </GlobalProvider>
-                  </ThemeComponent>
-                )
-              }}
-            </SettingsConsumer>
-          </SettingsProvider>
+          <StabilityPoolProvider>
+            <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+              <SettingsConsumer>
+                {({ settings }) => {
+                  return (
+                    <ThemeComponent settings={settings}>
+                      <GlobalProvider>
+                        {getLayout(<Component {...pageProps} />)}
+                        <ReactHotToast>
+                          <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                        </ReactHotToast>
+                      </GlobalProvider>
+                    </ThemeComponent>
+                  )
+                }}
+              </SettingsConsumer>
+            </SettingsProvider>
+          </StabilityPoolProvider>
         </ProtocolProvider>
         {/* </WalletConnector> */}
       </Web3Provider>

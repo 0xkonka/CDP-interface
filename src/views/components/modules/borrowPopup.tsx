@@ -18,7 +18,7 @@ import { parseEther, parseUnits } from 'viem'
 import useModules from '@/context/ModuleProvider/useModules'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
-import { ETHERSCAN_BASE_URL } from '@/configs/collaterals'
+import { ETHERSCAN_BASE_URL } from '@/configs/address'
 
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
@@ -147,7 +147,7 @@ export const BorrowPopup = (props: Props) => {
             'Borrow Success',
             `You have successfully deposit ${depositAmount} ${collateral} and borrow ${borrowAmount} trenUSD.`,
             30000,
-            `${ETHERSCAN_BASE_URL}/${txhash}`,
+            `${ETHERSCAN_BASE_URL}/tx/${txhash}`,
           )
           break
         case 'deposit':
@@ -177,7 +177,7 @@ export const BorrowPopup = (props: Props) => {
 
   const handleSubmit = () => {
     if (!collateralDetail) return
-    if (type != 'openOrAdjust' &&  (+inputAmount > availableBalance || +inputAmount == 0)) return
+    if (type != 'openOrAdjust' && (+inputAmount > availableBalance || +inputAmount == 0)) return
     if (type === 'openOrAdjust') {
       try {
         if (+formattedAllowance < +removeComma(depositAmount!)) {

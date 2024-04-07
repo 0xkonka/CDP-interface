@@ -136,12 +136,11 @@ export const useModuleView = (collateral: string) => {
   // useEffect(() => {
 
   const getModuleInfo = async () => {
-    console.log('_collateralDetail', collateralDetail)
     if (!account || !chainId || !collateralDetail) return
     const _module: any = await readContract(wagmiConfig, {
       abi: MODULE_MANAGER_ABI,
       address: MODULE_MANAGER[chainId] as '0x{string}',
-      functionName: 'Vessels',
+      functionName: 'TrenBoxes',
       args: [account, collateralDetail.address]
     })
     if(collateralDetail.price == undefined) {
@@ -160,7 +159,7 @@ export const useModuleView = (collateral: string) => {
       currentLTV,
       healthFactor: +formatEther(collateralDetail.liquidation) / currentLTV,
       borrowingPower: currentLTV / +formatEther(collateralDetail.LTV),
-      maximumBorrowingPower: BigInt(formatEther(collUSD * collateralDetail.LTV)),
+      maximumBorrowingPower: collUSD * collateralDetail.LTV / BigInt((10 ** 18)),
       MRCV,
       liquidationPrice: MRCV / +formatEther(_module[1])
     }

@@ -1,7 +1,76 @@
 [
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "target",
+                "type": "address"
+            }
+        ],
+        "name": "AddressEmptyCode",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "implementation",
+                "type": "address"
+            }
+        ],
+        "name": "ERC1967InvalidImplementation",
+        "type": "error"
+    },
+    {
         "inputs": [],
-        "name": "VesselManagerOperations__EmptyAmount",
+        "name": "ERC1967NonPayable",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "FailedInnerCall",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "InvalidInitialization",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "NotInitializing",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnableInvalidOwner",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "OwnableUnauthorizedAccount",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ReentrancyGuardReentrantCall",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "TrenBoxManagerOperations__EmptyAmount",
         "type": "error"
     },
     {
@@ -17,7 +86,7 @@
                 "type": "uint256"
             }
         ],
-        "name": "VesselManagerOperations__FeePercentOutOfBounds",
+        "name": "TrenBoxManagerOperations__FeePercentOutOfBounds",
         "type": "error"
     },
     {
@@ -28,37 +97,37 @@
                 "type": "uint256"
             }
         ],
-        "name": "VesselManagerOperations__InsufficientDebtTokenBalance",
+        "name": "TrenBoxManagerOperations__InsufficientDebtTokenBalance",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "VesselManagerOperations__InvalidArraySize",
+        "name": "TrenBoxManagerOperations__InvalidArraySize",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "VesselManagerOperations__InvalidParam",
+        "name": "TrenBoxManagerOperations__InvalidParam",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "VesselManagerOperations__NotTimelock",
+        "name": "TrenBoxManagerOperations__NotTimelock",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "VesselManagerOperations__NothingToLiquidate",
+        "name": "TrenBoxManagerOperations__NothingToLiquidate",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "VesselManagerOperations__OnlyVesselManager",
+        "name": "TrenBoxManagerOperations__OnlyTrenBoxManager",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "VesselManagerOperations__RedemptionIsBlocked",
+        "name": "TrenBoxManagerOperations__RedemptionIsBlocked",
         "type": "error"
     },
     {
@@ -74,17 +143,33 @@
                 "type": "uint256"
             }
         ],
-        "name": "VesselManagerOperations__TCRMustBeAboveMCR",
+        "name": "TrenBoxManagerOperations__TCRMustBeAboveMCR",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "VesselManagerOperations__UnableToRedeemAnyAmount",
+        "name": "TrenBoxManagerOperations__TrenBoxNotActive",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "VesselManagerOperations__VesselNotActive",
+        "name": "TrenBoxManagerOperations__UnableToRedeemAnyAmount",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "UUPSUnauthorizedCallContext",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "slot",
+                "type": "bytes32"
+            }
+        ],
+        "name": "UUPSUnsupportedProxiableUUID",
         "type": "error"
     },
     {
@@ -92,41 +177,9 @@
         "inputs": [
             {
                 "indexed": false,
-                "internalType": "address",
-                "name": "previousAdmin",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "address",
-                "name": "newAdmin",
-                "type": "address"
-            }
-        ],
-        "name": "AdminChanged",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "beacon",
-                "type": "address"
-            }
-        ],
-        "name": "BeaconUpgraded",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "uint8",
+                "internalType": "uint64",
                 "name": "version",
-                "type": "uint8"
+                "type": "uint64"
             }
         ],
         "name": "Initialized",
@@ -244,19 +297,6 @@
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "implementation",
-                "type": "address"
-            }
-        ],
-        "name": "Upgraded",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
                 "name": "_asset",
                 "type": "address"
             },
@@ -280,12 +320,25 @@
             },
             {
                 "indexed": false,
-                "internalType": "enum IVesselManager.VesselManagerOperation",
+                "internalType": "enum ITrenBoxManager.TrenBoxManagerOperation",
                 "name": "_operation",
                 "type": "uint8"
             }
         ],
-        "name": "VesselLiquidated",
+        "name": "TrenBoxLiquidated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "implementation",
+                "type": "address"
+            }
+        ],
+        "name": "Upgraded",
         "type": "event"
     },
     {
@@ -342,6 +395,19 @@
     },
     {
         "inputs": [],
+        "name": "UPGRADE_INTERFACE_VERSION",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "activePool",
         "outputs": [
             {
@@ -388,11 +454,11 @@
             },
             {
                 "internalType": "address[]",
-                "name": "_vesselArray",
+                "name": "_trenBoxArray",
                 "type": "address[]"
             }
         ],
-        "name": "batchLiquidateVessels",
+        "name": "batchLiquidateTrenBoxes",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -489,19 +555,6 @@
     {
         "inputs": [],
         "name": "feeCollector",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "flashLoanAddress",
         "outputs": [
             {
                 "internalType": "address",
@@ -653,19 +706,6 @@
     },
     {
         "inputs": [],
-        "name": "grvtStaking",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "initialize",
         "outputs": [],
         "stateMutability": "nonpayable",
@@ -715,7 +755,7 @@
                 "type": "uint256"
             }
         ],
-        "name": "liquidateVessels",
+        "name": "liquidateTrenBoxes",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -856,32 +896,6 @@
     {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "_flashLoanAddress",
-                "type": "address"
-            }
-        ],
-        "name": "setFlashLoan",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_grvtStaking",
-                "type": "address"
-            }
-        ],
-        "name": "setGRVTStaking",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "uint256",
                 "name": "_redemptionSofteningParam",
                 "type": "uint256"
@@ -893,8 +907,21 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_trenStaking",
+                "type": "address"
+            }
+        ],
+        "name": "setTRENStaking",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
-        "name": "sortedVessels",
+        "name": "sortedTrenBoxes",
         "outputs": [
             {
                 "internalType": "address",
@@ -958,16 +985,42 @@
         "type": "function"
     },
     {
-        "inputs": [
+        "inputs": [],
+        "name": "trenBoxManager",
+        "outputs": [
             {
                 "internalType": "address",
-                "name": "newImplementation",
+                "name": "",
                 "type": "address"
             }
         ],
-        "name": "upgradeTo",
-        "outputs": [],
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "trenBoxManagerOperations",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "trenStaking",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -986,32 +1039,6 @@
         "name": "upgradeToAndCall",
         "outputs": [],
         "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "vesselManager",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "vesselManagerOperations",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     }
 ]
