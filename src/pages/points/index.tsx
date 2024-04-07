@@ -47,34 +47,34 @@ const Points = () => {
         {
             label: 'Rank',
             key: 'id',  // This is sort key.
-            flexWidth: 5,
+            flexWidth: 6.5,
             sortable: false
         },
         {
             label: 'User Address',
             key: 'address',
-            flexWidth: 8,
+            flexWidth: 8.5,
             sortable: false
 
         },
         {
             label: 'Total XP',
             key: 'totalXP',
-            flexWidth: 6,
+            flexWidth: 5.5,
             sortable: false
 
         },
         {
             label: 'XP gained per day',
             key: 'dailyXP',
-            flexWidth: 6.5,
+            flexWidth: 8.5,
             sortable: false
 
         },
         {
             label: 'Referral XP',
             key: 'referralXP',
-            flexWidth: 5,
+            flexWidth: 6,
             sortable: false
 
         },
@@ -82,7 +82,7 @@ const Points = () => {
 
     return (
         <Box>
-            <Box mt={10} position='relative' borderRadius={2.5} border='solid 2px #2D3131' overflow='hidden' sx={{px: {xs: 4, md: 15}, py: {xs: 4, md: 9}}}>
+            <Box mt={10} position='relative' borderRadius={2.5} border='solid 2px #2D3131' overflow='hidden' sx={{px: {xs: 4, md: 8, xl: 15}, py: {xs: 4, md: 9}}}>
                 <Stack className="content" zIndex={10} position='relative'>
                     <Box>
                         <Typography className='header-gradient' variant='h1'sx={{
@@ -150,7 +150,7 @@ const Points = () => {
                                         <Typography variant='h4' fontWeight={700}>Next Update</Typography>
                                         <Typography variant='h4' fontWeight={700} color='primary'>08:51:58</Typography>
                                     </Stack>
-                                    <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400}>Last Update: 3/3/2024 - 22:19:19</Typography>
+                                    <Typography sx={{fontSize: {xs: 14, md: 16, xl: 18}}} fontWeight={400}>Last Update: 3/3/2024 - 22:19:19</Typography>
                                 </Stack>
                             </Grid>
                         </Grid>
@@ -158,7 +158,7 @@ const Points = () => {
                 </Stack>
                 <Box sx={{ display: {xs: 'none', lg: 'block'}, width: '100%', position: 'absolute', zIndex: '1', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
                     <video autoPlay muted loop id="background-video" style={{ width: '100%' }}>
-                        <source src={isMediumLargeScreen ? '/videos/tren-points-3d-mobile.mp4' : '/videos/tren-points-3d.mp4'} type="video/mp4" />
+                        <source src={isMediumLargeScreen ? '/videos/tren-points-3d-laptop.mp4' : '/videos/tren-points-3d.mp4'} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
                 </Box>
@@ -201,7 +201,7 @@ const Points = () => {
 
             {/* Leaderboard and Referrals */}
             <Grid container spacing={4} mt={12}>
-                <Grid item xs={12} md={6} lg={8}>
+                <Grid item xs={12} lg={7}>
                     <Typography className='header-gradient' sx={{ fontSize: {xs: 32, lg: 40}}}>
                         Leaderboard
                     </Typography>
@@ -298,7 +298,7 @@ const Points = () => {
                         </Stack>
                     </Box>
                 </Grid>
-                <Grid item xs={12} md={6} lg={4}>
+                <Grid item xs={12} lg={5}>
                     <Typography className='header-gradient' sx={{ fontSize: {xs: 32, lg: 40}}}>
                         Referrals
                     </Typography>
@@ -307,7 +307,7 @@ const Points = () => {
                             Invite your friends to Tren Finance to gain additional XP. Along with earning 1,000 XP per referral, you will also receive 15% of the points earned by the referred member.
                         </Typography>
                         <Box sx={{border: 'solid 1px #2D3131', borderRadius: '10px', mt: 4}}>
-                            <Stack direction='row' borderBottom='solid 1px #2D3131' px={6} py={4}>
+                            <Stack direction='row' borderBottom='solid 1px #2D3131' px={6} py={4} alignItems='center'>
                                 <Stack flex={1}>
                                     <Typography variant='subtitle2' fontWeight={400} color='#D4D4D4'>XP from Referrals</Typography>
                                 </Stack>

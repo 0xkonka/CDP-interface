@@ -208,14 +208,14 @@ export const StabilityPool = () => {
               </Typography>
             </Stack>
             {/* <Stack direction='row' alignItems='center'>
-                            <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{fontWeight: 400}} color='primary'>{47}%&nbsp;</Typography>
-                            <Icon icon='bi:fire' color={theme.palette.primary.main} fontSize={18}/>
-                            <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} color='#98999D' sx={{display: 'flex', alignItems: 'center'}}>
-                                &nbsp;(Base&nbsp;
-                                    <Icon icon='mi:circle-information' fontSize={18}/>
-                                &nbsp;: {12.72}%)
-                            </Typography>
-                        </Stack> */}
+                  <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{fontWeight: 400}} color='primary'>{47}%&nbsp;</Typography>
+                  <Icon icon='bi:fire' color={theme.palette.primary.main} fontSize={18}/>
+                  <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} color='#98999D' sx={{display: 'flex', alignItems: 'center'}}>
+                              &nbsp;(Base&nbsp;
+                                  <Icon icon='mi:circle-information' fontSize={18}/>
+                              &nbsp;: {12.72}%)
+                          </Typography>
+                      </Stack> */}
           </Stack>
           <Stack
             direction={isSmallScreen ? 'column' : 'row'}

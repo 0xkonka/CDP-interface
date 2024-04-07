@@ -24,7 +24,7 @@ export const SortableHeaderItem = (props: Props) => {
 
   return (
     <Stack sx={{ flex: `${flexWidth} 1 0%`, alignItems: 'center', cursor: 'pointer' }} direction='row'>
-      <Typography onClick={() => {onSort(sortBy, newDirection)}}>
+      <Typography onClick={() => {onSort(sortBy, newDirection)}} fontWeight={500}>
         {label}
       </Typography>
       {sortable &&
