@@ -42,7 +42,7 @@ export const StabilityPool = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} lg={6}>
-        <Box sx={{ ...radiusBoxStyle }}>
+        <Box sx={{ ...radiusBoxStyle, height: 1 }}>
           <Stack direction='row' justifyContent='space-between' mt={4}>
             <Stack direction='row' gap={3} alignItems='center'>
               <Box sx={{ width: { xs: 16, lg: 25 }, height: { xs: 16, lg: 25 } }}>
@@ -134,7 +134,7 @@ export const StabilityPool = () => {
           <Box mt={10}>
             <BarChart title='Daily revenue fees distributed over time' />
           </Box>
-          <Grid container spacing={6} mt={6} mb={4}>
+          <Grid container spacing={6} mt={6}>
             <Grid item xs={12} md={6}>
               <StakeCard
                 balanceUSD={+formatEther(userDeposit || BigInt(0))}
@@ -156,7 +156,8 @@ export const StabilityPool = () => {
         </Box>
       </Grid>
       <Grid item xs={12} lg={6} position='relative'>
-        
+        <Box sx={{ ...radiusBoxStyle, height: 1, display:  {xs: 'none', lg: 'block'}}}>
+        </Box>
       </Grid>
     </Grid>
   )
