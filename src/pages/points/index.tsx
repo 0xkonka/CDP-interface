@@ -11,7 +11,7 @@ import { Copy } from '@/views/components/Copy'
 import {useRef, useEffect} from 'react'
 
 const Points = () => {
-    const {isSmallScreen, isMediumScreen, radiusBoxStyle, isMediumLargeScreen} = useGlobalValues()
+    const {isSmallScreen, isMobileScreen, isMediumScreen, radiusBoxStyle, isMediumLargeScreen} = useGlobalValues()
     const [sortBy, setSortBy]= useState('symbol')
     const [direction, setDirection] = useState('asc')
     const [referralLink, setReferralLink] = useState('')
@@ -314,19 +314,19 @@ const Points = () => {
                                 <Stack flex={1}>
                                     <Typography variant='subtitle2' fontWeight={400} color='#D4D4D4'>Invited People</Typography>
                                 </Stack>
-                                <Stack flex={1}>
+                                <Stack flex={1.2}>
                                     <Typography variant='subtitle2' fontWeight={400} color='#D4D4D4'>XP share from referred members</Typography>
                                 </Stack>
                             </Stack>
                             <Stack direction='row' px={6} py={4}>
                                 <Stack flex={1}>
-                                    <Typography variant='h5' fontWeight={400} color='white'>{formatToThousandsInt(12000)} XP</Typography>
+                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='white'>{formatToThousandsInt(12000)} XP</Typography>
                                 </Stack>
                                 <Stack flex={1}>
-                                    <Typography variant='h5' fontWeight={400} color='white'>12</Typography>
+                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='white'>12</Typography>
                                 </Stack>
-                                <Stack flex={1}>
-                                    <Typography variant='h5' fontWeight={400} color='white'>{formatToThousandsInt(3600)} XP / Day</Typography>
+                                <Stack flex={1.2}>
+                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='white'>{formatToThousandsInt(3600)} XP / Day</Typography>
                                 </Stack>
                             </Stack>
                         </Box>
