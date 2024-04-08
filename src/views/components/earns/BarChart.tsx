@@ -57,7 +57,7 @@ export const BarChart = (props: Props) => {
       dataLabels: { enabled: false },
       plotOptions: {
         bar: {
-          borderRadius: period == 30 ? 8 : 0,
+          // borderRadius: period == 30 ? 8 : 0,
           barHeight: '30%',
           horizontal: false,
           startingShape: 'rounded'
@@ -113,7 +113,7 @@ export const BarChart = (props: Props) => {
 
     return (
       <Box>
-        <Stack direction='row' mb={4.5} justifyContent='space-between'>
+        <Stack direction='row' mb={4.5} justifyContent='space-between' alignItems='center'>
           <Typography fontWeight={600}>{title}</Typography>
           <Stack direction='row' sx={{ cursor: 'pointer' }}>
             <Box sx={{px: 3.5, py: 2.5, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopLeftRadius: 6, borderBottomLeftRadius: 6, borderColor: period == 30 ? theme.palette.primary.main : '#2E2E2E'}}

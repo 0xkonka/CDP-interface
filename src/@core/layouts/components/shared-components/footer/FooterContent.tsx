@@ -30,7 +30,7 @@ const FooterContent = () => {
         <Stack direction='row' gap={8}>
           <Box sx={{display: {xs: 'none', md: 'block'}}}>
             <svg xmlns="http://www.w3.org/2000/svg" width="23" height="25" viewBox="0 0 23 25" fill="none">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M10.8646 10.1136C9.51354 10.1468 8.16435 10.5644 7.31839 11.7606C6.14641 13.4177 3.84975 17.1474 1.98907 20.1692C1.28064 21.3196 0.635403 22.3675 0.139504 23.1592C-0.0160448 23.4076 0.0901856 23.7335 0.373347 23.809C2.28801 24.3191 5.76751 24.1204 6.78446 22.5668L12.9032 13.219C15.0928 16.5141 17.7396 20.4046 19.3573 22.7643C19.5267 23.0114 19.8777 23.0382 20.0741 22.8119C21.5512 21.1108 23.5755 17.8944 22.1837 15.8136L12.0636 0.683663C11.8952 0.431811 11.5387 0.403015 11.347 0.637734C9.94056 2.36067 8.17155 5.82998 10.0912 8.89881C10.3163 9.25863 10.5765 9.66701 10.8646 10.1136Z" fill="white"/>
+              <path fillRule="evenodd" clipRule="evenodd" d="M10.8646 10.1136C9.51354 10.1468 8.16435 10.5644 7.31839 11.7606C6.14641 13.4177 3.84975 17.1474 1.98907 20.1692C1.28064 21.3196 0.635403 22.3675 0.139504 23.1592C-0.0160448 23.4076 0.0901856 23.7335 0.373347 23.809C2.28801 24.3191 5.76751 24.1204 6.78446 22.5668L12.9032 13.219C15.0928 16.5141 17.7396 20.4046 19.3573 22.7643C19.5267 23.0114 19.8777 23.0382 20.0741 22.8119C21.5512 21.1108 23.5755 17.8944 22.1837 15.8136L12.0636 0.683663C11.8952 0.431811 11.5387 0.403015 11.347 0.637734C9.94056 2.36067 8.17155 5.82998 10.0912 8.89881C10.3163 9.25863 10.5765 9.66701 10.8646 10.1136Z" fill="white"/>
             </svg>
           </Box>
           <Stack direction={isSmallScreen ? 'column' : 'row'} justifyContent='center' alignItems='center' sx={{ gap: {xs: 8, md: 3, lg: 12} }}>
@@ -103,12 +103,14 @@ const FooterContent = () => {
             Terms of Use
           </Typography>
         </Stack>
-        <Typography fontSize={isSmallScreen ? 12 : 14} sx={{display: 'flex', alignItems: 'center', fontWeight: 400, color: '#979899' }}>
-          Tren Finance Protocol
-          <Typography fontSize={isSmallScreen ? 12 : 14} sx={{ml:2, color: (theme) => theme.palette.primary.main}}>
-          {`© ${new Date().getFullYear()} All Right Reserved `}
+        <Stack direction='row'>
+          <Typography fontSize={isSmallScreen ? 12 : 14} sx={{display: 'flex', alignItems: 'center', fontWeight: 400, color: '#979899' }}>
+            Tren Finance Protocol
           </Typography>
-        </Typography>
+          <Typography fontSize={isSmallScreen ? 12 : 14} sx={{ml:2, color: (theme) => theme.palette.primary.main}}>
+            {`© ${new Date().getFullYear()} All Right Reserved `}
+          </Typography>
+        </Stack>
       </Stack>
     </Box>
   )
