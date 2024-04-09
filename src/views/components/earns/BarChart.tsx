@@ -83,6 +83,7 @@ export const BarChart = (props: Props) => {
         categories: categories.slice(Math.max(categories.length - period, 0)),
         type: 'datetime',
         labels: {
+          style: { colors: theme.palette.text.disabled },
           formatter: function(value, timestamp) {
             if (timestamp === undefined) {
               return '';

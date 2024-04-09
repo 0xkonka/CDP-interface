@@ -42,7 +42,8 @@ export const ModuleOverView = (props: Props) => {
     {
       key: 'trenUSD Available',
       tooltip: 'trenUSD available to borrow/total trenUSD allocated',
-      value: `${formatMoney(formattedBorrowAvailable)} / ${formatMoney(formattedMintCap)}`
+      value: formatMoney(formattedBorrowAvailable),
+      value2: formatMoney(formattedMintCap)
     },
     {
       key: 'Utilization',
@@ -99,16 +100,22 @@ export const ModuleOverView = (props: Props) => {
           <Typography
             variant='body1'
             color='#707175'
-            sx={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}
+            sx={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap', position:'relative' }}
           >
             {label.key}
             <Tooltip title={label.tooltip} placement='top'>
-              <IconButton sx={{ bgcolor: 'transparent !important' }}>
+              <IconButton sx={{ position: 'absolute', bgcolor: 'transparent !important', right: -28 }}>
                 <Icon fontSize='14' icon='simple-line-icons:question' style={{ color: '#707175', cursor: 'pointer' }} />
               </IconButton>
             </Tooltip>
           </Typography>
-          <Typography variant='body1'>{label.value}</Typography>
+          <Typography variant='body1'>
+            {
+              label.key != 'trenUSD Available' ? 
+                label.value : 
+                <span>{label.value} <span style={{color: '#707175'}}> / {label.value2}</span></span>
+            }
+          </Typography>
         </Stack>
       ))}
     </Stack>

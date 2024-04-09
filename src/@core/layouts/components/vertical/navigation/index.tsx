@@ -212,7 +212,7 @@ const Navigation = (props: Props) => {
               ? afterNavMenuContent(navMenuContentProps)
               : null}
           </Box>
-          <Box sx={{px: 2}}>
+          <Box sx={{px: 2, display: {xs: 'none', md: 'block'}}}>
             <Footer {...props} footerStyles={footerProps?.sx} footerContent={footerProps?.content} />
           </Box>
         </Box>
