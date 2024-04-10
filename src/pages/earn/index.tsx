@@ -97,37 +97,36 @@ const Earn = () => {
     }, [rows, networkFilter])
 
       // Sory by different specs
-  useEffect(() => {
-    const sortKey = sortBy
-    console.log(sortKey, direction)
+    useEffect(() => {
+        const sortKey = sortBy
 
-    setRows(rows => {
-      const sortedRows = [...rows]
-      if (direction == 'desc') {
-        return sortedRows.sort((a, b) => {
-          if (a[sortKey] > b[sortKey]) {
-            return -1
-          }
-          if (a[sortKey] < b[sortKey]) {
-            return 1
-          }
-          return 0
+        setRows(rows => {
+        const sortedRows = [...rows]
+        if (direction == 'desc') {
+            return sortedRows.sort((a, b) => {
+            if (a[sortKey] > b[sortKey]) {
+                return -1
+            }
+            if (a[sortKey] < b[sortKey]) {
+                return 1
+            }
+            return 0
+            })
+        } else if (direction == 'asc') {
+            return sortedRows.sort((a, b) => {
+            if (a[sortKey] < b[sortKey]) {
+                return -1
+            }
+            if (a[sortKey] > b[sortKey]) {
+                return 1
+            }
+            return 0
+            })
+        } else {
+            return sortedRows
+        }
         })
-      } else if (direction == 'asc') {
-        return sortedRows.sort((a, b) => {
-          if (a[sortKey] < b[sortKey]) {
-            return -1
-          }
-          if (a[sortKey] > b[sortKey]) {
-            return 1
-          }
-          return 0
-        })
-      } else {
-        return sortedRows
-      }
-    })
-  }, [sortBy, direction])
+    }, [sortBy, direction])
 
     return (
         <Box>
