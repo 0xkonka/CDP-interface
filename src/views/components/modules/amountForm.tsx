@@ -35,7 +35,11 @@ const getAmountTooltip = (type: string) => {
         case 'repay':
             return "Your repayment capacity is limited by your wallet's trenUSD balance. Use the MAX button to fully repay the loan if you have sufficient trenUSD, or to apply the full trenUSD from your wallet towards the loan repayment"
         case 'borrow':
-            return 'Your trenUSD amount is based on your borrowing power. Increase it by adding collateral. The MAX button uses all your borrowing power.'
+            return "Your trenUSD amount is based on your borrowing power. Increase it by adding collateral. The MAX button uses all your borrowing power."
+        case 'stability-withdraw':
+            return "The total amount available to withdraw corresponds to the total balance deposited"
+        case 'stability-deposit':
+            return "The available amount to deposit corresponds to the trenUSD wallet balance."
         case 'default':
             return 'N/A'
     }
@@ -80,9 +84,6 @@ export const AmountForm = (props: Props) => {
             borderColor: theme.palette.secondary.dark
         })
     }
-    const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
-        setAmount(event.target.value)
-    }
 
     return (
         <Stack>
@@ -96,7 +97,7 @@ export const AmountForm = (props: Props) => {
                 </Tooltip>
             </Typography>
             }
-            <Box sx={{...radiusBoxStyle, ...borderColorStyle}} onClick={focusAmount}>
+            <Box sx={{...radiusBoxStyle, ...borderColorStyle, pt: 2}} onClick={focusAmount}>
                 <Stack direction='row' justifyContent='space-between'>
                     <CleaveWrapper style={{ position: 'relative' }}>
                         <Cleave
@@ -107,6 +108,7 @@ export const AmountForm = (props: Props) => {
                                 border: 'none',
                                 fontWeight: 700,
                                 paddingLeft: 6,
+                                paddingBottom: 0,
                             }} 
                             placeholder='0.00'
                             options={{
@@ -117,7 +119,7 @@ export const AmountForm = (props: Props) => {
                                 stripLeadingZeroes: false // Prevents stripping the leading zero before the decimal point
                             }}
                             value={amount}
-                            onChange={e => setAmount(e.target.value)}
+                            onChange={e => setAmount(removeComma(e.target.value))}
                             onFocus={handleFocus} onBlur={handleBlur}
                             autoComplete='off'
                         />
@@ -125,7 +127,7 @@ export const AmountForm = (props: Props) => {
                     <Stack direction='row' gap={2} alignItems='center'>
                         <img 
                             src={`/images/tokens/${asset.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
-                            alt={asset} height={25}
+                            alt={asset} height={28}
                         />
                         <Typography variant='h5'>{asset}</Typography>
                     </Stack>

@@ -10,7 +10,7 @@ import { erc20Abi, formatEther, formatUnits, parseUnits } from 'viem'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { formatToThousands } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
-import { BorrowPopup } from '@/views/components/modules/borrowPopup'
+import { BorrowPopup } from '@/views/components/popups/borrowPopup'
 
 // React imports
 import React, { useState, useMemo, useEffect } from 'react'

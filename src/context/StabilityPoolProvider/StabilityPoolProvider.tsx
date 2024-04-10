@@ -42,7 +42,6 @@ export const StabilityPoolProvider: React.FC<StabilityPoolProviderProps> = ({ ch
   } as const
 
   const getStabilityPoolDetails = async () => {
-    console.log('asdf')
     const _stabilityPoolDetails = await multicall(wagmiConfig, {
       contracts: [
         {

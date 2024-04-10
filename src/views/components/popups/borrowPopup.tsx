@@ -6,9 +6,9 @@ import { Dialog, SlideProps, Slide, Box, Typography, Button, Theme, useTheme, St
 
 // Core Components Imports
 import Icon from '@/@core/components/icon'
-import { TransactionOverView } from './transactionOverview'
-import { ApproveDetailView } from './approveDetailView'
-import { AmountForm } from './amountForm'
+import { TransactionOverView } from '../modules/transactionOverview'
+import { ApproveDetailView } from '../modules/approveDetailView'
+import { AmountForm } from '../modules/amountForm'
 import { showToast } from '@/hooks/toasts'
 import { BaseError } from 'wagmi'
 import { formatEther, formatUnits } from 'viem'
