@@ -32,7 +32,7 @@ export const TrenUSDPool = () => {
     const decimals = 18 // Will be replaced with real decimal - Jordan
 
     const { stabilityPoolInfo, userStabilityPoolPosition } = useStabilityPoolView()
-    const { userDeposit = BigInt(0) } = userStabilityPoolPosition || {}
+    const { userDeposit = BigInt(0), userDebtGain = BigInt(0) } = userStabilityPoolPosition || {}
     const { totalDebtTokenDeposits = BigInt(0) } = stabilityPoolInfo || {}
     
     // Get trenUSD balance of wallet.
@@ -92,8 +92,8 @@ export const TrenUSDPool = () => {
                     </Typography>
                 </Stack>
             </Stack>
-            <Stack direction={isMobileScreen ? 'column' : 'row'} justifyContent='space-between' alignItems='start' mt={8} gap={6}>
-                <Stack direction='row' sx={{ width: { xs: 1, sm: 'auto' }, gap: { xs: 4, md: 16 } }}>
+            <Stack direction={isMobileScreen ? 'column' : 'row'} justifyContent='space-between' alignItems={isMobileScreen ? 'start' : 'center'} mt={8} gap={6}>
+                <Stack direction='row'sx={{ width: { xs: 1, sm: 'auto' }, gap: { xs: 4, md: 16 } }}>
                     <Box>
                         <Typography variant={isSmallScreen ? 'caption' : 'subtitle2'} sx={{ mb: 1 }} color='#D4D4D47D' fontWeight={400} >
                             Total Staked trenUSD
@@ -139,7 +139,7 @@ export const TrenUSDPool = () => {
                             Wallet Balance
                         </Typography>
                         <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' mb={6} fontWeight={400}>
-                            {formatToThousandsInt(userStabilityInfo.walletBalance)} trenUSD
+                            {userStabilityInfo.walletBalance == 0 ? '-' : formatToThousandsInt(userStabilityInfo.walletBalance) + ' trenUSD'}
                         </Typography>
                         <Button variant='contained' color='primary'
                             sx={{ 
@@ -157,7 +157,7 @@ export const TrenUSDPool = () => {
                             Staked trenUSD
                         </Typography>
                         <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' mb={6}>
-                            {formatMoney(+formatEther(userDeposit || BigInt(0)))} trenUSD
+                            {userDeposit == undefined || userDeposit == BigInt(0) ? '-' : formatMoney(+formatEther(userDeposit || BigInt(0))) + ' trenUSD'}
                         </Typography>
                         <Button variant='outlined' color='primary'
                             sx={{ 
@@ -175,7 +175,7 @@ export const TrenUSDPool = () => {
                             Rewards
                         </Typography>
                         <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' mb={6}>
-                            {formatMoney(2)} TREN
+                            {userDebtGain == undefined || userDebtGain == BigInt(0) ? '-' : formatMoney(+formatEther(userDebtGain || BigInt(0))) + ' TREN'}
                         </Typography>
                         <Button variant='outlined'
                             sx={{ 

@@ -92,7 +92,7 @@ export const TrenPool = () => {
                     </Typography>
                 </Stack>
             </Stack>
-            <Stack direction={isMobileScreen ? 'column' : 'row'} justifyContent='space-between' alignItems='start' mt={8} gap={6}>
+            <Stack direction={isMobileScreen ? 'column' : 'row'} justifyContent='space-between'  alignItems={isMobileScreen ? 'start' : 'center'} mt={8} gap={6}>
                 <Stack direction='row' sx={{ width: { xs: 1, sm: 'auto' }, gap: { xs: 4, md: 16 } }}>
                     <Box>
                         <Typography variant={isSmallScreen ? 'caption' : 'subtitle2'} sx={{ mb: 1 }} color='#D4D4D47D' fontWeight={400} >
