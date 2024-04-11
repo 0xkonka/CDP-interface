@@ -1,5 +1,5 @@
 import { useGlobalValues } from '@/context/GlobalContext'
-import { formatToThousands, formatToThousandsInt, removeComma } from '@/hooks/utils'
+import { formatPercent, formatToThousands, formatToThousandsInt, removeComma } from '@/hooks/utils'
 import {
     Stack, Typography, Box, Tooltip, IconButton,
     Theme, useTheme
@@ -11,6 +11,7 @@ import Icon from '@/@core/components/icon'
 interface Props {
     collateral: string
     gasFee: number
+    poolVolume: number
     poolBalance: number
     type: string
     amount: string
@@ -19,7 +20,8 @@ interface Props {
 export const TransactionOverView = (props: Props) => {
     const {radiusBoxStyle} = useGlobalValues()
     const theme:Theme = useTheme()
-    const {collateral, gasFee, poolBalance, amount, type} = props
+    const {collateral, gasFee, poolVolume, poolBalance, amount, type} = props
+    const newPoolBalance = poolBalance + +amount * (type == 'deposit' ? 1 : -1)
     
     return (
         <Stack>
@@ -43,11 +45,11 @@ export const TransactionOverView = (props: Props) => {
                                 src={`/images/tokens/${collateral.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
                                 alt={collateral} height={28}
                             />
-                            <Typography variant='h4'>{formatToThousandsInt(poolBalance + +amount * (type == 'deposit' ? 1 : -1))}</Typography>
+                            <Typography variant='h4'>{formatToThousandsInt(newPoolBalance)}</Typography>
                         </Stack>
                         <Stack justifyContent='flex-end' mt={2}>
                             <Typography variant='h5' color='#707175' fontWeight={400} textAlign='right'>
-                                Pool Share: {formatToThousands(0.22).slice(1)}%
+                                Pool Share: {formatPercent(newPoolBalance / poolVolume, 5)}
                             </Typography>
                         </Stack>
                     </Box>

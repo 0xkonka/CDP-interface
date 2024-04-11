@@ -11,6 +11,8 @@ import React, {useState, useMemo, useEffect} from'react'
 import { EarnRow } from '@/views/components/earns/EarnRow'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
 import { StabilityPool } from '@/views/components/earns/StabilityPool'
+import { useStabilityPoolView } from '@/context/StabilityPoolProvider/StabilityPoolContext'
+import { formatUnits } from 'viem'
 
 const Earn = () => {
     const { isSmallScreen, isMediumScreen } = useGlobalValues()
@@ -18,6 +20,9 @@ const Earn = () => {
     const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
     const [sortBy, setSortBy]= useState('symbol')
     const [direction, setDirection] = useState('asc')
+    const { stabilityPoolInfo } = useStabilityPoolView()
+    const { totalDebtTokenDeposits = BigInt(0) } = stabilityPoolInfo || {}
+    const decimals = 18 // Will be replaced with real decimal - Jordan
 
     const networkTypes: string[] = [
         'All', 'Ethereum', 'Binance', 'Polygon', 'Avalanche', 'Solana'
@@ -149,7 +154,7 @@ const Earn = () => {
                             Total Staked
                         </Typography>
                         <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 600 }}>
-                            $ {formatToThousands(200000).slice(1)}
+                            $ {formatToThousands(+formatUnits(totalDebtTokenDeposits, decimals!)).slice(1)}
                         </Typography>
                     </Box>
                     <Box>
@@ -157,7 +162,7 @@ const Earn = () => {
                             TREN per day
                         </Typography>
                         <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 600 }}>
-                            $ {formatToThousands(150000).slice(1)}
+                            $ {formatToThousands(2000).slice(1)}
                         </Typography>
                     </Box>
                 </Stack>
