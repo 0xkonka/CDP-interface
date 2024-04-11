@@ -43,6 +43,7 @@ const Modules = () => {
   const { isSmallScreen, isMediumScreen } = useGlobalValues()
 
   const { collateralDetails } = useProtocol()
+  console.log(collateralDetails)
 
   const rows = useMemo(() => {
     if (collateralDetails && collateralDetails.length > 0) {

@@ -30,34 +30,40 @@ const Earn = () => {
     const { collateralDetails } = useProtocol()
     const headerItems = [
         {
-            label: 'Pools',
+            label: 'Liqudity Pool',
             key: 'symbol',  // This is sort key.
-            flexWidth: 2,
-            sortable: true
-        },
-        {
-            label: 'Platform',
-            key: 'platform',
-            flexWidth: 1,
+            flexWidth: 5,
             sortable: true
         },
         {
             label: 'APY',
             key: 'borrowAPY',
-            flexWidth: 1.5,
+            flexWidth: 3.3,
             sortable: true
         },
         {
             label: 'Liquidity',
             key: 'liquidity',
-            flexWidth: 1.25,
+            flexWidth: 2.3,
             sortable: true
         },
         {
-            label: '',
-            key: '',
-            flexWidth: 1,
-            sortable: false
+            label: 'Wallet Balance',
+            key: 'walletBalance',
+            flexWidth: 3.7,
+            sortable: true
+        },
+        {
+            label: 'Staked LP Tokens',
+            key: 'stakedLPTokens',
+            flexWidth: 3.7,
+            sortable: true
+        },
+        {
+            label: 'Rewards',
+            key: 'rewards',
+            flexWidth: 3.5,
+            sortable: true
         },
     ]
 
@@ -168,7 +174,7 @@ const Earn = () => {
                 </Stack>
             </Stack>
             <StabilityPool/>
-            <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: {xs: 4, md: 10} }}>
+            <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: {xs: 4, md: 10}, mt: 20 }}>
                 {networkTypes.map((value, index) => {
                     return value == networkFilter ? (
                         <ToggleOnButton
@@ -217,7 +223,7 @@ const Earn = () => {
 
             {/* Collateral Group Stack*/}
             {collateralDetails && (
-                <Stack sx={{ mt: 4 }} gap={isMediumScreen ? 5 : 0}>
+                <Stack sx={{ mt: 4 }} gap={4}>
                 {filteredRows.length > 0 ? (
                     filteredRows.map((row, index) => (
                     <EarnRow
