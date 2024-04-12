@@ -146,7 +146,7 @@ export const useModuleView = (collateral: string) => {
     if(collateralDetail.price == undefined) {
       throw new Error('Collateral price fetching failed.')
     }
-    const collUSD = (_module[1] * collateralDetail.price) / BigInt(10 ** collateralDetail.decimals)
+    const collUSD = (_module[1] * collateralDetail.price) / BigInt(10 ** 18)
     const currentLTV = Number(_module[0]) / Number(collUSD)
     const MRCV = +formatEther(_module[0]) / +formatEther(collateralDetail.LTV)
     const _moduleInfo: ModuleInfo = {

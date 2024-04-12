@@ -127,12 +127,12 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
               </Stack>
               <Stack sx={{ ml: isSmallScreen ? 0 : 12, alignItems: 'flex-end' }}>
                 <Typography variant='subtitle1'>
-                  {formatToThousands(+formatUnits(depositedAmount, row.decimals)).substring(1)}
+                  {formatToThousands(+formatEther(depositedAmount)).substring(1)}
                 </Typography>
                 <Stack direction='row' alignItems='center' gap={1}>
                   <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                   <Typography variant='subtitle2' sx={{ color: '#707175' }}>
-                    {formatToThousands(+formatUnits(depositedAmount, row.decimals) * +formatEther(row.price))}
+                    {formatToThousands(+formatEther(depositedAmount) * +formatEther(row.price))}
                   </Typography>
                 </Stack>
               </Stack>

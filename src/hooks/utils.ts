@@ -13,9 +13,18 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'TST') {
         return {
-            type: 'Stable',
+            type: 'Volatile',
             borrowAPY: 0,
             network: 'Solana',
+            platform: 'Uniswap v3',
+            rateType: 'Stable Rate'
+        }
+    }
+    else if (collateral == 'FURY') {
+        return {
+            type: 'Volatile',
+            borrowAPY: 0,
+            network: 'Ethereum',
             platform: 'Uniswap v3',
             rateType: 'Stable Rate'
         }

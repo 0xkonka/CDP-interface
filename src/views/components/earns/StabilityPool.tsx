@@ -50,8 +50,8 @@ export const StabilityPool = () => {
     if(userDebtBal != undefined && userDeposit != undefined) {
       setUserStabilityInfo(prevState => ({
         ...prevState,
-        walletBalance: +formatUnits(userDebtBal, decimals!),
-        userDeposit: +formatUnits(userDeposit, decimals!),
+        walletBalance: +formatEther(userDebtBal),
+        userDeposit: +formatEther(userDeposit),
       }))
       refetchBalance()
     }
@@ -125,7 +125,7 @@ export const StabilityPool = () => {
                           Total Staked trenUSD
                       </Typography>
                       <Typography sx={{ fontWeight: 400, lineHeight: 1.3, mt: {xs: 2, lg: 0}, fontSize: {xs: 16, lg: 18, xl: 24} }}>
-                          {formatToThousandsInt(+formatUnits(totalDebtTokenDeposits, decimals!))} <span style={{marginRight: 2}}></span>
+                          {formatToThousandsInt(+formatEther(totalDebtTokenDeposits))} <span style={{marginRight: 2}}></span>
                           <br style={{display: isMobileScreen ? 'inline-block' : 'none'}}/>
                           trenUSD
                       </Typography>
@@ -193,7 +193,7 @@ export const StabilityPool = () => {
           type={type}
           depositAvailable={userStabilityInfo.walletBalance}
           withdrawAvailable={userStabilityInfo.userDeposit}
-          totalDebtTokenDeposits={+formatUnits(totalDebtTokenDeposits, decimals!)}
+          totalDebtTokenDeposits={+formatEther(totalDebtTokenDeposits)}
       />
     </Box>
   )

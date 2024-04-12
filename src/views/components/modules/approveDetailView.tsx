@@ -4,7 +4,7 @@ import { removeComma } from '@/hooks/utils'
 import { formatToThousands } from '@/hooks/utils'
 import { Stack, Typography } from '@mui/material'
 import { useMemo } from 'react'
-import { formatUnits } from 'viem'
+import { formatEther, formatUnits } from 'viem'
 
 interface Props {
   depositAmount: string
@@ -21,7 +21,7 @@ export const ApproveDetailView = (props: Props) => {
     () => collateralDetails.find(i => i.symbol === collateral),
     [collateral, collateralDetails]
   )
-  const collateralUSD = collateralDetail ? +formatUnits(collateralDetail.price, collateralDetail.decimals) : 0
+  const collateralUSD = collateralDetail ? +formatEther(collateralDetail.price) : 0
   const trenUSD = 1.0
 
   return (
