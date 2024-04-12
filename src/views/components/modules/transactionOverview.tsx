@@ -49,15 +49,15 @@ export const TransactionOverView = (props: Props) => {
     const plusDebt = type == 'borrow'? +removeComma(amount) : ((type == 'repay')? +removeComma(amount) * -1 : 0)
 
     // Module Calculation
-    const collateralValue = +formatUnits(price, decimals!) * (+formatUnits(depositedAmount, decimals))
-    const new_collateralValue = +formatUnits(price, decimals!) * (+formatUnits(depositedAmount, decimals) + plusColl)
-    const loanValue = +formatUnits(debtAmount, decimals)
-    const new_loanValue = +formatUnits(debtAmount, decimals) + plusDebt
+    const collateralValue = +formatEther(price) * (+formatEther(depositedAmount))
+    const new_collateralValue = +formatEther(price!) * (+formatEther(depositedAmount) + plusColl)
+    const loanValue = +formatEther(debtAmount)
+    const new_loanValue = +formatEther(debtAmount) + plusDebt
     const currentLTV = (collateralValue == 0) ? 0 : (loanValue / collateralValue * 100)
     const new_CurrentLTV = (new_collateralValue == 0) ? 0 : (new_loanValue / new_collateralValue * 100)
     const old_healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
     const new_healthFactor = (new_CurrentLTV == 0) ? 0 : (+formatEther(liquidation) / new_CurrentLTV * 100)
-    const liquidationPrice = (+formatUnits(depositedAmount, decimals) + plusColl) == 0 ? 0 : new_loanValue / ((+formatUnits(depositedAmount, decimals) + plusColl) * +formatEther(liquidation))
+    const liquidationPrice = (+formatEther(depositedAmount) + plusColl) == 0 ? 0 : new_loanValue / ((+formatEther(depositedAmount) + plusColl) * +formatEther(liquidation))
   
     return (
         <Stack>

@@ -126,10 +126,10 @@ export const BorrowPopup = (props: Props) => {
         setAvailableBalance(+formatUnits(userCollateralBal, decimals))
         break
       case 'withdraw':
-        setAvailableBalance(+formatUnits(depositedAmount, decimals))
+        setAvailableBalance(+formatEther(depositedAmount))
         break
       case 'borrow':
-        setAvailableBalance(+formatUnits(depositedAmount, decimals) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount)))
+        setAvailableBalance(+formatEther(depositedAmount) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount)))
         break
       case 'repay':
         setAvailableBalance(+formatEther(debtAmount))
@@ -185,10 +185,10 @@ export const BorrowPopup = (props: Props) => {
           handleApprove(parseUnits(formattedDepositAmount, decimals))
         } else if (moduleView === 'ACTIVE') {
           if (!collateralDetail) return
-          handleAdjust(parseUnits(formattedDepositAmount, decimals), parseUnits(formattedBorrowAmount, decimals))
+          handleAdjust(parseEther(formattedDepositAmount), parseEther(formattedBorrowAmount))
         } else {
           if (!collateralDetail) return
-          handleOpen(parseUnits(formattedDepositAmount, decimals), parseUnits(formattedBorrowAmount, decimals))
+          handleOpen(parseEther(formattedDepositAmount), parseEther(formattedBorrowAmount))
         }
       } catch (err) {
         console.log('err', err)
@@ -198,10 +198,10 @@ export const BorrowPopup = (props: Props) => {
         // In case Approve amount is less than deposit amount , Should be approved first
         handleApprove(parseUnits(inputAmount, decimals))
       } else if (moduleView === 'ACTIVE') {
-        handleDeposit(parseUnits(inputAmount, decimals))
+        handleDeposit(parseEther(inputAmount))
       }
     } else if (type == 'withdraw') {
-      handleWithdraw(parseUnits(inputAmount, decimals))
+      handleWithdraw(parseEther(inputAmount))
     } else if (type === 'borrow') {
       handleBorrow(parseEther(inputAmount))
     } else if (type == 'repay') {

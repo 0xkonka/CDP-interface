@@ -94,7 +94,7 @@ const Borrow = () => {
   // Calculate minimum deposit & borrow amount
   useEffect(() => {
     const _minBorrow = +formatEther(minNetDebt)
-    const _minDeposit = parseFloat((_minBorrow / +formatUnits(price, decimals!) / +formatEther(LTV)).toFixed(2))
+    const _minDeposit = parseFloat((_minBorrow / +formatEther(price) / +formatEther(LTV)).toFixed(2))
 
     setUserModuleInfo(prevState => ({
       ...prevState,
@@ -157,10 +157,10 @@ const Borrow = () => {
   }, [depositAmount, borrowAmount, depositInputError, borrowInputError])
 
   // Calculation View
-  const collateralValue = +formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals))
-  const loanValue = +formatUnits(debtAmount, decimals) + +removeComma(borrowAmount)
+  const collateralValue = +formatEther(price) * (+removeComma(depositAmount) + +formatEther(depositedAmount))
+  const loanValue = +formatEther(debtAmount) + +removeComma(borrowAmount)
   const currentLTV = (collateralValue == 0) ? 0 : (loanValue / collateralValue * 100)
-  const totalCollateralQuantity = +removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)
+  const totalCollateralQuantity = +removeComma(depositAmount) + +formatEther(depositedAmount)
   const liquidationPrice = totalCollateralQuantity == 0 ? 0 : loanValue / (totalCollateralQuantity * +formatEther(liquidation))
   const healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
   const borrowingPowerPercent = currentLTV / +formatEther(LTV)
@@ -252,12 +252,12 @@ const Borrow = () => {
                       </Stack>
                       <Box>
                         <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
-                          {formatToThousands(+formatUnits(depositedAmount, decimals)).substring(1)}
+                          {formatToThousands(+formatEther(depositedAmount)).substring(1)}
                         </Typography>
                         <Stack direction='row' alignItems='center' gap={1}>
                           <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                           <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                            {formatToThousands(+formatUnits(depositedAmount, decimals) * +formatEther(price!))}
+                            {formatToThousands(+formatEther(depositedAmount) * +formatEther(price!))}
                           </Typography>
                         </Stack>
                       </Box>

@@ -43,7 +43,8 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
       functionName: 'getValidCollateral',
       args: []
     })
-    setCollaterals(_collaterals as string[])
+    const sortedCollateral = (_collaterals as string[]).sort()
+    setCollaterals(sortedCollateral)
   }
   //   getCollateralList()
   // }, [chainId])
@@ -177,13 +178,12 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
         const redemptionBlockTimestamp = result[11].result as bigint
         const mintCap = result[12].result as bigint
         const totalAssetDebt = result[13].result as bigint
-        const price = BigInt(1500) //result[14].result as bigint
+        const price = result[14].result as bigint
         const entireSystemDebt = result[15].result as bigint
         const totalCollDeposited = result[16].result as bigint
 
         let baseAPY = 0
         if (symbol) baseAPY = await getDefillmaAPY(symbol)
-
         const _collateralDetail: CollateralParams = {
           address,
           symbol,
