@@ -11,6 +11,8 @@ import React, {useState, useMemo, useEffect} from'react'
 import { EarnRow } from '@/views/components/earns/EarnRow'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
 import { StabilityPool } from '@/views/components/earns/StabilityPool'
+import { useStabilityPoolView } from '@/context/StabilityPoolProvider/StabilityPoolContext'
+import { formatUnits } from 'viem'
 
 const Earn = () => {
     const { isSmallScreen, isMediumScreen } = useGlobalValues()
@@ -18,6 +20,9 @@ const Earn = () => {
     const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
     const [sortBy, setSortBy]= useState('symbol')
     const [direction, setDirection] = useState('asc')
+    const { stabilityPoolInfo } = useStabilityPoolView()
+    const { totalDebtTokenDeposits = BigInt(0) } = stabilityPoolInfo || {}
+    const decimals = 18 // Will be replaced with real decimal - Jordan
 
     const networkTypes: string[] = [
         'All', 'Ethereum', 'Binance', 'Polygon', 'Avalanche', 'Solana'
@@ -25,34 +30,40 @@ const Earn = () => {
     const { collateralDetails } = useProtocol()
     const headerItems = [
         {
-            label: 'Pools',
+            label: 'Liqudity Pool',
             key: 'symbol',  // This is sort key.
-            flexWidth: 2,
-            sortable: true
-        },
-        {
-            label: 'Platform',
-            key: 'platform',
-            flexWidth: 1,
+            flexWidth: 5,
             sortable: true
         },
         {
             label: 'APY',
             key: 'borrowAPY',
-            flexWidth: 1.5,
+            flexWidth: 3.3,
             sortable: true
         },
         {
             label: 'Liquidity',
             key: 'liquidity',
-            flexWidth: 1.25,
+            flexWidth: 2.3,
             sortable: true
         },
         {
-            label: '',
-            key: '',
-            flexWidth: 1,
-            sortable: false
+            label: 'Wallet Balance',
+            key: 'walletBalance',
+            flexWidth: 3.7,
+            sortable: true
+        },
+        {
+            label: 'Staked LP Tokens',
+            key: 'stakedLPTokens',
+            flexWidth: 3.7,
+            sortable: true
+        },
+        {
+            label: 'Rewards',
+            key: 'rewards',
+            flexWidth: 3.5,
+            sortable: true
         },
     ]
 
@@ -149,7 +160,7 @@ const Earn = () => {
                             Total Staked
                         </Typography>
                         <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 600 }}>
-                            $ {formatToThousands(200000).slice(1)}
+                            $ {formatToThousands(+formatUnits(totalDebtTokenDeposits, decimals!)).slice(1)}
                         </Typography>
                     </Box>
                     <Box>
@@ -157,13 +168,13 @@ const Earn = () => {
                             TREN per day
                         </Typography>
                         <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 600 }}>
-                            $ {formatToThousands(150000).slice(1)}
+                            $ {formatToThousands(2000).slice(1)}
                         </Typography>
                     </Box>
                 </Stack>
             </Stack>
             <StabilityPool/>
-            <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: {xs: 4, md: 10} }}>
+            <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: {xs: 4, md: 10}, mt: 20 }}>
                 {networkTypes.map((value, index) => {
                     return value == networkFilter ? (
                         <ToggleOnButton
@@ -212,7 +223,7 @@ const Earn = () => {
 
             {/* Collateral Group Stack*/}
             {collateralDetails && (
-                <Stack sx={{ mt: 4 }} gap={isMediumScreen ? 5 : 0}>
+                <Stack sx={{ mt: 4 }} gap={4}>
                 {filteredRows.length > 0 ? (
                     filteredRows.map((row, index) => (
                     <EarnRow

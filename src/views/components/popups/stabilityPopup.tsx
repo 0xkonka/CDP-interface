@@ -161,7 +161,7 @@ export const StabilityPopup = (props: Props) => {
               asset='trenUSD'
               available={availableBalance}
             />
-            <TransactionOverView collateral='trenUSD' type={type} amount={inputAmount} gasFee={0.14} poolBalance={totalDebtTokenDeposits}/>
+            <TransactionOverView collateral='trenUSD' type={type} amount={inputAmount} gasFee={0.14} poolBalance={withdrawAvailable} poolVolume={totalDebtTokenDeposits} />
             <Button
               sx={{
                 color: 'white',
