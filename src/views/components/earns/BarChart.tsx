@@ -53,14 +53,13 @@ export const BarChart = (props: Props) => {
         enabled: false,
       }
     },
-    colors: ['#67DAB1'],
+    colors: ['#A1A1A1'],
     dataLabels: { enabled: false },
     plotOptions: {
       bar: {
-        // borderRadius: period == 30 ? 8 : 0,
-        barHeight: '30%',
+        // barHeight: '90%',
         horizontal: false,
-        startingShape: 'rounded'
+        columnWidth: '40%',
       }
     },
     grid: {
@@ -68,17 +67,31 @@ export const BarChart = (props: Props) => {
       xaxis: {
         lines: { show: false }
       },
+      yaxis: {
+        lines: { show: false }
+      },
       padding: {
         top: -10
       }
     },
     yaxis: {
+      axisBorder: {
+        show: true,
+        color: '#393939',
+      },
       labels: {
         style: { colors: theme.palette.text.disabled }
-      }
+      },
     },
     xaxis: {
       tickAmount: 10,
+      axisBorder: {
+        show: true,
+        color: '#393939',
+      },
+      axisTicks: {
+        show: false
+      },
       // axisTicks: { color: theme.palette.divider },
       categories: categories.slice(Math.max(categories.length - period, 0)),
       type: 'datetime',
@@ -109,7 +122,7 @@ export const BarChart = (props: Props) => {
           return '$ ' + formatToThousands(value).slice(1)
         }
       }
-    }
+    },
   }
 
   return (
