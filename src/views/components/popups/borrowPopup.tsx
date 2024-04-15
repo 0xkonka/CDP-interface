@@ -85,7 +85,7 @@ export const BorrowPopup = (props: Props) => {
     collateralDetail,
     userCollateralBal
   } = props
-  const { decimals, LTV, price = BigInt(0) } = collateralDetail
+  const { decimals, LTV, price = BigInt(0), debtTokenGasCompensation = BigInt(0), minNetDebt = BigInt(0) } = collateralDetail
 
   const theme: Theme = useTheme()
 
@@ -132,7 +132,7 @@ export const BorrowPopup = (props: Props) => {
         setAvailableBalance(+formatEther(depositedAmount) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount)))
         break
       case 'repay':
-        setAvailableBalance(+formatEther(debtAmount))
+        setAvailableBalance(+formatEther(debtAmount - debtTokenGasCompensation - minNetDebt))
         break
     }
   }, [type, decimals, userCollateralBal, depositedAmount, debtAmount])
