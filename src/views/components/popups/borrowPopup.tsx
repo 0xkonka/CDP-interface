@@ -10,15 +10,16 @@ import { TransactionOverView } from '../modules/transactionOverview'
 import { ApproveDetailView } from '../modules/approveDetailView'
 import { AmountForm } from '../modules/amountForm'
 import { showToast } from '@/hooks/toasts'
-import { BaseError } from 'wagmi'
+import { BaseError, useAccount, useChainId, useReadContract } from 'wagmi'
+import { getBalance } from '@wagmi/core'
+import { wagmiConfig } from '@/pages/_app'
 import { formatEther, formatUnits } from 'viem'
 import { removeComma } from '@/hooks/utils'
 import { parseEther, parseUnits } from 'viem'
-
 import useModules from '@/context/ModuleProvider/useModules'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
-import { ETHERSCAN_BASE_URL } from '@/configs/address'
+import { DEBT_TOKEN, ETHERSCAN_BASE_URL } from '@/configs/address'
 
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
@@ -85,6 +86,8 @@ export const BorrowPopup = (props: Props) => {
     collateralDetail,
     userCollateralBal
   } = props
+  const { address: account } = useAccount()
+  const chainId = useChainId()
   const { decimals, LTV, price = BigInt(0), debtTokenGasCompensation = BigInt(0), minNetDebt = BigInt(0) } = collateralDetail
 
   const theme: Theme = useTheme()
@@ -116,6 +119,7 @@ export const BorrowPopup = (props: Props) => {
   const [useWalletBalance, setUseWalletBalance] = useState(true)
   const [inputAmount, setInputAmount] = useState('')
   const [availableBalance, setAvailableBalance] = useState(0)
+  const [walletDebtAmount, setWalletDebtAmount] = useState(0)
   const initializePopupStates = () => {
     setOpen(false)
     setInputAmount('')
@@ -132,10 +136,24 @@ export const BorrowPopup = (props: Props) => {
         setAvailableBalance(+formatEther(depositedAmount) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount)))
         break
       case 'repay':
-        setAvailableBalance(+formatEther(debtAmount - debtTokenGasCompensation - minNetDebt))
+        setAvailableBalance(walletDebtAmount)
+        // setAvailableBalance(+formatEther(debtAmount - debtTokenGasCompensation - minNetDebt))
         break
     }
   }, [type, decimals, userCollateralBal, depositedAmount, debtAmount])
+  
+  useEffect(() => {
+    if (!account) return
+    const getUserInfo = async () => {
+      const _userDebtBal = await getBalance(wagmiConfig, {
+        address: account as '0x${string}',
+        token: DEBT_TOKEN[chainId] as '0x{string}'
+      })
+      setWalletDebtAmount(+formatEther(_userDebtBal.value))
+      // console.log('Wallet balance: ', +formatEther(_userDebtBal.value))
+    }
+    getUserInfo()
+  }, [account])
 
   useEffect(() => {
     if (isConfirmed && !isPending) {
