@@ -14,7 +14,6 @@ export const StabilityPool = () => {
           <TrenPool/>
         </Grid>
       </Grid>
-      
     </Box>
   )
 }
