@@ -10,15 +10,17 @@ import { ApexOptions } from 'apexcharts'
 import { formatToThousands } from '@/hooks/utils';
 
 interface Props {
-  isEmpty? :boolean
+  title: string
+  yAxisLabel: string
     // More props types here
 }
 
-export const BarChart = (props: Props) => {
-  const {isEmpty} = props
+export const AreaChart = (props: Props) => {
+  const {title, yAxisLabel} = props
   const theme = useTheme()
   const [period, setPeriod] = useState(30)
   const [series, setSeries] = useState<number[]>([])
+  const [series1, setSeries1] = useState<number[]>([])
   const [categories, setCategories] = useState<string[]>([])
 
   useEffect(()=>{
@@ -26,11 +28,12 @@ export const BarChart = (props: Props) => {
       setCategories(generateCategories())
     }
     if(series.length === 0) {
-      setSeries(Array.from({ length: 90 }, () => Math.floor(Math.random() * (70000 - 2000 + 1)) + 2000))
+      setSeries(Array.from({ length: 90 }, () => Math.floor(Math.random() * 26) + 10))
+      setSeries1(Array.from({ length: 90 }, () => Math.floor(Math.random() * 10)))
     }
   }, [])
 
-  const generateCategories = () => {
+  function generateCategories() {
     const tempCategories = [];
     const endDate = new Date();
     for (let i = 90; i >= 0; i--) {
@@ -53,7 +56,11 @@ export const BarChart = (props: Props) => {
         enabled: false,
       }
     },
-    colors: ['#A1A1A1'],
+    stroke: {
+      // curve: 'stepline',
+      width: 1
+    },
+    colors: ['#67DAB1', '#FF5A75'],
     dataLabels: { enabled: false },
     plotOptions: {
       bar: {
@@ -67,18 +74,11 @@ export const BarChart = (props: Props) => {
       xaxis: {
         lines: { show: false }
       },
-      yaxis: {
-        lines: { show: false }
-      },
       padding: {
         top: -10
       }
     },
     yaxis: {
-      axisBorder: {
-        show: true,
-        color: '#393939',
-      },
       labels: {
         style: { colors: theme.palette.text.disabled }
       },
@@ -128,7 +128,9 @@ export const BarChart = (props: Props) => {
   return (
     <Box>
       <Stack direction='row' mb={4.5} justifyContent='space-between' alignItems='center'>
-        <Typography fontWeight={600}>Daily revenue fees distributed over time</Typography>
+        <Typography fontWeight={600}>
+          {title}
+        </Typography>
         <Stack direction='row' sx={{ cursor: 'pointer' }}>
           <Box sx={{px: 3.5, py: 2, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopLeftRadius: 6, borderBottomLeftRadius: 6, borderColor: period == 30 ? theme.palette.primary.main : '#2E2E2E'}}
               onClick={() => setPeriod(30)}>
@@ -146,14 +148,19 @@ export const BarChart = (props: Props) => {
       </Stack>
       
       <ReactApexcharts
-          type='bar'
+          type='area'
           height={310}
           options={options}
           // series={[{ data: [72000, 36000, 4200, 65000, 2100, 3500, 15000] }]}
           series={[{
-            name: 'revenue',
-            data: isEmpty ? [] : series.slice(Math.max(series.length - period, 0))
-          }]}
+            name: 'Profit',
+            data:  series.slice(Math.max(series.length - period, 0))
+          },
+          {
+            name: 'Loss',
+            data:  series1.slice(Math.max(series.length - period, 0))
+          }
+        ]}
       />
     </Box>
   )
