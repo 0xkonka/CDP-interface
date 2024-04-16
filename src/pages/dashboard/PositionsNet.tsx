@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import { AreaChart } from "@/views/components/earns/AreaChart"
 import { useGlobalValues } from '@/context/GlobalContext'
 
-export const PositionsNet = () => {
+const PositionsNet = () => {
     const {radiusBoxStyle} = useGlobalValues()
     return (
         <Box sx={{ ...radiusBoxStyle, pt: {xs: 1, md: 6} }}>
@@ -10,3 +10,5 @@ export const PositionsNet = () => {
         </Box>
     )
 }
+
+export default PositionsNet
