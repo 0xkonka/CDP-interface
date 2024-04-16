@@ -1,6 +1,6 @@
 import { Typography, Grid } from '@mui/material'
 import Box from '@mui/material/Box'
-import { PositionsNet } from './PositionsNet'
+import { PositionsNet } from '@/views/components/dashboard/PositionsNet'
 
 const Dashboard = () => {
     return (
