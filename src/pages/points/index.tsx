@@ -30,7 +30,7 @@ const Points = () => {
   useEffect(() => {
     const updateHeight = () => {
       if (secondItemRef.current) {
-        const height = secondItemRef.current.clientHeightd
+        const height = secondItemRef.current.clientHeight;
         setFirstItemHeight(`${height}px`)
       }
     }
