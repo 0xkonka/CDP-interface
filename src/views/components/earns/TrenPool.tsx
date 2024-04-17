@@ -2,7 +2,7 @@ import { Grid, Box, Stack, Typography, Theme, useTheme, Button } from '@mui/mate
 import Icon from 'src/@core/components/icon'
 import { useGlobalValues } from '@/context/GlobalContext'
 import { formatMoney, formatToThousandsInt } from '@/hooks/utils'
-import { BarChart } from './BarChart'
+import { BarChart } from '../charts/BarChart'
 import { useAccount, useChainId, useReadContract } from 'wagmi'
 import { DEBT_TOKEN } from '@/configs/address'
 import { erc20Abi, formatEther, formatUnits, parseUnits } from 'viem'
