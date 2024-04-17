@@ -10,12 +10,14 @@ import { ApexOptions } from 'apexcharts'
 import { formatToThousands } from '@/hooks/utils';
 
 interface Props {
+  title?: string
+  yAxisLabel?: string
   isEmpty? :boolean
     // More props types here
 }
 
 export const BarChart = (props: Props) => {
-  const {isEmpty} = props
+  const {isEmpty, title} = props
   const theme = useTheme()
   const [period, setPeriod] = useState(30)
   const [series, setSeries] = useState<number[]>([])
@@ -128,7 +130,7 @@ export const BarChart = (props: Props) => {
   return (
     <Box>
       <Stack direction='row' mb={4.5} justifyContent='space-between' alignItems='center'>
-        <Typography fontWeight={600}>Daily revenue fees distributed over time</Typography>
+        <Typography fontWeight={600}>{title}</Typography>
         <Stack direction='row' sx={{ cursor: 'pointer' }}>
           <Box sx={{px: 3.5, py: 2, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopLeftRadius: 6, borderBottomLeftRadius: 6, borderColor: period == 30 ? theme.palette.primary.main : '#2E2E2E'}}
               onClick={() => setPeriod(30)}>

@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react'
 // ** Third Party Imports
 import { ApexOptions } from 'apexcharts'
 import { formatToThousands } from '@/hooks/utils';
+import { useGlobalValues } from '@/context/GlobalContext';
 
 interface Props {
   title: string
@@ -21,28 +22,30 @@ export const AreaChart = (props: Props) => {
   const [period, setPeriod] = useState(30)
   const [series, setSeries] = useState<number[]>([])
   const [series1, setSeries1] = useState<number[]>([])
-  const [categories, setCategories] = useState<string[]>([])
+  const [categories, setCategories] = useState<number[]>([])
+  const {isSmallScreen} = useGlobalValues()
 
   useEffect(()=>{
     if (categories.length === 0) {
-      setCategories(generateCategories())
+      setCategories(generateTimestamps())
     }
     if(series.length === 0) {
-      setSeries(Array.from({ length: 90 }, () => Math.floor(Math.random() * 26) + 10))
-      setSeries1(Array.from({ length: 90 }, () => Math.floor(Math.random() * 10)))
+      setSeries(Array.from({ length: 200 }, () => Math.floor(Math.random() * 26) + 10))
+      setSeries1(Array.from({ length: 200 }, () => Math.floor(Math.random() * 8) + 2))
     }
   }, [])
 
-  function generateCategories() {
-    const tempCategories = [];
+  const generateTimestamps = () => {
+    const timestamps = [];
     const endDate = new Date();
-    for (let i = 90; i >= 0; i--) {
+    for (let i = 200; i >= 0; i--) {
       const date = new Date();
       date.setDate(endDate.getDate() - i);
-      const dateString = date.toISOString().split('T')[0];
-      tempCategories.push(dateString);
+      // Convert the date to a timestamp
+      const timestamp = date.getTime();
+      timestamps.push(timestamp);
     }
-    return tempCategories;
+    return timestamps;
   }
 
   const options: ApexOptions = {
@@ -79,12 +82,25 @@ export const AreaChart = (props: Props) => {
       }
     },
     yaxis: {
+      title: {
+        text: isSmallScreen ? undefined : yAxisLabel,
+        offsetX: -10,
+        style: {
+          color: '#98999D',
+          fontSize: '18px',
+          fontWeight: 400,
+        }
+      },
       labels: {
-        style: { colors: theme.palette.text.disabled }
+        style: { 
+          colors: '#FFF',
+          fontSize: '15px',
+          fontWeight: 400,
+        }
       },
     },
     xaxis: {
-      tickAmount: 10,
+      tickAmount: 4,
       axisBorder: {
         show: true,
         color: '#393939',
@@ -96,7 +112,11 @@ export const AreaChart = (props: Props) => {
       categories: categories.slice(Math.max(categories.length - period, 0)),
       type: 'datetime',
       labels: {
-        style: { colors: theme.palette.text.disabled },
+        style: { 
+          colors: '#FFF',
+          fontSize: '15px',
+          fontWeight: 400,
+        },
         formatter: function(value, timestamp) {
           if (timestamp === undefined) {
             return '';
@@ -115,7 +135,19 @@ export const AreaChart = (props: Props) => {
         fontFamily: undefined,
       },
       x: {
-        format: 'dd MMM yyyy' // Format date for x-axis tooltip
+        formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+          // Create an array of month names
+          const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+          
+          // Use the given value (timestamp) to create a new Date object
+          const date = new Date(value);
+      
+          // Use the month from the date and get the correct month name from the array
+          const monthName = monthNames[date.getMonth()];
+      
+          // Format the date as 'Mar 2, 2024'
+          return `${monthName} ${date.getDate()}, ${date.getFullYear()}`;
+        }
       },
       y: {
         formatter: function (value) {
@@ -123,12 +155,51 @@ export const AreaChart = (props: Props) => {
         }
       }
     },
+    legend: {
+      show: false,
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0,
+        opacityTo: 0.2,
+        stops: [0, 100],
+        type: 'vertical',
+        colorStops: [
+          [
+            {
+              offset: 0,
+              color: '#67DAB1',
+              opacity: 0.2
+            },
+            {
+              offset: 100,
+              color: '#67DAB1',
+              opacity: 0
+            }
+          ],
+          [
+            {
+              offset: 0,
+              color: '#FF5A75',
+              opacity: 0.2
+            },
+            {
+              offset: 100,
+              color: '#FF5A75',
+              opacity: 0
+            }
+          ]
+        ]
+      }
+    }
   }
 
   return (
     <Box>
-      <Stack direction='row' mb={4.5} justifyContent='space-between' alignItems='center'>
-        <Typography fontWeight={600}>
+      <Stack direction={isSmallScreen ? 'column' : 'row'} mb={4.5} justifyContent='space-between' alignItems={isSmallScreen ? 'end' : 'center'} marginBottom={isSmallScreen ? 10 : 15} gap={2}>
+        <Typography fontWeight={600} sx={{fontSize: 18, ml: 8}} >
           {title}
         </Typography>
         <Stack direction='row' sx={{ cursor: 'pointer' }}>
@@ -140,21 +211,21 @@ export const AreaChart = (props: Props) => {
               onClick={() => setPeriod(60)}>
             60d
           </Box>
-          <Box sx={{px: 3.5, py: 2, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopRightRadius: 6, borderBottomRightRadius: 6, borderColor: period == 90 ? theme.palette.primary.main : '#2E2E2E'}}
-              onClick={() => setPeriod(90)}>
-            90d
+          <Box sx={{px: 3.5, py: 2, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopRightRadius: 6, borderBottomRightRadius: 6, borderColor: period == 200 ? theme.palette.primary.main : '#2E2E2E'}}
+              onClick={() => setPeriod(200)}>
+            All
           </Box>
         </Stack>
       </Stack>
       
       <ReactApexcharts
           type='area'
-          height={310}
+          height={isSmallScreen ? 300 : 400}
           options={options}
           // series={[{ data: [72000, 36000, 4200, 65000, 2100, 3500, 15000] }]}
           series={[{
             name: 'Profit',
-            data:  series.slice(Math.max(series.length - period, 0))
+            data:  series.slice(Math.max(series.length - period, 0)),
           },
           {
             name: 'Loss',

@@ -1,12 +1,12 @@
 import { Box } from '@mui/material'
-import { AreaChart } from "@/views/components/charts/AreaChart"
+import { MultiBarchart } from "@/views/components/charts/MultiBarchart"
 import { useGlobalValues } from '@/context/GlobalContext'
 
-export const PositionsNet = () => {
+export const PositionsCount = () => {
     const {radiusBoxStyle} = useGlobalValues()
     return (
         <Box sx={{ ...radiusBoxStyle }}>
-            <AreaChart title='Positions Profit vs. Loss' yAxisLabel='Positions Net PnL'/>
+            <MultiBarchart title='Positions Profit vs. Loss' yAxisLabel='Numbers of Positions'/>
         </Box>
     )
 }
