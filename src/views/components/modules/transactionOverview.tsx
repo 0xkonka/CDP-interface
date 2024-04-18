@@ -36,15 +36,18 @@ export const TransactionOverView = (props: Props) => {
         () => collateralDetails.find(i => i.symbol === collateral),
         [collateral, collateralDetails]
     )
-    const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0) } = collateralDetail || {}
+    const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0), debtTokenGasCompensation = BigInt(0)} = collateralDetail || {}
 
     // === User Trove management === //
     const { moduleInfo } = useModuleView(collateral!)
-    const {
+    let {
         debt: debtAmount = BigInt(0),
         coll: depositedAmount = BigInt(0)
     } = moduleInfo || {}
     
+    // Minus Gas compensation from trenBox Debt  @Alex R
+    debtAmount -= debtTokenGasCompensation
+
     const plusColl = type == 'deposit'? +removeComma(amount) : ((type == 'withdraw')? +removeComma(amount) * -1 : 0)
     const plusDebt = type == 'borrow'? +removeComma(amount) : ((type == 'repay')? +removeComma(amount) * -1 : 0)
 

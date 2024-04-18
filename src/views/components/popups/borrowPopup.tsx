@@ -88,7 +88,7 @@ export const BorrowPopup = (props: Props) => {
   } = props
   const { address: account } = useAccount()
   const chainId = useChainId()
-  const { decimals, LTV, price = BigInt(0), debtTokenGasCompensation = BigInt(0), minNetDebt = BigInt(0) } = collateralDetail
+  const { decimals, LTV, price = BigInt(0), debtTokenGasCompensation = BigInt(0), minNetDebt = BigInt(0)} = collateralDetail
 
   const theme: Theme = useTheme()
 
@@ -114,7 +114,10 @@ export const BorrowPopup = (props: Props) => {
   } = useModules(collateral)
 
   const { view: moduleView, moduleInfo } = useModuleView(collateral)
-  const { debt: debtAmount = BigInt(0), coll: depositedAmount = BigInt(0) } = moduleInfo || {}
+  let { debt: debtAmount = BigInt(0), coll: depositedAmount = BigInt(0) } = moduleInfo || {}
+  
+  // Minus Gas compensation from trenBox Debt  @Alex R
+  debtAmount -= debtTokenGasCompensation
 
   const [useWalletBalance, setUseWalletBalance] = useState(true)
   const [inputAmount, setInputAmount] = useState('')
@@ -137,7 +140,6 @@ export const BorrowPopup = (props: Props) => {
         break
       case 'repay':
         setAvailableBalance(walletDebtAmount)
-        // setAvailableBalance(+formatEther(debtAmount - debtTokenGasCompensation - minNetDebt))
         break
     }
   }, [type, decimals, userCollateralBal, depositedAmount, debtAmount])
