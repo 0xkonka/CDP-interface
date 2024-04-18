@@ -6,12 +6,12 @@ interface Props {
   show?: 'always' | 'connected' | 'disconnected'
 }
 
-export default function ConnectWallet({ show = 'always' }: Props) {
+export default function DashboardConnectWallet({ show = 'always' }: Props) {
   const { isConnected } = useAccount()
   
   if ((show === 'connected' && !isConnected) || (show === 'disconnected' && isConnected)) return null
   return (
-    <Stack direction='row' id='navigation-wallet'>
+    <Stack direction='row' id='dashboard-wallet' sx={{width: {xs: 1, md: 'auto'}}}>
       {
         isConnected &&
         <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 36 36" fill="none">

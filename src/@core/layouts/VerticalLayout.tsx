@@ -106,6 +106,7 @@ const VerticalLayout = (props: LayoutProps) => {
           <ContentWrapper
             className='layout-page-content'
             sx={{
+              position: 'relative',
               ...(contentHeightFixed && {
                 overflow: 'hidden',
                 '& > :first-of-type': { height: '100%' }

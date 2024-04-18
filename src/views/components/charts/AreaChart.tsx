@@ -23,7 +23,7 @@ export const AreaChart = (props: Props) => {
   const [series, setSeries] = useState<number[]>([])
   const [series1, setSeries1] = useState<number[]>([])
   const [categories, setCategories] = useState<number[]>([])
-  const {isSmallScreen} = useGlobalValues()
+  const {isSmallScreen, isMobileScreen} = useGlobalValues()
 
   useEffect(()=>{
     if (categories.length === 0) {
@@ -94,7 +94,7 @@ export const AreaChart = (props: Props) => {
       labels: {
         style: { 
           colors: '#FFF',
-          fontSize: '15px',
+          fontSize: isMobileScreen ? '12px' : '15px',
           fontWeight: 400,
         }
       },
@@ -114,7 +114,7 @@ export const AreaChart = (props: Props) => {
       labels: {
         style: { 
           colors: '#FFF',
-          fontSize: '15px',
+          fontSize: isMobileScreen ? '12px' : '15px',
           fontWeight: 400,
         },
         formatter: function(value, timestamp) {
@@ -198,20 +198,20 @@ export const AreaChart = (props: Props) => {
 
   return (
     <Box>
-      <Stack direction={isSmallScreen ? 'column' : 'row'} mb={4.5} justifyContent='space-between' alignItems={isSmallScreen ? 'end' : 'center'} marginBottom={isSmallScreen ? 10 : 15} gap={2}>
-        <Typography fontWeight={600} sx={{fontSize: 18, ml: 8}} >
+      <Stack direction='row' mb={4.5} justifyContent='space-between' alignItems='center' marginBottom={isSmallScreen ? 4 : 15} gap={2}>
+        <Typography fontWeight={600} sx={{fontSize: {xs: 14, sm: 18}, ml: {xs: 0, sm: 8}}} >
           {title}
         </Typography>
         <Stack direction='row' sx={{ cursor: 'pointer' }}>
-          <Box sx={{px: 3.5, py: 2, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopLeftRadius: 6, borderBottomLeftRadius: 6, borderColor: period == 30 ? theme.palette.primary.main : '#2E2E2E'}}
+          <Box sx={{px: {xs: 2, sm: 3.5}, py: {xs: 1.5, sm: 2}, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopLeftRadius: 6, borderBottomLeftRadius: 6, borderColor: period == 30 ? theme.palette.primary.main : '#2E2E2E'}}
               onClick={() => setPeriod(30)}>
             30d
           </Box>
-          <Box sx={{px: 3.5, py: 2, fontSize: 14, border: 'solid 1px #2E2E2E', borderColor: period == 60 ? theme.palette.primary.main : '#2E2E2E'}}
+          <Box sx={{px: {xs: 2, sm: 3.5}, py: {xs: 1.5, sm: 2}, fontSize: 14, border: 'solid 1px #2E2E2E', borderColor: period == 60 ? theme.palette.primary.main : '#2E2E2E'}}
               onClick={() => setPeriod(60)}>
             60d
           </Box>
-          <Box sx={{px: 3.5, py: 2, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopRightRadius: 6, borderBottomRightRadius: 6, borderColor: period == 200 ? theme.palette.primary.main : '#2E2E2E'}}
+          <Box sx={{px: {xs: 2, sm: 3.5}, py: {xs: 1.5, sm: 2}, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopRightRadius: 6, borderBottomRightRadius: 6, borderColor: period == 200 ? theme.palette.primary.main : '#2E2E2E'}}
               onClick={() => setPeriod(200)}>
             All
           </Box>
