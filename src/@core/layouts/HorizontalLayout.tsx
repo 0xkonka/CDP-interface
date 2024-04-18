@@ -155,6 +155,7 @@ const HorizontalLayout = (props: LayoutProps) => {
           className='layout-page-content'
           sx={{
             width: '100%',
+            position: 'relative',
             ...(contentHeightFixed && { display: 'flex', overflow: 'hidden' }),
             ...(contentWidth === 'boxed' && {
               mx: 'auto',

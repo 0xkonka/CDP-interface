@@ -5,7 +5,7 @@ import { useGlobalValues } from '@/context/GlobalContext'
 export const PositionsCount = () => {
     const {radiusBoxStyle} = useGlobalValues()
     return (
-        <Box sx={{ ...radiusBoxStyle }}>
+        <Box sx={{ ...radiusBoxStyle, mb: 0 }}>
             <MultiBarchart title='Positions Profit vs. Loss' yAxisLabel='Numbers of Positions'/>
         </Box>
     )

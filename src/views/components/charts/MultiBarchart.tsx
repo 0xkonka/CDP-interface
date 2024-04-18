@@ -22,7 +22,7 @@ export const MultiBarchart = (props: Props) => {
   const [seriesProfit, setSeriesProfit] = useState<number[]>([])
   const [seriesLoss, setSeriesLoss] = useState<number[]>([])
   const [categories, setCategories] = useState<string[]>(['TST', 'WETH', 'FURY'])
-  const {isSmallScreen} = useGlobalValues()
+  const {isSmallScreen, isMobileScreen} = useGlobalValues()
   const ticksAmount = Math.max(10, categories.length)
 
   useEffect(()=>{
@@ -50,7 +50,7 @@ export const MultiBarchart = (props: Props) => {
         startingShape: 'rounded',
         horizontal: false,
         columnWidth: isSmallScreen ? '60%' : '30%',
-        borderRadius: 8
+        borderRadius: isMobileScreen ? 6 : 8
       }
     },
     grid: {
@@ -73,7 +73,7 @@ export const MultiBarchart = (props: Props) => {
         }
       },
       labels: {
-        style: { colors: '#FFF', fontSize: '15px' },
+        style: { colors: '#FFF', fontSize: isMobileScreen ? '12px' : '15px'},
       },
     },
     xaxis: {
@@ -88,7 +88,7 @@ export const MultiBarchart = (props: Props) => {
       categories: [...categories, ...Array(Math.max(0, ticksAmount - categories.length)).fill('')],
       type: 'category',
       labels: {
-        style: { colors: '#FFF', fontSize: '15px' },
+        style: { colors: '#FFF', fontSize: isMobileScreen ? '12px' : '15px' },
       },
     },
     tooltip: {
@@ -108,21 +108,21 @@ export const MultiBarchart = (props: Props) => {
 
   return (
     <Box>
-      <Stack direction={isSmallScreen ? 'column' : 'row'} mb={4.5} justifyContent='space-between' alignItems={isSmallScreen ? 'end' : 'center'} marginBottom={isSmallScreen ? 10 : 15} gap={2}>
-        <Typography fontWeight={600} sx={{fontSize: 18, ml: 8}} >
+      <Stack direction='row' mb={4.5} justifyContent='space-between' alignItems='center' marginBottom={isSmallScreen ? 4 : 15} gap={2}>
+        <Typography fontWeight={600} sx={{fontSize: {xs: 14, sm: 18}, ml: {xs: 0, sm: 8}}} >
           {title}
         </Typography>
         <Stack direction='row' sx={{ cursor: 'pointer' }}>
-          <Box sx={{px: 3.5, py: 2, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopLeftRadius: 6, borderBottomLeftRadius: 6, borderColor: period == 30 ? theme.palette.primary.main : '#2E2E2E'}}
+          <Box sx={{px: {xs: 2, sm: 3.5}, py: {xs: 1.5, sm: 2}, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopLeftRadius: 6, borderBottomLeftRadius: 6, borderColor: period == 30 ? theme.palette.primary.main : '#2E2E2E'}}
               onClick={() => setPeriod(30)}>
             30d
           </Box>
-          <Box sx={{px: 3.5, py: 2, fontSize: 14, border: 'solid 1px #2E2E2E', borderColor: period == 60 ? theme.palette.primary.main : '#2E2E2E'}}
+          <Box sx={{px: {xs: 2, sm: 3.5}, py: {xs: 1.5, sm: 2}, fontSize: 14, border: 'solid 1px #2E2E2E', borderColor: period == 60 ? theme.palette.primary.main : '#2E2E2E'}}
               onClick={() => setPeriod(60)}>
             60d
           </Box>
-          <Box sx={{px: 3.5, py: 2, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopRightRadius: 6, borderBottomRightRadius: 6, borderColor: period == 90 ? theme.palette.primary.main : '#2E2E2E'}}
-              onClick={() => setPeriod(90)}>
+          <Box sx={{px: {xs: 2, sm: 3.5}, py: {xs: 1.5, sm: 2}, fontSize: 14, border: 'solid 1px #2E2E2E', borderTopRightRadius: 6, borderBottomRightRadius: 6, borderColor: period == 200 ? theme.palette.primary.main : '#2E2E2E'}}
+              onClick={() => setPeriod(200)}>
             All
           </Box>
         </Stack>

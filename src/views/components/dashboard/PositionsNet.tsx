@@ -5,7 +5,7 @@ import { useGlobalValues } from '@/context/GlobalContext'
 export const PositionsNet = () => {
     const {radiusBoxStyle} = useGlobalValues()
     return (
-        <Box sx={{ ...radiusBoxStyle }}>
+        <Box sx={{ ...radiusBoxStyle, mb: 0 }}>
             <AreaChart title='Positions Profit vs. Loss' yAxisLabel='Positions Net PnL'/>
         </Box>
     )
