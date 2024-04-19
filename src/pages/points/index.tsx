@@ -27,8 +27,6 @@ const Points = () => {
 
   const { inviteCodes, getInviteCode, generateInviteCodes, signReferral } = useReferral()
 
-  console.log('inviteCodes', inviteCodes)
-
   useEffect(() => {
     const updateHeight = () => {
       if (secondItemRef.current) {
