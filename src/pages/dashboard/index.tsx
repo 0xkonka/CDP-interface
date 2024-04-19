@@ -3,9 +3,17 @@ import { PositionsNet } from '@/views/components/dashboard/PositionsNet'
 import { PositionsCount } from '@/views/components/dashboard/PositionsCount'
 import { useGlobalValues } from '@/context/GlobalContext'
 import DashboardConnectWallet from '@/views/components/DashboardConnectWallet'
+import CollateralRow from '@/views/collateralRow'
+
+import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
+import { CollateralParams } from '@/context/ModuleProvider/type'
+import { getOverView } from '@/hooks/utils'
+import { formatEther } from 'viem'
+
+import {useState, useMemo} from 'react'
 
 const Dashboard = () => {
-    const {isSmallScreen, isMobileScreen} = useGlobalValues()
+    const {isSmallScreen, isMobileScreen, isMediumScreen } = useGlobalValues()
     const statBoxStyle = {
         borderRadius: '10px',
         border: 'solid 1px #393939', 
@@ -14,6 +22,25 @@ const Dashboard = () => {
         minWidth: '160px',
         py: 4, px: {xs: 4, lg: 6}
     }
+    const { collateralDetails } = useProtocol()
+    const rows = useMemo(() => {
+        if (collateralDetails && collateralDetails.length > 0) {
+          const _rows: CollateralParams[] = collateralDetails
+            .map((collateral: CollateralParams, index) => {
+              return {
+                id: index + 1,
+                ...collateral,
+                ...getOverView(collateral.symbol),
+                maxLeverage: (1 / (1 - +formatEther(collateral.LTV))),
+                maxDepositAPY: +collateral.baseAPY.toFixed(3) + 30
+              }
+            })
+            .filter(collateral => collateral !== undefined) as CollateralParams[]
+          return _rows
+        }
+        return []
+    }, [collateralDetails])
+
     return (
         <Box>
             <Stack direction={isSmallScreen ? 'column' : 'row'} justifyContent='space-between' alignItems='center' 
@@ -197,6 +224,27 @@ const Dashboard = () => {
                     </Link>
                 </Box>
             </Stack>
+
+            {/* Active positions */}
+            {collateralDetails && (
+                <Stack sx={{ mt: {xs: 20, md: 30} }} gap={isMediumScreen ? 6 : 12}>
+                {rows.length > 0 ? (
+                    rows.map((row, index) => (
+                    <CollateralRow
+                        row={row}
+                        onToogle={() => {}}
+                        isOpen={true}
+                        key={index}
+                        disableToogle={true}
+                    />
+                    ))
+                ) : (
+                    <Box sx={{ p: 6, textAlign: 'center' }}>
+                    <Typography variant='body1'>No matching collateral</Typography>
+                    </Box>
+                )}
+                </Stack>
+            )}
         </Box>
     )
 }
