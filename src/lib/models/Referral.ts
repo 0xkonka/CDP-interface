@@ -11,7 +11,8 @@ const ReferralSchema = new Schema({
     redeemed: {
         type: Boolean,
         default: false
-    }
+    },
+    signMsg: { type: String }
 })
 
 export const Referral = mongoose.models.Referral || mongoose.model('Referral', ReferralSchema)

@@ -11,6 +11,7 @@ import { Copy } from '@/views/components/Copy'
 import { useRef, useEffect } from 'react'
 import { ReferralType } from '@/lib/types'
 import { useAccount } from 'wagmi'
+import { useReferral } from '@/context/ReferralContext'
 
 const Points = () => {
   const { address: account } = useAccount()
@@ -18,19 +19,20 @@ const Points = () => {
   const [sortBy, setSortBy] = useState('symbol')
   const [direction, setDirection] = useState('asc')
   const [referralLink, setReferralLink] = useState('')
+  const [inviteCode, setInviteCode] = useState('')
   const theme = useTheme()
 
   const [firstItemHeight, setFirstItemHeight] = useState('auto')
   const secondItemRef = useRef<HTMLDivElement>(null)
 
-  const [inviteCodes, setInviteCodes] = useState<ReferralType[]>([])
+  const { inviteCodes, getInviteCode, generateInviteCodes, signReferral } = useReferral()
 
   console.log('inviteCodes', inviteCodes)
 
   useEffect(() => {
     const updateHeight = () => {
       if (secondItemRef.current) {
-        const height = secondItemRef.current.clientHeight;
+        const height = secondItemRef.current.clientHeight
         setFirstItemHeight(`${height}px`)
       }
     }
@@ -50,30 +52,16 @@ const Points = () => {
     setDirection(direction)
   }
 
-  useEffect(() => {
-    if (!account) return
-    const getInviteCode = async () => {
-      const res = await fetch('/api/points?owner=' + account)
-      setInviteCodes(await res.json())
-    }
-    getInviteCode()
-  }, [account]) // Dependency array to control re-fetching
-
   const handleGenerate = async () => {
     if (!account) return
-
     const inviteCode = Math.random().toString(36).substring(2, 15)
-
     setReferralLink(`https://tren.finance/invite/${inviteCode}`)
-    const todo: ReferralType = { owner: account as string, inviteCode }
+    generateInviteCodes(inviteCode)
+    getInviteCode()
+  }
 
-    await fetch('/api/points', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(todo)
-    })
+  const handleJoin = async () => {
+    signReferral(inviteCode)
   }
 
   const headerItems = [
@@ -541,9 +529,8 @@ const Points = () => {
               </Box>
             </Box>
             <Typography>Generated invideCodes:</Typography>
-            {inviteCodes.map((i, index) => (
-              <Typography key={index}> {i.inviteCode} </Typography>
-            ))}
+            {inviteCodes.length > 0 &&
+              inviteCodes.map((i, index) => <Typography key={index}> {i.inviteCode} </Typography>)}
             <Button
               variant='outlined'
               sx={{ width: 1, color: 'white', mt: 8, py: 3, fontSize: 18, fontWeight: 400 }}
@@ -552,6 +539,31 @@ const Points = () => {
               Generate
             </Button>
           </Box>
+          <CustomTextField
+            sx={{
+              fontSize: 18,
+              width: 1,
+              '& .MuiInputBase-root': {
+                width: 1,
+                height: 1,
+                '& input': {
+                  fontSize: isSmallScreen ? 16 : 18,
+                  padding: '14px !important',
+                  backgroundColor: 'transparent'
+                }
+              }
+            }}
+            value={inviteCode}
+            onChange={(e) => setInviteCode(e.target.value)}
+            placeholder='Input InviteCode'
+          />
+          <Button
+            variant='outlined'
+            sx={{ width: 1, color: 'white', mt: 8, py: 3, fontSize: 18, fontWeight: 400 }}
+            onClick={() => handleJoin()}
+          >
+            Join
+          </Button>
         </Grid>
       </Grid>
     </Box>

@@ -8,4 +8,5 @@ export interface ReferralType {
     inviteCode: string
     redeemer?: string
     redeemed?: boolean
+    signMsg?: string
 }
