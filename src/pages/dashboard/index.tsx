@@ -232,7 +232,7 @@ const Dashboard = () => {
                     rows.map((row, index) => (
                     <CollateralRow
                         row={row}
-                        onToogle={() => {}}
+                        onToogle={() => {console.log('Do nothing')}}
                         isOpen={true}
                         key={index}
                         disableToogle={true}
