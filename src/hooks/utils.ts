@@ -19,8 +19,7 @@ export const getOverView = (collateral: string) => {
             platform: 'Uniswap v3',
             rateType: 'Stable Rate'
         }
-    }
-    else if (collateral == 'FURY') {
+    } else if (collateral == 'FURY') {
         return {
             type: 'Volatile',
             borrowAPY: 0,
@@ -51,7 +50,10 @@ export const formatToThousands = (value: number, floating = 2) => {
 
 export const formatToThousandsInt = (value: number) => {
     // return '$' + value.toLocaleString('en-US')
-    return value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',').slice(0, -3)
+    return value
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        .slice(0, -3)
 }
 
 export const removeComma = (amount: string) => {
@@ -68,7 +70,7 @@ export const shortenWalletAddress = (address: string, chars = 4) => {
 }
 
 export const getAssetPath = (str: string) => {
-    return str.toLowerCase().replace(/\s+/g, '_');
+    return str.toLowerCase().replace(/\s+/g, '_')
 }
 
 import { useEffect, useState } from 'react'
@@ -89,4 +91,22 @@ export const getDefillmaAPY = async (symbol: string) => {
         console.log('err', err)
         return 0
     }
+}
+
+export const generateRandomCode = () => {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    const digits = '0123456789'
+
+    // Define the pattern of your code here, L for letter, D for digit
+    const pattern = ['L', 'D', 'L', 'D', 'L']
+
+    return pattern
+        .map(type => {
+            if (type === 'L') {
+                return letters.charAt(Math.floor(Math.random() * letters.length))
+            } else {
+                return digits.charAt(Math.floor(Math.random() * digits.length))
+            }
+        })
+        .join('-')
 }

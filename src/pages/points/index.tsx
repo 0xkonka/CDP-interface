@@ -5,7 +5,7 @@ import { ActiveTask } from '@/views/components/points/ActiveTask'
 import { useGlobalValues } from '@/context/GlobalContext'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
 import { useMemo, useState } from 'react'
-import { formatToThousands, formatToThousandsInt, shortenWalletAddress } from '@/hooks/utils'
+import { formatToThousands, formatToThousandsInt, generateRandomCode, shortenWalletAddress } from '@/hooks/utils'
 import CustomTextField from '@/@core/components/mui/text-field'
 import { Copy } from '@/views/components/Copy'
 import { useRef, useEffect } from 'react'
@@ -54,8 +54,8 @@ const Points = () => {
     if (!account) return
     if (inviteCodes.length >= 5) return
 
-    const inviteCode = Math.random().toString(36).substring(2, 15)
-    setReferralLink(`https://tren.finance/invite/${inviteCode}`)
+    const inviteCode = generateRandomCode()
+    setReferralLink(inviteCode)
     generateInviteCode(inviteCode)
     getInviteCode()
   }
@@ -490,7 +490,7 @@ const Points = () => {
               </Stack>
             </Box>
             <Typography variant='h5' fontWeight={400} mt={6}>
-              Generate Link
+              Generate InviteCode
             </Typography>
             <Box position='relative' mt={3}>
               <CustomTextField
@@ -508,7 +508,6 @@ const Points = () => {
                   }
                 }}
                 value={referralLink}
-                placeholder='http://'
                 disabled={true}
               />
               <Box
