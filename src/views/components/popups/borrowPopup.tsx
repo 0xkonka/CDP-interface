@@ -13,13 +13,13 @@ import { showToast } from '@/hooks/toasts'
 import { BaseError, useAccount, useChainId, useReadContract } from 'wagmi'
 import { getBalance } from '@wagmi/core'
 import { wagmiConfig } from '@/pages/_app'
-import { formatEther, formatUnits } from 'viem'
+import { erc20Abi, formatEther, formatUnits } from 'viem'
 import { removeComma } from '@/hooks/utils'
 import { parseEther, parseUnits } from 'viem'
 import useModules from '@/context/ModuleProvider/useModules'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
-import { DEBT_TOKEN, ETHERSCAN_BASE_URL } from '@/configs/address'
+import { BORROWER_OPERATIONS, DEBT_TOKEN, ETHERSCAN_BASE_URL } from '@/configs/address'
 
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
@@ -81,7 +81,7 @@ export const BorrowPopup = (props: Props) => {
     type,
     depositAmount,
     borrowAmount,
-    allowance,
+    // allowance,
     collateral,
     collateralDetail,
     userCollateralBal
@@ -90,13 +90,20 @@ export const BorrowPopup = (props: Props) => {
   const chainId = useChainId()
   const { decimals, LTV, price = BigInt(0), debtTokenGasCompensation = BigInt(0), minNetDebt = BigInt(0)} = collateralDetail
 
+  // Get Allowance
+  const { data: allowance, refetch: refetchBalance } = useReadContract({
+    address: collateralDetail?.address as '0x{string}',
+    abi: erc20Abi,
+    functionName: 'allowance',
+    args: [account as '0x${string}', BORROWER_OPERATIONS[chainId] as '0x${string}']
+  })
+  
+
   const theme: Theme = useTheme()
 
   const formattedAllowance = +formatUnits(allowance!, decimals)
   const formattedDepositAmount = removeComma(depositAmount!)
   const formattedBorrowAmount = removeComma(borrowAmount!)
-  const formattedWithdrawAmount = removeComma(depositAmount!)
-  const formattedRepayAmount = removeComma(borrowAmount!)
 
   const {
     handleApprove,
@@ -164,6 +171,7 @@ export const BorrowPopup = (props: Props) => {
       switch (type) {
         case 'openOrAdjust':
           if(formattedAllowance < +formattedDepositAmount) {
+            refetchBalance()
             showToast('success', 'Approve Success', 'You have successfully approved collateral.', 30000)
           } else {
             initializePopupStates()
@@ -396,7 +404,7 @@ export const BorrowPopup = (props: Props) => {
                 Collateral (coming soon)
               </Button>
             </Stack>
-            <AmountForm amount={inputAmount} setAmount={setInputAmount} type={type} asset='trenUSD' available={availableBalance} />
+            <AmountForm amount={inputAmount} setAmount={setInputAmount} type={type} asset='trenUSD' available={availableBalance} debtAmount={debtAmount}/>
             <TransactionOverView
               collateral={collateralDetail.symbol}
               type={type}
@@ -414,7 +422,7 @@ export const BorrowPopup = (props: Props) => {
               variant='outlined'
               color={+inputAmount == +formatEther(debtAmount) ? 'error' : 'primary'}
               onClick={handleSubmit}
-              disabled={isPending || isConfirming || (+inputAmount > availableBalance) || +inputAmount == 0}
+              disabled={isPending || isConfirming || (type != 'repay' ? (+inputAmount > availableBalance) : (+inputAmount > +formatEther(debtAmount))) || +inputAmount == 0}
             >
               {
                 (isPending || isConfirming) && 

@@ -24,6 +24,7 @@ interface Props {
     amount: string
     setAmount: (amount: string) => void
     showTooltip?: boolean
+    debtAmount?: bigint // It is only for Repay popup
 }
 
 const getAmountTooltip = (type: string) => {
@@ -47,7 +48,7 @@ const getAmountTooltip = (type: string) => {
 
 export const AmountForm = (props: Props) => {
     const theme:Theme = useTheme()
-    const {asset, type, available, amount, setAmount, showTooltip = true} = props
+    const {asset, type, available, amount, setAmount, showTooltip = true, debtAmount} = props
     const [borderColorStyle, setBorderColorStyle] = useState({})
     const [collateralUSD, setCollateralUSD] = useState(1)
     const {radiusBoxStyle} = useGlobalValues()
@@ -139,7 +140,7 @@ export const AmountForm = (props: Props) => {
                     </Stack>
                     <Stack direction='row' gap={2} alignItems='center'>
                         <Typography color='#707175' fontWeight={400}>{type == 'repay' ? 'Wallet balance:' : 'Available:'} {formatToThousands(available).substring(1)}</Typography>
-                        <Typography variant='body2' color='primary' fontWeight={600} sx={{cursor: 'pointer'}} onClick={() => {setAmount(String(available))}}>MAX</Typography>
+                        <Typography variant='body2' color='primary' fontWeight={600} sx={{cursor: 'pointer'}} onClick={() => {setAmount(type != 'repay' ? String(available) : formatEther(debtAmount!))}}>MAX</Typography>
                     </Stack>
                 </Stack>
             </Box>
