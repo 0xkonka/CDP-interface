@@ -25,7 +25,7 @@ const Points = () => {
   const [firstItemHeight, setFirstItemHeight] = useState('auto')
   const secondItemRef = useRef<HTMLDivElement>(null)
 
-  const { inviteCodes, getInviteCode, generateInviteCodes, signReferral } = useReferral()
+  const { inviteCodes, getInviteCode, generateInviteCode, signReferral } = useReferral()
 
   useEffect(() => {
     const updateHeight = () => {
@@ -52,9 +52,11 @@ const Points = () => {
 
   const handleGenerate = async () => {
     if (!account) return
+    if (inviteCodes.length >= 5) return
+
     const inviteCode = Math.random().toString(36).substring(2, 15)
     setReferralLink(`https://tren.finance/invite/${inviteCode}`)
-    generateInviteCodes(inviteCode)
+    generateInviteCode(inviteCode)
     getInviteCode()
   }
 
@@ -552,7 +554,7 @@ const Points = () => {
               }
             }}
             value={inviteCode}
-            onChange={(e) => setInviteCode(e.target.value)}
+            onChange={e => setInviteCode(e.target.value)}
             placeholder='Input InviteCode'
           />
           <Button

@@ -13,7 +13,7 @@ interface ReferralContextValue {
   isInvited: boolean
   signMsg: string
   getInviteCode: () => void
-  generateInviteCodes: (inviteCode: string) => void
+  generateInviteCode: (inviteCode: string) => void
   signReferral: (inviteCode: string) => void
 }
 
@@ -35,7 +35,7 @@ export const ReferralProvider: React.FC<Props> = ({ children }) => {
     setInviteCodes(await res.json())
   }
 
-  const generateInviteCodes = async (inviteCode: string) => {
+  const generateInviteCode = async (inviteCode: string) => {
     if (!account) return
 
     const inviteCodes: ReferralType = { owner: account as string, inviteCode }
@@ -94,7 +94,7 @@ export const ReferralProvider: React.FC<Props> = ({ children }) => {
     isInvited,
     signMsg,
     getInviteCode,
-    generateInviteCodes,
+    generateInviteCode,
     signReferral
   }
 
