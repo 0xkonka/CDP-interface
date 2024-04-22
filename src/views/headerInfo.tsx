@@ -6,6 +6,7 @@ import { useGlobalValues } from '@/context/GlobalContext'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { useMemo } from 'react'
 import { formatEther, formatUnits } from 'viem'
+import ThreeCanvas from '@/views/components/framer/ThreeCanvas'
 
 const HeaderInfo = () => {
   const { isSmallScreen } = useGlobalValues()
@@ -29,20 +30,25 @@ const HeaderInfo = () => {
 
   return (
     <Box>
-      <Typography className='header-gradient' variant='h1' sx={{
-          mb: { xs: 4, md: 8 }, mt: 8,
-          fontSize: { xs: 36, md: 64, xl: 72 },
-        }}
-      >
-        Isolated Modules
-      </Typography>
-      <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'}
-        color='#F3F3F3'
-        sx={{ mb: { xs: 8, md: 16 }, fontWeight: 300, width: 730, maxWidth: '100%', lineHeight: { xs: 1.25, sm: 1.7 } }}
-      >
-        Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop your assets in one click to
-        leverage exposure for your spot assets. Pay back your loan later using trenUSD or your collateral.
-      </Typography>
+      <Stack direction='row'>
+        <Box>
+          <Typography className='header-gradient' variant='h1' sx={{
+              mb: { xs: 4, md: 8 }, mt: 8,
+              fontSize: { xs: 36, md: 64, xl: 72 },
+            }}
+          >
+            Isolated Modules
+          </Typography>
+          <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'}
+            color='#F3F3F3'
+            sx={{ mb: { xs: 8, md: 16 }, fontWeight: 300, width: 730, maxWidth: '100%', lineHeight: { xs: 1.25, sm: 1.7 } }}
+          >
+            Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop your assets in one click to
+            leverage exposure for your spot assets. Pay back your loan later using trenUSD or your collateral.
+          </Typography>
+        </Box>
+        <ThreeCanvas/>
+      </Stack>
       {/* Total Info Group Seection */}
       <Stack
         id='total-info'
