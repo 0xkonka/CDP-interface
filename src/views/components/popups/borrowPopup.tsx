@@ -142,7 +142,7 @@ export const BorrowPopup = (props: Props) => {
         setAvailableBalance(+formatUnits(userCollateralBal, decimals))
         break
       case 'withdraw':
-        setAvailableBalance(+formatEther(depositedAmount))
+        setAvailableBalance(+formatEther(depositedAmount) - (+formatEther(debtAmount) / +formatEther(LTV) / +formatEther(price)))
         break
       case 'borrow':
         setAvailableBalance(+formatEther(depositedAmount) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount)))
