@@ -142,7 +142,9 @@ export const BorrowPopup = (props: Props) => {
         setAvailableBalance(+formatUnits(userCollateralBal, decimals))
         break
       case 'withdraw':
-        setAvailableBalance(+formatEther(depositedAmount) - (+formatEther(debtAmount) / +formatEther(LTV) / +formatEther(price)))
+        setAvailableBalance(+formatEther(depositedAmount))
+        //  Once @Alex R found the reason why 0.25 TST was available to withdraw, we can use below codeline.
+        // setAvailableBalance(+formatEther(depositedAmount) - (+formatEther(debtAmount) / +formatEther(LTV) / +formatEther(price)))
         break
       case 'borrow':
         setAvailableBalance(+formatEther(depositedAmount) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount)))
