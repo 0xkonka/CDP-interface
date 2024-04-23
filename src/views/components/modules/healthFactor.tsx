@@ -20,7 +20,8 @@ export const getHealthColor = (value: number) => {
 }
 
 export const HealthFactor = (props: Props) => {
-    const {safety} = props
+    let {safety} = props
+    safety = safety > 0 ? safety : 0
 
     return (
         <Stack>

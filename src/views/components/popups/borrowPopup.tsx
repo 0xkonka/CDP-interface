@@ -2,7 +2,7 @@
 import React, { Fragment, useState, Ref, forwardRef, ReactElement, useEffect, useMemo, useCallback } from 'react'
 
 // MUI components
-import { Dialog, SlideProps, Slide, Box, Typography, Button, Theme, useTheme, Stack } from '@mui/material'
+import { Dialog, SlideProps, Slide, Box, Typography, Button, Theme, useTheme, Stack, CircularProgress } from '@mui/material'
 
 // Core Components Imports
 import Icon from '@/@core/components/icon'
@@ -13,13 +13,13 @@ import { showToast } from '@/hooks/toasts'
 import { BaseError, useAccount, useChainId, useReadContract } from 'wagmi'
 import { getBalance } from '@wagmi/core'
 import { wagmiConfig } from '@/pages/_app'
-import { formatEther, formatUnits } from 'viem'
+import { erc20Abi, formatEther, formatUnits } from 'viem'
 import { removeComma } from '@/hooks/utils'
 import { parseEther, parseUnits } from 'viem'
 import useModules from '@/context/ModuleProvider/useModules'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
-import { DEBT_TOKEN, ETHERSCAN_BASE_URL } from '@/configs/address'
+import { BORROWER_OPERATIONS, DEBT_TOKEN, ETHERSCAN_BASE_URL } from '@/configs/address'
 
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
@@ -81,7 +81,7 @@ export const BorrowPopup = (props: Props) => {
     type,
     depositAmount,
     borrowAmount,
-    allowance,
+    // allowance,
     collateral,
     collateralDetail,
     userCollateralBal
@@ -90,13 +90,20 @@ export const BorrowPopup = (props: Props) => {
   const chainId = useChainId()
   const { decimals, LTV, price = BigInt(0), debtTokenGasCompensation = BigInt(0), minNetDebt = BigInt(0)} = collateralDetail
 
+  // Get Allowance
+  const { data: allowance, refetch: refetchBalance } = useReadContract({
+    address: collateralDetail?.address as '0x{string}',
+    abi: erc20Abi,
+    functionName: 'allowance',
+    args: [account as '0x${string}', BORROWER_OPERATIONS[chainId] as '0x${string}']
+  })
+  
+
   const theme: Theme = useTheme()
 
   const formattedAllowance = +formatUnits(allowance!, decimals)
   const formattedDepositAmount = removeComma(depositAmount!)
   const formattedBorrowAmount = removeComma(borrowAmount!)
-  const formattedWithdrawAmount = removeComma(depositAmount!)
-  const formattedRepayAmount = removeComma(borrowAmount!)
 
   const {
     handleApprove,
@@ -106,6 +113,7 @@ export const BorrowPopup = (props: Props) => {
     handleWithdraw,
     handleBorrow,
     handleRepay,
+    handleClose,
     txhash,
     isPending,
     isConfirming,
@@ -117,7 +125,8 @@ export const BorrowPopup = (props: Props) => {
   let { debt: debtAmount = BigInt(0), coll: depositedAmount = BigInt(0) } = moduleInfo || {}
   
   // Minus Gas compensation from trenBox Debt  @Alex R
-  debtAmount -= debtTokenGasCompensation
+  if(debtAmount > debtTokenGasCompensation)
+    debtAmount -= debtTokenGasCompensation
 
   const [useWalletBalance, setUseWalletBalance] = useState(true)
   const [inputAmount, setInputAmount] = useState('')
@@ -134,6 +143,8 @@ export const BorrowPopup = (props: Props) => {
         break
       case 'withdraw':
         setAvailableBalance(+formatEther(depositedAmount))
+        //  Once @Alex R found the reason why 0.25 TST was available to withdraw, we can use below codeline.
+        // setAvailableBalance(+formatEther(depositedAmount) - (+formatEther(debtAmount) / +formatEther(LTV) / +formatEther(price)))
         break
       case 'borrow':
         setAvailableBalance(+formatEther(depositedAmount) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount)))
@@ -159,24 +170,32 @@ export const BorrowPopup = (props: Props) => {
 
   useEffect(() => {
     if (isConfirmed && !isPending) {
-      initializePopupStates()
       switch (type) {
         case 'openOrAdjust':
-          showToast(
-            'success',
-            'Borrow Success',
-            `You have successfully deposit ${depositAmount} ${collateral} and borrow ${borrowAmount} trenUSD.`,
-            30000,
-            `${ETHERSCAN_BASE_URL}/tx/${txhash}`,
-          )
+          if(formattedAllowance < +formattedDepositAmount) {
+            refetchBalance()
+            showToast('success', 'Approve Success', 'You have successfully approved collateral.', 30000)
+          } else {
+            initializePopupStates()
+            showToast(
+              'success',
+              'Borrow Success',
+              `You have successfully deposit ${depositAmount} ${collateral} and borrow ${borrowAmount} trenUSD.`,
+              30000,
+              `${ETHERSCAN_BASE_URL}/tx/${txhash}`,
+            )
+          }
           break
         case 'deposit':
+          initializePopupStates()
           showToast('success', 'Deposit Success', `You have successfully deposit ${inputAmount} ${collateral}`, 30000)
           break
         case 'borrow':
+          initializePopupStates()
           showToast('success', 'Borrow Success', `You have successfully borrow ${inputAmount} trenUSD`, 30000)
           break
         case 'withdraw':
+          initializePopupStates()
           showToast(
             'success',
             'Withdraw Success',
@@ -185,6 +204,7 @@ export const BorrowPopup = (props: Props) => {
           )
           break
         case 'repay':
+          initializePopupStates()
           showToast('success', 'Repay Success', `You have successfully repaid ${inputAmount} trenUSD`, 30000)
           break
       }
@@ -225,7 +245,11 @@ export const BorrowPopup = (props: Props) => {
     } else if (type === 'borrow') {
       handleBorrow(parseEther(inputAmount))
     } else if (type == 'repay') {
-      handleRepay(parseEther(inputAmount))
+      if(+inputAmount != +formatEther(debtAmount)) {
+        handleRepay(parseEther(inputAmount))
+      } else {
+        handleClose()
+      }
     }
   }
 
@@ -272,6 +296,10 @@ export const BorrowPopup = (props: Props) => {
               onClick={handleSubmit}
               disabled={isPending || isConfirming || (+inputAmount > availableBalance) || +inputAmount == 0}
             >
+              {
+                (isPending || isConfirming) && 
+                <CircularProgress color='primary' sx={{mr: 4, height: '20px !important', width: '20px !important'}} />
+              }
               {getButtonLabel(type, formattedAllowance < +formattedDepositAmount)}
             </Button>
           </Box>
@@ -305,6 +333,10 @@ export const BorrowPopup = (props: Props) => {
               onClick={handleSubmit}
               disabled={isPending || isConfirming || (+inputAmount > availableBalance)}
             >
+              {
+                (isPending || isConfirming) && 
+                <CircularProgress color='primary' sx={{mr: 4, height: '20px !important', width: '20px !important'}} />
+              }
               {getButtonLabel(type, formattedAllowance < +formattedDepositAmount)}
             </Button>
           </Box>
@@ -374,7 +406,7 @@ export const BorrowPopup = (props: Props) => {
                 Collateral (coming soon)
               </Button>
             </Stack>
-            <AmountForm amount={inputAmount} setAmount={setInputAmount} type={type} asset='trenUSD' available={availableBalance} />
+            <AmountForm amount={inputAmount} setAmount={setInputAmount} type={type} asset='trenUSD' available={availableBalance} debtAmount={debtAmount}/>
             <TransactionOverView
               collateral={collateralDetail.symbol}
               type={type}
@@ -390,10 +422,15 @@ export const BorrowPopup = (props: Props) => {
                 fontSize: 18
               }}
               variant='outlined'
+              color={+inputAmount == +formatEther(debtAmount) ? 'error' : 'primary'}
               onClick={handleSubmit}
-              disabled={isPending || isConfirming || (+inputAmount > availableBalance) || +inputAmount == 0}
+              disabled={isPending || isConfirming || (type != 'repay' ? (+inputAmount > availableBalance) : (+inputAmount > +formatEther(debtAmount))) || +inputAmount == 0}
             >
-              {getButtonLabel(type)}
+              {
+                (isPending || isConfirming) && 
+                <CircularProgress color='primary' sx={{mr: 4, height: '20px !important', width: '20px !important'}} />
+              }
+              {+inputAmount == +formatEther(debtAmount) ? 'Close' : 'Repay'}
             </Button>
           </Box>
         )}

@@ -82,7 +82,7 @@ const CollateralRow = (props: TableHeaderProps) => {
     }
 
     return (
-        <Stack sx={{borderRadius:  2, border: `solid 1px ${isOpen ? theme.palette.primary.main : 'transparent'}`, cursor: 'pointer',
+        <Stack display={disableToogle && positionStatus !== 'active' ? 'none' : 'flex'} sx={{borderRadius:  2, border: `solid 1px ${isOpen ? theme.palette.primary.main : 'transparent'}`, cursor: 'pointer',
             '& .active-open': {
                 color: theme.palette.primary.main,
                 '& .arrow-diagonal': {
