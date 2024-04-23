@@ -46,7 +46,8 @@ export const TransactionOverView = (props: Props) => {
     } = moduleInfo || {}
     
     // Minus Gas compensation from trenBox Debt  @Alex R
-    debtAmount -= debtTokenGasCompensation
+    if(debtAmount > debtTokenGasCompensation)
+        debtAmount -= debtTokenGasCompensation
 
     const plusColl = type == 'deposit'? +removeComma(amount) : ((type == 'withdraw')? +removeComma(amount) * -1 : 0)
     const plusDebt = type == 'borrow'? +removeComma(amount) : ((type == 'repay')? +removeComma(amount) * -1 : 0)

@@ -83,7 +83,8 @@ const Borrow = () => {
   } = moduleInfo || {}
   
   // Minus Gas compensation from trenBox Debt  @Alex R
-  debtAmount -= debtTokenGasCompensation
+  if(debtAmount > debtTokenGasCompensation)
+    debtAmount -= debtTokenGasCompensation
 
   // Get Allowance
   const chainId = useChainId()
