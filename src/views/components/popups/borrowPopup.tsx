@@ -404,7 +404,7 @@ export const BorrowPopup = (props: Props) => {
                 Collateral (coming soon)
               </Button>
             </Stack>
-            <AmountForm amount={inputAmount} setAmount={setInputAmount} type={type} asset='trenUSD' available={availableBalance} />
+            <AmountForm amount={inputAmount} setAmount={setInputAmount} type={type} asset='trenUSD' available={availableBalance} debtAmount={debtAmount}/>
             <TransactionOverView
               collateral={collateralDetail.symbol}
               type={type}
@@ -422,7 +422,7 @@ export const BorrowPopup = (props: Props) => {
               variant='outlined'
               color={+inputAmount == +formatEther(debtAmount) ? 'error' : 'primary'}
               onClick={handleSubmit}
-              disabled={isPending || isConfirming || (+inputAmount > availableBalance) || +inputAmount == 0}
+              disabled={isPending || isConfirming || (type != 'repay' ? (+inputAmount > availableBalance) : (+inputAmount > +formatEther(debtAmount))) || +inputAmount == 0}
             >
               {
                 (isPending || isConfirming) && 
