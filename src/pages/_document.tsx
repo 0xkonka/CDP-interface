@@ -38,9 +38,9 @@ class CustomDocument extends Document {
         <body>
           <noscript>
             <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N8M5SW75" 
-                    height="0" 
-                    width="0" 
-                    style={{ display: 'none', visibility: 'hidden' }}>
+                height="0" 
+                width="0" 
+                style={{ display: 'none', visibility: 'hidden' }}>
             </iframe>
           </noscript>
           <Main />
