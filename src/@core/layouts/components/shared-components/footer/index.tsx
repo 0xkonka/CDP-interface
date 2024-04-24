@@ -58,8 +58,13 @@ const Footer = (props: Props) => {
           pt: 20,
           // py: theme => theme.spacing(footer === 'fixed' && skin === 'bordered' ? 2.875 : 4),
           ...(contentWidth === 'boxed' && { 
-            '@media (min-width:1440px)': { maxWidth: 1440 },
-            '@media (min-width:1680px)': { maxWidth: 1680 },
+            // '@media (min-width:1440px)': { maxWidth: 1440 },
+            // '@media (min-width:1680px)': { maxWidth: 1680 },
+            mx: 'auto',
+            '@media (min-width:1200px)': { maxWidth: '100%' },
+            '@media (min-width:1440px)': { maxWidth: '95%' },
+            '@media (min-width:1680px)': { maxWidth: '95%' },
+            '@media (min-width:2560px)': { maxWidth: '1920px !important' },
           }),
           ...(layout === 'vertical' && {
             borderTopLeftRadius: theme => theme.shape.borderRadius,
