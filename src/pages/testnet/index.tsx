@@ -108,7 +108,6 @@ const Testnet = () => {
             </Box>
           
             <Box sx={{
-                display: { xs: 'none', lg: 'block' },
                 width: '100vw',
                 height: 'calc(100vh + 170px)',
                 position: 'fixed',
@@ -125,6 +124,17 @@ const Testnet = () => {
                     Your browser does not support the video tag.
                 </video>
             </Box>
+            <Box sx={{
+                width: '100vw',
+                height: '100vh',
+                position: 'fixed',
+                zIndex: '1',
+                top: 0,
+                left: 0,
+                overflow: 'hidden',
+                background: 'rgba(0, 0, 0, 0.53)'
+            }}></Box>
+            
         </Box>
     )
 }
