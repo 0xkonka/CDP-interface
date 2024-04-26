@@ -15,6 +15,7 @@ import MuiMenuItem, { MenuItemProps } from '@mui/material/MenuItem'
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import ConnectWallet from '@/views/components/ConnectWallet'
+import { useRouter } from 'next/router'
 
 interface Props {
   hidden: boolean
@@ -51,11 +52,18 @@ const MenuItem = styled(MuiMenuItem)<MenuItemProps>(({ theme }) => ({
 const AppBarContent = (props: Props) => {
   // ** Props
   const { hidden, settings, saveSettings } = props
+  const router = useRouter();
+  // Check if the pathname matches '/testnet'
+  const isTestnet = router.pathname === '/testnet';
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      {/* <ModeToggler settings={settings} saveSettings={saveSettings} /> */}
+      {!isTestnet &&
       <ConnectWallet />
+      }
+      {isTestnet && 
+      <Box width={235}></Box>
+      }
     </Box>
   )
 }
