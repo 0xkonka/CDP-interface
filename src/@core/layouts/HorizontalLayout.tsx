@@ -19,6 +19,7 @@ import { LayoutProps } from 'src/@core/layouts/types'
 import Footer from './components/shared-components/footer'
 import ScrollToTop from 'src/@core/components/scroll-to-top'
 import AppBarContent from './components/horizontal/app-bar-content'
+import { useRouter } from 'next/router';
 
 // ** Util Import
 import { hexToRGBA } from '../utils/hex-to-rgba'
@@ -95,6 +96,10 @@ const HorizontalLayout = (props: LayoutProps) => {
   const userAppBarProps = Object.assign({}, appBarProps)
   delete userAppBarProps.sx
 
+  const router = useRouter();
+   // Check if the pathname matches '/testnet'
+   const isTestnet = router.pathname === '/testnet';
+
   return (
     <HorizontalLayoutWrapper className='layout-wrapper'>
       <MainContentWrapper className='layout-content-wrapper' sx={{ ...(contentHeightFixed && { maxHeight: '100vh' }) }}>
@@ -169,7 +174,9 @@ const HorizontalLayout = (props: LayoutProps) => {
           {children}
         </ContentWrapper>
         {/* Footer */}
-        <Footer {...props} footerStyles={footerProps?.sx} footerContent={footerProps?.content} />
+        {!isTestnet && (
+          <Footer {...props} footerStyles={footerProps?.sx} footerContent={footerProps?.content} />
+        )}
         {/* Scroll to top button */}
         {scrollToTop ? (
           scrollToTop(props)
