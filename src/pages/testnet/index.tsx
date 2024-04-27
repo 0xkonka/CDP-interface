@@ -8,6 +8,13 @@ const Testnet = () => {
         WebkitBackdropFilter: 'blur(1.244215965270996px)', // for Safari
         backdropFilter: 'blur(1.244215965270996px)' // standard property, may not work as inline-style
     }
+    const lightPrimaryBlendingStyle = {
+        borderRadius: '2010px',
+        background: '#67DAB1',
+        filter: 'blur(400px)',
+        width: '100%',
+        height: 132,
+    }
 
     return (
         <Box>
@@ -134,7 +141,7 @@ const Testnet = () => {
                 overflow: 'hidden',
                 background: 'rgba(0, 0, 0, 0.53)'
             }}></Box>
-            
+            <Box style={lightPrimaryBlendingStyle}></Box>
         </Box>
     )
 }
