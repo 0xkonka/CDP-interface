@@ -44,10 +44,32 @@ export const formatPercent = (value: number, floating = 0) => {
     return value.toFixed(floating) + '%'
 }
 
-export const formatToThousands = (value: number, floating = 2) => {
-    // return '$' + value.toLocaleString('en-US')
-    return '$' + value.toFixed(floating).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+// export const formatToThousands = (value: number, floating = 5) => {
+//     // return '$' + value.toLocaleString('en-US')
+//     return '$' + value.toFixed(floating).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+// }
+// export const formatToThousands = (value: number, floating = 5) => {
+//     return '$' + value.toFixed(floating).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+// }
+
+export const formatToThousands = (value: number, floating = 5) => {
+    // // First, round the number to the desired precision to avoid floating point representation issues
+    // const roundedValue = Math.round(value * Math.pow(10, floating)) / Math.pow(10, floating);
+    // // Convert the number to a string splitting at the decimal point (if any)
+    // let [integerPart, decimalPart] = roundedValue.toString().split('.');
+
+     // First, truncate the number to the desired precision to avoid floating point representation issues
+     const factor = Math.pow(10, floating);
+     const truncatedValue = Math.floor(value * factor) / factor;
+     // Convert the number to a string splitting at the decimal point (if any)
+     let [integerPart, decimalPart] = truncatedValue.toString().split('.');
+     
+    // Add thousands separator to the integer part only
+    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // Return formatted value with or without decimal part
+    return '$' + (decimalPart ? `${integerPart}.${decimalPart}` : integerPart);
 }
+
 
 export const formatToThousandsInt = (value: number) => {
     // return '$' + value.toLocaleString('en-US')
