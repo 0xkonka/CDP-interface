@@ -80,7 +80,7 @@ import { GlobalProvider } from '@/context/GlobalContext'
 import { WalletConnector } from '@/views/components/WalletConnector'
 import { createPublicClient } from 'viem'
 import { StabilityPoolProvider } from '@/context/StabilityPoolProvider/StabilityPoolProvider'
-import { ReferralProvider } from '@/context/ReferralContext'
+import { PointProvider } from '@/context/PointContext'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -135,7 +135,7 @@ const App = (props: ExtendedAppProps) => {
                   return (
                     <ThemeComponent settings={settings}>
                       <GlobalProvider>
-                        <ReferralProvider>
+                        <PointProvider>
                           {getLayout(<Component {...pageProps} />)}
                           <ReactHotToast>
                             <Toaster
@@ -143,7 +143,7 @@ const App = (props: ExtendedAppProps) => {
                               toastOptions={{ className: 'react-hot-toast' }}
                             />
                           </ReactHotToast>
-                        </ReferralProvider>
+                        </PointProvider>
                       </GlobalProvider>
                     </ThemeComponent>
                   )

@@ -12,4 +12,5 @@ export interface Point {
     xpPoint: number
     multiplier: number
     endTimestamp?: number
+    rank: number
 }

@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from 'react'
 import { formatToThousands, formatToThousandsInt, shortenWalletAddress } from '@/hooks/utils'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
 import { Copy } from '../Copy'
-import { useReferral } from '@/context/ReferralContext'
+import { usePoint } from '@/context/PointContext'
 
 export const ExperienceBoard = () => {
     const [firstItemHeight, setFirstItemHeight] = useState('auto')
@@ -16,9 +16,8 @@ export const ExperienceBoard = () => {
     const [sortBy, setSortBy] = useState('symbol')
     const theme = useTheme()
 
-    const {userReferral, userPoint} = useReferral()
-    console.log('userReferral', userReferral)
-
+    const {userReferral} = usePoint()
+    
     // Adjust the container heights of leaderboard and referrals.
     useEffect(() => {
         const updateHeight = () => {
@@ -76,39 +75,6 @@ export const ExperienceBoard = () => {
           flexWidth: 6,
           sortable: false
         }
-    ]
-
-    const referralItems = [
-        {
-            code: 'E82S9',
-            redeemed: false,
-            address: '',
-            xpPoint: 0
-        },
-        {
-            code: '73Z91',
-            redeemed: true,
-            address: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe',
-            xpPoint: 14000
-        },
-        {
-            code: '52X8U',
-            redeemed: false,
-            address: '',
-            xpPoint: 0
-        },
-        {
-            code: '4I0YT',
-            redeemed: true,
-            address: '0x4D88DC5d528A33E4b8bE579e9476715F60060582',
-            xpPoint: 7800
-        },
-        {
-            code: '3N7QB',
-            redeemed: true,
-            address: '0x7E5F4552091A69125d5DfCb7B8C2659029395Bdf',
-            xpPoint: 12700
-        },
     ]
 
     const totalxpPoint = userReferral.reduce((sum, item) => {
