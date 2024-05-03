@@ -5,7 +5,6 @@ import { ActiveTask } from '@/views/components/points/ActiveTask'
 import { useGlobalValues } from '@/context/GlobalContext'
 import { useState } from 'react'
 import { useRef, useEffect } from 'react'
-import { ReferralType } from '@/types'
 import { useAccount } from 'wagmi'
 import { TrenPointBanner } from '@/views/components/points/TrenPointBanner'
 import { ExperienceBoard } from '@/views/components/points/ExperienceBoard'
@@ -13,17 +12,6 @@ import { ExperienceBoard } from '@/views/components/points/ExperienceBoard'
 const Points = () => {
   const { address: account } = useAccount()
   const { isSmallScreen } = useGlobalValues()
-
-  const [inviteCodes, setInviteCodes] = useState<ReferralType[]>([])
-
-  useEffect(() => {
-    if (!account) return
-    const getInviteCode = async () => {
-      const res = await fetch('/api/points?owner=' + account)
-      setInviteCodes(await res.json())
-    }
-    getInviteCode()
-  }, [account]) // Dependency array to control re-fetching
 
   return (
     <Box>
@@ -98,7 +86,7 @@ const Points = () => {
       </Box>
 
       {/* Leaderboard and Referrals */}
-      <ExperienceBoard/>
+      <ExperienceBoard />
     </Box>
   )
 }
