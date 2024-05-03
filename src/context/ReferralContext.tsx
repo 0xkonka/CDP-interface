@@ -5,16 +5,21 @@ import * as crypto from 'crypto'
 import 'cleave.js/dist/addons/cleave-phone.us'
 import { useAccount } from 'wagmi'
 import { signMessage } from '@wagmi/core'
-import { ReferralType } from '@/lib/types'
+import { Point, Referral } from '@/types'
 import { wagmiConfig } from '@/pages/_app'
+import axios from 'axios'
+import { showToast } from '@/hooks/toasts'
+
+const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://be-express-lime.vercel.app'
+
+console.log('BE_ENDPOINT', BE_ENDPOINT)
+
+const REFERRAL_DISTRIBUTION = process.env.REFERRAL_DISTRIBUTION || 2
 
 interface ReferralContextValue {
-  inviteCodes: ReferralType[]
-  isInvited: boolean
-  signMsg: string
-  getInviteCode: () => void
-  generateInviteCode: (inviteCode: string) => void
-  signReferral: (inviteCode: string) => void
+  isUserRedeemed: boolean,
+  userReferral: Referral[],
+  userPoint?: Point,
 }
 
 const ReferralContext = createContext<ReferralContextValue | undefined>(undefined)
@@ -26,76 +31,39 @@ interface Props {
 export const ReferralProvider: React.FC<Props> = ({ children }) => {
   const { address: account } = useAccount()
 
-  const [inviteCodes, setInviteCodes] = useState<ReferralType[]>([])
-  const [isInvited, setIsInvited] = useState<boolean>(false)
-  const [signMsg, setSignMsg] = useState<string>('')
+  const [isUserRedeemed, setIsUserRedeemed] = useState(false)
+  const [userReferral, setReferral] = useState<Referral[]>([])
+  const [userPoint, setPoint] = useState<Point>()
+  // const [inviteCode, setInviteCode] = useState<string>('')
 
-  const getInviteCode = async () => {
-    const res = await fetch('/api/referral?owner=' + account)
-    setInviteCodes(await res.json())
-  }
-
-  const generateInviteCode = async (inviteCode: string) => {
-    if (!account) return
-
-    const inviteCodes: ReferralType = { owner: account as string, inviteCode }
-
-    await fetch('/api/referral', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(inviteCodes)
-    })
-  }
-
-  const signReferral = async (inviteCode: string) => {
-    // Check inviteKey exists
-    const res = await fetch('/api/referral/' + inviteCode)
-    const result: ReferralType = await res.json()
-
-    if (result === null) {
-      console.log('Wrong InviteCode')
-    }
-    if (result.redeemed) {
-      console.log('InviteCode expired')
-    } else {
-      // If exists
-      try {
-        const hash = crypto.createHash('sha256')
-        hash.update(result.inviteCode + result.owner + account)
-        const hashCode = hash.digest('hex')
-
-        const signMsg = await signMessage(wagmiConfig, {
-          message: hashCode
-        })
-        
-        await fetch('/api/referral/' + inviteCode, {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ inviteCode, redeemer: account, signMsg })
-        })
-      } catch (err) {
-        console.log('err', err)
-      }
-    }
-  }
+  console.log('userReferral', userReferral)
+  console.log('userPoint', userPoint)
 
   useEffect(() => {
-    if (!account) return
+    const getUserReferral = async () => {
+      if (!account) return
 
-    getInviteCode()
+      try {
+        const { data } = await axios.get(`${BE_ENDPOINT}/api/referral/user/${account}`)
+        console.log('Fetched Referral:', data)
+
+        setIsUserRedeemed(data.redeemed)
+        if(data.redeemed){
+          setReferral(data.data.referral)
+          setPoint(data.data.point)
+        }
+      } catch (err) {
+        console.error('Failed to fetch referral:', err)
+      }
+    }
+
+    getUserReferral()
   }, [account])
 
   const value = {
-    inviteCodes,
-    isInvited,
-    signMsg,
-    getInviteCode,
-    generateInviteCode,
-    signReferral
+    isUserRedeemed,
+    userReferral,
+    userPoint
   }
 
   return <ReferralContext.Provider value={value}>{children}</ReferralContext.Provider>
