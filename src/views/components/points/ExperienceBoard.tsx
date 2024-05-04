@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from 'react'
 import { formatToThousands, formatToThousandsInt, shortenWalletAddress } from '@/hooks/utils'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
 import { Copy } from '../Copy'
+import { usePoint } from '@/context/PointContext'
 
 export const ExperienceBoard = () => {
     const [firstItemHeight, setFirstItemHeight] = useState('auto')
@@ -15,6 +16,8 @@ export const ExperienceBoard = () => {
     const [sortBy, setSortBy] = useState('symbol')
     const theme = useTheme()
 
+    const {userReferral} = usePoint()
+    
     // Adjust the container heights of leaderboard and referrals.
     useEffect(() => {
         const updateHeight = () => {
@@ -74,42 +77,9 @@ export const ExperienceBoard = () => {
         }
     ]
 
-    const referralItems = [
-        {
-            code: 'E82S9',
-            redeemed: false,
-            address: '',
-            xpGained: 0
-        },
-        {
-            code: '73Z91',
-            redeemed: true,
-            address: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe',
-            xpGained: 14000
-        },
-        {
-            code: '52X8U',
-            redeemed: false,
-            address: '',
-            xpGained: 0
-        },
-        {
-            code: '4I0YT',
-            redeemed: true,
-            address: '0x4D88DC5d528A33E4b8bE579e9476715F60060582',
-            xpGained: 7800
-        },
-        {
-            code: '3N7QB',
-            redeemed: true,
-            address: '0x7E5F4552091A69125d5DfCb7B8C2659029395Bdf',
-            xpGained: 12700
-        },
-    ]
-
-    const totalXPGained = referralItems.reduce((sum, item) => {
+    const totalxpPoint = userReferral.reduce((sum, item) => {
         if (item.redeemed) {
-            return sum + item.xpGained;
+            return sum + item.xpPoint;
         }
         return sum;
     }, 0);
@@ -268,12 +238,12 @@ export const ExperienceBoard = () => {
                             </Stack>
                             <Stack sx={{gap: {xs: 4, sm: 6}}}>
                                 {
-                                    referralItems.map((item, index) => (
+                                    userReferral.map((item, index) => (
                                         <Stack width={isMobileScreen ? 100 : 130} direction='row' gap={isMobileScreen ? 1 : 3} sx={{height: {xs: 28, sm:32}}} alignItems='center' justifyContent='space-between' key={index}>
                                             <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color={item.redeemed ? 'primary' : 'white'} sx={{my:'auto', userSelect: 'none', textDecorationThickness: 2, textDecoration: item.redeemed ? 'line-through' : 'none'}}>
-                                                {insertHyphens(item.code)}
+                                                {insertHyphens(item.inviteCode)}
                                             </Typography>
-                                            <Box display={item.redeemed ? 'none' : 'block'} height={isMobileScreen ? 20 : 24}><Copy text={item.code}/></Box>
+                                            <Box display={item.redeemed ? 'none' : 'block'} height={isMobileScreen ? 20 : 24}><Copy text={item.inviteCode}/></Box>
                                         </Stack>        
                                     ))
                                 }
@@ -304,7 +274,7 @@ export const ExperienceBoard = () => {
                             </Stack>
                             <Stack sx={{gap: {xs: 4, sm: 6}}}>
                                 {
-                                    referralItems.map((item, index) => {
+                                    userReferral.map((item, index) => {
                                         if(item.redeemed) {
                                             return (
                                                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{height: {xs: 28, sm:32}}} key={index}>
@@ -313,11 +283,11 @@ export const ExperienceBoard = () => {
                                                             <img alt='Gradient Circle' src='/images/icons/customized-icons/gradient-circle.png' style={{width: '100%'}}/>
                                                         </Stack>
                                                         <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
-                                                            {shortenWalletAddress(item.address)}
+                                                            {shortenWalletAddress(item.redeemer)}
                                                         </Typography>
                                                     </Stack>
                                                     <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
-                                                        {formatToThousandsInt(item.xpGained)} XP
+                                                        {formatToThousandsInt(item.xpPoint)} XP
                                                     </Typography>
                                                 </Stack> 
                                             )
@@ -335,7 +305,7 @@ export const ExperienceBoard = () => {
                                 }
                                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{height: {xs: 28, sm:32}}}>
                                     <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#FFFFFF99' sx={{width: {xs: 124, sm: 166}, textAlign: 'end'}}>Total</Typography>
-                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={600} color='primary'> {formatToThousandsInt(totalXPGained)} XP </Typography>
+                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={600} color='primary'> {formatToThousandsInt(totalxpPoint)} XP </Typography>
                                 </Stack>
                             </Stack>
                         </Stack>

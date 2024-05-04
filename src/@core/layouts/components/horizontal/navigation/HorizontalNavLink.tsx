@@ -40,16 +40,10 @@ interface Props {
 }
 
 const ListItem = styled(MuiListItem)<
-  ListItemProps & { component?: ElementType; href: string; target?: '_blank' | undefined }
+  ListItemProps & { component?: ElementType; href: string; target?: '_blank' | undefined; passHref?: boolean; prefetch?: boolean }
 >(({ theme }) => ({
   width: 'auto',
   borderRadius: theme.shape.borderRadius,
-  '&:hover': {
-    // backgroundColor: theme.palette.action.hover
-  },
-  // '&.active, &.active:hover': {
-  //   backgroundColor: hexToRGBA(theme.palette.primary.main, 0.08)
-  // },
   '&:focus-visible': {
     outline: 0,
     backgroundColor: theme.palette.action.focus
@@ -81,6 +75,8 @@ const HorizontalNavLink = (props: Props) => {
       <Wrapper {...(!hasParent ? { component: 'div', sx: { py: settings.skin === 'bordered' ? 2.625 : 2.75 } } : {})}>
         <ListItem
           component={Link}
+          passHref 
+          prefetch
           disabled={item.disabled}
           {...(item.disabled && { tabIndex: -1 })}
           className={clsx({ active: isNavLinkActive() })}

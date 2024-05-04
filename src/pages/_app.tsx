@@ -77,9 +77,8 @@ import '../../styles/rainbowwallet.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import { ProtocolProvider } from '@/context/ProtocolProvider/ProtocolProvider'
 import { GlobalProvider } from '@/context/GlobalContext'
-import { WalletConnector } from '@/views/components/WalletConnector'
-import { createPublicClient } from 'viem'
 import { StabilityPoolProvider } from '@/context/StabilityPoolProvider/StabilityPoolProvider'
+import { PointProvider } from '@/context/PointContext'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -134,10 +133,15 @@ const App = (props: ExtendedAppProps) => {
                   return (
                     <ThemeComponent settings={settings}>
                       <GlobalProvider>
-                        {getLayout(<Component {...pageProps} />)}
-                        <ReactHotToast>
-                          <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-                        </ReactHotToast>
+                        <PointProvider>
+                          {getLayout(<Component {...pageProps} />)}
+                          <ReactHotToast>
+                            <Toaster
+                              position={settings.toastPosition}
+                              toastOptions={{ className: 'react-hot-toast' }}
+                            />
+                          </ReactHotToast>
+                        </PointProvider>
                       </GlobalProvider>
                     </ThemeComponent>
                   )

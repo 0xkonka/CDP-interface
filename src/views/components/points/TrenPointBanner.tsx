@@ -1,8 +1,11 @@
 import { useGlobalValues } from "@/context/GlobalContext"
+import { usePoint } from "@/context/PointContext"
 import { Box, Stack, Typography, Grid } from "@mui/material"
 
 export const TrenPointBanner = () => {
     const {isSmallScreen, isMediumScreen, isMediumLargeScreen} = useGlobalValues()
+
+    const {userPoint} = usePoint()
 
     return (
         <Box
@@ -50,7 +53,7 @@ export const TrenPointBanner = () => {
                         }}
                         fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`}
                         >
-                        232.2 XP
+                        {userPoint?.xpPoint} XP
                         </Typography>
                     </Grid>
                     <Grid item xs={6} lg={2.3}>
@@ -80,7 +83,7 @@ export const TrenPointBanner = () => {
                         }}
                         fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`}
                         >
-                        #1,321
+                        #{userPoint?.rank}
                         </Typography>
                     </Grid>
                     <Grid item xs={6} lg={2.3}>
