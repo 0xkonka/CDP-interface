@@ -138,7 +138,10 @@ const App = (props: ExtendedAppProps) => {
                         <ReferralProvider>
                           {getLayout(<Component {...pageProps} />)}
                           <ReactHotToast>
-                            <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                            <Toaster
+                              position={settings.toastPosition}
+                              toastOptions={{ className: 'react-hot-toast' }}
+                            />
                           </ReactHotToast>
                         </ReferralProvider>
                       </GlobalProvider>
