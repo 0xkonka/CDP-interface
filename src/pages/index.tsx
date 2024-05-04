@@ -1,54 +1,93 @@
 import { useGlobalValues } from '@/context/GlobalContext'
-import {Box, Typography, Stack, Button} from '@mui/material'
+import {Box, Typography, Stack, Button, CircularProgress} from '@mui/material'
 import ReactCodeInput from 'react-code-input'
 import { CSSProperties, useEffect, useState } from'react'
 import { showToast } from '@/hooks/toasts'
 import Icon from 'src/@core/components/icon'
 import { Wizard } from '@/views/components/Wizard'
-import { useReferral } from '@/context/ReferralContext'
+import { usePoint } from '@/context/PointContext'
 import { useAccount } from 'wagmi'
 import ConnectWalletWithIcon from '@/views/components/ConnectWalletWithIcon'
+import { useRouter } from 'next/router'
 
-const Connect = () => {
+const Home = () => {
+    const router = useRouter()
+    
+    // Get the inviteCode from the query object
+    const paramCode = router.query?.code?.toString() || ''
+
     const {isMobileScreen, isSmallScreen, isMediumScreen, isMediumLargeScreen} = useGlobalValues()
     const [currentStep, setCurrentStep] = useState(1)
     const [progressWidth, setProgressWidth] = useState('')
     const { isConnected } = useAccount()
-    const { signMsg, inviteCode, userReferral, validateInviteCode } = useReferral()
-    const [code, setCode] = useState(inviteCode)
-    const [isValidating, setIsValidating] = useState(inviteCode ? true : false)
-    const [isRedeemd, setIsRedeemd] = useState(false)
+    const { signMsg, userReferral, validateInviteCode, isUserRedeemed, redeemedCode } = usePoint()
+    const [code, setCode] = useState('')
+    const [isValidated, setIsValidated] = useState(false)
+    const [isRedeemd, setIsRedeemd] = useState(isUserRedeemed)
+    const [isChecking, setIsChecking] = useState(false)
 
+    // useEffect(() => {
+    //     console.log('isConnected, isUserRedeemed:', isConnected, isUserRedeemed)
+    //     if(isConnected && isUserRedeemed) {
+    //         // We set code as redeemedCode here.
+    //         setCode(redeemedCode)
+    //     } else {
+    //         // We fetch from param of ?inviteCode=xxx and setCode(xxx).
+    //         setCode(paramCode);
+    //     }
+    // }, [isConnected, isUserRedeemed, paramCode])
+
+    // Check if the inital code is valid and redeemed.
+    // useEffect(() => {
+    //     console.log('REdeemed Code, code:', redeemedCode, code)
+    //     setIsValidated(redeemedCode.toUpperCase() == code.toUpperCase())
+    //     setIsRedeemd(isUserRedeemed)
+    // }, [code, redeemedCode, isUserRedeemed])
+    
     useEffect(() => {
-        console.log(isValidating, isConnected, isRedeemd)
-        if(!isValidating) {
+        console.log(isValidated, isConnected, isRedeemd)
+        if(!isValidated) {
             setCurrentStep(1)
         } else if(!isConnected || !isRedeemd) {
             setCurrentStep(2)
         } else {
             setCurrentStep(3)
         }
-    }, [isValidating, isConnected, isRedeemd])
+    }, [isValidated, isConnected, isRedeemd])
+    
+    useEffect(() => {
+        if(isConnected && isUserRedeemed) {     // If the wallet connected and it is redeemed wallet.
+            setCode(redeemedCode)
+            setIsValidated(true)
+            setIsRedeemd(true)
+        } else {
+            setCode(paramCode)
+            setIsValidated(false)
+            setIsRedeemd(false)
+        }
+    }, [paramCode, isConnected, isUserRedeemed, redeemedCode])
 
     useEffect(() => {
         setProgressWidth(`calc(${16.5 * (2 * currentStep - 1)}%${currentStep == 3 ? ' + 10px': ''})`)
     }, [currentStep])
 
     const enterCode = async () => {
-        if(inviteCode.length === 5 && code.length === 5) {
+        if(isValidated || paramCode.length != 0) {
             return
         }
+        setIsChecking(true)
         try {
             const result = await validateInviteCode(code.toUpperCase())
-            console.log('Enter Code Result', result)
             if(result) {
-                setIsValidating(true)
+                setIsValidated(true)
                 return
             }
-            setIsValidating(false)
+            setIsValidated(false)
         } catch (error) {
             console.error("Error validating invite code", error);
-            setIsValidating(false)
+            setIsValidated(false)
+        } finally {
+            setIsChecking(false)
         }
     }
 
@@ -130,17 +169,21 @@ const Connect = () => {
                         <Stack justifyContent='space-between' alignItems='center' sx={{width: 1, flexDirection: {xs: 'column', xl: 'row'}, alignItems: {xs: 'center', lg: 'start', xl: 'center'}, gap: {xs: 8, lg: 4, xl: 4}}}>
                             <Stack direction='row' justifyContent='center' className='tren-connect-box' sx={{width: 'fit-content'}}>
                                 <ReactCodeInput
+                                    key={code || ''}
                                     name='pinCode'
                                     type='text'
                                     placeholder=''
                                     fields={5}
                                     onChange={setCode}
-                                    value={inviteCode}
+                                    value={code}
                                     inputMode='verbatim'
                                     inputStyle={inputStyle}
                                     pattern='0-9'
                                     autoFocus={false}
-                                    disabled={inviteCode.length === 5}
+                                    // Check if the code comes from previous landing.
+                                    // Check if it is already validated code 
+                                    // In above two cases, we set disable true
+                                    disabled={isValidated || paramCode.length > 0}
                                 />
                             </Stack>
                             <Button
@@ -155,11 +198,15 @@ const Connect = () => {
                                     width: {xs: '100%', sm: 'fit-content'},
                                 }}
                                 variant='contained'
-                                endIcon={inviteCode.length < 5 ? <></> : <Icon icon='mingcute:check-fill' fontSize={20}/>}
+                                endIcon={!isValidated && paramCode.length == 0 ? <></> : <Icon icon='mingcute:check-fill' fontSize={20}/>}
                                 // disabled={code.length < 5}
                                 onClick={enterCode}
                             >
-                            {inviteCode.length < 5 ? 'Enter Code' : 'Code Entered'}
+                            {!isValidated && paramCode.length == 0 ? 'Enter Code' : 'Code Entered'}
+                            {
+                            isChecking && 
+                            <CircularProgress color='primary' sx={{ml: 4, height: '20px !important', width: '20px !important', color: '#020101'}} />
+                            }
                             </Button>
                         </Stack>
                     </Wizard>
@@ -246,4 +293,4 @@ const Connect = () => {
     )
 }
 
-export default Connect
+export default Home
