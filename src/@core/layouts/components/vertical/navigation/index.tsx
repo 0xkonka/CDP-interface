@@ -29,6 +29,7 @@ import themeOptions from 'src/@core/theme/ThemeOptions'
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { FooterProps } from 'src/@core/layouts/types'
 import Footer from '../../shared-components/footer'
+import { useAccount } from 'wagmi'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -154,11 +155,11 @@ const Navigation = (props: Props) => {
   }
 
   const ScrollWrapper = hidden ? Box : PerfectScrollbar
+  const {isConnected} = useAccount()
 
   return (
     <ThemeProvider theme={darkTheme}>
       <Drawer {...props} navHover={navHover} setNavHover={setNavHover} navigationBorderWidth={navigationBorderWidth}>
-        {/* <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}> */}
         <Box sx={{height: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 5 }}>
           <Box>
             <VerticalNavHeader {...props} navHover={navHover} />
@@ -185,7 +186,7 @@ const Navigation = (props: Props) => {
                 {beforeNavMenuContent && beforeVerticalNavMenuContentPosition === 'static'
                   ? beforeNavMenuContent(navMenuContentProps)
                   : null}
-                {userNavMenuContent ? (
+                {isConnected && (userNavMenuContent ? (
                   userNavMenuContent(navMenuContentProps)
                 ) : (
                   <List className='nav-items'>
@@ -198,7 +199,7 @@ const Navigation = (props: Props) => {
                       {...props}
                     />
                   </List>
-                )}
+                ))}
                 {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'static'
                   ? afterNavMenuContent(navMenuContentProps)
                   : null}
