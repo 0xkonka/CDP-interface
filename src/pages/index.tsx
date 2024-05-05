@@ -1,7 +1,7 @@
 import { useGlobalValues } from '@/context/GlobalContext'
 import {Box, Typography, Stack, Button, CircularProgress} from '@mui/material'
 import ReactCodeInput from 'react-code-input'
-import { CSSProperties, useEffect, useState } from'react'
+import { CSSProperties, useEffect, useRef, useState } from'react'
 import { showToast } from '@/hooks/toasts'
 import Icon from 'src/@core/components/icon'
 import { Wizard } from '@/views/components/Wizard'
@@ -20,29 +20,11 @@ const Home = () => {
     const [currentStep, setCurrentStep] = useState(1)
     const [progressWidth, setProgressWidth] = useState('')
     const { isConnected } = useAccount()
-    const { signMsg, userReferral, validateInviteCode, isUserRedeemed, redeemedCode } = usePoint()
+    const { signMsg, validateInviteCode, isUserRedeemed, redeemedCode } = usePoint()
     const [code, setCode] = useState('')
     const [isValidated, setIsValidated] = useState(false)
     const [isRedeemd, setIsRedeemd] = useState(isUserRedeemed)
     const [isChecking, setIsChecking] = useState(false)
-
-    // useEffect(() => {
-    //     console.log('isConnected, isUserRedeemed:', isConnected, isUserRedeemed)
-    //     if(isConnected && isUserRedeemed) {
-    //         // We set code as redeemedCode here.
-    //         setCode(redeemedCode)
-    //     } else {
-    //         // We fetch from param of ?inviteCode=xxx and setCode(xxx).
-    //         setCode(paramCode);
-    //     }
-    // }, [isConnected, isUserRedeemed, paramCode])
-
-    // Check if the inital code is valid and redeemed.
-    // useEffect(() => {
-    //     console.log('REdeemed Code, code:', redeemedCode, code)
-    //     setIsValidated(redeemedCode.toUpperCase() == code.toUpperCase())
-    //     setIsRedeemd(isUserRedeemed)
-    // }, [code, redeemedCode, isUserRedeemed])
     
     useEffect(() => {
         console.log(isValidated, isConnected, isRedeemd)
@@ -60,12 +42,26 @@ const Home = () => {
             setCode(redeemedCode)
             setIsValidated(true)
             setIsRedeemd(true)
+            // const codeInputs = document.getElementsByClassName('react-code-input')[0].getElementsByTagName('input');
+
+            // if(redeemedCode != '' && codeInputs.length == 5) {                   /// Don't remove comments here
+            //     codeInputs[0].value = redeemedCode[0];
+            //     codeInputs[1].value = redeemedCode[1] || '';
+            //     codeInputs[2].value = redeemedCode[2] || '';
+            //     codeInputs[3].value = redeemedCode[3] || '';
+            //     codeInputs[4].value = redeemedCode[4] || '';
+            //           console.log('Changing Code:', code)
+            // }
+
+        // } else if(paramCode.length === 5) {
+        //     setCode(paramCode)
+        //     // setIsValidated(true)
+        //     setIsRedeemd(false)
         } else {
-            setCode(paramCode)
             setIsValidated(false)
             setIsRedeemd(false)
-        }
-    }, [paramCode, isConnected, isUserRedeemed, redeemedCode])
+        }    
+    }, [isConnected, isUserRedeemed, redeemedCode])
 
     useEffect(() => {
         setProgressWidth(`calc(${16.5 * (2 * currentStep - 1)}%${currentStep == 3 ? ' + 10px': ''})`)
@@ -93,8 +89,7 @@ const Home = () => {
 
     const signWalletToRedeem = async () => {
         try {
-            const result = await signMsg()
-            console.log('SignMsg Result:', result)
+            const result = await signMsg(code.toUpperCase())
             if(result) {
                 setIsRedeemd(true)
                 return
@@ -169,7 +164,7 @@ const Home = () => {
                         <Stack justifyContent='space-between' alignItems='center' sx={{width: 1, flexDirection: {xs: 'column', xl: 'row'}, alignItems: {xs: 'center', lg: 'start', xl: 'center'}, gap: {xs: 8, lg: 4, xl: 4}}}>
                             <Stack direction='row' justifyContent='center' className='tren-connect-box' sx={{width: 'fit-content'}}>
                                 <ReactCodeInput
-                                    key={code || ''}
+                                    key={isValidated && isConnected && isRedeemd ? code : ''}
                                     name='pinCode'
                                     type='text'
                                     placeholder=''
@@ -179,7 +174,7 @@ const Home = () => {
                                     inputMode='verbatim'
                                     inputStyle={inputStyle}
                                     pattern='0-9'
-                                    autoFocus={false}
+                                    autoFocus={code.length !== 0}
                                     // Check if the code comes from previous landing.
                                     // Check if it is already validated code 
                                     // In above two cases, we set disable true
