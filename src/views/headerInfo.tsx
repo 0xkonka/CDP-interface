@@ -30,8 +30,8 @@ const HeaderInfo = () => {
 
   return (
     <Box>
-      <Stack direction='row'>
-        <Box>
+      <Stack direction='row' position='relative'>
+        <Box zIndex={1}>
           <Typography className='header-gradient' variant='h1' sx={{
               mb: { xs: 4, md: 8 }, mt: 8,
               fontSize: { xs: 36, md: 64, xl: 72 },
@@ -47,13 +47,18 @@ const HeaderInfo = () => {
             leverage exposure for your spot assets. Pay back your loan later using trenUSD or your collateral.
           </Typography>
         </Box>
-        <ThreeCanvas/>
+        {/* <ThreeCanvas/> */}
+        <Box position='absolute' right={-250} top={-240} sx={{display: {xs: 'none', lg: 'block'}}}>
+          <iframe src='https://my.spline.design/retroglassmaterialcopy-f7fc0736b8e30a6131788f0a32a7a06c/' frameBorder='0' width='1000px' height='1000px'></iframe>
+        </Box>
       </Stack>
       {/* Total Info Group Seection */}
       <Stack
         id='total-info'
         direction='row'
         sx={{ mb: 12, justifyContent: 'space-between', flexWrap: 'wrap', gap: { xs: 8, md: 16 } }}
+        position='relative'
+        zIndex={1}
       >
         <Stack
           direction='row'
@@ -96,6 +101,7 @@ const HeaderInfo = () => {
             py: { xs: 2, md: 4 },
             gap: 4.5
           }}
+          zIndex={1}
         >
           <Typography variant='subtitle1' color='#C6C6C7'>
             TVL
