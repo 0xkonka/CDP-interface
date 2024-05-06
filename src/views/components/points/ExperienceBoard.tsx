@@ -17,6 +17,8 @@ export const ExperienceBoard = () => {
     const theme = useTheme()
 
     const {userReferral} = usePoint()
+
+    console.log('userReferral', userReferral)
     
     // Adjust the container heights of leaderboard and referrals.
     useEffect(() => {
@@ -287,7 +289,7 @@ export const ExperienceBoard = () => {
                                                         </Typography>
                                                     </Stack>
                                                     <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
-                                                        {formatToThousandsInt(item.xpPoint)} XP
+                                                        {formatToThousandsInt(item.xpPoint || 0)} XP
                                                     </Typography>
                                                 </Stack> 
                                             )
