@@ -42,8 +42,7 @@ const Home = () => {
             setCode(redeemedCode)
             setIsValidated(true)
             setIsRedeemd(true)
-            const codeInputs = document.getElementsByClassName('react-code-input')[0].getElementsByTagName('input');
-            console.log('Hey I am here', codeInputs)
+            // const codeInputs = document.getElementsByClassName('react-code-input')[0].getElementsByTagName('input');
 
             // if(redeemedCode != '' && codeInputs.length == 5) {                   /// Don't remove comments here
             //     codeInputs[0].value = redeemedCode[0];
@@ -165,6 +164,7 @@ const Home = () => {
                         <Stack justifyContent='space-between' alignItems='center' sx={{width: 1, flexDirection: {xs: 'column', xl: 'row'}, alignItems: {xs: 'center', lg: 'start', xl: 'center'}, gap: {xs: 8, lg: 4, xl: 4}}}>
                             <Stack direction='row' justifyContent='center' className='tren-connect-box' sx={{width: 'fit-content'}}>
                                 <ReactCodeInput
+                                    key={isValidated && isConnected && isRedeemd ? code : ''}
                                     name='pinCode'
                                     type='text'
                                     placeholder=''
