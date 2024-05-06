@@ -48,11 +48,10 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
       try {
         const { data: referralData } = await axios.get(`${BE_ENDPOINT}/api/referral/user/${account}`)
         
-        setIsUserRedeemed(referralData.redeemed)
-        setReferral(referralData.data)
-        setRedeemedCode(referralData.referralCode)
-        
         if (referralData.redeemed) {
+          setIsUserRedeemed(referralData.redeemed)
+          setReferral(referralData.data)
+          setRedeemedCode(referralData.referralCode)
           const { data: pointData } = await axios.get(`${BE_ENDPOINT}/api/point/user/${account}`)
           if (pointData.data.point) {
             const { xpPoint = 0, multiplier = 1, endTimestamp } = pointData.data.point
