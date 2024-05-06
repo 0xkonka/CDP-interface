@@ -94,7 +94,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
 
   const signMsg = async (code: string) => {
     if (!account || code === '') return
-    if(userReferral.length === REFERRAL_DISTRIBUTION ){
+    if(userReferral?.length === REFERRAL_DISTRIBUTION ){
       showToast('error', 'Redeeme Error', `You already redeemed and got ${REFERRAL_DISTRIBUTION} inviteCodes`, 3000)
       return
     }
