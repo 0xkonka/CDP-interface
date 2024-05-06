@@ -329,7 +329,7 @@ export const BorrowPopup = (props: Props) => {
               }}
               variant='outlined'
               onClick={handleSubmit}
-              disabled={isPending || isConfirming || (+inputAmount > availableBalance)}
+              disabled={isPending || isConfirming}
             >
               {
                 (isPending || isConfirming) && 
