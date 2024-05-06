@@ -208,7 +208,7 @@ const Borrow = () => {
             router.push('/modules')
           }}
         >
-          Go back to Pools
+          Go back to modules
         </Typography>
       </Stack>
       <ModuleOverView collateral={collateral || ''} />

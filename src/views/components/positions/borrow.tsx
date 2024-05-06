@@ -68,6 +68,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
 
   // Setup user collateral value for state
   useEffect(() => {
+    console.log("Are you calling me?")
     if (!account || !address) return
     const getUserInfo = async () => {
       const _userCollateralBal = await getBalance(wagmiConfig, {

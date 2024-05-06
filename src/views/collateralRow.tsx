@@ -34,6 +34,7 @@ interface TableHeaderProps {
     onToogle: () => void;
     isOpen: boolean,
     disableToogle?: boolean
+    showOnlyActive?: boolean
 }
 
 const getChipTheme = (label: string) => {
@@ -63,7 +64,7 @@ const getChipTheme = (label: string) => {
 
 const CollateralRow = (props: TableHeaderProps) => {
     const router = useRouter()
-    const {isOpen, row, onToogle, disableToogle} = props
+    const {isOpen, row, onToogle, disableToogle, showOnlyActive} = props
     const theme: Theme = useTheme()
     const {isMediumScreen, isSmallScreen} = useGlobalValues()
 
@@ -82,7 +83,7 @@ const CollateralRow = (props: TableHeaderProps) => {
     }
 
     return (
-        <Stack display={disableToogle && positionStatus !== 'active' ? 'none' : 'flex'} sx={{
+        <Stack display={(disableToogle || showOnlyActive) && positionStatus !== 'active' ? 'none' : 'flex'} sx={{
             borderRadius: '8px', border: `solid 1px ${isOpen ? theme.palette.primary.main : 'transparent'}`, 
             cursor: 'pointer',
             background: isOpen ? '#10131487' : 'transparent',

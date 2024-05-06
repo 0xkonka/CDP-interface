@@ -143,7 +143,7 @@ const Home = () => {
                     lineHeight: 1.2,
                     maxWidth: 800
                 }}>
-                    Secure 2X points multiplier on Mainnet!
+                    Lock in Your 2X Mainnet Points Multiplier
                 </Typography>
                 
                 <Typography sx={{
@@ -154,9 +154,9 @@ const Home = () => {
                     margin: 'auto',
                     textAlign: 'center',
                     color: {xs: '#F3F3F3', sm: '#FFF'},
-                    maxWidth: 600
+                    maxWidth: 700
                 }}>
-                    We can have some descriptive text here We can have some descriptive text here
+                    Join the testnet by redeeming an invite code. Every invite comes with 2 invite codes to give to your friends.
                 </Typography>
                 <Stack position='relative' direction={isMediumScreen ? 'column' : 'row'} sx={{gap: {xs: 27, lg: 4}, pt: {xs: 0, lg: 16}, mt: {xs: 48, md: 72, lg: 32}, borderTop: '1px solid #CCCCCF4B'}}>
                     {/* Progress view here */}
@@ -164,7 +164,7 @@ const Home = () => {
                     <Box position='absolute' top={-1} left={-100} height={3} width={100} borderTop='solid 1px #67DAB1' sx={{display: {xs: 'none', lg: 'block'}}}></Box>
                     <Box position='absolute' top={-1} right={-100} height={3} width={100} borderTop='solid 1px #CCCCCF4B' sx={{display: {xs: 'none', lg: 'block'}}}></Box>
 
-                    <Wizard step={1} isCompleted={currentStep >= 1} header='Enter Code' description='Here is the description of the task. Here is the description of the task. the description of the task.'>
+                    <Wizard step={1} isCompleted={currentStep >= 1} header='Enter Code' description='Enter an invite code to verify its eligibility. '>
                         <Stack justifyContent='space-between' alignItems='center' sx={{width: 1, flexDirection: {xs: 'column', xl: 'row'}, alignItems: {xs: 'center', lg: 'start', xl: 'center'}, gap: {xs: 8, lg: 4, xl: 4}}}>
                             <Stack direction='row' justifyContent='center' className='tren-connect-box' sx={{width: 'fit-content'}}>
                                 <ReactCodeInput
@@ -209,7 +209,8 @@ const Home = () => {
                             </Button>
                         </Stack>
                     </Wizard>
-                    <Wizard step={2} isCompleted={currentStep >= 2} header='Sign wallet to Redeem 2X Points multiplier' description='Here is the description of the task.'>
+                    <Wizard step={2} isCompleted={currentStep >= 2} header={!isConnected ? 'Connect Wallet' : 'Sign Message to Redeem Code'} 
+                            description={!isConnected ? 'Using an EVM wallet of your choice, connect to Tren Finance.' : 'Let’s make it official. Sign the message to access testnet & lock in your 2X multiplier.'} >
                         <Box mt={4} sx={{width: {xs: 1, sm: 'auto'}}}>
                         {
                             !isConnected &&
@@ -230,13 +231,13 @@ const Home = () => {
                                 }}
                                 variant='outlined'
                             >
-                                Sign Wallet
+                                Sign Message
                                 <Icon icon='solar:key-outline' fontSize={isMobileScreen ? 16: 20} style={{marginLeft: 10}}/>
                             </Button>
                         }
                         </Box>
                     </Wizard>
-                    <Wizard step={3} isCompleted={currentStep >= 3} header='Enter App' description='Here is the description of the task.Here is the description of the task.'>
+                    <Wizard step={3} isCompleted={currentStep >= 3} header='Enter App' description='Head over to the Tren application to start using the testnet.'>
                         <Box mt={4} sx={{width: {xs: 1, sm: 'auto'}}}>
                             <Button
                                 href='/points'

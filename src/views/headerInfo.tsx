@@ -31,7 +31,7 @@ const HeaderInfo = () => {
   return (
     <Box>
       <Stack direction='row' position='relative'>
-        <Box zIndex={1}>
+        <Box zIndex={1} width='100%'>
           <Typography className='header-gradient' variant='h1' sx={{
               mb: { xs: 4, md: 8 }, mt: 8,
               fontSize: { xs: 36, md: 64, xl: 72 },
@@ -43,8 +43,9 @@ const HeaderInfo = () => {
             color='#F3F3F3'
             sx={{ mb: { xs: 8, md: 16 }, fontWeight: 300, width: 730, maxWidth: '100%', lineHeight: { xs: 1.25, sm: 1.7 } }}
           >
-            Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop your assets in one click to
-            leverage exposure for your spot assets. Pay back your loan later using trenUSD or your collateral.
+            Deposit your collateral tokens into a module in exchange for a <strong>trenUSD loan.<br></br> 
+            Loop</strong> your assets in one click to leverage exposure for your spot assets. <br></br>
+            Pay back your loan later using trenUSD or your collateral.
           </Typography>
         </Box>
         {/* <ThreeCanvas/> */}
