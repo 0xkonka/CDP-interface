@@ -38,7 +38,7 @@ const Home = () => {
     }, [isValidated, isConnected, isRedeemd])
     
     useEffect(() => {
-        if(isUserRedeemed) {     // If the wallet connected and it is redeemed wallet.
+        if(isConnected && isUserRedeemed) {     // If the wallet connected and it is redeemed wallet.
             setCode(redeemedCode)
             setIsValidated(true)
             setIsRedeemd(true)
