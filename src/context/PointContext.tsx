@@ -12,8 +12,6 @@ import { showToast } from '@/hooks/toasts'
 
 const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://be-express-lime.vercel.app' // 'http://localhost:8000
 
-console.log('BE_ENDPOINT', BE_ENDPOINT)
-
 const REFERRAL_DISTRIBUTION = process.env.REFERRAL_DISTRIBUTION || 2
 
 interface PointContextValue {
@@ -42,31 +40,30 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
   const [inviteCode, setInviteCode] = useState<string>('')  
   const [userReferral, setReferral] = useState<Referral[]>([])
   const [userPoint, setPoint] = useState<Point>()
-  
+
   useEffect(() => {
     const getUserReferral = async () => {
       if (!account) return
 
       try {
         const { data: referralData } = await axios.get(`${BE_ENDPOINT}/api/referral/user/${account}`)
-        console.log('Fetched Referral:', referralData)
-
+        
         setIsUserRedeemed(referralData.redeemed)
+        setReferral(referralData.data)
         setRedeemedCode(referralData.referralCode)
+        
         if (referralData.redeemed) {
           const { data: pointData } = await axios.get(`${BE_ENDPOINT}/api/point/user/${account}`)
-          // console.log('pointData', pointData.data.point)
-          const { xpPoint, multiplier, endTimestamp } = pointData.data.point
-          setPoint({
-            account,
-            xpPoint,
-            multiplier,
-            endTimestamp,
-            rank: pointData.data.rank
-          })
-          console.log('pointData.data', pointData.data.rank)
-
-          setReferral(referralData.data)
+          if (pointData.data.point) {
+            const { xpPoint = 0, multiplier = 1, endTimestamp } = pointData.data.point
+            setPoint({
+              account,
+              xpPoint,
+              multiplier,
+              endTimestamp,
+              rank: xpPoint > 0 && pointData.data.rank
+            })
+          }
         }
       } catch (err) {
         console.error('Failed to fetch referral:', err)
@@ -84,7 +81,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
       console.log('Created Post:', response)
       if (response.data.result === true) {
         setInviteCode(inviteCode)
-        showToast('success', 'Correct InviteCode', "You have successfully entered correct inviteCode", 3000)
+        showToast('success', 'Correct InviteCode', 'You have successfully entered correct inviteCode', 3000)
         return true
       }
       return false
@@ -111,7 +108,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
         message: `I’m joining Tren Finance with my wallet ${account} with invite code ${code}, and I accept the Terms of Service`
       })
 
-      if(signResult) {
+      if (signResult) {
         const response = await axios.post(BE_ENDPOINT + '/api/referral/user/redeem', {
           account,
           inviteCode: code,
@@ -119,7 +116,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
         })
         try {
           if (response.data.result === true) {
-            showToast('success', 'Success', "Invitation code was successfully redeemed.", 3000)
+            showToast('success', 'Success', 'Invitation code was successfully redeemed.', 3000)
             return true
           }
           return false
