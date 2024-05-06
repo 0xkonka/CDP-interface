@@ -243,7 +243,7 @@ export const BorrowPopup = (props: Props) => {
     } else if (type === 'borrow') {
       handleBorrow(parseEther(inputAmount))
     } else if (type == 'repay') {
-      if(+inputAmount != +formatEther(debtAmount)) {
+      if(+inputAmount < +formatEther(debtAmount)) {
         handleRepay(parseEther(inputAmount))
       } else {
         handleClose()
@@ -410,6 +410,7 @@ export const BorrowPopup = (props: Props) => {
               type={type}
               gasFee={0.14}
               amount={inputAmount}
+              closeModule={+inputAmount >= +formatEther(debtAmount)}
             />
             <Button
               sx={{
@@ -420,15 +421,14 @@ export const BorrowPopup = (props: Props) => {
                 fontSize: 18
               }}
               variant='outlined'
-              color={+inputAmount == +formatEther(debtAmount) ? 'error' : 'primary'}
               onClick={handleSubmit}
-              disabled={isPending || isConfirming || (type != 'repay' ? (+inputAmount > availableBalance) : (+inputAmount > +formatEther(debtAmount))) || +inputAmount == 0}
+              disabled={isPending || isConfirming || (+inputAmount > availableBalance) || +inputAmount == 0}
             >
               {
                 (isPending || isConfirming) && 
                 <CircularProgress color='primary' sx={{mr: 4, height: '20px !important', width: '20px !important'}} />
               }
-              {+inputAmount == +formatEther(debtAmount) ? 'Close' : 'Repay'}
+              {+inputAmount >= +formatEther(debtAmount) ? 'Close' : 'Repay'}
             </Button>
           </Box>
         )}

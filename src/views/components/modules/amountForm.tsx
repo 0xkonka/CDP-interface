@@ -140,7 +140,7 @@ export const AmountForm = (props: Props) => {
                     </Stack>
                     <Stack direction='row' gap={2} alignItems='center'>
                         <Typography color='#707175' fontWeight={400}>{type == 'repay' ? 'Wallet balance:' : 'Available:'} {formatToThousands(available).substring(1)}</Typography>
-                        <Typography variant='body2' color='primary' fontWeight={600} sx={{cursor: 'pointer'}} onClick={() => {setAmount(type != 'repay' ? String(available) : formatEther(debtAmount!))}}>MAX</Typography>
+                        <Typography variant='body2' color='primary' fontWeight={600} sx={{cursor: 'pointer'}} onClick={() => {setAmount(type != 'repay' ? String(available) : Math.min(+formatEther(debtAmount!), available).toString())}}>MAX</Typography>
                     </Stack>
                 </Stack>
             </Box>
