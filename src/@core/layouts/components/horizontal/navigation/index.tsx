@@ -9,6 +9,7 @@ import themeConfig from 'src/configs/themeConfig'
 
 // ** Menu Components
 import HorizontalNavItems from './HorizontalNavItems'
+import { useAccount } from 'wagmi'
 
 // ** Types
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const Navigation = (props: Props) => {
+  const {isConnected} = useAccount()
   return (
     <Box
       className='menu-content'
@@ -30,7 +32,10 @@ const Navigation = (props: Props) => {
         }
       }}
     >
-      <HorizontalNavItems {...props} />
+      {
+        isConnected &&
+        <HorizontalNavItems {...props} />
+      }
     </Box>
   )
 }

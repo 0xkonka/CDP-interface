@@ -33,6 +33,61 @@
     border: solid 1px #67DAB1 !important;
 }
 
+/* Wallet Button with Icon (We use this one in connect landing page)*/
+
+#wallet-with-icon .iekbcc0.ju367v78 {
+    background: transparent;
+    box-shadow: none;
+    border: solid 1px #FFF;
+    padding: 12px 54px 12px 22px;
+    font-size: 18px;
+    line-height: 21px;
+    font-weight: 500;
+}
+
+#wallet-with-icon .ju367v2g {
+    height: auto
+}
+
+#wallet-with-icon .ju367va3 {
+    background: transparent !important;
+}
+
+#wallet-with-icon .ju367v8a {
+    padding: 11px 22px;
+    font-size: 18px;
+    font-weight: 500;
+    border: solid 1px #67DAB1;
+}
+
+#wallet-with-icon .ju367va {
+    width: 100%;
+}
+
+#wallet-with-icon .ju367v1p {
+    justify-content: center;
+}
+
+@media (max-width: 1200px) {
+    #wallet-with-icon .iekbcc0.ju367v78 {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        font-size: 14px !important;
+        width: 100%;
+        text-align: center;
+    }
+
+    #wallet-with-icon .ju367v8a {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        font-size: 14px !important;
+    }
+
+    #wallet-with-icon .ju367v75 {
+        width: 100%;
+    }
+}
+
 /* Dashboard connect wallet style */
 
 #dashboard-wallet .ju367v9i {

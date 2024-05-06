@@ -16,11 +16,14 @@ const REFERRAL_DISTRIBUTION = process.env.REFERRAL_DISTRIBUTION || 2
 
 interface PointContextValue {
   isUserRedeemed: boolean
+  redeemedCode: string
   inviteCode: string
+  setInviteCode: (inviteCode: string) => any
   userReferral: Referral[]
   userPoint?: Point
   validateInviteCode: (inviteCode: string) => any
-  signMsg: () => any
+  signMsg: (code: string) => any
+  getRedeemCode: (address: string) => any
 }
 
 const PointContext = createContext<PointContextValue | undefined>(undefined)
@@ -33,7 +36,8 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
   const { address: account } = useAccount()
 
   const [isUserRedeemed, setIsUserRedeemed] = useState(false)
-  const [inviteCode, setInviteCode] = useState<string>('')
+  const [redeemedCode, setRedeemedCode] = useState('')
+  const [inviteCode, setInviteCode] = useState<string>('')  
   const [userReferral, setReferral] = useState<Referral[]>([])
   const [userPoint, setPoint] = useState<Point>()
 
@@ -46,7 +50,8 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
         
         setIsUserRedeemed(referralData.redeemed)
         setReferral(referralData.data)
-
+        setRedeemedCode(referralData.referralCode)
+        
         if (referralData.redeemed) {
           const { data: pointData } = await axios.get(`${BE_ENDPOINT}/api/point/user/${account}`)
           if (pointData.data.point) {
@@ -87,29 +92,27 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
     }
   }
 
-  const signMsg = async () => {
-    if (!account || inviteCode === '') return
-
-    if (userReferral.length === REFERRAL_DISTRIBUTION) {
+  const signMsg = async (code: string) => {
+    if (!account || code === '') return
+    if(userReferral.length === REFERRAL_DISTRIBUTION ){
       showToast('error', 'Redeeme Error', `You already redeemed and got ${REFERRAL_DISTRIBUTION} inviteCodes`, 3000)
       return
     }
 
     try {
       const hash = crypto.createHash('sha256')
-      hash.update(inviteCode + account)
+      hash.update(code + account)
       const hashCode = hash.digest('hex')
 
       const signResult = await signMessage(wagmiConfig, {
-        message: `I’m joining Tren Finance with my wallet ${account} with invite code ${inviteCode}, and I accept the Terms of Service`
+        message: `I’m joining Tren Finance with my wallet ${account} with invite code ${code}, and I accept the Terms of Service`
       })
 
       if (signResult) {
         const response = await axios.post(BE_ENDPOINT + '/api/referral/user/redeem', {
           account,
-          inviteCode,
-          count: REFERRAL_DISTRIBUTION
-          // signMsg
+          inviteCode: code,
+          count: REFERRAL_DISTRIBUTION,
         })
         try {
           if (response.data.result === true) {
@@ -128,13 +131,32 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
     }
   }
 
+  const getRedeemCode = async (address: string) => {
+    try {
+      const response = await axios.post(BE_ENDPOINT + '/api/referral/user/' + address)
+      console.log('Get Redeemed Code:', response)
+      if (response.data.result === true) {
+        showToast('success', 'Correct InviteCode', "You have successfully entered correct inviteCode", 3000)
+        return true
+      }
+      return false
+    } catch (error: any) {
+      console.log('error', error)
+      showToast('error', 'Error', error.response.data.messages, 3000)
+      return false
+    }
+  }
+
   const value = {
     inviteCode,
+    setInviteCode,
     isUserRedeemed,
+    redeemedCode,
     userReferral,
     userPoint,
     validateInviteCode,
-    signMsg
+    signMsg,
+    getRedeemCode
   }
 
   return <PointContext.Provider value={value}>{children}</PointContext.Provider>

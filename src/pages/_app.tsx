@@ -77,8 +77,6 @@ import '../../styles/rainbowwallet.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import { ProtocolProvider } from '@/context/ProtocolProvider/ProtocolProvider'
 import { GlobalProvider } from '@/context/GlobalContext'
-import { WalletConnector } from '@/views/components/WalletConnector'
-import { createPublicClient } from 'viem'
 import { StabilityPoolProvider } from '@/context/StabilityPoolProvider/StabilityPoolProvider'
 import { PointProvider } from '@/context/PointContext'
 

@@ -81,6 +81,8 @@ const HorizontalLayout = (props: LayoutProps) => {
   // ** Vars
   const { skin, appBar, navHidden, appBarBlur, contentWidth } = settings
   const appBarProps = horizontalLayoutProps?.appBar?.componentProps
+  
+
 
    // ** init trigger for scroll down 100px
   const trigger = useScrollTrigger({
@@ -96,9 +98,8 @@ const HorizontalLayout = (props: LayoutProps) => {
   const userAppBarProps = Object.assign({}, appBarProps)
   delete userAppBarProps.sx
 
-  const router = useRouter();
-   // Check if the pathname matches '/testnet'
-   const isTestnet = router.pathname === '/testnet';
+  const router = useRouter()
+  const isHomePath = router.pathname === '/';
 
   return (
     <HorizontalLayoutWrapper className='layout-wrapper'>
@@ -174,7 +175,7 @@ const HorizontalLayout = (props: LayoutProps) => {
           {children}
         </ContentWrapper>
         {/* Footer */}
-        {!isTestnet && (
+        {!isHomePath && (
           <Footer {...props} footerStyles={footerProps?.sx} footerContent={footerProps?.content} />
         )}
         {/* Scroll to top button */}
