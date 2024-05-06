@@ -88,6 +88,10 @@ const Home = () => {
     }
 
     const signWalletToRedeem = async () => {
+        if(isRedeemd) {
+            showToast("success", "Enter App", "You've already redeemed your invite code.", 3000)
+            return;
+        }
         try {
             const result = await signMsg(code.toUpperCase())
             if(result) {
