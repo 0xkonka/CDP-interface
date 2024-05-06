@@ -20,10 +20,11 @@ interface PointContextValue {
   isUserRedeemed: boolean
   redeemedCode: string
   inviteCode: string
+  setInviteCode: (inviteCode: string) => any
   userReferral: Referral[]
   userPoint?: Point
   validateInviteCode: (inviteCode: string) => any
-  signMsg: () => any
+  signMsg: (code: string) => any
   getRedeemCode: (address: string) => any
 }
 
@@ -94,9 +95,8 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
     }
   }
 
-  const signMsg = async () => {
-    if (!account || inviteCode === '') return
-
+  const signMsg = async (code: string) => {
+    if (!account || code === '') return
     if(userReferral.length === REFERRAL_DISTRIBUTION ){
       showToast('error', 'Redeeme Error', `You already redeemed and got ${REFERRAL_DISTRIBUTION} inviteCodes`, 3000)
       return
@@ -104,19 +104,18 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
 
     try {
       const hash = crypto.createHash('sha256')
-      hash.update(inviteCode + account)
+      hash.update(code + account)
       const hashCode = hash.digest('hex')
 
       const signResult = await signMessage(wagmiConfig, {
-        message: `I’m joining Tren Finance with my wallet ${account} with invite code ${inviteCode}, and I accept the Terms of Service`
+        message: `I’m joining Tren Finance with my wallet ${account} with invite code ${code}, and I accept the Terms of Service`
       })
 
       if(signResult) {
         const response = await axios.post(BE_ENDPOINT + '/api/referral/user/redeem', {
           account,
-          inviteCode,
+          inviteCode: code,
           count: REFERRAL_DISTRIBUTION,
-          // signMsg
         })
         try {
           if (response.data.result === true) {
@@ -153,6 +152,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
 
   const value = {
     inviteCode,
+    setInviteCode,
     isUserRedeemed,
     redeemedCode,
     userReferral,
