@@ -72,7 +72,7 @@ const HorizontalNavLink = (props: Props) => {
 
   return (
     <CanViewNavLink navLink={item}>
-      <Wrapper {...(!hasParent ? { component: 'div', sx: { py: settings.skin === 'bordered' ? 2.625 : 2.75 } } : {})}>
+      <Wrapper {...(!hasParent ? { component: 'div', sx: { py: settings.skin === 'bordered' ? 2 : 2.75 } } : {})}>
         <ListItem
           component={Link}
           passHref 
@@ -89,6 +89,7 @@ const HorizontalNavLink = (props: Props) => {
             }
           }}
           sx={{
+            px: 6,
             ...(item.disabled ? { pointerEvents: 'none' } : { cursor: 'pointer' }),
             ...(!hasParent
               ? {
@@ -129,7 +130,7 @@ const HorizontalNavLink = (props: Props) => {
               <ListItemIcon sx={{ mr: 2, color: 'text.secondary' }}>
                 <UserIcon icon={icon} fontSize={icon === navSubItemIcon ? '0.625rem' : '1.375rem'} />
               </ListItemIcon>
-              <Typography {...(menuTextTruncate && { noWrap: true })} sx={{ fontSize: 16, fontWeight: 500, color: '#C6C6C7' }}>
+              <Typography {...(menuTextTruncate && { noWrap: true })} sx={{ fontSize: 16, fontWeight: 500, color: '#C6C6C7', lineHeight: '19px' }}>
                 <Translations text={item.title} />
               </Typography>
             </Box>

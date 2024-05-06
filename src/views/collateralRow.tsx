@@ -82,7 +82,10 @@ const CollateralRow = (props: TableHeaderProps) => {
     }
 
     return (
-        <Stack display={disableToogle && positionStatus !== 'active' ? 'none' : 'flex'} sx={{borderRadius:  2, border: `solid 1px ${isOpen ? theme.palette.primary.main : 'transparent'}`, cursor: 'pointer',
+        <Stack display={disableToogle && positionStatus !== 'active' ? 'none' : 'flex'} sx={{
+            borderRadius: '8px', border: `solid 1px ${isOpen ? theme.palette.primary.main : 'transparent'}`, 
+            cursor: 'pointer',
+            background: isOpen ? '#10131487' : 'transparent',
             '& .active-open': {
                 color: theme.palette.primary.main,
                 '& .arrow-diagonal': {
@@ -113,7 +116,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                 }
             }}}>
             {isMediumScreen ? (
-            <Stack sx={{p: {xs: 3, sm: 6}}} onClick={
+            <Stack sx={{px: {xs: 3, sm: 6}, py: {xs: 3, sm: 5}}} onClick={
                 (event) => {
                     if(event.target instanceof HTMLElement && event.target.className.includes('open-button') ||
                         event.target instanceof SVGElement && event.target.className.baseVal.includes('arrow-right')) {
@@ -181,7 +184,7 @@ const CollateralRow = (props: TableHeaderProps) => {
             </Stack>
             ) : (
             <Stack direction='row' sx={{alignItems: 'center', 
-                p: {xs: 3, sm: 6},
+                px: {xs: 3, sm: 6}, py: {xs: 3, sm: 5},
                 '& .arrow-right': {
                     display: 'none'
                 }
@@ -224,7 +227,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                     <Stack direction='row' sx={{cursor: 'pointer', alignItems: 'center'}} className={clsx('open-button active-hover', {
                         'active-open': isOpen
                     })}>
-                        <Button variant={isOpen ? 'contained' : 'outlined'} color='primary' sx={{color: isOpen ? '#0D1313' : '#FFFFFF', fontWeight: 600}} className={clsx('open-button', {
+                        <Button variant={isOpen ? 'contained' : 'outlined'} color='primary' sx={{py: 2, color: isOpen ? '#0D1313' : '#FFFFFF', fontWeight: 600}} className={clsx('open-button', {
                             'active-open': isOpen
                         })}>
                             Open
@@ -233,14 +236,14 @@ const CollateralRow = (props: TableHeaderProps) => {
                     <Box>
                         <Typography color='primary'>{positionStatus === 'active' ? 'Active' : ''}</Typography>
                     </Box>
-                    <Box>
-                        <Box sx={{display: disableToogle ? 'none' : 'block'}}>
+                    <Stack>
+                        <Stack sx={{display: disableToogle ? 'none' : 'flex'}} justifyContent='center'>
                             {
                                 isOpen ? <Icon icon='solar:alt-arrow-up-outline' color={theme.palette.primary.main} style={{cursor: 'pointer'}}/> :
                                         <Icon icon='solar:alt-arrow-down-outline' style={{cursor: 'pointer'}}/>
                             }       
-                        </Box>
-                    </Box>
+                        </Stack>
+                    </Stack>
                 </Stack>
             </Stack>
             )}

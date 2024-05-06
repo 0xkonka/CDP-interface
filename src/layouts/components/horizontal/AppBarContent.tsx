@@ -53,7 +53,7 @@ const AppBarContent = (props: Props) => {
   const { hidden, settings, saveSettings } = props
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+    <Box sx={{ position: 'absolute', right: 0, display: 'flex', alignItems: 'center' }}>
       <ConnectWallet />
     </Box>
   )

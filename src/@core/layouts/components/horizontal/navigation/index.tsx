@@ -24,6 +24,10 @@ const Navigation = (props: Props) => {
       className='menu-content'
       sx={{
         display: 'flex',
+        px: 2,
+        background: '#1A1D1E91',
+        border: 'solid 1px #2D3131',
+        borderRadius: '6px',
         flexWrap: 'wrap',
         alignItems: 'center',
         '& > *': {
@@ -32,10 +36,10 @@ const Navigation = (props: Props) => {
         }
       }}
     >
-      {
-        isConnected &&
+      {/* {
+        isConnected && */}
         <HorizontalNavItems {...props} />
-      }
+      {/* } */}
     </Box>
   )
 }

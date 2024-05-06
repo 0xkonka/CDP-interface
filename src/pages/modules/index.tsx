@@ -40,7 +40,7 @@ const Modules = () => {
     'Volatile',
     'Stable'
   ]
-  const { isSmallScreen, isMediumScreen } = useGlobalValues()
+  const { isSmallScreen, isMediumScreen, componentContainerStyle } = useGlobalValues()
 
   const { collateralDetails } = useProtocol()
 
@@ -129,93 +129,102 @@ const Modules = () => {
   return (
     <Box>
       <HeaderInfo />
-      {/* Search and Multi Select Filter Section */}
-      <Stack
-        direction='row'
-        sx={{ flexWrap: 'wrap', gap: 2.5, justifyContent: 'space-between', alignItems: 'center', pb: 6 }}
-      >
+      <Stack sx={{...componentContainerStyle, zIndex: 1, position: 'relative'}}>
+        {/* Search and Multi Select Filter Section */}
         <Stack
           direction='row'
-          sx={{ flexWrap: 'wrap', alignItems: 'center', gap: 4, order: { xs: 1, md: 0 }, width: { xs: 1, md: 'auto' } }}
+          sx={{ flexWrap: 'wrap', gap: 2.5, justifyContent: 'space-between', alignItems: 'center', pb: 7 }}
+          position='relative'
+          zIndex={1}
         >
-          <CustomTextField
-            label=''
-            id='input-with-icon-textfield'
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <Icon icon='tabler:search' />
-                </InputAdornment>
-              )
-            }}
-            value={filterText}
-            onChange={handleFilterChange}
-            placeholder='Search....'
-            sx={{
-              height: isSmallScreen ? 44 : 52,
-              flex: { xs: 1, md: 'auto' },
-              '& .MuiInputBase-root': {
-                width: 1,
-                height: 1,
-                '& input': {
-                  fontSize: isSmallScreen ? 16 : 18
+          <Stack
+            direction='row'
+            sx={{ flexWrap: 'wrap', alignItems: 'center', gap: 4, order: { xs: 1, md: 0 }, width: { xs: 1, md: 'auto' } }}
+          >
+            <CustomTextField
+              label=''
+              id='input-with-icon-textfield'
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Icon icon='tabler:search' />
+                  </InputAdornment>
+                )
+              }}
+              value={filterText}
+              onChange={handleFilterChange}
+              placeholder='Search....'
+              sx={{
+                background: '#1A1D1E',
+                height: isSmallScreen ? 36 : 43,
+                flex: { xs: 1, md: 'auto' },
+                '& .MuiInputBase-root': {
+                  width: 1,
+                  height: 1,
+                  border: 'solid 1px #2D3131',
+                  '& input': {
+                    fontSize: isSmallScreen ? 16 : 18
+                  }
                 }
-              }
-            }}
-          />
-          <SortByDropdown
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-            fields={[
-              { key: 'symbol', label: 'Name' },
-              { key: 'totalAssetDebt', label: 'TVL' },
-              { key: 'borrowAPY', label: 'Borrow APY' },
-              { key: 'totalBorrowAvailable', label: 'Available trenUSD' },
-              { key: 'mintCap', label: 'Total trenUSD' },
-              { key: 'LTV', label: 'LTV' }
-            ]}
-          />
+              }}
+            />
+            <SortByDropdown
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              fields={[
+                { key: 'symbol', label: 'Name' },
+                { key: 'totalAssetDebt', label: 'TVL' },
+                { key: 'borrowAPY', label: 'Borrow APY' },
+                { key: 'totalBorrowAvailable', label: 'Available trenUSD' },
+                { key: 'mintCap', label: 'Total trenUSD' },
+                { key: 'LTV', label: 'LTV' }
+              ]}
+            />
+          </Stack>
+          <Stack
+            direction='row'
+            sx={{ width: { xs: 1, md: 'auto' }, justifyContent: 'space-between', alignItems: 'center' }}
+          >
+            <Typography variant='h6' sx={{ fontWeight: 400, mt: 1 }}>
+              Open Positions Only
+            </Typography>
+            <Switch checked={filterOnlyActive} onChange={handleSwitchChange} />
+          </Stack>
         </Stack>
-        <Stack
-          direction='row'
-          sx={{ width: { xs: 1, md: 'auto' }, justifyContent: 'space-between', alignItems: 'center' }}
-        >
-          <Typography variant='h6' sx={{ fontWeight: 400, mt: 1 }}>
-            Open Positions Only
-          </Typography>
-          <Switch checked={filterOnlyActive} onChange={handleSwitchChange} />
-        </Stack>
+        {/* Token Types Buttons Section */}
+        <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: {xs: 2, md: 0} }}>
+          {assetTypes.map((value, index) => {
+            return value == assetFilter ? (
+              <ToggleOnButton
+                key={index}
+                onClick={() => {
+                  setAssetFilter(value)
+                }}
+              >
+                <span style={{ marginLeft: -6 }}>{value}</span>
+                <span style={{ position: 'absolute', right: 19 }}>
+                  {filteredRows.length}
+                </span>
+              </ToggleOnButton>
+            ) : (
+              <ToggleOffButton
+                key={index}
+                onClick={() => {
+                  setAssetFilter(value)
+                }}
+              >
+                {value}
+              </ToggleOffButton>
+            )
+          })}
+        </Box>
       </Stack>
-      {/* Token Types Buttons Section */}
-      <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: {xs: 4, md: 10} }}>
-        {assetTypes.map((value, index) => {
-          return value == assetFilter ? (
-            <ToggleOnButton
-              key={index}
-              onClick={() => {
-                setAssetFilter(value)
-              }}
-            >
-              <span style={{ marginLeft: -6 }}>{value}</span>
-              <span style={{ position: 'absolute', right: 19 }}>
-                {filteredRows.length}
-              </span>
-            </ToggleOnButton>
-          ) : (
-            <ToggleOffButton
-              key={index}
-              onClick={() => {
-                setAssetFilter(value)
-              }}
-            >
-              {value}
-            </ToggleOffButton>
-          )
-        })}
-      </Box>
 
       {/* Collateral Table Header */}
       <Stack direction='row' sx={{
+          position: 'relative',
+          zIndex: 1,
+          mt: {xs: 12, md: 18},
           px: 6, pt: 2, 
           display: {
             xs: 'none',
@@ -236,9 +245,10 @@ const Modules = () => {
           Deposit APY
         </Stack>
       </Stack>
+
       {/* Collateral Group Stack*/}
       {collateralDetails && (
-        <Stack sx={{ mt: 4 }} gap={isMediumScreen ? 5 : 0}>
+        <Stack sx={{ mt: 4 }} gap={isMediumScreen ? 5 : 0} position='relative' zIndex={1}>
           {filteredRows.length > 0 ? (
             filteredRows.map((row, index) => (
               <CollateralRow

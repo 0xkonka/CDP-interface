@@ -93,18 +93,19 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
   return (
     <Box sx={{flex: {xs: 1, md: 'none'}}} ref={dropDownComponentRef}>
       <Box onClick={handleOpenMenu} ref={boxRef}
-          sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 4, py: 3, 
+          sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 4, py: 1.7, 
               minWidth: `${menuWidth}px`, borderRadius: 1, cursor: 'pointer',
               border: 'solid 1px #2D3131',
+              background: '#1A1D1E'
               }}>
           <Stack direction='row' gap={1} sx={{alignItems: 'center'}}>
-            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#a1a1a1'>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#C6C6C7' fontWeight={600}>
                 Sort by
             </Typography>
             <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'}>
                 {isSmallScreen ? '' : sortByLabel}
             </Typography>
-            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#a1a1a1'>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#C6C6C7' fontWeight={600}>
               {isSmallScreen ? '' : (sortBy[0] == '-' ? 'desc' : 'asc')}
             </Typography>
           </Stack>

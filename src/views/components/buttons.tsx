@@ -4,7 +4,7 @@ import {
 } from '@mui/material'
 
 export const ToggleOnButton = styled(Button)<ButtonProps>(({ theme }) => ({
-    borderRadius: '50px', 
+    borderRadius: '6px', 
     fontWeight: 600, 
     backgroundColor: theme.palette.primary.main, 
     color: '#101617',
@@ -18,7 +18,7 @@ export const ToggleOnButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }))
 
 export const ToggleOffButton = styled(Button)<ButtonProps>(({ theme }) => ({
-    borderRadius: '50px', 
+    borderRadius: '6px', 
     fontWeight: 400, 
     backgroundColor: '#191D1C', 
     color: '#FFFFFF', 
