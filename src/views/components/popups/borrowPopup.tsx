@@ -178,7 +178,7 @@ export const BorrowPopup = (props: Props) => {
             showToast(
               'success',
               'Borrow Success',
-              `You have successfully deposit ${depositAmount} ${collateral} and borrow ${borrowAmount} trenUSD.`,
+              `You have successfully deposited ${depositAmount} ${collateral} and borrowed ${borrowAmount} trenUSD.`,
               30000,
               `${ETHERSCAN_BASE_URL}/tx/${txhash}`,
             )
@@ -186,11 +186,11 @@ export const BorrowPopup = (props: Props) => {
           break
         case 'deposit':
           initializePopupStates()
-          showToast('success', 'Deposit Success', `You have successfully deposit ${inputAmount} ${collateral}`, 30000)
+          showToast('success', 'Deposit Success', `You have successfully deposited ${inputAmount} ${collateral}`, 30000)
           break
         case 'borrow':
           initializePopupStates()
-          showToast('success', 'Borrow Success', `You have successfully borrow ${inputAmount} trenUSD`, 30000)
+          showToast('success', 'Borrow Success', `You have successfully borrowed ${inputAmount} trenUSD`, 30000)
           break
         case 'withdraw':
           initializePopupStates()
