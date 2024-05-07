@@ -172,7 +172,7 @@ export const BorrowPopup = (props: Props) => {
         case 'openOrAdjust':
           if(formattedAllowance < +formattedDepositAmount) {
             refetchBalance()
-            showToast('success', 'Approve Success', 'You have successfully approved collateral.', 30000)
+            showToast('success', 'Approve Success', 'You have successfully approved collateral.', 50000)
           } else {
             initializePopupStates()
             showToast(
@@ -186,11 +186,11 @@ export const BorrowPopup = (props: Props) => {
           break
         case 'deposit':
           initializePopupStates()
-          showToast('success', 'Deposit Success', `You have successfully deposited ${formatToThousands(+inputAmount!, 2).substring(1)} ${collateral}`, 30000)
+          showToast('success', 'Deposit Success', `You have successfully deposited ${formatToThousands(+inputAmount!, 2).substring(1)} ${collateral}`, 50000)
           break
         case 'borrow':
           initializePopupStates()
-          showToast('success', 'Borrow Success', `You have successfully borrowed ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 30000)
+          showToast('success', 'Borrow Success', `You have successfully borrowed ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 50000)
           break
         case 'withdraw':
           initializePopupStates()
@@ -203,14 +203,14 @@ export const BorrowPopup = (props: Props) => {
           break
         case 'repay':
           initializePopupStates()
-          showToast('success', 'Repay Success', `You have successfully repaid ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 30000)
+          showToast('success', 'Repay Success', `You have successfully repaid ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 50000)
           break
       }
     }
   }, [isConfirmed, isPending, inputAmount, depositAmount, borrowAmount, collateral, txhash, type])
 
   useEffect(() => {
-    if (error) showToast('error', 'Error', (error as BaseError).shortMessage || error.message, 30000)
+    if (error) showToast('error', 'Error', (error as BaseError).shortMessage || error.message, 50000)
   }, [error])
 
   const handleSubmit = () => {
