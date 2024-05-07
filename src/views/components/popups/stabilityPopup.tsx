@@ -98,7 +98,7 @@ export const StabilityPopup = (props: Props) => {
         case 'deposit':
           showToast('success', 
             'Deposit Success', 
-            `You have successfully deposit ${inputAmount} trenUSD`,
+            `You have successfully deposited ${inputAmount} trenUSD`,
             30000,
             `${ETHERSCAN_BASE_URL}/tx/${txhash}`
           )

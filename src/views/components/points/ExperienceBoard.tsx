@@ -44,8 +44,6 @@ export const ExperienceBoard = () => {
         setDirection(direction)
     }
 
-    const insertHyphens = (s: string) => s.split('').join('-');
-
     const headerItems = [
         {
           label: 'Rank',
@@ -229,7 +227,7 @@ export const ExperienceBoard = () => {
                     Referrals
                 </Typography>
                 <Box sx={{ ...radiusBoxStyle, mt: 8, py: 6 }} ref={secondItemRef}>
-                    <Stack direction='row' justifyContent='space-between'>
+                    <Stack direction='row' justifyContent='space-between' sx={{mb: {xs: 0, lg: 20}}}>
                         <Stack sx={{flex: {xs: 4, sm: 3.5}}}>
                             <Stack direction='row' gap={2} alignItems='center' sx={{mb: {xs: 4, md: 10}}}>
                                 <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}}}>Codes</Typography>
@@ -243,7 +241,7 @@ export const ExperienceBoard = () => {
                                     userReferral.map((item, index) => (
                                         <Stack width={isMobileScreen ? 100 : 130} direction='row' gap={isMobileScreen ? 1 : 3} sx={{height: {xs: 28, sm:32}}} alignItems='center' justifyContent='space-between' key={index}>
                                             <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color={item.redeemed ? 'primary' : 'white'} sx={{my:'auto', userSelect: 'none', textDecorationThickness: 2, textDecoration: item.redeemed ? 'line-through' : 'none'}}>
-                                                {insertHyphens(item.inviteCode)}
+                                                {item.inviteCode}
                                             </Typography>
                                             <Box display={item.redeemed ? 'none' : 'block'} height={isMobileScreen ? 20 : 24}><Copy text={item.inviteCode}/></Box>
                                         </Stack>        
