@@ -14,7 +14,7 @@ import { BaseError, useAccount, useChainId, useReadContract } from 'wagmi'
 import { getBalance } from '@wagmi/core'
 import { wagmiConfig } from '@/pages/_app'
 import { erc20Abi, formatEther, formatUnits } from 'viem'
-import { removeComma } from '@/hooks/utils'
+import { formatToThousands, removeComma } from '@/hooks/utils'
 import { parseEther, parseUnits } from 'viem'
 import useModules from '@/context/ModuleProvider/useModules'
 import { CollateralParams } from '@/context/ModuleProvider/type'
@@ -178,7 +178,7 @@ export const BorrowPopup = (props: Props) => {
             showToast(
               'success',
               'Borrow Success',
-              `You have successfully deposited ${depositAmount} ${collateral} and borrowed ${borrowAmount} trenUSD.`,
+              `You have successfully deposited ${formatToThousands(+depositAmount!, 2).substring(1)} ${collateral} and borrowed ${formatToThousands(+borrowAmount!).substring(1)} trenUSD.`,
               30000,
               `${ETHERSCAN_BASE_URL}/tx/${txhash}`,
             )
@@ -186,24 +186,24 @@ export const BorrowPopup = (props: Props) => {
           break
         case 'deposit':
           initializePopupStates()
-          showToast('success', 'Deposit Success', `You have successfully deposited ${inputAmount} ${collateral}`, 30000)
+          showToast('success', 'Deposit Success', `You have successfully deposited ${formatToThousands(+inputAmount!, 2).substring(1)} ${collateral}`, 30000)
           break
         case 'borrow':
           initializePopupStates()
-          showToast('success', 'Borrow Success', `You have successfully borrowed ${inputAmount} trenUSD`, 30000)
+          showToast('success', 'Borrow Success', `You have successfully borrowed ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 30000)
           break
         case 'withdraw':
           initializePopupStates()
           showToast(
             'success',
             'Withdraw Success',
-            `You have successfully withdrawn ${inputAmount} ${collateral}`,
+            `You have successfully withdrawn ${formatToThousands(+inputAmount!, 2).substring(1)} ${collateral}`,
             30000
           )
           break
         case 'repay':
           initializePopupStates()
-          showToast('success', 'Repay Success', `You have successfully repaid ${inputAmount} trenUSD`, 30000)
+          showToast('success', 'Repay Success', `You have successfully repaid ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 30000)
           break
       }
     }
