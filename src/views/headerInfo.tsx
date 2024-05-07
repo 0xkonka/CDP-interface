@@ -31,7 +31,7 @@ const HeaderInfo = () => {
   return (
     <Box>
       <Stack direction='row' position='relative'>
-        <Box>
+        <Box zIndex={1}>
           <Typography className='header-gradient' variant='h1' sx={{
               mb: { xs: 4, md: 8 }, mt: 8,
               fontSize: { xs: 36, md: 64, xl: 72 },
@@ -48,7 +48,7 @@ const HeaderInfo = () => {
           </Typography>
         </Box>
         {/* <ThreeCanvas/> */}
-        <Box position='absolute' right={-300} top={-200}>
+        <Box position='absolute' right={-250} top={-240} sx={{display: {xs: 'none', lg: 'block'}}}>
           <iframe src='https://my.spline.design/retroglassmaterialcopy-f7fc0736b8e30a6131788f0a32a7a06c/' frameBorder='0' width='1000px' height='1000px'></iframe>
         </Box>
       </Stack>
@@ -57,6 +57,8 @@ const HeaderInfo = () => {
         id='total-info'
         direction='row'
         sx={{ mb: 12, justifyContent: 'space-between', flexWrap: 'wrap', gap: { xs: 8, md: 16 } }}
+        position='relative'
+        zIndex={1}
       >
         <Stack
           direction='row'
