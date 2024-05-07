@@ -34,6 +34,8 @@ class CustomDocument extends Document {
               })(window,document,'script','dataLayer','GTM-N8M5SW75');`
             }}
           ></script>
+          <script type="module" src="https://unpkg.com/@splinetool/viewer@1.2.5/build/spline-viewer.js"></script>
+{/* <spline-viewer url="https://prod.spline.design/U73cCb6nwSP22gbt/scene.splinecode"></spline-viewer> */}
         </Head>
         <body>
           <noscript>
