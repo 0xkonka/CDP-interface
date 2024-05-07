@@ -23,12 +23,13 @@ interface Props {
     uptoFee?: number
     type: string
     amount: string
+    closeModule?: boolean
 }
 
 export const TransactionOverView = (props: Props) => {
     const {radiusBoxStyle} = useGlobalValues()
     const theme:Theme = useTheme()
-    const {collateral, gasFee, uptoFee, type, amount} = props
+    const {collateral, gasFee, uptoFee, type, amount, closeModule} = props
     
     // Fetch detail from hook.
     const { collateralDetails } = useProtocol()
@@ -152,11 +153,21 @@ export const TransactionOverView = (props: Props) => {
 
                 }
             </Stack>
-            <Box sx={{...radiusBoxStyle, backgroundColor: 'rgba(103, 218, 177, 0.10)', mt: 2, mb: 12}} display={type == 'repay' ? 'none' : 'block'}>
-                <Typography variant='subtitle1' lineHeight='normal'>
-                    <span style={{ color: theme.palette.primary.main, fontWeight: 600}}>Attention: </span>
-                    Parameter changes via governance can alter your account health factor and risk of liquidation. Follow the Tren governance forum for updates.
-                </Typography>
+            <Box sx={{...radiusBoxStyle, backgroundColor: 'rgba(103, 218, 177, 0.10)', mt: 2, mb: 12}} display={(type == 'repay' && !closeModule) ? 'none' : 'block'}>
+                {
+                    !closeModule &&
+                    <Typography variant='subtitle1' lineHeight='normal'>
+                        <span style={{ color: theme.palette.primary.main, fontWeight: 600}}>Attention: </span>
+                        Parameter changes via governance can alter your account health factor and risk of liquidation. Follow the Tren governance forum for updates.
+                    </Typography>
+                }
+                {
+                    closeModule &&
+                    <Typography variant='subtitle1' lineHeight='normal'>
+                        <span style={{ color: theme.palette.primary.main, fontWeight: 600}}>Attention: </span>
+                        Once you click close button, you will not be able to undo this action.
+                    </Typography>
+                }
             </Box>
         </Stack>
     )
