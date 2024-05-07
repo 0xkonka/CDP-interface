@@ -27,6 +27,7 @@ interface Props {
 }
 
 const LinkStyled = styled(Link)(({ theme }) => ({
+  position: 'absolute',
   display: 'flex',
   alignItems: 'center',
   textDecoration: 'none',
@@ -58,7 +59,7 @@ const AppBarContent = (props: Props) => {
   const theme = useTheme()
 
   return (
-    <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
       {userAppBarBranding ? (
         userAppBarBranding(props)
       ) : (
@@ -69,7 +70,8 @@ const AppBarContent = (props: Props) => {
             style={{
               width: '100%',
               height: 'auto',
-              minHeight: 32
+              minHeight: 32,
+              zIndex: 1
             }}
             priority />
         </LinkStyled>
