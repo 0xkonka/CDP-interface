@@ -25,18 +25,8 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'Swap',
-      icon: 'stake',
+      icon: 'swap',
       path: '/swap'
-    },
-    {
-      title: 'Farm',
-      icon: 'stake',
-      path: '/farm'
-    },
-    {
-      title: 'Governance',
-      icon: 'stake',
-      path: '/governance'
     },
     // {
     //   title: 'Analytics',

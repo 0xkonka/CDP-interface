@@ -34,26 +34,20 @@ const FooterContent = () => {
             </svg>
           </Box>
           <Stack direction={isSmallScreen ? 'column' : 'row'} justifyContent='center' alignItems='center' sx={{ gap: {xs: 8, md: 3, lg: 12} }}>
+            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/dashboard'>
+              Dashboard
+            </Typography>
             <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/modules'>
-              Pools
+              Modules
             </Typography>
             <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/earn'>
               Earn
             </Typography>
-            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/points'>
+            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled}  href='/points'>
               Points
             </Typography>
-            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled}  href='/swap'>
+            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/swap'>
               Swap
-            </Typography>
-            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/farm'>
-              Farm
-            </Typography>
-            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/governance'>
-              Governance
-            </Typography>
-            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/analytics-1'>
-              Analytics
             </Typography>
           </Stack>
         </Stack>

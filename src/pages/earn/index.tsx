@@ -151,8 +151,8 @@ const Earn = () => {
             <Stack direction={isMediumScreen ? 'column' : 'row'} justifyContent='space-between' sx={{mb: { xs: 8, md: 16 }}} gap={8}>
                 <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} color='#F3F3F3'
                     sx={{ fontWeight: 300, width: 730, maxWidth: '100%', lineHeight: { xs: 1.25, sm: 1.7 } }}>
-                    Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop 
-                    your assets in one click to leverage exposure for your spot assets. Pay back your loan later using trenUSD or your collateral.
+                    TrenUSD holders can stake into the stability pool, contributing to the protocol's overall health. 
+                    Stakers earn a base rate on assets and a share of liquidation profits by participating, safeguarding against bad debt.
                 </Typography>
                 <Stack direction='row' sx={{ width: { xs: 1, md: 'auto' }, gap: { xs: 8, md: 16 } }}>
                     <Box>

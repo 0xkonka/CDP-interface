@@ -34,9 +34,9 @@ export const TrenPointBanner = () => {
                     color='#F3F3F3'
                     sx={{ fontWeight: 300, width: isMediumScreen ? 1 : 1 / 2, lineHeight: { xs: 1.25, sm: 1.7 } }}
                     >
-                    Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop your assets in one
-                    click to leverage exposure for your spot assets. Pay back your loan later using trenUSD or your
-                    collateral.
+                    Earn XP by borrowing trenUSD, staking tokens and referring friends.
+                     Increase your multiplier by completing social tasks and utilizing the Daily Boost. 
+                     Unlock larger airdrops by reaching milestones alongside fellow Tren users.
                     </Typography>
                 </Box>
                 <Box position='relative' sx={{ mt: { xs: 5, lg: 20 }, p: 4 }}>
