@@ -31,7 +31,7 @@ export const Wizard: React.FC<Props> = ({header, description, step, isCompleted 
             </Box>
             <Typography className='header-gradient' variant='h1' sx={{
                     mb: { xs: 4, md: 4 },
-                    lineHeight: 1,
+                    lineHeight: 1.25,
                     fontSize: { xs: 18, md: 24, xl: 32 },
                     maxWidth: {xs: 276, lg: '100%'},
                     textAlign: {xs: 'center', lg: 'start'}
@@ -39,7 +39,7 @@ export const Wizard: React.FC<Props> = ({header, description, step, isCompleted 
             >
                 {header}
             </Typography>
-            <Typography sx={{fontSize: {xs: 14, lg: 18}, mb: {xs: 4, md: 10}, textAlign: {xs: 'center', lg: 'start'}, maxWidth: {xs: 276, lg: '100%'}, fontWeight: 300}}>
+            <Typography sx={{fontSize: {xs: 14, lg: 18}, mb: {xs: 4, md: 6}, textAlign: {xs: 'center', lg: 'start'}, maxWidth: {xs: 276, lg: '100%'}, fontWeight: 300}}>
                 {description}
             </Typography>
             {children}

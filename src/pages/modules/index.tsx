@@ -105,10 +105,10 @@ const Modules = () => {
   // Comprehensive filter function
   const filterRows = () => {
     let newRows = rows.filter(row => row.symbol.toLocaleLowerCase().includes(filterText.toLowerCase()))
+    if (filterOnlyActive == true) newRows = newRows.filter(row => row.active)
     if (assetFilter != 'All') {
       newRows = newRows.filter(row => row.type == assetFilter)
     }
-    if (filterOnlyActive == true) newRows = newRows.filter(row => row.active)
     setRows(newRows)
   }
 
@@ -256,6 +256,7 @@ const Modules = () => {
                 onToogle={() => handleRowClick(index)}
                 isOpen={openRowIndex === index}
                 key={index}
+                showOnlyActive={filterOnlyActive}
               />
             ))
           ) : (
