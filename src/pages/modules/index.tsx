@@ -192,7 +192,7 @@ const Modules = () => {
           </Stack>
         </Stack>
         {/* Token Types Buttons Section */}
-        <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: {xs: 2, md: 0} }}>
+        <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', pb: {xs: 2, lg: 0} }}>
           {assetTypes.map((value, index) => {
             return value == assetFilter ? (
               <ToggleOnButton
