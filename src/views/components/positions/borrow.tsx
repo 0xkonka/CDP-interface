@@ -32,7 +32,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
   const [walletBalance, setWalletBalance] = useState(0)
 
   // Wallet Address
-  const { address: account, isConnected } = useAccount()
+  const { address: account } = useAccount()
 
    // === Get Collateral Detail === //
    const { collateralDetails } = useProtocol()
@@ -95,6 +95,17 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
   const handleRepay = () => {
     setOpen(true)
     setType('repay')
+  }
+
+  //  //reload and refetch the input values and balance.
+  //  const reloadBalance = useCallback(() => {
+  //   setDepositAmount('');
+  //   setBorrowAmount('');
+  //   setTriggerEffect(prev => prev + 1)
+  // }, [setDepositAmount, setBorrowAmount]);
+
+  const reloadBalance = () => {
+      // Do nothing ; Just keep it
   }
 
   return (
@@ -233,6 +244,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
           userCollateralBal={parseUnits(walletBalance.toString(), row.decimals)}
           depositAmount=''
           borrowAmount=''
+          reloadBalance={reloadBalance}
         />
       )}
     </Box>

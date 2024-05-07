@@ -186,7 +186,7 @@ const Navigation = (props: Props) => {
                 {beforeNavMenuContent && beforeVerticalNavMenuContentPosition === 'static'
                   ? beforeNavMenuContent(navMenuContentProps)
                   : null}
-                {isConnected && (userNavMenuContent ? (
+                {(userNavMenuContent ? (
                   userNavMenuContent(navMenuContentProps)
                 ) : (
                   <List className='nav-items'>

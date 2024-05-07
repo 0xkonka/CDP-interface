@@ -1,6 +1,8 @@
 import { Stack } from '@mui/material'
 import { useAccount } from 'wagmi'
 import { RainbowKitProvider, darkTheme, ConnectButton } from '@rainbow-me/rainbowkit'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 interface Props {
   show?: 'always' | 'connected' | 'disconnected'
@@ -8,6 +10,7 @@ interface Props {
 
 export default function ConnectWallet({ show = 'always' }: Props) {
   const { isConnected } = useAccount()
+  const router = useRouter()
   const connectedStyle = {
     px: 2, 
     background: '#1A1D1E91', 
@@ -15,6 +18,17 @@ export default function ConnectWallet({ show = 'always' }: Props) {
     borderRadius: '6px', 
     border: 'solid 1px #2D3131'
   }
+  
+  useEffect(() => {
+    if(!isConnected) {
+      router.replace('/')
+    }
+    if (isConnected) {
+      document.cookie = "wallet-connected=true; path=/";
+    } else {
+      document.cookie = "wallet-connected=false; path=/";
+    }
+  }, [isConnected])
 
   if ((show === 'connected' && !isConnected) || (show === 'disconnected' && isConnected)) return null
   return (

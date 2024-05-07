@@ -43,14 +43,6 @@ export const formatPercent = (value: number, floating = 0) => {
     return value.toFixed(floating) + '%'
 }
 
-// export const formatToThousands = (value: number, floating = 5) => {
-//     // return '$' + value.toLocaleString('en-US')
-//     return '$' + value.toFixed(floating).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-// }
-// export const formatToThousands = (value: number, floating = 5) => {
-//     return '$' + value.toFixed(floating).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-// }
-
 export const formatToThousands = (value: number, floating = 5) => {
     // // First, round the number to the desired precision to avoid floating point representation issues
     // const roundedValue = Math.round(value * Math.pow(10, floating)) / Math.pow(10, floating);
@@ -95,11 +87,18 @@ export const getAssetPath = (str: string) => {
     return str.toLowerCase().replace(/\s+/g, '_')
 }
 
+export function truncateFloating(number: number, decimalPlaces: number) {
+    const factor = Math.pow(10, decimalPlaces);
+    return Math.floor(number * factor) / factor;
+}
+
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 export const getDefillmaAPY = async (symbol: string) => {
     const POOL_ID = defillamaTokens.find(id => id.tokenSymbol === symbol)?.poolID
+    if(POOL_ID == undefined)
+        return 0
 
     try {
         const { data } = await axios.get(`https://yields.llama.fi/chart/${POOL_ID}`)
