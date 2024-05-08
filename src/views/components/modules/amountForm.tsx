@@ -139,6 +139,7 @@ export const AmountForm = (props: Props) => {
                         <Typography variant='subtitle1' color='white' fontWeight={500} sx={{opacity: 0.5}}>{formatToThousands(+removeComma(amount) * collateralUSD)}</Typography>
                     </Stack>
                     <Stack direction='row' gap={2} alignItems='center'>
+                        {available}
                         <Typography color='#707175' fontWeight={400}>{type == 'repay' ? 'Wallet balance:' : 'Available:'} {formatToThousands(available).substring(1)}</Typography>
                         <Typography variant='body2' color='primary' fontWeight={600} sx={{cursor: 'pointer'}} onClick={() => {setAmount(type != 'repay' ? String(available) : Math.min(+formatEther(debtAmount!), available).toString())}}>MAX</Typography>
                     </Stack>

@@ -139,16 +139,16 @@ export const BorrowPopup = (props: Props) => {
   useEffect(() => {
     switch (type) {
       case 'deposit':
-        setAvailableBalance(+formatUnits(userCollateralBal, decimals))
+        setAvailableBalance(+(+formatUnits(userCollateralBal, decimals)).toFixed(5))
         break
       case 'withdraw':
-        setAvailableBalance(+formatEther(depositedAmount) - (+formatEther(debtAmount + debtTokenGasCompensation) / +formatEther(LTV) / +formatEther(price)))
+        setAvailableBalance(+(+formatEther(depositedAmount) - (+formatEther(debtAmount + debtTokenGasCompensation) / +formatEther(LTV) / +formatEther(price))).toFixed(5))
         break
       case 'borrow':
-        setAvailableBalance(+formatEther(depositedAmount) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount)))
+        setAvailableBalance(+(+formatEther(depositedAmount) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount))).toFixed(5))
         break
       case 'repay':
-        setAvailableBalance(walletDebtAmount)
+        setAvailableBalance(+walletDebtAmount.toFixed(5))
         break
     }
   }, [type, decimals, userCollateralBal, depositedAmount, debtAmount])
