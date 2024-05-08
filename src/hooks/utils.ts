@@ -100,6 +100,8 @@ import axios from 'axios'
 
 export const getDefillmaAPY = async (symbol: string) => {
     const POOL_ID = defillamaTokens.find(id => id.tokenSymbol === symbol)?.poolID
+    if(POOL_ID == undefined)
+        return 0
 
     try {
         const { data } = await axios.get(`https://yields.llama.fi/chart/${POOL_ID}`)

@@ -124,7 +124,6 @@ const App = (props: ExtendedAppProps) => {
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
       <Web3Provider>
-        {/* <WalletConnector> */}
         <ProtocolProvider>
           <StabilityPoolProvider>
             <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
@@ -150,7 +149,6 @@ const App = (props: ExtendedAppProps) => {
             </SettingsProvider>
           </StabilityPoolProvider>
         </ProtocolProvider>
-        {/* </WalletConnector> */}
       </Web3Provider>
     </CacheProvider>
   )

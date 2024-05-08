@@ -32,7 +32,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
   const [walletBalance, setWalletBalance] = useState(0)
 
   // Wallet Address
-  const { address: account, isConnected } = useAccount()
+  const { address: account } = useAccount()
 
    // === Get Collateral Detail === //
    const { collateralDetails } = useProtocol()

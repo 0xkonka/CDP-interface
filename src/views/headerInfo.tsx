@@ -6,7 +6,6 @@ import { useGlobalValues } from '@/context/GlobalContext'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { useMemo } from 'react'
 import { formatEther, formatUnits } from 'viem'
-import ThreeCanvas from '@/views/components/framer/ThreeCanvas'
 
 const HeaderInfo = () => {
   const { isSmallScreen } = useGlobalValues()
@@ -48,7 +47,6 @@ const HeaderInfo = () => {
             Pay back your loan later using trenUSD or your collateral.
           </Typography>
         </Box>
-        {/* <ThreeCanvas/> */}
         <Box position='absolute' right={-250} top={-240} sx={{display: {xs: 'none', lg: 'block'}, userSelect: 'none'}}>
           <iframe src='https://my.spline.design/retroglassmaterialcopy-f7fc0736b8e30a6131788f0a32a7a06c/' frameBorder='0' width='1000px' height='1000px'></iframe>
         </Box>
