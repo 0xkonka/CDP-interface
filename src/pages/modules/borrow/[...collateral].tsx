@@ -1,5 +1,5 @@
 // React imports
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 // Next.js imports
 import { useRouter } from 'next/router'
@@ -62,6 +62,7 @@ const Borrow = () => {
   })
   const [depositAmount, setDepositAmount] = useState('')
   const [borrowAmount, setBorrowAmount] = useState('')
+  const [triggerEffect, setTriggerEffect] = useState(0);
 
   // Hook data fetching
   const { address: account, isConnected } = useAccount()
@@ -95,6 +96,14 @@ const Borrow = () => {
     args: [account as '0x${string}', BORROWER_OPERATIONS[chainId] as '0x${string}']
   })
   
+  //reload and refetch the input values and balance.
+  const reloadBalance = useCallback(() => {
+    setDepositAmount('');
+    setBorrowAmount('');
+    setTriggerEffect(prev => prev + 1)
+  }, [setDepositAmount, setBorrowAmount]);
+
+
   // Calculate minimum deposit & borrow amount
   useEffect(() => {
     const _minBorrow = +formatEther(minNetDebt)
@@ -109,7 +118,7 @@ const Borrow = () => {
 
   // Setup user collateral value for state
   useEffect(() => {
-    if (!account || !address) return
+    if (!account || !address || !reloadBalance) return
     const getUserInfo = async () => {
       const _userCollateralBal = await getBalance(wagmiConfig, {
         address: account as '0x${string}',
@@ -121,13 +130,13 @@ const Borrow = () => {
       }))
     }
     getUserInfo()
-  }, [account, address])
+  }, [account, address, triggerEffect])
 
 
   // Adjust available borrowing amount regarding deposit amount
   useEffect(() => {
     const _depositAmount = removeComma(depositAmount)
-    if (+_depositAmount > 0) {
+    if (+_depositAmount >= 0) {
       const userAvailableBorrowAmount = +formatEther(price) * +_depositAmount * +formatEther(LTV)
       setUserModuleInfo(prevState => ({ ...prevState, userAvailableBorrowAmount }))
     }
@@ -214,7 +223,6 @@ const Borrow = () => {
       <ModuleOverView collateral={collateral || ''} />
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
-          <Switcher page='borrow' collateral={collateral || ''} />
           <Stack direction='column-reverse'>
             <AmountForm amount={borrowAmount} setAmount={setBorrowAmount} type='borrow' asset='trenUSD' available={userModuleInfo.userAvailableBorrowAmount} showTooltip={false}/>
             <Stack direction='row' justifyContent='space-between' alignItems='center' mb={3}>
@@ -402,6 +410,7 @@ const Borrow = () => {
           userCollateralBal={parseUnits(userModuleInfo.userTotalCollateralAmount.toString(), decimals)}
           depositAmount={depositAmount}
           borrowAmount={borrowAmount}
+          reloadBalance={reloadBalance}
         />
       )}
     </Box>

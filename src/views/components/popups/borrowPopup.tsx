@@ -20,6 +20,7 @@ import useModules from '@/context/ModuleProvider/useModules'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
 import { BORROWER_OPERATIONS, DEBT_TOKEN, ETHERSCAN_BASE_URL } from '@/configs/address'
+import { truncateFloating } from '@/hooks/utils'
 
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
@@ -38,6 +39,7 @@ interface Props {
   userCollateralBal: bigint
   depositAmount?: string
   borrowAmount?: string
+  reloadBalance: () => void
 }
 const getTitle = (type: string) => {
   switch (type) {
@@ -84,7 +86,8 @@ export const BorrowPopup = (props: Props) => {
     // allowance,
     collateral,
     collateralDetail,
-    userCollateralBal
+    userCollateralBal,
+    reloadBalance
   } = props
   const { address: account } = useAccount()
   const chainId = useChainId()
@@ -139,16 +142,17 @@ export const BorrowPopup = (props: Props) => {
   useEffect(() => {
     switch (type) {
       case 'deposit':
-        setAvailableBalance(+(+formatUnits(userCollateralBal, decimals)).toFixed(5))
+        setAvailableBalance(truncateFloating(+formatUnits(userCollateralBal, decimals), 5))
         break
       case 'withdraw':
-        setAvailableBalance(+(+formatEther(depositedAmount) - (+formatEther(debtAmount + debtTokenGasCompensation) / +formatEther(LTV) / +formatEther(price))).toFixed(5))
+        // setAvailableBalance(+(+formatEther(depositedAmount) - (+formatEther(debtAmount + debtTokenGasCompensation) / +formatEther(LTV) / +formatEther(price))).toFixed(5))
+        setAvailableBalance(truncateFloating(+formatEther(depositedAmount) - (+formatEther(debtAmount + debtTokenGasCompensation) / +formatEther(LTV) / +formatEther(price)), 5))
         break
       case 'borrow':
-        setAvailableBalance(+(+formatEther(depositedAmount) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount))).toFixed(5))
+        setAvailableBalance(truncateFloating(+formatEther(depositedAmount) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount)), 5))
         break
       case 'repay':
-        setAvailableBalance(+walletDebtAmount.toFixed(5))
+        setAvailableBalance(truncateFloating(+walletDebtAmount, 5))
         break
     }
   }, [type, decimals, userCollateralBal, depositedAmount, debtAmount])
@@ -175,6 +179,7 @@ export const BorrowPopup = (props: Props) => {
             showToast('success', 'Approve Success', 'You have successfully approved collateral.', 50000)
           } else {
             initializePopupStates()
+            reloadBalance()
             showToast(
               'success',
               'Borrow Success',
@@ -186,14 +191,17 @@ export const BorrowPopup = (props: Props) => {
           break
         case 'deposit':
           initializePopupStates()
+          reloadBalance()
           showToast('success', 'Deposit Success', `You have successfully deposited ${formatToThousands(+inputAmount!, 2).substring(1)} ${collateral}`, 50000)
           break
         case 'borrow':
           initializePopupStates()
+          reloadBalance()
           showToast('success', 'Borrow Success', `You have successfully borrowed ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 50000)
           break
         case 'withdraw':
           initializePopupStates()
+          reloadBalance()
           showToast(
             'success',
             'Withdraw Success',
@@ -203,6 +211,7 @@ export const BorrowPopup = (props: Props) => {
           break
         case 'repay':
           initializePopupStates()
+          reloadBalance()
           showToast('success', 'Repay Success', `You have successfully repaid ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 50000)
           break
       }
