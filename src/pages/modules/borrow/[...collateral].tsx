@@ -118,7 +118,7 @@ const Borrow = () => {
 
   // Setup user collateral value for state
   useEffect(() => {
-    if (!account || !address || !reloadBalance) return
+    if (!account || !address) return
     const getUserInfo = async () => {
       const _userCollateralBal = await getBalance(wagmiConfig, {
         address: account as '0x${string}',

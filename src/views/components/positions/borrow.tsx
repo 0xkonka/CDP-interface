@@ -97,6 +97,17 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
     setType('repay')
   }
 
+  //  //reload and refetch the input values and balance.
+  //  const reloadBalance = useCallback(() => {
+  //   setDepositAmount('');
+  //   setBorrowAmount('');
+  //   setTriggerEffect(prev => prev + 1)
+  // }, [setDepositAmount, setBorrowAmount]);
+
+  const reloadBalance = () => {
+      // Do nothing ; Just keep it
+  }
+
   return (
     <Box className='borrow-position' sx={{ display: positionStatus === 'active' ? 'block' : 'none' }}>
       <Typography variant='subtitle1' sx={{ my: 4, fontWeight: 600 }}>
@@ -233,6 +244,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
           userCollateralBal={parseUnits(walletBalance.toString(), row.decimals)}
           depositAmount=''
           borrowAmount=''
+          reloadBalance={reloadBalance}
         />
       )}
     </Box>
