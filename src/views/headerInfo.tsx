@@ -55,7 +55,7 @@ const HeaderInfo = () => {
       <Stack
         id='total-info'
         direction='row'
-        sx={{ mb: 18, justifyContent: 'space-between', flexWrap: 'wrap', gap: { xs: 8, md: 16 } }}
+        sx={{ mb: 32, justifyContent: 'space-between', flexWrap: 'wrap', gap: { xs: 8, md: 16 } }}
         position='relative'
         zIndex={1}
       >
