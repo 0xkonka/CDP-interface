@@ -34,21 +34,24 @@ const FooterContent = () => {
             </svg>
           </Box>
           <Stack direction={isSmallScreen ? 'column' : 'row'} justifyContent='center' alignItems='center' sx={{ gap: {xs: 8, md: 3, lg: 12} }}>
-            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/dashboard'>
+            {/* <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/dashboard'>
               Dashboard
-            </Typography>
+            </Typography> */}
             <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/modules'>
               Modules
             </Typography>
             <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/earn'>
               Earn
             </Typography>
-            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled}  href='/points'>
+            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/referrals'>
+              Referrals
+            </Typography>
+            {/* <Typography variant='subtitle1' fontWeight={500} component={LinkStyled}  href='/points'>
               Points
-            </Typography>
-            <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/swap'>
+            </Typography> */}
+            {/* <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/swap'>
               Swap
-            </Typography>
+            </Typography> */}
           </Stack>
         </Stack>
         <Stack direction='row' sx={{ display: {xs: 'flex', 'md': 'none'} }} mt={5} gap={6}>
