@@ -201,7 +201,7 @@ const Home = () => {
                                 // disabled={code.length < 5}
                                 onClick={enterCode}
                             >
-                            {!isValidated && paramCode.length == 0 ? 'Enter Code' : 'Code Entered'}
+                            {!isValidated && paramCode.length == 0 ? 'Enter Code' : 'Code Eligable'}
                             {
                             isChecking && 
                             <CircularProgress color='primary' sx={{ml: 4, height: '20px !important', width: '20px !important', color: '#020101'}} />
@@ -210,7 +210,7 @@ const Home = () => {
                         </Stack>
                     </Wizard>
                     <Wizard step={2} isCompleted={currentStep >= 2} header={!isConnected ? 'Connect Wallet' : 'Sign Message to Redeem Code'} 
-                            description={!isConnected ? 'Using an EVM wallet of your choice, connect to Tren Finance.' : 'Let’s make it official. Sign the message to access testnet & lock in your 2X multiplier.'} >
+                            description={!isConnected ? 'Using an EVM wallet of your choice, connect to Tren Finance.' : 'Let’s make it official. Sign the message to access testnet & lock in your 2X multiplier. The code is not redeemed until you have connected your wallet and signed the message.'} >
                         <Box mt={4} sx={{width: {xs: 1, sm: 'auto'}}}>
                         {
                             !isConnected &&
@@ -240,7 +240,7 @@ const Home = () => {
                     <Wizard step={3} isCompleted={currentStep >= 3} header='Enter App' description='Head over to the Tren application to start using the testnet.'>
                         <Box mt={4} sx={{width: {xs: 1, sm: 'auto'}}}>
                             <Button
-                                href='/points'
+                                href='/modules'
                                 className='gradient-stroke-button'
                                 sx={{
                                     py: {xs: 2, md: 3},

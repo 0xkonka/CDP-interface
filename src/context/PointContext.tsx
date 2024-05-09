@@ -80,7 +80,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
       console.log('Created Post:', response)
       if (response.data.result === true) {
         setInviteCode(inviteCode)
-        showToast('success', 'Correct InviteCode', 'You have successfully entered correct inviteCode', 3000)
+        showToast('success', 'Correct InviteCode', 'You have successfully entered eligable invite code', 3000)
         return true
       }
       return false
