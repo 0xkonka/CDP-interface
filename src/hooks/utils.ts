@@ -11,7 +11,7 @@ export const getOverView = (collateral: string) => {
             platform: 'Uniswap v3',
             rateType: 'Variable Rate'
         }
-    } else if (collateral == 'TST') {
+    } else if (collateral == 'PEPE') {
         return {
             type: 'Volatile',
             borrowAPY: 0,
@@ -19,7 +19,63 @@ export const getOverView = (collateral: string) => {
             platform: 'Uniswap v3',
             rateType: 'Stable Rate'
         }
-    } else if (collateral == 'FURY') {
+    } else if (collateral == 'PT-weETH-26DEC2024') {
+        return {
+            type: 'Volatile',
+            borrowAPY: 0,
+            network: 'Ethereum',
+            platform: 'Uniswap v3',
+            rateType: 'Stable Rate'
+        }
+    } else if (collateral == 'tricryptov2') {
+        return {
+            type: 'Volatile',
+            borrowAPY: 0,
+            network: 'Ethereum',
+            platform: 'Uniswap v3',
+            rateType: 'Stable Rate'
+        }
+    } else if (collateral == 'sDAI') {
+        return {
+            type: 'Volatile',
+            borrowAPY: 0,
+            network: 'Ethereum',
+            platform: 'Uniswap v3',
+            rateType: 'Stable Rate'
+        }
+    } else if (collateral == 'TRUMP') {
+        return {
+            type: 'Volatile',
+            borrowAPY: 0,
+            network: 'Ethereum',
+            platform: 'Uniswap v3',
+            rateType: 'Stable Rate'
+        }
+    } else if (collateral == 'eETH') {
+        return {
+            type: 'Volatile',
+            borrowAPY: 0,
+            network: 'Ethereum',
+            platform: 'Uniswap v3',
+            rateType: 'Stable Rate'
+        }
+    } else if (collateral == 'USDC') {
+        return {
+            type: 'Volatile',
+            borrowAPY: 0,
+            network: 'Ethereum',
+            platform: 'Uniswap v3',
+            rateType: 'Stable Rate'
+        }
+    } else if (collateral == 'ONDO') {
+        return {
+            type: 'Volatile',
+            borrowAPY: 0,
+            network: 'Ethereum',
+            platform: 'Uniswap v3',
+            rateType: 'Stable Rate'
+        }
+    } else if (collateral == 'wstETH') {
         return {
             type: 'Volatile',
             borrowAPY: 0,

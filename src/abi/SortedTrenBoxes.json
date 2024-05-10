@@ -192,36 +192,6 @@
     },
     {
         "inputs": [],
-        "name": "FlashLoan__AmountBeyondMax",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "FlashLoan__AmountBeyondMin",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "FlashLoan__CollateralIsNotActive",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "FlashLoan__LoanIsNotRepayable",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "FlashLoan__SetupIsInitialized",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "FlashLoan__ZeroAddresses",
-        "type": "error"
-    },
-    {
-        "inputs": [],
         "name": "InvalidInitialization",
         "type": "error"
     },
@@ -254,7 +224,32 @@
     },
     {
         "inputs": [],
-        "name": "ReentrancyGuardReentrantCall",
+        "name": "SortedTrenBoxer__ListDoesNotContainNode",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "SortedTrenBoxes__CallerMustBeBorrowerOperationsOrTrenBoxManager",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "SortedTrenBoxes__CallerMustBeTrenBoxManager",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "SortedTrenBoxes__IdCannotBeZeroAddress",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "SortedTrenBoxes__ListAlreadyContainsNode",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "SortedTrenBoxes__NICRMustBeGreaterThanZero",
         "type": "error"
     },
     {
@@ -278,56 +273,56 @@
         "inputs": [
             {
                 "indexed": false,
-                "internalType": "address",
-                "name": "_stableCoin",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "address",
-                "name": "_swapRouter",
-                "type": "address"
-            }
-        ],
-        "name": "AddressesSet",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "_borrower",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "uint256",
-                "name": "_debtAmount",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "_feeAmount",
-                "type": "uint256"
-            }
-        ],
-        "name": "FlashLoanExecuted",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
                 "internalType": "uint64",
                 "name": "version",
                 "type": "uint64"
             }
         ],
         "name": "Initialized",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "_id",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_NICR",
+                "type": "uint256"
+            }
+        ],
+        "name": "NodeAdded",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "_id",
+                "type": "address"
+            }
+        ],
+        "name": "NodeRemoved",
         "type": "event"
     },
     {
@@ -348,19 +343,6 @@
         ],
         "name": "OwnershipTransferred",
         "type": "event"
-    },
-    {
-        "inputs": [],
-        "name": "FEE_DENOMINATOR",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
     },
     {
         "inputs": [],
@@ -441,6 +423,30 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_id",
+                "type": "address"
+            }
+        ],
+        "name": "contains",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "debtToken",
         "outputs": [
@@ -469,14 +475,40 @@
     {
         "inputs": [
             {
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "_NICR",
                 "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_prevId",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_nextId",
+                "type": "address"
             }
         ],
-        "name": "flashLoan",
-        "outputs": [],
-        "stateMutability": "nonpayable",
+        "name": "findInsertPosition",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -500,14 +532,93 @@
                 "type": "address"
             }
         ],
-        "name": "flashLoanForRepay",
-        "outputs": [],
-        "stateMutability": "nonpayable",
+        "name": "getFirst",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "getFlashLoanRate",
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            }
+        ],
+        "name": "getLast",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_id",
+                "type": "address"
+            }
+        ],
+        "name": "getNext",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_id",
+                "type": "address"
+            }
+        ],
+        "name": "getPrev",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            }
+        ],
+        "name": "getSize",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -532,6 +643,39 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_id",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_NICR",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_prevId",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_nextId",
+                "type": "address"
+            }
+        ],
+        "name": "insert",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "isAddressSetupInitialized",
         "outputs": [
@@ -545,8 +689,14 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "isSetupInitialized",
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            }
+        ],
+        "name": "isEmpty",
         "outputs": [
             {
                 "internalType": "bool",
@@ -597,6 +747,57 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_id",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_newNICR",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_prevId",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_nextId",
+                "type": "address"
+            }
+        ],
+        "name": "reInsert",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_id",
+                "type": "address"
+            }
+        ],
+        "name": "remove",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "renounceOwnership",
         "outputs": [],
@@ -633,24 +834,6 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_stableCoin",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_swapRouter",
-                "type": "address"
-            }
-        ],
-        "name": "setInternalAddresses",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
                 "name": "_trenStaking",
                 "type": "address"
             }
@@ -679,32 +862,6 @@
         "outputs": [
             {
                 "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "stableCoin",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "swapRouter",
-        "outputs": [
-            {
-                "internalType": "contract IUniswapRouterV3",
                 "name": "",
                 "type": "address"
             }
@@ -791,6 +948,35 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "collateral",
+                "type": "address"
+            }
+        ],
+        "name": "trenBoxes",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "head",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "tail",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "size",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "trenStaking",
         "outputs": [
@@ -798,6 +984,40 @@
                 "internalType": "address",
                 "name": "",
                 "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_NICR",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_prevId",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_nextId",
+                "type": "address"
+            }
+        ],
+        "name": "validInsertPosition",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
             }
         ],
         "stateMutability": "view",
