@@ -5,7 +5,7 @@ export const getOverView = (collateral: string) => {
     // In future, we will remove this one and all values will be replaced with dynamic one which comes from contract.
     if (collateral == 'WETH') {
         return {
-            type: 'Volatile',
+            type: 'Vault',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',
@@ -13,7 +13,7 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'PEPE') {
         return {
-            type: 'Volatile',
+            type: 'Meme',
             borrowAPY: 0,
             network: 'Solana',
             platform: 'Uniswap v3',
@@ -21,7 +21,7 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'PT-weETH-26DEC2024') {
         return {
-            type: 'Volatile',
+            type: 'PT Token',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',
@@ -29,7 +29,7 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'tricryptov2') {
         return {
-            type: 'Volatile',
+            type: 'LP Token',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',
@@ -37,7 +37,7 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'sDAI') {
         return {
-            type: 'Volatile',
+            type: 'Stable',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',
@@ -45,7 +45,7 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'TRUMP') {
         return {
-            type: 'Volatile',
+            type: 'Meme',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',
@@ -61,7 +61,7 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'USDC') {
         return {
-            type: 'Volatile',
+            type: 'Stable',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',
@@ -69,7 +69,7 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'ONDO') {
         return {
-            type: 'Volatile',
+            type: 'Vault',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',
@@ -77,7 +77,7 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'wstETH') {
         return {
-            type: 'Volatile',
+            type: 'Vault',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',

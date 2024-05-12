@@ -178,7 +178,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
         const redemptionBlockTimestamp = result[11].result as bigint
         const mintCap = result[12].result as bigint
         const totalAssetDebt = result[13].result as bigint
-        const price = result[14].result as bigint == undefined ? BigInt(1000000000000000000) : result[14].result as bigint
+        const price = result[14].result as bigint
         const entireSystemDebt = result[15].result as bigint
         const totalCollDeposited = result[16].result as bigint
 
@@ -206,9 +206,9 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
           entireSystemDebt,
           totalCollDeposited,
           totalBorrowAvailable: mintCap - entireSystemDebt,
-          LTV: parseEther((1 / +formatEther(mcr)).toString()),
+          LTV: parseEther((1 / +formatEther(mcr) - 0.15).toString()),
           interest: 5,
-          liquidation: parseEther((1 / +formatEther(mcr) + 0.1).toString()),
+          liquidation: parseEther((1 / +formatEther(mcr)).toString()),
           type: 'token_type_here',
           borrowAPY: 0,
           maxLeverage: 0,
