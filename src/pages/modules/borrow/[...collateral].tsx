@@ -277,7 +277,17 @@ const Borrow = () => {
                     <Stack direction='row' sx={{ mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 } }}>
                       <Button
                         sx={{
+                          color: 'white',
+                          borderColor: '#67DAB1',
                           mr: { xs: 2, md: 4 },
+                        }}
+                        variant='outlined'
+                        onClick={handleDepositMore}
+                      >
+                        Deposit more
+                      </Button>
+                      <Button
+                        sx={{
                           color: 'white',
                           borderColor: '#6795DA'
                         }}
@@ -285,16 +295,6 @@ const Borrow = () => {
                         onClick={handleWithdraw}
                       >
                         Withdraw
-                      </Button>
-                      <Button
-                        sx={{
-                          color: 'white',
-                          borderColor: '#67DAB1'
-                        }}
-                        variant='outlined'
-                        onClick={handleDepositMore}
-                      >
-                        Deposit more
                       </Button>
                     </Stack>
                   </Grid>
