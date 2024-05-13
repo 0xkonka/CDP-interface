@@ -327,7 +327,7 @@ export const BorrowPopup = (props: Props) => {
               depositAmount={depositAmount!}
               borrowAmount={borrowAmount!}
             />
-            <TransactionOverView collateral={collateralDetail.symbol} type={type} amount={inputAmount} gasFee={0.14} uptoFee={34.21} />
+            <TransactionOverView collateral={collateralDetail.symbol} type={type} amount={inputAmount} gasFee={0.14} uptoFee={34.21} depositAmount={depositAmount} borrowAmount={borrowAmount}/>
             <Button
               sx={{
                 color: 'white',

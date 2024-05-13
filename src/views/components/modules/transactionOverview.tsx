@@ -7,7 +7,7 @@ import {
 
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
-import { erc20Abi, formatEther, formatUnits, parseUnits } from 'viem'
+import { erc20Abi, formatEther, formatUnits, parseEther, parseUnits } from 'viem'
 
 // Core Components Imports
 import Icon from '@/@core/components/icon'
@@ -24,12 +24,14 @@ interface Props {
     type: string
     amount: string
     closeModule?: boolean
+    depositAmount?: string
+    borrowAmount?: string
 }
 
 export const TransactionOverView = (props: Props) => {
     const {radiusBoxStyle} = useGlobalValues()
     const theme:Theme = useTheme()
-    const {collateral, gasFee, uptoFee, type, amount, closeModule} = props
+    const {collateral, gasFee, uptoFee, type, amount, closeModule, depositAmount, borrowAmount} = props
     
     // Fetch detail from hook.
     const { collateralDetails } = useProtocol()
@@ -50,8 +52,14 @@ export const TransactionOverView = (props: Props) => {
     if(debtAmount > debtTokenGasCompensation)
         debtAmount -= debtTokenGasCompensation
 
-    const plusColl = type == 'deposit'? +removeComma(amount) : ((type == 'withdraw')? +removeComma(amount) * -1 : 0)
-    const plusDebt = type == 'borrow'? +removeComma(amount) : ((type == 'repay')? +removeComma(amount) * -1 : 0)
+    let plusColl, plusDebt
+    if(type == 'openOrAdjust') {
+        plusColl = +depositAmount!
+        plusDebt = +borrowAmount!
+    } else {
+        plusColl = type == 'deposit'? +removeComma(amount) : ((type == 'withdraw')? +removeComma(amount) * -1 : 0)
+        plusDebt = type == 'borrow'? +removeComma(amount) : ((type == 'repay')? +removeComma(amount) * -1 : 0)
+    }
 
     // Module Calculation
     const collateralValue = +formatEther(price) * (+formatEther(depositedAmount))
