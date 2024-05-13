@@ -17,7 +17,7 @@
     },
     {
         "inputs": [],
-        "name": "Timelock__AdminOnly",
+        "name": "Timelock__AdminZeroAddress",
         "type": "error"
     },
     {
@@ -37,12 +37,22 @@
     },
     {
         "inputs": [],
-        "name": "Timelock__PendingAdminOnly",
+        "name": "Timelock__OnlyAdmin",
         "type": "error"
     },
     {
         "inputs": [],
-        "name": "Timelock__TimelockOnly",
+        "name": "Timelock__OnlyPendingAdmin",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "Timelock__OnlyTimelock",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "Timelock__TargetZeroAddress",
         "type": "error"
     },
     {
@@ -451,7 +461,7 @@
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "",
+                "name": "txHash",
                 "type": "bytes32"
             }
         ],
@@ -459,7 +469,7 @@
         "outputs": [
             {
                 "internalType": "bool",
-                "name": "",
+                "name": "isQueued",
                 "type": "bool"
             }
         ],

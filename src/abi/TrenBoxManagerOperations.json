@@ -1,5 +1,128 @@
 [
     {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "previousAdmin",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "newAdmin",
+                "type": "address"
+            }
+        ],
+        "name": "AdminChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "beacon",
+                "type": "address"
+            }
+        ],
+        "name": "BeaconUpgraded",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "implementation",
+                "type": "address"
+            }
+        ],
+        "name": "Upgraded",
+        "type": "event"
+    },
+    {
+        "stateMutability": "payable",
+        "type": "fallback"
+    },
+    {
+        "inputs": [],
+        "name": "admin",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "admin_",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newAdmin",
+                "type": "address"
+            }
+        ],
+        "name": "changeAdmin",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "implementation",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "implementation_",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newImplementation",
+                "type": "address"
+            }
+        ],
+        "name": "upgradeTo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newImplementation",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes",
+                "name": "data",
+                "type": "bytes"
+            }
+        ],
+        "name": "upgradeToAndCall",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "stateMutability": "payable",
+        "type": "receive"
+    },
+    {
         "inputs": [
             {
                 "internalType": "address",
@@ -8,6 +131,42 @@
             }
         ],
         "name": "AddressEmptyCode",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ConfigurableAddresses__CommunityIssuanceZeroAddress",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ConfigurableAddresses__LengthMismatch",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ConfigurableAddresses__SetupIsInitialized",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ConfigurableAddresses__TRENStakingZeroAddress",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "position",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "address_",
+                "type": "address"
+            }
+        ],
+        "name": "ConfigurableAddresses__ZeroAddresses",
         "type": "error"
     },
     {
@@ -66,6 +225,22 @@
     {
         "inputs": [],
         "name": "ReentrancyGuardReentrantCall",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "feePercentage",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "maxFeePercentage",
+                "type": "uint256"
+            }
+        ],
+        "name": "TrenBase__FeeExceededMax",
         "type": "error"
     },
     {
@@ -301,6 +476,37 @@
                 "type": "address"
             },
             {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_redistributedDebt",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_redistributedCool",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_totalDebtTokenGasCompensation",
+                "type": "uint256"
+            }
+        ],
+        "name": "Redistribution",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
                 "indexed": true,
                 "internalType": "address",
                 "name": "_borrower",
@@ -329,34 +535,8 @@
         "type": "event"
     },
     {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "implementation",
-                "type": "address"
-            }
-        ],
-        "name": "Upgraded",
-        "type": "event"
-    },
-    {
         "inputs": [],
         "name": "BATCH_SIZE_LIMIT",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "DECIMAL_PRECISION",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -401,19 +581,6 @@
                 "internalType": "string",
                 "name": "",
                 "type": "string"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "activePool",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -478,19 +645,6 @@
     },
     {
         "inputs": [],
-        "name": "collSurplusPool",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "communityIssuance",
         "outputs": [
             {
@@ -541,19 +695,6 @@
     },
     {
         "inputs": [],
-        "name": "defaultPool",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "feeCollector",
         "outputs": [
             {
@@ -567,7 +708,7 @@
     },
     {
         "inputs": [],
-        "name": "gasPoolAddress",
+        "name": "flashLoanAddress",
         "outputs": [
             {
                 "internalType": "address",
@@ -705,7 +846,13 @@
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "initialOwner",
+                "type": "address"
+            }
+        ],
         "name": "initialize",
         "outputs": [],
         "stateMutability": "nonpayable",
@@ -861,6 +1008,24 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_asset",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_trenBoxes",
+                "type": "uint256"
+            }
+        ],
+        "name": "redistributeTrenBoxes",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "renounceOwnership",
         "outputs": [],
@@ -1012,6 +1177,19 @@
     },
     {
         "inputs": [],
+        "name": "trenBoxStorage",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "trenStaking",
         "outputs": [
             {
@@ -1027,18 +1205,21 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "newImplementation",
+                "name": "_logic",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "admin_",
                 "type": "address"
             },
             {
                 "internalType": "bytes",
-                "name": "data",
+                "name": "_data",
                 "type": "bytes"
             }
         ],
-        "name": "upgradeToAndCall",
-        "outputs": [],
         "stateMutability": "payable",
-        "type": "function"
+        "type": "constructor"
     }
 ]

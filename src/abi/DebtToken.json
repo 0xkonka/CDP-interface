@@ -11,6 +11,75 @@
         "type": "constructor"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "caller",
+                "type": "address"
+            }
+        ],
+        "name": "DebtToken__CallerIsNotBorrowerOperations",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "caller",
+                "type": "address"
+            }
+        ],
+        "name": "DebtToken__CallerIsNotStabilityPool",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "DebtToken__CannotBurnTokens",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "DebtToken__CannotReturnFromPool",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "DebtToken__CannotTransferTokensToTokenContract",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "DebtToken__CannotTransferTokensToZeroAddress",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "DebtToken__InvalidAddressToConnect",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "collateral",
+                "type": "address"
+            }
+        ],
+        "name": "DebtToken__MintBlockedForCollateral",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "notWhitelistedContract",
+                "type": "address"
+            }
+        ],
+        "name": "DebtToken__NotWhitelistedContract",
+        "type": "error"
+    },
+    {
         "inputs": [],
         "name": "ECDSAInvalidSignature",
         "type": "error"
@@ -271,6 +340,31 @@
             }
         ],
         "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "borrowerOperations",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "stabilityPool",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "trenBoxManager",
+                "type": "address"
+            }
+        ],
+        "name": "ProtocolContractsAddressesSet",
         "type": "event"
     },
     {
@@ -577,7 +671,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "",
+                "name": "collateral",
                 "type": "address"
             }
         ],
@@ -585,7 +679,7 @@
         "outputs": [
             {
                 "internalType": "bool",
-                "name": "",
+                "name": "isStopped",
                 "type": "bool"
             }
         ],
@@ -927,7 +1021,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "",
+                "name": "whitelistedContract",
                 "type": "address"
             }
         ],
@@ -935,7 +1029,7 @@
         "outputs": [
             {
                 "internalType": "bool",
-                "name": "",
+                "name": "isWhitelisted",
                 "type": "bool"
             }
         ],
