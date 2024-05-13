@@ -46,22 +46,16 @@ const FooterContent = () => {
             <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/referrals'>
               Referrals
             </Typography>
-            {/* <Typography variant='subtitle1' fontWeight={500} component={LinkStyled}  href='/points'>
-              Points
-            </Typography> */}
-            {/* <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} href='/swap'>
-              Swap
-            </Typography> */}
           </Stack>
         </Stack>
-        <Stack direction='row' sx={{ display: {xs: 'flex', 'md': 'none'} }} mt={5} gap={6}>
+        {/* <Stack direction='row' sx={{ display: {xs: 'flex', 'md': 'none'} }} mt={5} gap={6}>
           <Typography fontSize={12} fontWeight={500} component={LinkStyled} target='_blank' href='https://policy.com'>
             Privacy Policy
           </Typography>
           <Typography fontSize={12} fontWeight={500} component={LinkStyled} target='_blank' href='https://terms.com'>
             Terms of Use
           </Typography>
-        </Stack>
+        </Stack> */}
         <Stack direction='row' sx={{justifyContent: 'center', alignItems: 'center', gap: 6}}>
           <Link href='https://discord.com/invite/trenfinance' target='_blank'>
             <svg width="26" height="26" viewBox="0 0 25 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -92,14 +86,15 @@ const FooterContent = () => {
       </Stack>
       
       <Stack direction='row' justifyContent={isSmallScreen ? 'center' : 'space-between'} alignItems='center' sx={{ borderTop: 'solid 1px #414141', pt: 6}}>
-        <Stack direction='row' sx={{ gap: {xs: 8, md: 4, lg: 12}, display: {xs: 'none', 'md': 'flex'} }}>
+        <Box></Box>
+        {/* <Stack direction='row' sx={{ gap: {xs: 8, md: 4, lg: 12}, display: {xs: 'none', 'md': 'flex'} }}>
           <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} target='_blank' href='https://policy.com' ml={13}>
             Privacy Policy
           </Typography>
           <Typography variant='subtitle1' fontWeight={500} component={LinkStyled} target='_blank' href='https://terms.com'>
             Terms of Use
           </Typography>
-        </Stack>
+        </Stack> */}
         <Stack direction='row'>
           <Typography fontSize={isSmallScreen ? 12 : 14} sx={{display: 'flex', alignItems: 'center', fontWeight: 400, color: '#979899' }}>
             Tren Finance Protocol
