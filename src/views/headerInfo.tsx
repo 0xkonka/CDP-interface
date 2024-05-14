@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 import { formatEther, formatUnits } from 'viem'
 
 const HeaderInfo = () => {
-  const { isSmallScreen } = useGlobalValues()
+  const { isSmallScreen, isMediumLargeScreen } = useGlobalValues()
   const { collateralDetails } = useProtocol()
 
   const ProtocolInfo = useMemo(() => {
@@ -28,11 +28,18 @@ const HeaderInfo = () => {
   }, [collateralDetails])
 
   return (
-    <Box>
-      <Stack direction='row' position='relative'>
+    <Box  
+      mt={10}
+      mb={32}
+      position='relative'
+      borderRadius='10px'
+      border='solid 1px #2D3131'
+      overflow='hidden'
+      sx={{ px: { xs: 4, md: 8, xl: 15 }, py: { xs: 4, md: 9 } }}>
+      <Stack direction='row' position='relative' zIndex={10}>
         <Box zIndex={1} width='100%'>
           <Typography className='header-gradient' variant='h1' sx={{
-              mb: { xs: 4, md: 8 }, mt: 8,
+              mb: { xs: 4, md: 8 }, mt: 4,
               fontSize: { xs: 36, md: 64, xl: 72 },
             }}
           >
@@ -47,17 +54,17 @@ const HeaderInfo = () => {
             Pay back your loan later using trenUSD or your collateral.
           </Typography>
         </Box>
-        <Box position='absolute' right={-250} top={-240} sx={{display: {xs: 'none', lg: 'block'}, userSelect: 'none'}}>
+        {/* <Box position='absolute' right={-250} top={-240} sx={{display: {xs: 'none', lg: 'block'}, userSelect: 'none'}}>
           <iframe src='https://my.spline.design/retroglassmaterialcopy-f7fc0736b8e30a6131788f0a32a7a06c/' frameBorder='0' width='1000px' height='1000px'></iframe>
-        </Box>
+        </Box> */}
       </Stack>
       {/* Total Info Group Seection */}
       <Stack
         id='total-info'
         direction='row'
-        sx={{ mb: 32, justifyContent: 'space-between', flexWrap: 'wrap', gap: { xs: 8, md: 16 } }}
+        sx={{ mb: 4, justifyContent: 'space-between', flexWrap: 'wrap', gap: { xs: 8, md: 16 } }}
         position='relative'
-        zIndex={1}
+        zIndex={10}
       >
         <Stack
           direction='row'
@@ -67,7 +74,7 @@ const HeaderInfo = () => {
             <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{ mb: 1 }} color='#C6C6C7' fontWeight={400}>
               Total Collateral
             </Typography>
-            <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 600 }}>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'h4'} sx={{ fontWeight: 600 }}>
               ${Number(ProtocolInfo?.totalCollateral).toLocaleString()}
             </Typography>
           </Box>
@@ -75,7 +82,7 @@ const HeaderInfo = () => {
             <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{ mb: 1 }} color='#C6C6C7' fontWeight={400}>
               Total Debts
             </Typography>
-            <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 600 }}>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'h4'} sx={{ fontWeight: 600 }}>
               ${Number(ProtocolInfo?.totalDebt).toLocaleString()}
             </Typography>
           </Box>
@@ -83,7 +90,7 @@ const HeaderInfo = () => {
             <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} sx={{ mb: 1 }} color='#C6C6C7' fontWeight={400}>
               TrenUSD Available
             </Typography>
-            <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 600 }}>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'h4'} sx={{ fontWeight: 600 }}>
               ${Number(ProtocolInfo?.totalAvailableUSD).toLocaleString()}
             </Typography>
           </Box>
@@ -134,6 +141,23 @@ const HeaderInfo = () => {
           </Typography>
         </Stack>
       </Stack>
+      <Box sx={{
+          display: { xs: 'none', lg: 'block' },
+          width: '100%',
+          position: 'absolute',
+          zIndex: '1',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)'
+      }}>
+        <video autoPlay muted loop id='background-video' style={{ width: '100%' }}>
+            <source
+            src={isMediumLargeScreen ? '/videos/tren-pool-gradient.mp4' : '/videos/tren-pool-gradient.mp4'}
+            type='video/mp4'
+            />
+            Your browser does not support the video tag.
+        </video>
+      </Box>
     </Box>
   )
 }

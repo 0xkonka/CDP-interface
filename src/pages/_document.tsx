@@ -21,10 +21,10 @@ class CustomDocument extends Document {
           <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
           <link rel='apple-touch-icon' sizes='180x180' href='/images/apple-touch-icon.png' />
           <link rel='shortcut icon' href='/images/favicon.png' />
-          <Script
+          {/* <Script
             src="https://unpkg.com/@splinetool/viewer@1.2.5/build/spline-viewer.js"
             strategy="beforeInteractive"
-          />
+          /> */}
         </Head>
         <body>
           <Main />

@@ -11,8 +11,8 @@ export const TrenPointBanner = () => {
         <Box
             mt={10}
             position='relative'
-            borderRadius={2.5}
-            border='solid 2px #2D3131'
+            borderRadius='10px'
+            border='solid 1px #2D3131'
             overflow='hidden'
             sx={{ px: { xs: 4, md: 8, xl: 15 }, py: { xs: 4, md: 9 } }}
         >
