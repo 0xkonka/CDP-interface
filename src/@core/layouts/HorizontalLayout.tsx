@@ -3,7 +3,7 @@ import Fab from '@mui/material/Fab'
 import AppBar from '@mui/material/AppBar'
 import { styled } from '@mui/material/styles'
 import Box, { BoxProps } from '@mui/material/Box'
-import { Stack, Typography } from '@mui/material'
+import { Stack, Typography, Link } from '@mui/material'
 import MuiToolbar, { ToolbarProps } from '@mui/material/Toolbar'
 import useScrollTrigger from '@mui/material/useScrollTrigger'
 
@@ -150,7 +150,7 @@ const HorizontalLayout = (props: LayoutProps) => {
               }}>
                 <Typography sx={{color: '#000', fontWeight: 500, textAlign: 'center'}}>
                   Tren has been accepted into Mode Network’s Yield Accelerator.&nbsp;
-                  <span style={{fontWeight: 600}}>Read more</span>
+                  <Link style={{fontWeight: 600, color: '#000'}} href='https://mode.mirror.xyz/lQu3X5t-cKve4Yu2gfa49rPRS_0rhMq-4zXUyFCPH8M' target='_blank'>Read more</Link>
                 </Typography>
                 {/* <Box sx={{width: 16, height: 16, position: 'absolute', right: 24, top: '50%', transform: 'translate(0, -50%)', cursor: 'pointer'}} onClick={(closeAnnouncementBar)}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
