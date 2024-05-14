@@ -15,7 +15,7 @@ import { multicall, readContract, getBalance } from '@wagmi/core'
 import ADMIN_CONTRACT_ABI from '@/abi/AdminContract.json'
 import PRICE_FEED_ABI from '@/abi/PriceFeed.json'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
-import { ADMIN_CONTRACT, PRICE_FEED, BORROWER_OPERATIONS, ACTIVE_POOL } from '@/configs/address'
+import { ADMIN_CONTRACT, PRICE_FEED, BORROWER_OPERATIONS, TRENBOX_STORAGE } from '@/configs/address'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { wagmiConfig } from '@/pages/_app'
 import { ProtocolContext } from './ProtocolContext'
@@ -159,7 +159,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
               abi: erc20Abi,
               address: collaterals[i] as '0x{string}',
               functionName: 'balanceOf',
-              args: [ACTIVE_POOL[chainId] as '0x{string}']
+              args: [TRENBOX_STORAGE[chainId] as '0x{string}']
             },
           ]
         })
@@ -206,9 +206,9 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
           entireSystemDebt,
           totalCollDeposited,
           totalBorrowAvailable: mintCap - entireSystemDebt,
-          LTV: parseEther((1 / +formatEther(mcr)).toString()),
+          LTV: parseEther((1 / +formatEther(mcr) - 0.15).toString()),
           interest: 5,
-          liquidation: parseEther((1 / +formatEther(mcr) + 0.1).toString()),
+          liquidation: parseEther((1 / +formatEther(mcr)).toString()),
           type: 'token_type_here',
           borrowAPY: 0,
           maxLeverage: 0,
@@ -217,7 +217,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
           platform: 'platform',
           rateType: 'collateral rate tye here'
         }
-
+        console.log(_collateralDetail.symbol, _collateralDetail.price)
         _collateralDetails.push(_collateralDetail)
       }
       console.log('_collateralDetails', _collateralDetails)

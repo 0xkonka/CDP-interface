@@ -1,5 +1,128 @@
 [
     {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "previousAdmin",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "newAdmin",
+                "type": "address"
+            }
+        ],
+        "name": "AdminChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "beacon",
+                "type": "address"
+            }
+        ],
+        "name": "BeaconUpgraded",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "implementation",
+                "type": "address"
+            }
+        ],
+        "name": "Upgraded",
+        "type": "event"
+    },
+    {
+        "stateMutability": "payable",
+        "type": "fallback"
+    },
+    {
+        "inputs": [],
+        "name": "admin",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "admin_",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newAdmin",
+                "type": "address"
+            }
+        ],
+        "name": "changeAdmin",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "implementation",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "implementation_",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newImplementation",
+                "type": "address"
+            }
+        ],
+        "name": "upgradeTo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newImplementation",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes",
+                "name": "data",
+                "type": "bytes"
+            }
+        ],
+        "name": "upgradeToAndCall",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "stateMutability": "payable",
+        "type": "receive"
+    },
+    {
         "inputs": [
             {
                 "internalType": "address",
@@ -8,6 +131,53 @@
             }
         ],
         "name": "AddressEmptyCode",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "AddressInsufficientBalance",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ConfigurableAddresses__CommunityIssuanceZeroAddress",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ConfigurableAddresses__LengthMismatch",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ConfigurableAddresses__SetupIsInitialized",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ConfigurableAddresses__TRENStakingZeroAddress",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "position",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "address_",
+                "type": "address"
+            }
+        ],
+        "name": "ConfigurableAddresses__ZeroAddresses",
         "type": "error"
     },
     {
@@ -28,7 +198,17 @@
     },
     {
         "inputs": [],
+        "name": "EthUnsupportedError",
+        "type": "error"
+    },
+    {
+        "inputs": [],
         "name": "FailedInnerCall",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "InvalidAmountError",
         "type": "error"
     },
     {
@@ -65,6 +245,52 @@
     },
     {
         "inputs": [],
+        "name": "ReentrancyGuardReentrantCall",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+            }
+        ],
+        "name": "SafeERC20FailedOperation",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "TrenBoxStorage__BorrowerOperationsOnly",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "TrenBoxStorage__BorrowerOperationsOrTrenBoxManagerOnly",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "TrenBoxStorage__NoClaimableCollateral",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "TrenBoxStorage__NotAuthorizedContract",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "TrenBoxStorage__TrenBoxManagerOnly",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "TrenBoxStorage__TrenBoxManagerOperationsOnly",
+        "type": "error"
+    },
+    {
+        "inputs": [],
         "name": "UUPSUnauthorizedCallContext",
         "type": "error"
     },
@@ -78,6 +304,88 @@
         ],
         "name": "UUPSUnsupportedProxiableUUID",
         "type": "error"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_newBalance",
+                "type": "uint256"
+            }
+        ],
+        "name": "ActiveCollateralBalanceUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_newBalance",
+                "type": "uint256"
+            }
+        ],
+        "name": "ActiveDebtBalanceUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_newBalance",
+                "type": "uint256"
+            }
+        ],
+        "name": "ClaimableCollateralBalanceUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_to",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "CollateralSent",
+        "type": "event"
     },
     {
         "anonymous": false,
@@ -98,23 +406,17 @@
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "_asset",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "address",
-                "name": "_id",
+                "name": "_collateral",
                 "type": "address"
             },
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "_NICR",
+                "name": "_newBalance",
                 "type": "uint256"
             }
         ],
-        "name": "NodeAdded",
+        "name": "LiquidatedCollateralBalanceUpdated",
         "type": "event"
     },
     {
@@ -123,17 +425,17 @@
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "_asset",
+                "name": "_collateral",
                 "type": "address"
             },
             {
                 "indexed": false,
-                "internalType": "address",
-                "name": "_id",
-                "type": "address"
+                "internalType": "uint256",
+                "name": "_newBalance",
+                "type": "uint256"
             }
         ],
-        "name": "NodeRemoved",
+        "name": "LiquidatedDebtBalanceUpdated",
         "type": "event"
     },
     {
@@ -161,11 +463,23 @@
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "implementation",
+                "name": "_account",
                 "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_newBalance",
+                "type": "uint256"
             }
         ],
-        "name": "Upgraded",
+        "name": "UserClaimableCollateralBalanceUpdated",
         "type": "event"
     },
     {
@@ -196,19 +510,6 @@
     },
     {
         "inputs": [],
-        "name": "activePool",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "adminContract",
         "outputs": [
             {
@@ -224,7 +525,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "newImplementation",
+                "name": "_newImplementation",
                 "type": "address"
             }
         ],
@@ -247,16 +548,21 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "collSurplusPool",
-        "outputs": [
+        "inputs": [
             {
                 "internalType": "address",
-                "name": "",
+                "name": "_collateral",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_account",
                 "type": "address"
             }
         ],
-        "stateMutability": "view",
+        "name": "claimCollateral",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -267,59 +573,6 @@
                 "internalType": "address",
                 "name": "",
                 "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_asset",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_id",
-                "type": "address"
-            }
-        ],
-        "name": "contains",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "data",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "head",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "tail",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "size",
-                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -339,16 +592,62 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "defaultPool",
-        "outputs": [
+        "inputs": [
             {
                 "internalType": "address",
-                "name": "",
+                "name": "_collateral",
                 "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_debtAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_collAmount",
+                "type": "uint256"
             }
         ],
-        "stateMutability": "view",
+        "name": "decreaseActiveBalancesAfterRedemption",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "decreaseActiveCollateral",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "decreaseActiveDebt",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -365,47 +664,8 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_asset",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_NICR",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "_prevId",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_nextId",
-                "type": "address"
-            }
-        ],
-        "name": "findInsertPosition",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [],
-        "name": "gasPoolAddress",
+        "name": "flashLoanAddress",
         "outputs": [
             {
                 "internalType": "address",
@@ -420,97 +680,11 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_asset",
+                "name": "_collateral",
                 "type": "address"
             }
         ],
-        "name": "getFirst",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_asset",
-                "type": "address"
-            }
-        ],
-        "name": "getLast",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_asset",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_id",
-                "type": "address"
-            }
-        ],
-        "name": "getNext",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_asset",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_id",
-                "type": "address"
-            }
-        ],
-        "name": "getPrev",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_asset",
-                "type": "address"
-            }
-        ],
-        "name": "getSize",
+        "name": "getActiveCollateralBalance",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -522,8 +696,157 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "initialize",
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            }
+        ],
+        "name": "getActiveDebtBalance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            }
+        ],
+        "name": "getClaimableCollateralBalance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            }
+        ],
+        "name": "getLiquidatedCollateralBalance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            }
+        ],
+        "name": "getLiquidatedDebtBalance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            }
+        ],
+        "name": "getTotalCollateralBalance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            }
+        ],
+        "name": "getTotalDebtBalance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_account",
+                "type": "address"
+            }
+        ],
+        "name": "getUserClaimableCollateralBalance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "increaseActiveCollateral",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -532,31 +855,47 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_asset",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_id",
+                "name": "_collateral",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "_NICR",
+                "name": "_amount",
                 "type": "uint256"
-            },
+            }
+        ],
+        "name": "increaseActiveDebt",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
             {
                 "internalType": "address",
-                "name": "_prevId",
+                "name": "_collateral",
                 "type": "address"
             },
             {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "increaseClaimableCollateral",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "address",
-                "name": "_nextId",
+                "name": "initialOwner",
                 "type": "address"
             }
         ],
-        "name": "insert",
+        "name": "initialize",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -564,25 +903,6 @@
     {
         "inputs": [],
         "name": "isAddressSetupInitialized",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_asset",
-                "type": "address"
-            }
-        ],
-        "name": "isEmpty",
         "outputs": [
             {
                 "internalType": "bool",
@@ -633,59 +953,31 @@
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_asset",
+                "name": "_collateral",
                 "type": "address"
             },
             {
                 "internalType": "address",
-                "name": "_id",
+                "name": "_account",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "_newNICR",
+                "name": "_amount",
                 "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "_prevId",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_nextId",
-                "type": "address"
             }
         ],
-        "name": "reInsert",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_asset",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_id",
-                "type": "address"
-            }
-        ],
-        "name": "remove",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "renounceOwnership",
+        "name": "sendCollateral",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -822,6 +1114,19 @@
     },
     {
         "inputs": [],
+        "name": "trenBoxStorage",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "trenStaking",
         "outputs": [
             {
@@ -837,52 +1142,95 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "newImplementation",
+                "name": "_collateral",
                 "type": "address"
             },
             {
-                "internalType": "bytes",
-                "name": "data",
-                "type": "bytes"
+                "internalType": "uint256",
+                "name": "_debtAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_collAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "_isActiveIncrease",
+                "type": "bool"
             }
         ],
-        "name": "upgradeToAndCall",
+        "name": "updateDebtAndCollateralBalances",
         "outputs": [],
-        "stateMutability": "payable",
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_asset",
+                "name": "_collateral",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_account",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "_NICR",
+                "name": "_amount",
                 "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "_prevId",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_nextId",
-                "type": "address"
             }
         ],
-        "name": "validInsertPosition",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
+        "name": "updateUserAndEntireClaimableBalance",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_collateral",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_account",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "updateUserClaimableBalance",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_logic",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "admin_",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes",
+                "name": "_data",
+                "type": "bytes"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "constructor"
     }
 ]

@@ -132,7 +132,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                         <img 
                             src={`/images/tokens/${row.symbol.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
                             alt={row.symbol} height={isSmallScreen ? 24 : 32}
-                            style={{ width: 'auto' }}
+                            style={{ width: 'auto', borderRadius: '100%' }}
                         />
                         <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} sx={{fontWeight: 400, ml: 2}}>{row.symbol}</Typography>
                         <CustomChip label={row.type} skin='light' color={getChipTheme(row.type)} style={{marginLeft: 16}}/>
@@ -203,7 +203,7 @@ const CollateralRow = (props: TableHeaderProps) => {
                     <img 
                         src={`/images/tokens/${row.symbol.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
                         alt={row.symbol} width={32} height={32}
-                        style={{ width: 'auto' }}
+                        style={{ width: 'auto', borderRadius: '100%' }}
                     />
                     <Typography variant='h5' sx={{fontWeight: 400, ml: 2}}>{row.symbol}</Typography>
                     <CustomChip label={row.type} skin='light' color={getChipTheme(row.type)} style={{marginLeft: 16}}/>
