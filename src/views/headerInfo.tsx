@@ -29,13 +29,11 @@ const HeaderInfo = () => {
 
   return (
     <Box  
-      mt={10}
-      mb={32}
       position='relative'
       borderRadius='10px'
       border='solid 1px #2D3131'
       overflow='hidden'
-      sx={{ px: { xs: 4, md: 8, xl: 15 }, py: { xs: 4, md: 9 } }}>
+      sx={{ px: { xs: 4, md: 8, xl: 15 }, py: { xs: 4, md: 9 }, mt: {xs: 6, md: 10}, mb: {xs: 16, md: 32}}}>
       <Stack direction='row' position='relative' zIndex={10}>
         <Box zIndex={1} width='100%'>
           <Typography className='header-gradient' variant='h1' sx={{
@@ -152,7 +150,7 @@ const HeaderInfo = () => {
       }}>
         <video autoPlay muted loop id='background-video' style={{ width: '100%' }}>
             <source
-            src={isMediumLargeScreen ? '/videos/tren-pool-gradient.mp4' : '/videos/tren-pool-gradient.mp4'}
+            src={isMediumLargeScreen ? '/videos/tren-pool-laptop.mp4' : '/videos/tren-pool.mp4'}
             type='video/mp4'
             />
             Your browser does not support the video tag.
