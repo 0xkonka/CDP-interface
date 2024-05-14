@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react'
 // ** Third Party Imports
 import { ApexOptions } from 'apexcharts'
 import { formatToThousands } from '@/hooks/utils';
+import { useGlobalValues } from '@/context/GlobalContext';
 
 interface Props {
   title?: string
@@ -22,6 +23,7 @@ export const BarChart = (props: Props) => {
   const [period, setPeriod] = useState(30)
   const [series, setSeries] = useState<number[]>([])
   const [categories, setCategories] = useState<string[]>([])
+  const {isMobileScreen} = useGlobalValues()
 
   useEffect(()=>{
     if (categories.length === 0) {
@@ -149,7 +151,7 @@ export const BarChart = (props: Props) => {
       
       <ReactApexcharts
           type='bar'
-          height={310}
+          height={isMobileScreen ? 250 : 280}
           options={options}
           // series={[{ data: [72000, 36000, 4200, 65000, 2100, 3500, 15000] }]}
           series={[{

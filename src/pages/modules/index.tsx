@@ -202,7 +202,7 @@ const Modules = () => {
                 }}
               >
                 <span style={{ marginLeft: -6 }}>{value}</span>
-                <span style={{ position: 'absolute', right: 19 }}>
+                <span style={{ position: 'absolute', right: 15 }}>
                   {filteredRows.length}
                 </span>
               </ToggleOnButton>

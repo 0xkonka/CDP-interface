@@ -148,7 +148,7 @@ const Earn = () => {
             >
                 Earn
             </Typography>
-            <Stack direction={isMediumScreen ? 'column' : 'row'} justifyContent='space-between' sx={{mb: { xs: 8, md: 16 }}} gap={8}>
+            <Stack direction={isMediumScreen ? 'column' : 'row'} justifyContent='space-between' sx={{mb: { xs: 8, md: 24 }}} gap={8}>
                 <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} color='#F3F3F3'
                     sx={{ fontWeight: 300, width: 730, maxWidth: '100%', lineHeight: { xs: 1.25, sm: 1.7 } }}>
                     TrenUSD holders can stake into the stability pool, contributing to the protocol's overall health. 
@@ -174,7 +174,10 @@ const Earn = () => {
                 </Stack>
             </Stack>
             <StabilityPool/>
-            <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: {xs: 4, md: 10}, mt: 20 }}>
+
+            {/* We hide this section for testnet only */}
+            {/* Network Type */}
+            {/* <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: {xs: 4, md: 10}, mt: 20 }}>
                 {networkTypes.map((value, index) => {
                     return value == networkFilter ? (
                         <ToggleOnButton
@@ -184,7 +187,7 @@ const Earn = () => {
                             }}
                         >
                             <span style={{ marginLeft: -6 }}>{value}</span>
-                            <span style={{ position: 'absolute', right: 19 }}>
+                            <span style={{ position: 'absolute', right: 15 }}>
                                 {filteredRows.length}
                             </span>
                         </ToggleOnButton>
@@ -199,9 +202,10 @@ const Earn = () => {
                         </ToggleOffButton>
                     )
                     })}
-            </Box>
+            </Box> */}
+
             {/* Collateral Table Header */}
-            <Stack direction='row' sx={{
+            {/* <Stack direction='row' sx={{
                 px: 6, pt: 2, 
                 display: {
                     xs: 'none',
@@ -219,10 +223,10 @@ const Earn = () => {
                         sortable={item.sortable}
                     />
                 ))}
-            </Stack>
+            </Stack> */}
 
             {/* Collateral Group Stack*/}
-            {collateralDetails && (
+            {/* {collateralDetails && (
                 <Stack sx={{ mt: 4 }} gap={4}>
                 {filteredRows.length > 0 ? (
                     filteredRows.map((row, index) => (
@@ -239,7 +243,7 @@ const Earn = () => {
                     </Box>
                 )}
                 </Stack>
-            )}
+            )} */}
         </Box>
     )
 }
