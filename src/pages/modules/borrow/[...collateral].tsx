@@ -258,7 +258,7 @@ const Borrow = () => {
                           src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
                           alt={collateral}
                           height={42}
-                          style={{ marginRight: 10 }}
+                          style={{ marginRight: 10, borderRadius: '100%' }}
                         />
                         {collateral}
                       </Stack>

@@ -129,6 +129,7 @@ export const AmountForm = (props: Props) => {
                         <img 
                             src={`/images/tokens/${asset.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
                             alt={asset} height={28}
+                            style={{borderRadius: '100%'}}
                         />
                         <Typography variant='h5'>{asset}</Typography>
                     </Stack>

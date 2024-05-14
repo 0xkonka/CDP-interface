@@ -84,7 +84,7 @@ export const EarnRow = (props: TableHeaderProps) => {
                         <img 
                             src={`/images/tokens/${row.symbol.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
                             alt={row.symbol} width={32} height={32}
-                            style={{ width: 'auto' }}
+                            style={{ width: 'auto', borderRadius: '100%' }}
                         />
                         <Typography variant='h5' sx={{fontWeight: 400, ml: 2}}>{row.symbol}</Typography>
                     </Stack>
@@ -168,7 +168,7 @@ export const EarnRow = (props: TableHeaderProps) => {
                             <img 
                                 src={`/images/tokens/trenUSD.png`}
                                 alt='trenUSD' width={25} height={25}
-                                style={{ width: 'auto' }}
+                                style={{ width: 'auto', borderRadius: '100%' }}
                             />
                             <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' fontWeight={400}>
                                 178.2

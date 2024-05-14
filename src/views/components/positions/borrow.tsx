@@ -137,7 +137,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
                   src={`/images/tokens/${row.symbol.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
                   alt={row.symbol}
                   height={isSmallScreen ? 36 : 42}
-                  style={{ marginRight: 10 }}
+                  style={{ marginRight: 10, borderRadius: '100%' }}
                 />
                 {row.symbol}
               </Stack>

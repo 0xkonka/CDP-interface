@@ -35,7 +35,7 @@ export const TransactionOverView = (props: Props) => {
                         <Stack direction='row' gap={2} justifyContent='flex-end' alignItems='center'>
                             <img 
                                 src={`/images/tokens/${collateral.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
-                                alt={collateral} height={28}
+                                alt={collateral} height={28} style={{borderRadius: '100%'}}
                             />
                             <Typography variant='h4'>{formatToThousandsInt(poolBalance)}</Typography>
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="8" viewBox="0 0 15 8" fill="none">
@@ -43,7 +43,7 @@ export const TransactionOverView = (props: Props) => {
                             </svg>
                             <img 
                                 src={`/images/tokens/${collateral.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
-                                alt={collateral} height={28}
+                                alt={collateral} height={28} style={{borderRadius: '100%'}}
                             />
                             <Typography variant='h4'>{formatToThousandsInt(newPoolBalance)}</Typography>
                         </Stack>
