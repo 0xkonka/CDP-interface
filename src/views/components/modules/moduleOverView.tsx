@@ -85,7 +85,7 @@ export const ModuleOverView = (props: Props) => {
     borderBottom: 'solid 1px',
     borderTop: 'solid 1px',
     borderColor: theme.palette.secondary.dark,
-    gap: 6,
+    gap: 10,
     overflowX: 'scroll'
   }
 
@@ -93,7 +93,7 @@ export const ModuleOverView = (props: Props) => {
   return (
     <Stack
       direction='row'
-      sx={{ ...computedStyle, flexWrap: isMediumScreen ? 'nowrap' : 'wrap', justifyContent: 'space-between' }}
+      sx={{ ...computedStyle, flexWrap: isMediumScreen ? 'nowrap' : 'wrap', justifyContent: 'space-between', px: {xs: 4, md: 12}, background: '#1013149C' }}
     >
       {labels.map((label, index) => (
         <Stack key={index} sx={{ alignItems: 'center', gap: isSmallScreen ? 0 : 1 }}>
@@ -109,7 +109,7 @@ export const ModuleOverView = (props: Props) => {
               </IconButton>
             </Tooltip>
           </Typography>
-          <Typography variant='body1'>
+          <Typography variant='body1' sx={{whiteSpace: 'nowrap'}}>
             {
               label.key != 'trenUSD Available' ? 
                 label.value : 

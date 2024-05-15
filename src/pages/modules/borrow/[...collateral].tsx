@@ -220,7 +220,24 @@ const Borrow = () => {
           Go back to modules
         </Typography>
       </Stack>
-      <ModuleOverView collateral={collateral || ''} />
+      <Box sx={{mb: {xs: 8, lg: 12}}}>
+        <ModuleOverView collateral={collateral || ''} />
+      </Box>
+      <Box sx={{...radiusBoxStyle, background: '#1013149C'}}>
+        <Grid container spacing={8}>
+          <Grid item xs={12} lg={6}>
+            <HealthFactor 
+              safety={healthFactor}
+          />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <BorrowingPower 
+              percent={borrowingPowerPercent}
+              max={maxBorrowingValue}
+          />
+          </Grid>
+        </Grid>
+      </Box>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
           <Stack direction='column-reverse'>
@@ -237,146 +254,128 @@ const Borrow = () => {
           </Stack>
         </Grid>
         <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Stack sx={{ ...radiusBoxStyle, height: 1, justifyContent: 'center' }}>
-            <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
-              {
-                positionStatus == 'active' &&
-                <Grid container sx={{ height: '100%' }}>
-                  <Grid item xs={12} md={6}
-                    sx={{
-                      pr: { xs: 0, md: 4 },
-                      borderBottom: { xs: 'solid 1px #2D3131', md: 0 },
-                      borderRight: { md: 'solid 1px #2D3131' }
-                    }}
-                  >
-                    <Typography variant='subtitle1' sx={{ mb: 4, fontWeight: 600 }}>
-                      Collateral
-                    </Typography>
-                    <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
-                      <Stack direction='row' sx={{ alignItems: 'center' }}>
-                        <img
-                          src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
-                          alt={collateral}
-                          height={42}
-                          style={{ marginRight: 10, borderRadius: '100%' }}
-                        />
-                        {collateral}
-                      </Stack>
-                      <Box>
-                        <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
-                          {formatToThousands(+formatEther(depositedAmount)).substring(1)}
-                        </Typography>
-                        <Stack direction='row' alignItems='center' gap={1}>
-                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
-                          <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                            {formatToThousands(+formatEther(depositedAmount) * +formatEther(price!))}
-                          </Typography>
-                        </Stack>
-                      </Box>
-                    </Stack>
-                    <Stack direction='row' sx={{ mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 } }}>
-                      <Button
-                        sx={{
-                          color: 'white',
-                          borderColor: '#67DAB1',
-                          mr: { xs: 2, md: 4 },
-                        }}
-                        variant='outlined'
-                        onClick={handleDepositMore}
-                      >
-                        Deposit more
-                      </Button>
-                      <Button
-                        sx={{
-                          color: 'white',
-                          borderColor: '#6795DA'
-                        }}
-                        variant='outlined'
-                        onClick={handleWithdraw}
-                      >
-                        Withdraw
-                      </Button>
-                    </Stack>
-                  </Grid>
-                  <Grid item xs={12} md={6} sx={{ pl: { xs: 0, md: 4 }, pt: { xs: 4, md: 0 } }}>
-                    <Typography variant='subtitle1' sx={{ mb: 4, fontWeight: 600 }}>
-                      Debt
-                    </Typography>
-                    <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
-                      <Stack direction='row' sx={{ alignItems: 'center' }}>
-                        <Image
-                          src={`/images/tokens/trenUSD.png`}
-                          alt='TrenUSD'
-                          width={32}
-                          height={32}
-                          style={{ borderRadius: '100%', marginRight: 10 }}
-                        />
-                        trenUSD
-                      </Stack>
-                      <Box>
-                        <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
-                          {formatToThousands(+formatEther(debtAmount)).substring(1)}
-                        </Typography>
-                        <Stack direction='row' alignItems='center' gap={1}>
-                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
-                          <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                            {formatToThousands(+formatEther(debtAmount))}
-                          </Typography>
-                        </Stack>
-                      </Box>
-                    </Stack>
-                    <Stack direction='row' sx={{ mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 } }}>
-                      <Button
-                        sx={{
-                          mr: { xs: 2, md: 4 },
-                          color: 'white',
-                          borderColor: '#C6E0DC'
-                        }}
-                        variant='outlined'
-                        onClick={handleBorrowMore}
-                      >
-                        Borrow more
-                      </Button>
-                      <Button
-                        sx={{
-                          color: 'white',
-                          borderColor: '#C9A3FA'
-                        }}
-                        variant='outlined'
-                        onClick={handleRepay}
-                      >
-                        Repay
-                      </Button>
-                    </Stack>
-                  </Grid>
-                </Grid>
-              }
-              {
-                positionStatus != 'active' &&
-                <Typography variant='subtitle1' color='white' sx={{opacity: 0.2}}>
-                  No open modules
+          <Stack sx={{ ...radiusBoxStyle, height: 1, background: '#1013149C', mt: {xs: 0, lg: 10} }}>
+          {
+            positionStatus == 'active' &&
+            <Stack sx={{width: 1, height: 1, justifyContent: 'space-between', gap: {xs: 6, lg: 0}}}>
+              <Box>
+                <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 600 }}>
+                  Collateral
                 </Typography>
-              }  
+                <Stack gap={4} justifyContent='space-between' sx={{flexDirection: {xs: 'column', lg: 'row'}, alignItems: {xs: 'flex-start', lg: 'center'}}}>
+                  <Stack direction='row' sx={{ width: 1, justifyContent: 'space-between' }}>
+                    <Stack direction='row' sx={{ alignItems: 'center' }}>
+                      <img
+                        src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
+                        alt={collateral}
+                        height={42}
+                        style={{ marginRight: 10, borderRadius: '100%' }}
+                      />
+                      {collateral}
+                    </Stack>
+                    <Box>
+                      <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
+                        {formatToThousands(+formatEther(depositedAmount)).substring(1)}
+                      </Typography>
+                      <Stack direction='row' alignItems='center' gap={1}>
+                        <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
+                        <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
+                          {formatToThousands(+formatEther(depositedAmount) * +formatEther(price!))}
+                        </Typography>
+                      </Stack>
+                    </Box>
+                  </Stack>
+                  <Stack direction='row' sx={{ width: 1, justifyContent: {xs: 'flex-start', lg: 'flex-end'}}}>
+                    <Button
+                      sx={{
+                        color: 'white',
+                        borderColor: '#67DAB1',
+                        mr: { xs: 2, md: 4 },
+                      }}
+                      variant='outlined'
+                      onClick={handleDepositMore}
+                    >
+                      Deposit more
+                    </Button>
+                    <Button
+                      sx={{
+                        color: 'white',
+                        borderColor: '#6795DA'
+                      }}
+                      variant='outlined'
+                      onClick={handleWithdraw}
+                    >
+                      Withdraw
+                    </Button>
+                  </Stack>
+                </Stack>
+              </Box>
+              <Box sx={{height: '1px', borderBottom: 'solid 1px #2D3131'}}></Box>
+              <Box>
+                <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 600 }}>
+                  Debt
+                </Typography>
+                <Stack gap={4} justifyContent='space-between' sx={{flexDirection: {xs: 'column', lg: 'row'}, alignItems: {xs: 'flex-start', lg: 'center'}}}>
+                  <Stack direction='row' sx={{ width: 1, justifyContent: 'space-between' }}>
+                    <Stack direction='row' sx={{ alignItems: 'center' }}>
+                      <Image
+                        src={`/images/tokens/trenUSD.png`}
+                        alt='TrenUSD'
+                        width={32}
+                        height={32}
+                        style={{ borderRadius: '100%', marginRight: 10 }}
+                      />
+                      trenUSD
+                    </Stack>
+                    <Box>
+                      <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
+                        {formatToThousands(+formatEther(debtAmount)).substring(1)}
+                      </Typography>
+                      <Stack direction='row' alignItems='center' gap={1}>
+                        <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
+                        <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
+                          {formatToThousands(+formatEther(debtAmount))}
+                        </Typography>
+                      </Stack>
+                    </Box>
+                  </Stack>
+                  <Stack direction='row' sx={{ width: 1, justifyContent: {xs: 'flex-start', lg: 'flex-end'}}}>
+                    <Button
+                      sx={{
+                        mr: { xs: 2, md: 4 },
+                        color: 'white',
+                        borderColor: '#C6E0DC'
+                      }}
+                      variant='outlined'
+                      onClick={handleBorrowMore}
+                    >
+                      Borrow more
+                    </Button>
+                    <Button
+                      sx={{
+                        color: 'white',
+                        borderColor: '#C9A3FA'
+                      }}
+                      variant='outlined'
+                      onClick={handleRepay}
+                    >
+                      Repay
+                    </Button>
+                  </Stack>
+                </Stack>
+              </Box>
             </Stack>
+          }
+          {
+            positionStatus != 'active' &&
+            <Typography variant='subtitle1' color='white' sx={{opacity: 0.2}}>
+              No open modules
+            </Typography>
+          }  
           </Stack>
-          <Box sx={radiusBoxStyle}>
-            <Grid container spacing={8}>
-              <Grid item xs={12} lg={6}>
-                <HealthFactor 
-                  safety={healthFactor}
-                />
-              </Grid>
-              <Grid item xs={12} lg={6}>
-                <BorrowingPower 
-                  percent={borrowingPowerPercent}
-                  max={maxBorrowingValue}
-                />
-              </Grid>
-            </Grid>
-          </Box>
         </Grid>
       </Grid>
-      <Box sx={{...radiusBoxStyle, pt: 6, pb: 6}} >
+      <Box sx={{...radiusBoxStyle, pt: 6, pb: 6, background: '#1013149C', mt: {xs: 8, md: 12}}} >
         <Result
           liquidationPrice={liquidationPrice}
           ltv={currentLTV}

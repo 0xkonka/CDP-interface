@@ -98,7 +98,7 @@ export const AmountForm = (props: Props) => {
                 </Tooltip>
             </Typography>
             }
-            <Box sx={{...radiusBoxStyle, ...borderColorStyle, pt: 2}} onClick={focusAmount}>
+            <Box sx={{...radiusBoxStyle, ...borderColorStyle, pt: 2, background: '#1013149C'}} onClick={focusAmount}>
                 <Stack direction='row' justifyContent='space-between'>
                     <CleaveWrapper style={{ position: 'relative' }}>
                         <Cleave
