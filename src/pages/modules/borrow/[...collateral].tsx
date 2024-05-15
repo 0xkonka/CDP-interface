@@ -63,6 +63,7 @@ const Borrow = () => {
   const [depositAmount, setDepositAmount] = useState('')
   const [borrowAmount, setBorrowAmount] = useState('')
   const [triggerEffect, setTriggerEffect] = useState(0);
+  const {isMobileScreen} = useGlobalValues()
 
   // Hook data fetching
   const { address: account, isConnected } = useAccount()
@@ -238,7 +239,7 @@ const Borrow = () => {
           </Grid>
         </Grid>
       </Box>
-      <Grid container spacing={4}>
+      <Grid container spacing={isMobileScreen ? 2 : 8}>
         <Grid item xs={12} md={6}>
           <Stack direction='column-reverse'>
             <AmountForm amount={borrowAmount} setAmount={setBorrowAmount} type='borrow' asset='trenUSD' available={userModuleInfo.userAvailableBorrowAmount} showTooltip={false}/>
@@ -263,7 +264,7 @@ const Borrow = () => {
                   Collateral
                 </Typography>
                 <Stack gap={4} justifyContent='space-between' sx={{flexDirection: {xs: 'column', lg: 'row'}, alignItems: {xs: 'flex-start', lg: 'center'}}}>
-                  <Stack direction='row' sx={{ width: 1, justifyContent: 'space-between' }}>
+                  <Stack direction='row' sx={{ width: {xs: 1, sm: 400}, justifyContent: 'space-between' }}>
                     <Stack direction='row' sx={{ alignItems: 'center' }}>
                       <img
                         src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
@@ -316,7 +317,7 @@ const Borrow = () => {
                   Debt
                 </Typography>
                 <Stack gap={4} justifyContent='space-between' sx={{flexDirection: {xs: 'column', lg: 'row'}, alignItems: {xs: 'flex-start', lg: 'center'}}}>
-                  <Stack direction='row' sx={{ width: 1, justifyContent: 'space-between' }}>
+                  <Stack direction='row' sx={{ width: {xs: 1, sm: 400}, justifyContent: 'space-between' }}>
                     <Stack direction='row' sx={{ alignItems: 'center' }}>
                       <Image
                         src={`/images/tokens/trenUSD.png`}
@@ -375,7 +376,7 @@ const Borrow = () => {
           </Stack>
         </Grid>
       </Grid>
-      <Box sx={{...radiusBoxStyle, pt: 6, pb: 6, background: '#1013149C', mt: {xs: 8, md: 12}}} >
+      <Box sx={{...radiusBoxStyle, pt: 6, pb: 6, background: '#1013149C', mt: {xs: 8, md: 8}}} >
         <Result
           liquidationPrice={liquidationPrice}
           ltv={currentLTV}
