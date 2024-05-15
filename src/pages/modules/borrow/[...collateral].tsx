@@ -74,7 +74,7 @@ const Borrow = () => {
     () => collateralDetails.find(i => i.symbol === collateral),
     [collateral, collateralDetails]
   )
-  const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0), debtTokenGasCompensation = BigInt(0) } = collateralDetail || {}
+  const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0), debtTokenGasCompensation = BigInt(0), borrowingFee = BigInt(0) } = collateralDetail || {}
 
   // === User Trove management === //
   const { moduleInfo } = useModuleView(collateral!)
@@ -138,8 +138,8 @@ const Borrow = () => {
   useEffect(() => {
     const _depositAmount = removeComma(depositAmount)
     if (+_depositAmount >= 0) {
-      const userAvailableBorrowAmount = +formatEther(price) * +_depositAmount * +formatEther(LTV)
-      setUserModuleInfo(prevState => ({ ...prevState, userAvailableBorrowAmount }))
+      const userAvailableBorrowAmount = (+formatEther(price) * +_depositAmount * +formatEther(liquidation) - +formatEther(debtTokenGasCompensation)) / (1 + +formatEther(borrowingFee))
+      setUserModuleInfo(prevState => ({ ...prevState, userAvailableBorrowAmount : Math.max(0, userAvailableBorrowAmount) }))
     }
   }, [depositAmount])
 
@@ -172,13 +172,15 @@ const Borrow = () => {
 
   // Calculation View
   const collateralValue = +formatEther(price) * (+removeComma(depositAmount) + +formatEther(depositedAmount))
-  const loanValue = +formatEther(debtAmount) + +removeComma(borrowAmount)
-  const currentLTV = (collateralValue == 0) ? 0 : (loanValue / collateralValue * 100)
+  const loanValue = +formatEther(debtAmount) + +removeComma(borrowAmount) * (1 + +formatEther(borrowingFee))
+  const currentLTV = (collateralValue == 0) ? 0 : ((loanValue + +formatEther(debtTokenGasCompensation)) / collateralValue * 100)
   const totalCollateralQuantity = +removeComma(depositAmount) + +formatEther(depositedAmount)
-  const liquidationPrice = totalCollateralQuantity == 0 ? 0 : loanValue / (totalCollateralQuantity * +formatEther(liquidation))
+  const liquidationPrice = totalCollateralQuantity == 0 ? 0 : (loanValue + +formatEther(debtTokenGasCompensation)) / (totalCollateralQuantity * +formatEther(liquidation))
   const healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
-  const borrowingPowerPercent = currentLTV / +formatEther(LTV)
-  const maxBorrowingValue = collateralValue * +formatEther(LTV)
+  const borrowingPowerPercent = currentLTV / +formatEther(liquidation)
+  // const maxBorrowingValue = collateralValue * +formatEther(LTV)
+  const maxBorrowingValue = (collateralValue * +formatEther(liquidation) - +formatEther(debtTokenGasCompensation)) / (1 + +formatEther(borrowingFee))
+  // const borrowingPowerPercent = (maxBorrowingValue == 0) ? 0 : (loanValue / maxBorrowingValue * 100)
 
   // Handle click for poups
   const handleClickApprove = () => {
@@ -369,9 +371,11 @@ const Borrow = () => {
           }
           {
             positionStatus != 'active' &&
-            <Typography variant='subtitle1' color='white' sx={{opacity: 0.2}}>
-              No open modules
-            </Typography>
+            <Stack sx={{width: 1, height: 1}} justifyContent='center' alignItems='center'>
+              <Typography variant='subtitle1' color='white' sx={{opacity: 0.2}}>
+                No open modules
+              </Typography>
+            </Stack>
           }  
           </Stack>
         </Grid>

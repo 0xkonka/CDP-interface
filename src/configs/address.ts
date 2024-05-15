@@ -19,11 +19,6 @@ type AddressMap = { [chainId: number]: string }
 
 export const ETHERSCAN_BASE_URL = 'https://sepolia.etherscan.io'
 
-//  == Deprecated == //
-// export const ACTIVE_POOL: AddressMap = {
-//     [SupportedChainId.SEPOLIA]: '0x7769AD8a49AAC23b3033825509e0D3A6B2E8BBb1'
-// }
-
 export const TRENBOX_STORAGE: AddressMap = {     // newly added 05/09/2024
     [SupportedChainId.SEPOLIA]: '0x75A27E6785ab614C93495F1Ec85e95A999FDd6Ee'
 }
@@ -35,16 +30,6 @@ export const ADMIN_CONTRACT: AddressMap = {     // updated 05/09/2024
 export const BORROWER_OPERATIONS: AddressMap = {    // updated 05/09/2024
     [SupportedChainId.SEPOLIA]: '0x31bEEee3CF731B1A4Cc4649504518DA3782c242e'
 }
-
-//  == Deprecated == //
-// export const COLL_SURPLUS_POOL: AddressMap = {
-//     [SupportedChainId.SEPOLIA]: '0xC0C9115914Ca0a58163510202A3D0c743ae8C779'
-// }
-
-//  == Deprecated == //
-// export const DEFAULT_POOL: AddressMap = {
-//     [SupportedChainId.SEPOLIA]: '0xe9D1c8488B0afa43f5F2a18bF2E227c0ed64B7be'
-// }
 
 export const FEE_COLLECTOR: AddressMap = {  // updated 05/09/2024
     [SupportedChainId.SEPOLIA]: '0x953B34DD9dE4D78E372112d2b91DfDe67bEC77E5'
@@ -69,11 +54,6 @@ export const TRENBOX_MANAGER: AddressMap = {  // updated 05/09/2024
 export const TRENBOX_MANAGER_OPERATIONS: AddressMap = {  // updated 05/09/2024
     [SupportedChainId.SEPOLIA]: '0xF7F6D0a3af2dFD1968F4698076B50C6120334DeB'
 }
-
-//  == Deprecated == //
-// export const GAS_POOL: AddressMap = {
-//     [SupportedChainId.SEPOLIA]: '0x9F1D032414891D21f7D640755D161d54d6823f19'
-// }
 
 export const PRICE_FEED: AddressMap = {  // updated 05/09/2024
     [SupportedChainId.SEPOLIA]: '0x706D55cB6Da5E2447846f01F49485b3d0d71474c'

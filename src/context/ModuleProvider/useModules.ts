@@ -146,19 +146,6 @@ const useModules = (collateral: string) => {
     }
   }
 
-  const handleClose = () => {
-    if (!collateralDetail) return
-    try {
-      writeContract({
-        ...BorrowerOperationsContract,
-        functionName: 'closeTrenBox',
-        args: [collateralDetail.address as '0x{string}']
-      })
-    } catch (err) {
-      console.log('err', err)
-    }
-  }
-
   return {
     handleApprove,
     handleOpen,
@@ -167,7 +154,6 @@ const useModules = (collateral: string) => {
     handleWithdraw,
     handleBorrow,
     handleRepay,
-    handleClose,
     txhash,
     isPending,
     isConfirming,
