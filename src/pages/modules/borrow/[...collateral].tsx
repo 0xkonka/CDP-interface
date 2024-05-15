@@ -173,13 +173,13 @@ const Borrow = () => {
   // Calculation View
   const collateralValue = +formatEther(price) * (+removeComma(depositAmount) + +formatEther(depositedAmount))
   const loanValue = +formatEther(debtAmount) + +removeComma(borrowAmount) * (1 + +formatEther(borrowingFee))
-  const currentLTV = (collateralValue == 0) ? 0 : ((loanValue + +formatEther(debtTokenGasCompensation)) / collateralValue * 100)
+  const currentLTV = (collateralValue == 0 || loanValue == 0) ? 0 : ((loanValue + +formatEther(debtTokenGasCompensation)) / collateralValue * 100)
   const totalCollateralQuantity = +removeComma(depositAmount) + +formatEther(depositedAmount)
   const liquidationPrice = totalCollateralQuantity == 0 ? 0 : (loanValue + +formatEther(debtTokenGasCompensation)) / (totalCollateralQuantity * +formatEther(liquidation))
   const healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
   const borrowingPowerPercent = currentLTV / +formatEther(liquidation)
   // const maxBorrowingValue = collateralValue * +formatEther(LTV)
-  const maxBorrowingValue = (collateralValue * +formatEther(liquidation) - +formatEther(debtTokenGasCompensation)) / (1 + +formatEther(borrowingFee))
+  const maxBorrowingValue = Math.max(0, (collateralValue * +formatEther(liquidation) - +formatEther(debtTokenGasCompensation)) / (1 + +formatEther(borrowingFee)))
   // const borrowingPowerPercent = (maxBorrowingValue == 0) ? 0 : (loanValue / maxBorrowingValue * 100)
 
   // Handle click for poups
