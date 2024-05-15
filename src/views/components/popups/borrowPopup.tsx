@@ -116,7 +116,6 @@ export const BorrowPopup = (props: Props) => {
     handleWithdraw,
     handleBorrow,
     handleRepay,
-    handleClose,
     txhash,
     isPending,
     isConfirming,
@@ -210,9 +209,14 @@ export const BorrowPopup = (props: Props) => {
           )
           break
         case 'repay':
+          if(+inputAmount < +formatEther(debtAmount)) {
+            showToast('success', 'Repay Success', `You have successfully repaid ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 50000)
+          } else {
+            showToast('success', 'Close Success', `You have successfully closed the module`, 50000)
+          }
           initializePopupStates()
           reloadBalance()
-          showToast('success', 'Repay Success', `You have successfully repaid ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 50000)
+          
           break
       }
     }
@@ -255,7 +259,7 @@ export const BorrowPopup = (props: Props) => {
       if(+inputAmount < +formatEther(debtAmount)) {
         handleRepay(parseEther(inputAmount))
       } else {
-        handleClose()
+        handleRepay(debtAmount)
       }
     }
   }

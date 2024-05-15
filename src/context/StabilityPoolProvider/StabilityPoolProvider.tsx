@@ -91,15 +91,16 @@ export const StabilityPoolProvider: React.FC<StabilityPoolProviderProps> = ({ ch
 
       let _userPositionByCollateral: any = [[], []]
 
-      if (collaterals.length > 0) {
-        _userPositionByCollateral = await readContract(wagmiConfig, {
-          ...StabilityPoolContract,
-          functionName: 'getDepositorGains',
-          args: [account, collaterals.sort()]
-        })
+      // ===== We hide this temporarily because it is reverted in contract ===== //
+      // if (collaterals.length > 0) {
+      //   _userPositionByCollateral = await readContract(wagmiConfig, {
+      //     ...StabilityPoolContract,
+      //     functionName: 'getDepositorGains',
+      //     args: [account, collaterals.sort()]
+      //   })
 
-        console.log('_userPositionByCollateral', _userPositionByCollateral)
-      }
+      //   console.log('_userPositionByCollateral', _userPositionByCollateral)
+      // }
 
       setUserStabilityPoolPosition({
         userDeposit: _userInfo[0].result as bigint,

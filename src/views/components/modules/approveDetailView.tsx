@@ -54,7 +54,7 @@ export const ApproveDetailView = (props: Props) => {
         </Typography>
         <Stack direction='row' justifyContent='space-between' alignItems='center'>
           <Typography variant='h2' fontWeight={600}>
-            {borrowAmount}
+            {formatToThousands(+removeComma(borrowAmount)).substring(1)}
           </Typography>
           <Stack direction='row' gap={2} alignItems='center'>
             <img src='/images/tokens/trenUSD.png' alt='trenUSD' height={30} style={{borderRadius: '100%'}}/>
