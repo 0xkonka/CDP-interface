@@ -10,7 +10,7 @@ import { wagmiConfig } from '@/pages/_app'
 import axios from 'axios'
 import { showToast } from '@/hooks/toasts'
 
-const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://be-express-lime.vercel.app' // 'http://localhost:8000
+const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://be-express-lime.vercel.app' // 'http://localhost:8000'
 
 const REFERRAL_DISTRIBUTION = process.env.REFERRAL_DISTRIBUTION || 2
 
@@ -37,7 +37,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
 
   const [isUserRedeemed, setIsUserRedeemed] = useState(false)
   const [redeemedCode, setRedeemedCode] = useState('')
-  const [inviteCode, setInviteCode] = useState<string>('')  
+  const [inviteCode, setInviteCode] = useState<string>('')
   const [userReferral, setReferral] = useState<Referral[]>([])
   const [userPoint, setPoint] = useState<Point>()
 
@@ -47,7 +47,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
 
       try {
         const { data: referralData } = await axios.get(`${BE_ENDPOINT}/api/referral/user/${account}`)
-        
+
         if (referralData.redeemed) {
           setIsUserRedeemed(referralData.redeemed)
           setReferral(referralData.data)
@@ -93,40 +93,32 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
 
   const signMsg = async (code: string) => {
     if (!account || code === '') return
-    if(userReferral?.length === REFERRAL_DISTRIBUTION ){
+    if (userReferral?.length === REFERRAL_DISTRIBUTION) {
       showToast('error', 'Redeeme Error', `You already redeemed and got ${REFERRAL_DISTRIBUTION} inviteCodes`, 3000)
       return
     }
 
     try {
-      const hash = crypto.createHash('sha256')
-      hash.update(code + account)
-      const hashCode = hash.digest('hex')
-
-      const signResult = await signMessage(wagmiConfig, {
-        message: `I’m joining Tren Finance with my wallet ${account} with invite code ${code}, and I accept the Terms of Service`
+      const response = await axios.post(BE_ENDPOINT + '/api/referral/user/redeem', {
+        account,
+        inviteCode: code,
+        count: REFERRAL_DISTRIBUTION
       })
 
-      if (signResult) {
-        const response = await axios.post(BE_ENDPOINT + '/api/referral/user/redeem', {
-          account,
-          inviteCode: code,
-          count: REFERRAL_DISTRIBUTION,
+      if (response.data.result === true) {
+        const hash = crypto.createHash('sha256')
+        hash.update(code + account)
+        const hashCode = hash.digest('hex')
+
+        await signMessage(wagmiConfig, {
+          message: `I’m joining Tren Finance with my wallet ${account} with invite code ${code}, and I accept the Terms of Service`
         })
-        try {
-          if (response.data.result === true) {
-            showToast('success', 'Success', 'Invitation code was successfully redeemed.', 3000)
-            return true
-          }
-          return false
-        } catch (error: any) {
-          console.log('error', error)
-          showToast('error', 'Error', error.response.data.messages, 3000)
-          return false
-        }
+        return true
       }
-    } catch (err) {
+    } catch (err: any) {
       console.log('err', err)
+      showToast('error', 'Error', err.response.data.messages, 3000)
+      return false
     }
   }
 
@@ -135,7 +127,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
       const response = await axios.post(BE_ENDPOINT + '/api/referral/user/' + address)
       console.log('Get Redeemed Code:', response)
       if (response.data.result === true) {
-        showToast('success', 'Correct InviteCode', "You have successfully entered correct inviteCode", 3000)
+        showToast('success', 'Correct InviteCode', 'You have successfully entered correct inviteCode', 3000)
         return true
       }
       return false
