@@ -8,41 +8,9 @@ import { Copy } from '../Copy'
 import { usePoint } from '@/context/PointContext'
 
 export const ReferralBoard = () => {
-    const [firstItemHeight, setFirstItemHeight] = useState('auto')
-    const secondItemRef = useRef<HTMLDivElement>(null)
     const { isMobileScreen, radiusBoxStyle} = useGlobalValues()
 
-    const [direction, setDirection] = useState('asc')
-    const [sortBy, setSortBy] = useState('symbol')
-    const theme = useTheme()
-
     const {userReferral} = usePoint()
-
-    console.log('userReferral', userReferral)
-    
-    // Adjust the container heights of leaderboard and referrals.
-    useEffect(() => {
-        const updateHeight = () => {
-          if (secondItemRef.current) {
-            const height = secondItemRef.current.clientHeight;
-            setFirstItemHeight(`${height}px`)
-          }
-        }
-    
-        // Set the initial height
-        updateHeight()
-    
-        // Update height whenever the window resizes
-        window.addEventListener('resize', updateHeight)
-    
-        // Remove event listener on component unmount
-        return () => window.removeEventListener('resize', updateHeight)
-    }, [])
-
-    const setSortDetail = (sortBy: string, direction: string) => {
-        setSortBy(sortBy)
-        setDirection(direction)
-    }
 
     const headerItems = [
         {
@@ -91,7 +59,10 @@ export const ReferralBoard = () => {
                 <Typography className='header-gradient' sx={{ fontSize: { xs: 32, lg: 40 } }}>
                     Referrals
                 </Typography>
-                <Box sx={{ ...radiusBoxStyle, mt: 8, py: 6 }} ref={secondItemRef}>
+                <Typography variant='body1' fontWeight={400}>
+                    Every person you refer on testnet will get a 2x multiplier on mainnet, and you’ll earn 15% of their XP.
+                </Typography>
+                <Box sx={{ ...radiusBoxStyle, mt: 8, py: 6 }}>
                     <Stack direction='row' justifyContent='space-between'>
                         <Stack sx={{flex: {xs: 4, sm: 3.5}}}>
                             <Stack direction='row' gap={2} alignItems='center' sx={{mb: {xs: 4, md: 10}}}>
