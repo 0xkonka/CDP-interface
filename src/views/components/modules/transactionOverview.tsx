@@ -39,7 +39,7 @@ export const TransactionOverView = (props: Props) => {
         () => collateralDetails.find(i => i.symbol === collateral),
         [collateral, collateralDetails]
     )
-    const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0), debtTokenGasCompensation = BigInt(0)} = collateralDetail || {}
+    const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0), debtTokenGasCompensation = BigInt(0), borrowingFee = BigInt(0)} = collateralDetail || {}
 
     // === User Trove management === //
     const { moduleInfo } = useModuleView(collateral!)
@@ -65,12 +65,12 @@ export const TransactionOverView = (props: Props) => {
     const collateralValue = +formatEther(price) * (+formatEther(depositedAmount))
     const new_collateralValue = +formatEther(price!) * (+formatEther(depositedAmount) + plusColl)
     const loanValue = +formatEther(debtAmount)
-    const new_loanValue = +formatEther(debtAmount) + plusDebt
-    const currentLTV = (collateralValue == 0) ? 0 : (loanValue / collateralValue * 100)
-    const new_CurrentLTV = (new_collateralValue == 0) ? 0 : (new_loanValue / new_collateralValue * 100)
+    const new_loanValue = +formatEther(debtAmount) + plusDebt * (1 + +formatEther(borrowingFee))
+    const currentLTV = (collateralValue == 0) ? 0 : ((loanValue + +formatEther(debtTokenGasCompensation)) / collateralValue * 100)
+    const new_CurrentLTV = (new_collateralValue == 0) ? 0 : ((new_loanValue + +formatEther(debtTokenGasCompensation)) / new_collateralValue * 100)
     const old_healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
     const new_healthFactor = (new_CurrentLTV == 0) ? 0 : (+formatEther(liquidation) / new_CurrentLTV * 100)
-    const liquidationPrice = (+formatEther(depositedAmount) + plusColl) == 0 ? 0 : new_loanValue / ((+formatEther(depositedAmount) + plusColl) * +formatEther(liquidation))
+    const liquidationPrice = (+formatEther(depositedAmount) + plusColl) == 0 ? 0 : (new_loanValue + +formatEther(debtTokenGasCompensation)) / ((+formatEther(depositedAmount) + plusColl) * +formatEther(liquidation))
   
     return (
         <Stack>

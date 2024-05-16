@@ -91,7 +91,7 @@ export const BorrowPopup = (props: Props) => {
   } = props
   const { address: account } = useAccount()
   const chainId = useChainId()
-  const { decimals, LTV, price = BigInt(0), debtTokenGasCompensation = BigInt(0), minNetDebt = BigInt(0)} = collateralDetail
+  const { decimals, liquidation, price = BigInt(0), debtTokenGasCompensation = BigInt(0), borrowingFee = BigInt(0)} = collateralDetail
 
   // Get Allowance
   const { data: allowance, refetch: refetchBalance } = useReadContract({
@@ -145,10 +145,10 @@ export const BorrowPopup = (props: Props) => {
         break
       case 'withdraw':
         // setAvailableBalance(+(+formatEther(depositedAmount) - (+formatEther(debtAmount + debtTokenGasCompensation) / +formatEther(LTV) / +formatEther(price))).toFixed(5))
-        setAvailableBalance(truncateFloating(+formatEther(depositedAmount) - (+formatEther(debtAmount + debtTokenGasCompensation) / +formatEther(LTV) / +formatEther(price)), 5))
+        setAvailableBalance(truncateFloating(+formatEther(depositedAmount) - (+formatEther(debtAmount + debtTokenGasCompensation) / +formatEther(liquidation) / +formatEther(price)), 5))
         break
       case 'borrow':
-        setAvailableBalance(truncateFloating(+formatEther(depositedAmount) * +formatEther(price) * +formatEther(LTV) - (+formatEther(debtAmount)), 5))
+        setAvailableBalance(truncateFloating((+formatEther(depositedAmount) * +formatEther(price) * +formatEther(liquidation) - +formatEther(debtTokenGasCompensation)) - (+formatEther(debtAmount)), 5))
         break
       case 'repay':
         setAvailableBalance(truncateFloating(+walletDebtAmount, 5))
