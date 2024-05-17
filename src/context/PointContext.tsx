@@ -43,7 +43,10 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     const getUserReferral = async () => {
-      if (!account) return
+      if (!account) {
+        setReferral([]);
+        return
+      }
 
       try {
         const { data: referralData } = await axios.get(`${BE_ENDPOINT}/api/referral/user/${account}`)
@@ -96,7 +99,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
 
   const signMsg = async (code: string) => {
     if (!account || code === '') return
-    if (userReferral?.length === REFERRAL_DISTRIBUTION) {
+    if (userReferral?.length >= +REFERRAL_DISTRIBUTION) {
       showToast('error', 'Redeeme Error', `You already redeemed and got ${REFERRAL_DISTRIBUTION} inviteCodes`, 3000)
       return
     }
