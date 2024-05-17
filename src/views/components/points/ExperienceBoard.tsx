@@ -18,8 +18,6 @@ export const ExperienceBoard = () => {
 
     const {userReferral} = usePoint()
 
-    console.log('userReferral', userReferral)
-    
     // Adjust the container heights of leaderboard and referrals.
     useEffect(() => {
         const updateHeight = () => {

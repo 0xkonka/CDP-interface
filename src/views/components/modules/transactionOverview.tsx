@@ -65,11 +65,11 @@ export const TransactionOverView = (props: Props) => {
     const collateralValue = +formatEther(price) * (+formatEther(depositedAmount))
     const new_collateralValue = +formatEther(price!) * (+formatEther(depositedAmount) + plusColl)
     const loanValue = +formatEther(debtAmount)
-    const new_loanValue = +formatEther(debtAmount) + plusDebt * (1 + +formatEther(borrowingFee))
+    const new_loanValue = +formatEther(debtAmount) + plusDebt * (plusDebt > 0 ? 1 + +formatEther(borrowingFee) : 1)
     const currentLTV = (collateralValue == 0) ? 0 : ((loanValue + +formatEther(debtTokenGasCompensation)) / collateralValue * 100)
     const new_CurrentLTV = (new_collateralValue == 0) ? 0 : ((new_loanValue + +formatEther(debtTokenGasCompensation)) / new_collateralValue * 100)
-    const old_healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
-    const new_healthFactor = (new_CurrentLTV == 0) ? 0 : (+formatEther(liquidation) / new_CurrentLTV * 100)
+    const old_healthFactor = (currentLTV == 0 || loanValue == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
+    const new_healthFactor = (new_CurrentLTV == 0 || new_loanValue == 0) ? 0 : (+formatEther(liquidation) / new_CurrentLTV * 100)
     const liquidationPrice = (+formatEther(depositedAmount) + plusColl) == 0 ? 0 : (new_loanValue + +formatEther(debtTokenGasCompensation)) / ((+formatEther(depositedAmount) + plusColl) * +formatEther(liquidation))
   
     return (
@@ -77,7 +77,7 @@ export const TransactionOverView = (props: Props) => {
             <Typography variant='h5' fontWeight={400} color='#707175' mt={4} mb={3}>
                 Transaction overview
             </Typography>
-            <Stack sx={radiusBoxStyle} gap={6}>
+            <Stack sx={{...radiusBoxStyle, background: '#1013149C'}} gap={6}>
                 {
                     type == 'repay' &&
                     <Stack direction='row' justifyContent='space-between' alignItems='center'>

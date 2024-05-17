@@ -91,7 +91,7 @@ export const BorrowPopup = (props: Props) => {
   } = props
   const { address: account } = useAccount()
   const chainId = useChainId()
-  const { decimals, liquidation, price = BigInt(0), debtTokenGasCompensation = BigInt(0), borrowingFee = BigInt(0)} = collateralDetail
+  const { decimals, liquidation, price = BigInt(0), debtTokenGasCompensation = BigInt(0), LTV = BigInt(0), borrowingFee = BigInt(0)} = collateralDetail
 
   // Get Allowance
   const { data: allowance, refetch: refetchBalance } = useReadContract({
@@ -144,11 +144,10 @@ export const BorrowPopup = (props: Props) => {
         setAvailableBalance(truncateFloating(+formatUnits(userCollateralBal, decimals), 5))
         break
       case 'withdraw':
-        // setAvailableBalance(+(+formatEther(depositedAmount) - (+formatEther(debtAmount + debtTokenGasCompensation) / +formatEther(LTV) / +formatEther(price))).toFixed(5))
-        setAvailableBalance(truncateFloating(+formatEther(depositedAmount) - (+formatEther(debtAmount + debtTokenGasCompensation) / +formatEther(liquidation) / +formatEther(price)), 5))
+        setAvailableBalance(truncateFloating(+formatEther(depositedAmount) - (+formatEther(debtAmount + debtTokenGasCompensation) / +formatEther(LTV) / +formatEther(price)), 5))
         break
       case 'borrow':
-        setAvailableBalance(truncateFloating((+formatEther(depositedAmount) * +formatEther(price) * +formatEther(liquidation) - +formatEther(debtTokenGasCompensation)) - (+formatEther(debtAmount)), 5))
+        setAvailableBalance(truncateFloating((+formatEther(depositedAmount) * +formatEther(price) * +formatEther(LTV) - +formatEther(debtTokenGasCompensation) - +formatEther(debtAmount)) / (1 + +formatEther(borrowingFee)), 5))
         break
       case 'repay':
         setAvailableBalance(truncateFloating(+walletDebtAmount, 5))
@@ -164,7 +163,6 @@ export const BorrowPopup = (props: Props) => {
         token: DEBT_TOKEN[chainId] as '0x{string}'
       })
       setWalletDebtAmount(+formatEther(_userDebtBal.value))
-      // console.log('Wallet balance: ', +formatEther(_userDebtBal.value))
     }
     getUserInfo()
   }, [account])

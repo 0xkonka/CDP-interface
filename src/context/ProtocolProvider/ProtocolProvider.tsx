@@ -217,7 +217,6 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
           platform: 'platform',
           rateType: 'collateral rate tye here'
         }
-        console.log(_collateralDetail.symbol, _collateralDetail.price)
         _collateralDetails.push(_collateralDetail)
       }
       console.log('_collateralDetails', _collateralDetails)

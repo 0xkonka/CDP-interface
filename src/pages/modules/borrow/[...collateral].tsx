@@ -138,7 +138,7 @@ const Borrow = () => {
   useEffect(() => {
     const _depositAmount = removeComma(depositAmount)
     if (+_depositAmount >= 0) {
-      const userAvailableBorrowAmount = (+formatEther(price) * +_depositAmount * +formatEther(liquidation) - +formatEther(debtTokenGasCompensation)) / (1 + +formatEther(borrowingFee))
+      const userAvailableBorrowAmount = (+formatEther(price) * +_depositAmount * +formatEther(LTV) - +formatEther(debtTokenGasCompensation)) / (1 + +formatEther(borrowingFee))
       setUserModuleInfo(prevState => ({ ...prevState, userAvailableBorrowAmount : Math.max(0, userAvailableBorrowAmount) }))
     }
   }, [depositAmount])
@@ -177,9 +177,9 @@ const Borrow = () => {
   const totalCollateralQuantity = +removeComma(depositAmount) + +formatEther(depositedAmount)
   const liquidationPrice = totalCollateralQuantity == 0 ? 0 : (loanValue + +formatEther(debtTokenGasCompensation)) / (totalCollateralQuantity * +formatEther(liquidation))
   const healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
-  const borrowingPowerPercent = currentLTV / +formatEther(liquidation)
+  const borrowingPowerPercent = currentLTV / +formatEther(LTV)
   // const maxBorrowingValue = collateralValue * +formatEther(LTV)
-  const maxBorrowingValue = Math.max(0, (collateralValue * +formatEther(liquidation) - +formatEther(debtTokenGasCompensation)) / (1 + +formatEther(borrowingFee)))
+  const maxBorrowingValue = Math.max(0, (collateralValue * +formatEther(LTV) - +formatEther(debtTokenGasCompensation)) / (1 + +formatEther(borrowingFee)))
   // const borrowingPowerPercent = (maxBorrowingValue == 0) ? 0 : (loanValue / maxBorrowingValue * 100)
 
   // Handle click for poups

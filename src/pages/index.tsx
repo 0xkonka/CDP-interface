@@ -27,7 +27,6 @@ const Home = () => {
     const [isChecking, setIsChecking] = useState(false)
     
     useEffect(() => {
-        console.log(isValidated, isConnected, isRedeemd)
         if(!isValidated) {
             setCurrentStep(1)
         } else if(!isConnected || !isRedeemd) {
