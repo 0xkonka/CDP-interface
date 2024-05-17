@@ -115,14 +115,14 @@ const Home = () => {
     }
 
     const inputStyle: CSSProperties = {
-        height: 45,
-        width: 40,
+        height: 55,
+        width: 45,
         borderRadius: '3px',
         padding: 6,
         backgroundColor: '#0c1c174b',
         color: '#67DAB1',
         border: '1px solid #67dab14b',
-        fontSize: 24,
+        fontSize: 22,
         textTransform: 'uppercase',
         textAlign: 'center',
         fontFamily: `'Britanica-HeavySemiExpanded', sans-serif`,
