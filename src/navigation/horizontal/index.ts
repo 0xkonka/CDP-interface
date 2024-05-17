@@ -27,6 +27,11 @@ const navigation = (): HorizontalNavItemsType => {
       title: 'Referrals',
       icon: 'referrals',
       path: '/referrals'
+    },
+    {
+      title: 'Faucet',
+      icon: 'faucet',
+      path: '/faucet'
     }
     // {
     //   title: 'Swap',
