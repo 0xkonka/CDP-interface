@@ -108,7 +108,8 @@ const Borrow = () => {
   // Calculate minimum deposit & borrow amount
   useEffect(() => {
     const _minBorrow = +formatEther(minNetDebt)
-    const _minDeposit = parseFloat((_minBorrow / +formatEther(price) / +formatEther(LTV)).toFixed(2))
+    // const _minDeposit = parseFloat((_minBorrow / +formatEther(price) / +formatEther(LTV)).toFixed(2))
+    const _minDeposit = parseFloat(((_minBorrow * (1 + +formatEther(borrowingFee)) + +formatEther(debtTokenGasCompensation)) / +formatEther(LTV) / +formatEther(price)).toFixed(5))
 
     setUserModuleInfo(prevState => ({
       ...prevState,
