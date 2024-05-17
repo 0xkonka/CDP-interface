@@ -68,8 +68,10 @@ const FooterContent = () => {
             </svg>
           </Link>
           <Link href='https://blog.tren.finance/' target='_blank'>
-            <svg fill="#C6C6C7" width="24" height="24" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12,72A12,12,0,1,0,24,84,12.0119,12.0119,0,0,0,12,72Z"/><path d="M12,36a6,6,0,0,0,0,12A36.0393,36.0393,0,0,1,48,84a6,6,0,0,0,12,0A48.0512,48.0512,0,0,0,12,36Z"/><path d="M12,0a6,6,0,0,0,0,12A72.0788,72.0788,0,0,1,84,84a6,6,0,0,0,12,0A84.0981,84.0981,0,0,0,12,0Z"/>
+            <svg  width="26" height="26" viewBox="0 0 24 24" fill="#C6C6C7" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 18L20 18" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
+              <path d="M4 12L20 12" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
+              <path d="M4 6L20 6" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </Link>
           <Link href='https://t.me/trenfinance' target='_blank'>

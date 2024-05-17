@@ -34,6 +34,7 @@ import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { handleURLQueries } from 'src/@core/layouts/utils'
 import { useAccount } from 'wagmi'
 import { showToast } from '@/hooks/toasts'
+import { usePoint } from '@/context/PointContext'
 
 interface Props {
   item: NavLink
@@ -56,6 +57,7 @@ const HorizontalNavLink = (props: Props) => {
   // ** Props
   const { item, settings, hasParent } = props
   const {isConnected} = useAccount()
+  const { isUserRedeemed } = usePoint()
 
   // ** Hook & Vars
   const router = useRouter()
@@ -87,6 +89,9 @@ const HorizontalNavLink = (props: Props) => {
           onClick={e => {
             if(!isConnected) {
               showToast('success', 'Welcome', 'You should connect wallet to view protocol.', 3000)
+            }
+            else if(!isUserRedeemed) {
+              showToast('success', 'Welcome', 'You should redeem the code to view protocol.', 3000)
             }
             if (item.path === undefined) {
               e.preventDefault()

@@ -37,7 +37,10 @@ const Home = () => {
     }, [isValidated, isConnected, isRedeemd])
     
     useEffect(() => {
+        console.log('isConnected: ', isConnected)
+        console.log('isUserRedeemed: ', isUserRedeemed)
         if(isConnected && isUserRedeemed) {     // If the wallet connected and it is redeemed wallet.
+            document.cookie = "user-redeemed=true; path=/";
             setCode(redeemedCode)
             setIsValidated(true)
             setIsRedeemd(true)
@@ -57,6 +60,7 @@ const Home = () => {
         //     // setIsValidated(true)
         //     setIsRedeemd(false)
         } else {
+            document.cookie = "user-redeemed=false; path=/";
             setIsValidated(false)
             setIsRedeemd(false)
         }    
