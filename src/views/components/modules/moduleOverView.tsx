@@ -48,7 +48,7 @@ export const ModuleOverView = (props: Props) => {
     {
       key: 'Utilization',
       tooltip: 'Total borrowed trenUSD/total trenUSD allocated',
-      value: formatPercent((formattedBorrowAvailable / formattedMintCap) * 100, 2)
+      value: formatPercent((1 - formattedBorrowAvailable / formattedMintCap) * 100, 2)
     },
     {
       key: 'Max LTV',

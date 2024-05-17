@@ -63,9 +63,12 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
               rank: xpPoint > 0 && pointData.data.rank
             })
           }
+        }else {
+          setIsUserRedeemed(false)
         }
       } catch (err) {
         console.error('Failed to fetch referral:', err)
+        setIsUserRedeemed(false)
       }
     }
 

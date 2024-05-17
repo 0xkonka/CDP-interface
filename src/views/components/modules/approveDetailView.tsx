@@ -32,7 +32,7 @@ export const ApproveDetailView = (props: Props) => {
         </Typography>
         <Stack direction='row' justifyContent='space-between' alignItems='center'>
           <Typography variant='h2' fontWeight={600}>
-            {depositAmount}
+            {formatToThousands(+removeComma(depositAmount)).substring(1)}
           </Typography>
           <Stack direction='row' gap={2} alignItems='center'>
             <img

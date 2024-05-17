@@ -10,6 +10,7 @@ interface Props {
 
 export default function ConnectWallet({ show = 'always' }: Props) {
   const { isConnected } = useAccount()
+
   const router = useRouter()
   const connectedStyle = {
     px: 2, 
@@ -23,6 +24,7 @@ export default function ConnectWallet({ show = 'always' }: Props) {
     if(!isConnected) {
       router.replace('/')
     }
+    // document.cookie = "user-redeemed=false; path=/";
     if (isConnected) {
       document.cookie = "wallet-connected=true; path=/";
     } else {

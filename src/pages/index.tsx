@@ -37,7 +37,10 @@ const Home = () => {
     }, [isValidated, isConnected, isRedeemd])
     
     useEffect(() => {
+        console.log('isConnected: ', isConnected)
+        console.log('isUserRedeemed: ', isUserRedeemed)
         if(isConnected && isUserRedeemed) {     // If the wallet connected and it is redeemed wallet.
+            document.cookie = "user-redeemed=true; path=/";
             setCode(redeemedCode)
             setIsValidated(true)
             setIsRedeemd(true)
@@ -57,6 +60,7 @@ const Home = () => {
         //     // setIsValidated(true)
         //     setIsRedeemd(false)
         } else {
+            document.cookie = "user-redeemed=false; path=/";
             setIsValidated(false)
             setIsRedeemd(false)
         }    
@@ -115,14 +119,14 @@ const Home = () => {
     }
 
     const inputStyle: CSSProperties = {
-        height: 45,
-        width: 40,
+        height: 55,
+        width: 45,
         borderRadius: '3px',
         padding: 6,
         backgroundColor: '#0c1c174b',
         color: '#67DAB1',
         border: '1px solid #67dab14b',
-        fontSize: 24,
+        fontSize: 22,
         textTransform: 'uppercase',
         textAlign: 'center',
         fontFamily: `'Britanica-HeavySemiExpanded', sans-serif`,
