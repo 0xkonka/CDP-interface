@@ -98,6 +98,7 @@ const Home = () => {
         try {
             const result = await signMsg(code.toUpperCase())
             if(result) {
+                showToast('success', 'Enter App', 'You have successfully redeemed invite code.', 3000)
                 setIsRedeemd(true)
                 return
             }
