@@ -11,6 +11,8 @@ import React, {useState, useMemo, useEffect} from'react'
 import { EarnRow } from '@/views/components/earns/EarnRow'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
 import { StabilityPool } from '@/views/components/earns/StabilityPool'
+import { useStabilityPoolView } from '@/context/StabilityPoolProvider/StabilityPoolContext'
+import { formatUnits } from 'viem'
 
 const Earn = () => {
     const { isSmallScreen, isMediumScreen } = useGlobalValues()
@@ -18,6 +20,9 @@ const Earn = () => {
     const [openRowIndex, setOpenRowIndex] = useState<number>(-1)
     const [sortBy, setSortBy]= useState('symbol')
     const [direction, setDirection] = useState('asc')
+    const { stabilityPoolInfo } = useStabilityPoolView()
+    const { totalDebtTokenDeposits = BigInt(0) } = stabilityPoolInfo || {}
+    const decimals = 18 // Will be replaced with real decimal - Jordan
 
     const networkTypes: string[] = [
         'All', 'Ethereum', 'Binance', 'Polygon', 'Avalanche', 'Solana'
@@ -25,34 +30,40 @@ const Earn = () => {
     const { collateralDetails } = useProtocol()
     const headerItems = [
         {
-            label: 'Pools',
+            label: 'Liqudity Pool',
             key: 'symbol',  // This is sort key.
-            flexWidth: 2,
-            sortable: true
-        },
-        {
-            label: 'Platform',
-            key: 'platform',
-            flexWidth: 1,
+            flexWidth: 5,
             sortable: true
         },
         {
             label: 'APY',
             key: 'borrowAPY',
-            flexWidth: 1.5,
+            flexWidth: 3.3,
             sortable: true
         },
         {
             label: 'Liquidity',
             key: 'liquidity',
-            flexWidth: 1.25,
+            flexWidth: 2.3,
             sortable: true
         },
         {
-            label: '',
-            key: '',
-            flexWidth: 1,
-            sortable: false
+            label: 'Wallet Balance',
+            key: 'walletBalance',
+            flexWidth: 3.7,
+            sortable: true
+        },
+        {
+            label: 'Staked LP Tokens',
+            key: 'stakedLPTokens',
+            flexWidth: 3.7,
+            sortable: true
+        },
+        {
+            label: 'Rewards',
+            key: 'rewards',
+            flexWidth: 3.5,
+            sortable: true
         },
     ]
 
@@ -97,37 +108,36 @@ const Earn = () => {
     }, [rows, networkFilter])
 
       // Sory by different specs
-  useEffect(() => {
-    const sortKey = sortBy
-    console.log(sortKey, direction)
+    useEffect(() => {
+        const sortKey = sortBy
 
-    setRows(rows => {
-      const sortedRows = [...rows]
-      if (direction == 'desc') {
-        return sortedRows.sort((a, b) => {
-          if (a[sortKey] > b[sortKey]) {
-            return -1
-          }
-          if (a[sortKey] < b[sortKey]) {
-            return 1
-          }
-          return 0
+        setRows(rows => {
+        const sortedRows = [...rows]
+        if (direction == 'desc') {
+            return sortedRows.sort((a, b) => {
+            if (a[sortKey] > b[sortKey]) {
+                return -1
+            }
+            if (a[sortKey] < b[sortKey]) {
+                return 1
+            }
+            return 0
+            })
+        } else if (direction == 'asc') {
+            return sortedRows.sort((a, b) => {
+            if (a[sortKey] < b[sortKey]) {
+                return -1
+            }
+            if (a[sortKey] > b[sortKey]) {
+                return 1
+            }
+            return 0
+            })
+        } else {
+            return sortedRows
+        }
         })
-      } else if (direction == 'asc') {
-        return sortedRows.sort((a, b) => {
-          if (a[sortKey] < b[sortKey]) {
-            return -1
-          }
-          if (a[sortKey] > b[sortKey]) {
-            return 1
-          }
-          return 0
-        })
-      } else {
-        return sortedRows
-      }
-    })
-  }, [sortBy, direction])
+    }, [sortBy, direction])
 
     return (
         <Box>
@@ -138,11 +148,11 @@ const Earn = () => {
             >
                 Earn
             </Typography>
-            <Stack direction={isMediumScreen ? 'column' : 'row'} justifyContent='space-between' sx={{mb: { xs: 8, md: 16 }}} gap={8}>
+            <Stack direction={isMediumScreen ? 'column' : 'row'} justifyContent='space-between' sx={{mb: { xs: 8, md: 24 }}} gap={8}>
                 <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} color='#F3F3F3'
                     sx={{ fontWeight: 300, width: 730, maxWidth: '100%', lineHeight: { xs: 1.25, sm: 1.7 } }}>
-                    Deposit your collateral tokens into a module in exchange for a trenUSD loan or Loop 
-                    your assets in one click to leverage exposure for your spot assets. Pay back your loan later using trenUSD or your collateral.
+                    TrenUSD holders can stake into the stability pool, contributing to the protocol's overall health. 
+                    Stakers earn a base rate on assets and a share of liquidation profits by participating, safeguarding against bad debt.
                 </Typography>
                 <Stack direction='row' sx={{ width: { xs: 1, md: 'auto' }, gap: { xs: 8, md: 16 } }}>
                     <Box>
@@ -150,7 +160,7 @@ const Earn = () => {
                             Total Staked
                         </Typography>
                         <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 600 }}>
-                            $ {formatToThousands(200000).slice(1)}
+                            $ {formatToThousands(+formatUnits(totalDebtTokenDeposits, decimals!)).slice(1)}
                         </Typography>
                     </Box>
                     <Box>
@@ -158,13 +168,16 @@ const Earn = () => {
                             TREN per day
                         </Typography>
                         <Typography variant={isSmallScreen ? 'subtitle1' : 'h4'} sx={{ fontWeight: 600 }}>
-                            $ {formatToThousands(150000).slice(1)}
+                            $ {formatToThousands(2000).slice(1)}
                         </Typography>
                     </Box>
                 </Stack>
             </Stack>
             <StabilityPool/>
-            <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: {xs: 4, md: 10} }}>
+
+            {/* We hide this section for testnet only */}
+            {/* Network Type */}
+            {/* <Box sx={{ display: 'flex', gap: 4, overflowX: 'auto', py: {xs: 4, md: 10}, mt: 20 }}>
                 {networkTypes.map((value, index) => {
                     return value == networkFilter ? (
                         <ToggleOnButton
@@ -174,7 +187,7 @@ const Earn = () => {
                             }}
                         >
                             <span style={{ marginLeft: -6 }}>{value}</span>
-                            <span style={{ position: 'absolute', right: 19 }}>
+                            <span style={{ position: 'absolute', right: 15 }}>
                                 {filteredRows.length}
                             </span>
                         </ToggleOnButton>
@@ -189,9 +202,10 @@ const Earn = () => {
                         </ToggleOffButton>
                     )
                     })}
-            </Box>
+            </Box> */}
+
             {/* Collateral Table Header */}
-            <Stack direction='row' sx={{
+            {/* <Stack direction='row' sx={{
                 px: 6, pt: 2, 
                 display: {
                     xs: 'none',
@@ -209,11 +223,11 @@ const Earn = () => {
                         sortable={item.sortable}
                     />
                 ))}
-            </Stack>
+            </Stack> */}
 
             {/* Collateral Group Stack*/}
-            {collateralDetails && (
-                <Stack sx={{ mt: 4 }} gap={isMediumScreen ? 5 : 0}>
+            {/* {collateralDetails && (
+                <Stack sx={{ mt: 4 }} gap={4}>
                 {filteredRows.length > 0 ? (
                     filteredRows.map((row, index) => (
                     <EarnRow
@@ -229,7 +243,7 @@ const Earn = () => {
                     </Box>
                 )}
                 </Stack>
-            )}
+            )} */}
         </Box>
     )
 }

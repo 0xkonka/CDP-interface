@@ -30,8 +30,11 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
   const {sortBy, setSortBy, fields} = props
   const obj = fields.find(element => element.key == sortBy.substring(1))
   const sortByLabel = obj?.label
-  const boxRef = useRef<HTMLDivElement>(null); // Ref for the Box
+  const boxRef = useRef<HTMLDivElement>(null);
+  const sortByPopupRef = useRef<HTMLDivElement>(null);
+  const dropDownComponentRef = useRef<HTMLDivElement>(null);
   const [menuWidth, setMenuWidth] = useState<number>(0); // Default min width
+  const [offsetBottom, setOffsetBottom] =  useState<number>(0);
 
   const handleOpenMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -49,22 +52,60 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
         setMenuWidth(Math.max(boxRef.current.offsetWidth, 260));
     }
   }, [sortBy, isSmallScreen]); // Depend on sortByLabel to trigger width check
+  
+  // Here we fetch the offsetBottom of the dropdown menu.
+  // If the offset is less than 400px, it means that we can not show poup below dropdown.
+  useEffect(() => {
+    const updatePosition = () => {
+      if (dropDownComponentRef.current) {
+        const scrollTop = document.documentElement.scrollTop;
+        const offsetTop = dropDownComponentRef.current.offsetTop - scrollTop;
+        const _offsetBottom = document.documentElement.clientHeight - offsetTop;
+        setOffsetBottom(_offsetBottom)
+      }
+    };
+
+    updatePosition();
+    window.addEventListener('resize', updatePosition)
+    window.addEventListener('scroll', updatePosition)
+
+    return () => {
+      window.removeEventListener('resize', updatePosition)
+      window.removeEventListener('scroll', updatePosition)
+    };
+  }, []);
+
+  // If offsetBottom value is less than 400, we change the position of the popup. (To the right above of dropdown)
+  useEffect(() => {
+    return () => {
+      setTimeout(() => {
+        if(!anchorEl && sortByPopupRef.current && offsetBottom < 400) {
+          const paperRoot = sortByPopupRef.current.getElementsByClassName('MuiPaper-root')[0] as HTMLElement
+          if(paperRoot) {
+            paperRoot.style.top = 'auto'
+            paperRoot.style.bottom = offsetBottom + 5 + 'px'
+          }
+        }        
+      }, 100)
+    };
+  }, [anchorEl, offsetBottom]); 
 
   return (
-    <Box sx={{flex: {xs: 1, md: 'none'}}}>
+    <Box sx={{flex: {xs: 1, md: 'none'}}} ref={dropDownComponentRef}>
       <Box onClick={handleOpenMenu} ref={boxRef}
-          sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 4, py: 3, 
+          sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 4, py: 1.7, 
               minWidth: `${menuWidth}px`, borderRadius: 1, cursor: 'pointer',
               border: 'solid 1px #2D3131',
+              background: '#1A1D1E'
               }}>
           <Stack direction='row' gap={1} sx={{alignItems: 'center'}}>
-            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#a1a1a1'>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#C6C6C7' fontWeight={600}>
                 Sort by
             </Typography>
             <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'}>
                 {isSmallScreen ? '' : sortByLabel}
             </Typography>
-            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#a1a1a1'>
+            <Typography variant={isSmallScreen ? 'subtitle2' : 'subtitle1'} color='#C6C6C7' fontWeight={600}>
               {isSmallScreen ? '' : (sortBy[0] == '-' ? 'desc' : 'asc')}
             </Typography>
           </Stack>
@@ -76,6 +117,8 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
       </Box>
       <Menu
         anchorEl={anchorEl}
+        ref={sortByPopupRef}
+        PaperProps={{ ref: sortByPopupRef }}
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
         sx={{ 

@@ -19,77 +19,54 @@ type AddressMap = { [chainId: number]: string }
 
 export const ETHERSCAN_BASE_URL = 'https://sepolia.etherscan.io'
 
-export const ACTIVE_POOL: AddressMap = {
-    [SupportedChainId.GOERLI]: '0x53De404DE4a3bC176fC63f2ec7b8A1bc2015B5eA',
-    [SupportedChainId.SEPOLIA]: '0xbFdb028468c3f3E9DC74D260fD1B9fe58d3351d3'
+export const TRENBOX_STORAGE: AddressMap = {     // newly added 05/09/2024
+    [SupportedChainId.SEPOLIA]: '0x75A27E6785ab614C93495F1Ec85e95A999FDd6Ee'
 }
 
-export const ADMIN_CONTRACT: AddressMap = {
-    [SupportedChainId.GOERLI]: '0xC1d85dB2C62536C120FC3c8735B5317EF9a1D56F',
-    [SupportedChainId.SEPOLIA]: '0x2Ac25cBf80F5C06Fed3e5deFbe097B2eBB86bf0f'
+export const ADMIN_CONTRACT: AddressMap = {     // updated 05/09/2024
+    [SupportedChainId.SEPOLIA]: '0xAF0e56d4490b9B019eBD67Bc2f6f79282Bf66561'
 }
 
-export const BORROWER_OPERATIONS: AddressMap = {
-    [SupportedChainId.GOERLI]: '0xA98AF95c2abcF7EE108ed0aeFf85b7992717e787',
-    [SupportedChainId.SEPOLIA]: '0x5C197c0F1428aA859520B423cAb827E1c03be1B1'
+export const BORROWER_OPERATIONS: AddressMap = {    // updated 05/09/2024
+    [SupportedChainId.SEPOLIA]: '0x31bEEee3CF731B1A4Cc4649504518DA3782c242e'
 }
 
-export const COLL_SURPLUS_POOL: AddressMap = {
-    [SupportedChainId.GOERLI]: '0x90787aB3879d2d26c385B2FbaF528592181bf82C',
-    [SupportedChainId.SEPOLIA]: '0x42519444d558415D6Aa9FbC2F543BFEa5B57f350'
+export const FEE_COLLECTOR: AddressMap = {  // updated 05/09/2024
+    [SupportedChainId.SEPOLIA]: '0x953B34DD9dE4D78E372112d2b91DfDe67bEC77E5'
 }
 
-export const DEFAULT_POOL: AddressMap = {
-    [SupportedChainId.GOERLI]: '0x92768C8B2Dac41e3253F67Bf7Cccf2bAcABD3aE1',
-    [SupportedChainId.SEPOLIA]: '0xB3d70Fce2c49a0B51D5ae271d5FbC7419B20b3cD'
+export const FLASH_LOAN: AddressMap = {  // updated 05/09/2024
+    [SupportedChainId.SEPOLIA]: '0xDaA989CAB0cFB8C798e12AF5653A32Fa6ff1e844'
 }
 
-export const FEE_COLLECTOR: AddressMap = {
-    [SupportedChainId.GOERLI]: '0x43224DEBdA936a16C09e669F957A5D7539AE815f',
-    [SupportedChainId.SEPOLIA]: '0x9d7855d3e5aE7Ff333e0F3091F4Ac88C9E0445bb'
+export const SORTED_TRENBOXES: AddressMap = {   // updated 05/09/2024
+    [SupportedChainId.SEPOLIA]: '0xDC68844b2C1D2389ec569a573d7BbdBeea30eA90'
 }
 
-export const FLASH_LOAN: AddressMap = {
-    [SupportedChainId.GOERLI]: '',
-    [SupportedChainId.SEPOLIA]: '0x897B95a34D8bFeF139F335d18Dbab3ffA2A7Cf1F'
+export const STABILITY_POOL: AddressMap = {  // updated 05/09/2024
+    [SupportedChainId.SEPOLIA]: '0xf398661f226783080d44C8F31731DD42A52679C7'
 }
 
-export const SORTED_MODULES: AddressMap = {
-    [SupportedChainId.GOERLI]: '0x7671f328Eb430597D2cAf69E6D760708Fd2179E6',
-    [SupportedChainId.SEPOLIA]: '0x72f1b73a00Ae1724ED7b427f18ABEebAAd30C24b'
+export const TRENBOX_MANAGER: AddressMap = {  // updated 05/09/2024
+    [SupportedChainId.SEPOLIA]: '0x5F92EB88746EDB19C4a5aE862d43bc0a26F94002'
 }
 
-export const STABILITY_POOL: AddressMap = {
-    [SupportedChainId.GOERLI]: '0x308A5FCeFe09705d64A6F71828428CDa1901Cc8C',
-    [SupportedChainId.SEPOLIA]: '0xbCf883737EE0Cd210E214F4baE90579ed23d5187'
+export const TRENBOX_MANAGER_OPERATIONS: AddressMap = {  // updated 05/09/2024
+    [SupportedChainId.SEPOLIA]: '0xF7F6D0a3af2dFD1968F4698076B50C6120334DeB'
 }
 
-export const MODULE_MANAGER: AddressMap = {
-    [SupportedChainId.GOERLI]: '0x0F065FBfC74a354b10598f859CEc56bE23d8FdD4',
-    [SupportedChainId.SEPOLIA]: '0x5Dd3cB5fF47637DEeD4EfDFE0517682EDaBE3505'
+export const PRICE_FEED: AddressMap = {  // updated 05/09/2024
+    [SupportedChainId.SEPOLIA]: '0x706D55cB6Da5E2447846f01F49485b3d0d71474c'
 }
 
-export const MODULE_MANAGER_OPERATIONS: AddressMap = {
-    [SupportedChainId.GOERLI]: '0x4F8DE0245544C4896F3D3c4D96F2B3b2cE1F6239',
-    [SupportedChainId.SEPOLIA]: '0xE893aB599A7383BeCd32aC3DF94E1feaD8636a3c'
+export const TIME_LOCK_TESTOR: AddressMap = {   // updated 05/09/2024
+    [SupportedChainId.SEPOLIA]: '0xA8c17cBE32958FC5a76ba2d56f77916E0924E38E'
 }
 
-export const GAS_POOL: AddressMap = {
-    [SupportedChainId.GOERLI]: '0xF4c24132EfcE04422deC0F46d203f6D37Dc45b16',
-    [SupportedChainId.SEPOLIA]: '0x28D21cA26601B22222733D294D1AE0D27Ca0B4FF'
+export const DEBT_TOKEN: AddressMap = {   // updated 05/09/2024
+    [SupportedChainId.SEPOLIA]: '0xAD525A54D2a761dFa921353512FF145f2B5B37fd'
 }
 
-export const PRICE_FEED: AddressMap = {
-    [SupportedChainId.GOERLI]: '0xd1e4bf40e0A3102d0377da4f432b272715b29A2B',
-    [SupportedChainId.SEPOLIA]: '0x8C00258A5f9c6a28fB2349ffF4a1111581376c53'
-}
-
-export const TIME_LOCK_TESTOR: AddressMap = {
-    [SupportedChainId.GOERLI]: '0x04E7b5b54BfE1e1caA80b4Da73ba6F3474937b7d',
-    [SupportedChainId.SEPOLIA]: '0x38657842d3C59F60370844a84801E54230f62757'
-}
-
-export const DEBT_TOKEN: AddressMap = {
-    [SupportedChainId.GOERLI]: '0xDA57F2DA78A38413fD7eF53D2E72aE319E0964Aa',
-    [SupportedChainId.SEPOLIA]: '0xBf2FB6b1643CAa9B3b1D640F09D0b54d11A5E9AE'
+export const DEBT_TOKEN_MANAGER: AddressMap = {
+    [SupportedChainId.SEPOLIA]: '0xAb4C13ebF080972CCbE67231F4844a744252b81E'
 }

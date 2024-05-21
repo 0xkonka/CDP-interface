@@ -24,6 +24,7 @@ interface Props {
     amount: string
     setAmount: (amount: string) => void
     showTooltip?: boolean
+    debtAmount?: bigint // It is only for Repay popup
 }
 
 const getAmountTooltip = (type: string) => {
@@ -35,7 +36,11 @@ const getAmountTooltip = (type: string) => {
         case 'repay':
             return "Your repayment capacity is limited by your wallet's trenUSD balance. Use the MAX button to fully repay the loan if you have sufficient trenUSD, or to apply the full trenUSD from your wallet towards the loan repayment"
         case 'borrow':
-            return 'Your trenUSD amount is based on your borrowing power. Increase it by adding collateral. The MAX button uses all your borrowing power.'
+            return "Your trenUSD amount is based on your borrowing power. Increase it by adding collateral. The MAX button uses all your borrowing power."
+        case 'stability-withdraw':
+            return "The total amount available to withdraw corresponds to the total balance deposited"
+        case 'stability-deposit':
+            return "The available amount to deposit corresponds to the trenUSD wallet balance."
         case 'default':
             return 'N/A'
     }
@@ -43,7 +48,7 @@ const getAmountTooltip = (type: string) => {
 
 export const AmountForm = (props: Props) => {
     const theme:Theme = useTheme()
-    const {asset, type, available, amount, setAmount, showTooltip = true} = props
+    const {asset, type, available, amount, setAmount, showTooltip = true, debtAmount} = props
     const [borderColorStyle, setBorderColorStyle] = useState({})
     const [collateralUSD, setCollateralUSD] = useState(1)
     const {radiusBoxStyle} = useGlobalValues()
@@ -80,9 +85,6 @@ export const AmountForm = (props: Props) => {
             borderColor: theme.palette.secondary.dark
         })
     }
-    const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
-        setAmount(event.target.value)
-    }
 
     return (
         <Stack>
@@ -96,7 +98,7 @@ export const AmountForm = (props: Props) => {
                 </Tooltip>
             </Typography>
             }
-            <Box sx={{...radiusBoxStyle, ...borderColorStyle}} onClick={focusAmount}>
+            <Box sx={{...radiusBoxStyle, ...borderColorStyle, pt: 2, background: '#1013149C'}} onClick={focusAmount}>
                 <Stack direction='row' justifyContent='space-between'>
                     <CleaveWrapper style={{ position: 'relative' }}>
                         <Cleave
@@ -107,6 +109,7 @@ export const AmountForm = (props: Props) => {
                                 border: 'none',
                                 fontWeight: 700,
                                 paddingLeft: 6,
+                                paddingBottom: 0,
                             }} 
                             placeholder='0.00'
                             options={{
@@ -117,7 +120,7 @@ export const AmountForm = (props: Props) => {
                                 stripLeadingZeroes: false // Prevents stripping the leading zero before the decimal point
                             }}
                             value={amount}
-                            onChange={e => setAmount(e.target.value)}
+                            onChange={e => setAmount(removeComma(e.target.value))}
                             onFocus={handleFocus} onBlur={handleBlur}
                             autoComplete='off'
                         />
@@ -125,7 +128,8 @@ export const AmountForm = (props: Props) => {
                     <Stack direction='row' gap={2} alignItems='center'>
                         <img 
                             src={`/images/tokens/${asset.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
-                            alt={asset} height={25}
+                            alt={asset} height={28}
+                            style={{borderRadius: '100%'}}
                         />
                         <Typography variant='h5'>{asset}</Typography>
                     </Stack>
@@ -137,7 +141,7 @@ export const AmountForm = (props: Props) => {
                     </Stack>
                     <Stack direction='row' gap={2} alignItems='center'>
                         <Typography color='#707175' fontWeight={400}>{type == 'repay' ? 'Wallet balance:' : 'Available:'} {formatToThousands(available).substring(1)}</Typography>
-                        <Typography variant='body2' color='primary' fontWeight={600} sx={{cursor: 'pointer'}} onClick={() => {setAmount(String(available))}}>MAX</Typography>
+                        <Typography variant='body2' color='primary' fontWeight={600} sx={{cursor: 'pointer'}} onClick={() => {setAmount(type != 'repay' ? String(available) : Math.min(+formatEther(debtAmount!), available).toString())}}>MAX</Typography>
                     </Stack>
                 </Stack>
             </Box>

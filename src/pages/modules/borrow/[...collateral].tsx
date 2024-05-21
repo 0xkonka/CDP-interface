@@ -1,5 +1,5 @@
 // React imports
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 // Next.js imports
 import { useRouter } from 'next/router'
@@ -18,7 +18,7 @@ import { Switcher } from '@/views/components/modules/switcher'
 import { HealthFactor } from '@/views/components/modules/healthFactor'
 import { BorrowingPower } from '@/views/components/modules/borrowingPower'
 import { Result } from '@/views/components/modules/result'
-import { BorrowPopup } from '@/views/components/modules/borrowPopup'
+import { BorrowPopup } from '@/views/components/popups/borrowPopup'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { getBalance } from '@wagmi/core'
 import { wagmiConfig } from '@/pages/_app'
@@ -62,6 +62,8 @@ const Borrow = () => {
   })
   const [depositAmount, setDepositAmount] = useState('')
   const [borrowAmount, setBorrowAmount] = useState('')
+  const [triggerEffect, setTriggerEffect] = useState(0);
+  const {isMobileScreen} = useGlobalValues()
 
   // Hook data fetching
   const { address: account, isConnected } = useAccount()
@@ -72,16 +74,20 @@ const Borrow = () => {
     () => collateralDetails.find(i => i.symbol === collateral),
     [collateral, collateralDetails]
   )
-  const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0) } = collateralDetail || {}
+  const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0), debtTokenGasCompensation = BigInt(0), borrowingFee = BigInt(0) } = collateralDetail || {}
 
   // === User Trove management === //
   const { moduleInfo } = useModuleView(collateral!)
-  const {
+  let {
     debt: debtAmount = BigInt(0),
     coll: depositedAmount = BigInt(0),
     status: positionStatus = 'nonExistent'
   } = moduleInfo || {}
   
+  // Minus Gas compensation from trenBox Debt  @Alex R
+  if(debtAmount > debtTokenGasCompensation)
+    debtAmount -= debtTokenGasCompensation
+
   // Get Allowance
   const chainId = useChainId()
   const { data: allowance } = useReadContract({
@@ -91,10 +97,19 @@ const Borrow = () => {
     args: [account as '0x${string}', BORROWER_OPERATIONS[chainId] as '0x${string}']
   })
   
+  //reload and refetch the input values and balance.
+  const reloadBalance = useCallback(() => {
+    setDepositAmount('');
+    setBorrowAmount('');
+    setTriggerEffect(prev => prev + 1)
+  }, [setDepositAmount, setBorrowAmount]);
+
+
   // Calculate minimum deposit & borrow amount
   useEffect(() => {
     const _minBorrow = +formatEther(minNetDebt)
-    const _minDeposit = parseFloat((_minBorrow / +formatUnits(price, decimals!) / +formatEther(LTV)).toFixed(2))
+    // const _minDeposit = parseFloat((_minBorrow / +formatEther(price) / +formatEther(LTV)).toFixed(2))
+    const _minDeposit = parseFloat(((_minBorrow * (1 + +formatEther(borrowingFee)) + +formatEther(debtTokenGasCompensation)) / +formatEther(LTV) / +formatEther(price)).toFixed(5))
 
     setUserModuleInfo(prevState => ({
       ...prevState,
@@ -117,15 +132,15 @@ const Borrow = () => {
       }))
     }
     getUserInfo()
-  }, [account, address])
+  }, [account, address, triggerEffect])
 
 
   // Adjust available borrowing amount regarding deposit amount
   useEffect(() => {
     const _depositAmount = removeComma(depositAmount)
-    if (+_depositAmount > 0) {
-      const userAvailableBorrowAmount = +formatEther(price) * +_depositAmount * +formatEther(LTV)
-      setUserModuleInfo(prevState => ({ ...prevState, userAvailableBorrowAmount }))
+    if (+_depositAmount >= 0) {
+      const userAvailableBorrowAmount = (+formatEther(price) * +_depositAmount * +formatEther(LTV) - +formatEther(debtTokenGasCompensation)) / (1 + +formatEther(borrowingFee))
+      setUserModuleInfo(prevState => ({ ...prevState, userAvailableBorrowAmount : Math.max(0, userAvailableBorrowAmount) }))
     }
   }, [depositAmount])
 
@@ -157,14 +172,16 @@ const Borrow = () => {
   }, [depositAmount, borrowAmount, depositInputError, borrowInputError])
 
   // Calculation View
-  const collateralValue = +formatUnits(price, decimals!) * (+removeComma(depositAmount) + +formatUnits(depositedAmount, decimals))
-  const loanValue = +formatUnits(debtAmount, decimals) + +removeComma(borrowAmount)
-  const currentLTV = (collateralValue == 0) ? 0 : (loanValue / collateralValue * 100)
-  const totalCollateralQuantity = +removeComma(depositAmount) + +formatUnits(depositedAmount, decimals)
-  const liquidationPrice = totalCollateralQuantity == 0 ? 0 : loanValue / (totalCollateralQuantity * +formatEther(liquidation))
+  const collateralValue = +formatEther(price) * (+removeComma(depositAmount) + +formatEther(depositedAmount))
+  const loanValue = +formatEther(debtAmount) + +removeComma(borrowAmount) * (1 + +formatEther(borrowingFee))
+  const currentLTV = (collateralValue == 0 || loanValue == 0) ? 0 : ((loanValue + +formatEther(debtTokenGasCompensation)) / collateralValue * 100)
+  const totalCollateralQuantity = +removeComma(depositAmount) + +formatEther(depositedAmount)
+  const liquidationPrice = totalCollateralQuantity == 0 ? 0 : (loanValue + +formatEther(debtTokenGasCompensation)) / (totalCollateralQuantity * +formatEther(liquidation))
   const healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
   const borrowingPowerPercent = currentLTV / +formatEther(LTV)
-  const maxBorrowingValue = collateralValue * +formatEther(LTV)
+  // const maxBorrowingValue = collateralValue * +formatEther(LTV)
+  const maxBorrowingValue = Math.max(0, (collateralValue * +formatEther(LTV) - +formatEther(debtTokenGasCompensation)) / (1 + +formatEther(borrowingFee)))
+  // const borrowingPowerPercent = (maxBorrowingValue == 0) ? 0 : (loanValue / maxBorrowingValue * 100)
 
   // Handle click for poups
   const handleClickApprove = () => {
@@ -204,13 +221,29 @@ const Borrow = () => {
             router.push('/modules')
           }}
         >
-          Go back to Pools
+          Go back to modules
         </Typography>
       </Stack>
-      <ModuleOverView collateral={collateral || ''} />
-      <Grid container spacing={4}>
+      <Box sx={{mb: {xs: 8, lg: 12}}}>
+        <ModuleOverView collateral={collateral || ''} />
+      </Box>
+      <Box sx={{...radiusBoxStyle, background: '#1013149C'}}>
+        <Grid container spacing={8}>
+          <Grid item xs={12} lg={6}>
+            <HealthFactor 
+              safety={healthFactor}
+          />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <BorrowingPower 
+              percent={borrowingPowerPercent}
+              max={maxBorrowingValue}
+          />
+          </Grid>
+        </Grid>
+      </Box>
+      <Grid container spacing={isMobileScreen ? 2 : 8}>
         <Grid item xs={12} md={6}>
-          <Switcher page='borrow' collateral={collateral || ''} />
           <Stack direction='column-reverse'>
             <AmountForm amount={borrowAmount} setAmount={setBorrowAmount} type='borrow' asset='trenUSD' available={userModuleInfo.userAvailableBorrowAmount} showTooltip={false}/>
             <Stack direction='row' justifyContent='space-between' alignItems='center' mb={3}>
@@ -225,146 +258,130 @@ const Borrow = () => {
           </Stack>
         </Grid>
         <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Stack sx={{ ...radiusBoxStyle, height: 1, justifyContent: 'center' }}>
-            <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
-              {
-                positionStatus == 'active' &&
-                <Grid container sx={{ height: '100%' }}>
-                  <Grid item xs={12} md={6}
-                    sx={{
-                      pr: { xs: 0, md: 4 },
-                      borderBottom: { xs: 'solid 1px #2D3131', md: 0 },
-                      borderRight: { md: 'solid 1px #2D3131' }
-                    }}
-                  >
-                    <Typography variant='subtitle1' sx={{ mb: 4, fontWeight: 600 }}>
-                      Collateral
-                    </Typography>
-                    <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
-                      <Stack direction='row' sx={{ alignItems: 'center' }}>
-                        <img
-                          src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
-                          alt={collateral}
-                          height={42}
-                          style={{ marginRight: 10 }}
-                        />
-                        {collateral}
-                      </Stack>
-                      <Box>
-                        <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
-                          {formatToThousands(+formatUnits(depositedAmount, decimals)).substring(1)}
-                        </Typography>
-                        <Stack direction='row' alignItems='center' gap={1}>
-                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
-                          <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                            {formatToThousands(+formatUnits(depositedAmount, decimals) * +formatEther(price!))}
-                          </Typography>
-                        </Stack>
-                      </Box>
-                    </Stack>
-                    <Stack direction='row' sx={{ mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 } }}>
-                      <Button
-                        sx={{
-                          mr: { xs: 2, md: 4 },
-                          color: 'white',
-                          borderColor: '#6795DA'
-                        }}
-                        variant='outlined'
-                        onClick={handleWithdraw}
-                      >
-                        Withdraw
-                      </Button>
-                      <Button
-                        sx={{
-                          color: 'white',
-                          borderColor: '#67DAB1'
-                        }}
-                        variant='outlined'
-                        onClick={handleDepositMore}
-                      >
-                        Deposit more
-                      </Button>
-                    </Stack>
-                  </Grid>
-                  <Grid item xs={12} md={6} sx={{ pl: { xs: 0, md: 4 }, pt: { xs: 4, md: 0 } }}>
-                    <Typography variant='subtitle1' sx={{ mb: 4, fontWeight: 600 }}>
-                      Debt
-                    </Typography>
-                    <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
-                      <Stack direction='row' sx={{ alignItems: 'center' }}>
-                        <Image
-                          src={`/images/tokens/trenUSD.png`}
-                          alt='TrenUSD'
-                          width={32}
-                          height={32}
-                          style={{ borderRadius: '100%', marginRight: 10 }}
-                        />
-                        trenUSD
-                      </Stack>
-                      <Box>
-                        <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
-                          {formatToThousands(+formatEther(debtAmount)).substring(1)}
-                        </Typography>
-                        <Stack direction='row' alignItems='center' gap={1}>
-                          <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
-                          <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                            {formatToThousands(+formatEther(debtAmount))}
-                          </Typography>
-                        </Stack>
-                      </Box>
-                    </Stack>
-                    <Stack direction='row' sx={{ mt: { xs: 4, md: 12 }, mb: { xs: 4, md: 0 } }}>
-                      <Button
-                        sx={{
-                          mr: { xs: 2, md: 4 },
-                          color: 'white',
-                          borderColor: '#C6E0DC'
-                        }}
-                        variant='outlined'
-                        onClick={handleBorrowMore}
-                      >
-                        Borrow more
-                      </Button>
-                      <Button
-                        sx={{
-                          color: 'white',
-                          borderColor: '#C9A3FA'
-                        }}
-                        variant='outlined'
-                        onClick={handleRepay}
-                      >
-                        Repay
-                      </Button>
-                    </Stack>
-                  </Grid>
-                </Grid>
-              }
-              {
-                positionStatus != 'active' &&
-                <Typography variant='subtitle1' color='white' sx={{opacity: 0.2}}>
-                  No open modules
+          <Stack sx={{ ...radiusBoxStyle, height: 1, background: '#1013149C', mt: {xs: 0, lg: 10} }}>
+          {
+            positionStatus == 'active' &&
+            <Stack sx={{width: 1, height: 1, justifyContent: 'space-between', gap: {xs: 6, lg: 0}}}>
+              <Box>
+                <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 600 }}>
+                  Collateral
                 </Typography>
-              }  
+                <Stack gap={4} justifyContent='space-between' sx={{flexDirection: {xs: 'column', lg: 'row'}, alignItems: {xs: 'flex-start', lg: 'center'}}}>
+                  <Stack direction='row' sx={{ width: {xs: 1, sm: 400}, justifyContent: 'space-between' }}>
+                    <Stack direction='row' sx={{ alignItems: 'center' }}>
+                      <img
+                        src={`/images/tokens/${collateral?.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
+                        alt={collateral}
+                        height={42}
+                        style={{ marginRight: 10, borderRadius: '100%' }}
+                      />
+                      {collateral}
+                    </Stack>
+                    <Box>
+                      <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
+                        {formatToThousands(+formatEther(depositedAmount)).substring(1)}
+                      </Typography>
+                      <Stack direction='row' alignItems='center' gap={1}>
+                        <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
+                        <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
+                          {formatToThousands(+formatEther(depositedAmount) * +formatEther(price!))}
+                        </Typography>
+                      </Stack>
+                    </Box>
+                  </Stack>
+                  <Stack direction='row' sx={{ width: 1, justifyContent: {xs: 'flex-start', lg: 'flex-end'}}}>
+                    <Button
+                      sx={{
+                        color: 'white',
+                        borderColor: '#67DAB1',
+                        mr: { xs: 2, md: 4 },
+                      }}
+                      variant='outlined'
+                      onClick={handleDepositMore}
+                    >
+                      Deposit more
+                    </Button>
+                    <Button
+                      sx={{
+                        color: 'white',
+                        borderColor: '#6795DA'
+                      }}
+                      variant='outlined'
+                      onClick={handleWithdraw}
+                    >
+                      Withdraw
+                    </Button>
+                  </Stack>
+                </Stack>
+              </Box>
+              <Box sx={{height: '1px', borderBottom: 'solid 1px #2D3131'}}></Box>
+              <Box>
+                <Typography variant='subtitle1' sx={{ mb: 2, fontWeight: 600 }}>
+                  Debt
+                </Typography>
+                <Stack gap={4} justifyContent='space-between' sx={{flexDirection: {xs: 'column', lg: 'row'}, alignItems: {xs: 'flex-start', lg: 'center'}}}>
+                  <Stack direction='row' sx={{ width: {xs: 1, sm: 400}, justifyContent: 'space-between' }}>
+                    <Stack direction='row' sx={{ alignItems: 'center' }}>
+                      <Image
+                        src={`/images/tokens/trenUSD.png`}
+                        alt='TrenUSD'
+                        width={32}
+                        height={32}
+                        style={{ borderRadius: '100%', marginRight: 10 }}
+                      />
+                      trenUSD
+                    </Stack>
+                    <Box>
+                      <Typography variant='subtitle1' sx={{ textAlign: 'end' }}>
+                        {formatToThousands(+formatEther(debtAmount)).substring(1)}
+                      </Typography>
+                      <Stack direction='row' alignItems='center' gap={1}>
+                        <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
+                        <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
+                          {formatToThousands(+formatEther(debtAmount))}
+                        </Typography>
+                      </Stack>
+                    </Box>
+                  </Stack>
+                  <Stack direction='row' sx={{ width: 1, justifyContent: {xs: 'flex-start', lg: 'flex-end'}}}>
+                    <Button
+                      sx={{
+                        mr: { xs: 2, md: 4 },
+                        color: 'white',
+                        borderColor: '#C6E0DC'
+                      }}
+                      variant='outlined'
+                      onClick={handleBorrowMore}
+                    >
+                      Borrow more
+                    </Button>
+                    <Button
+                      sx={{
+                        color: 'white',
+                        borderColor: '#C9A3FA'
+                      }}
+                      variant='outlined'
+                      onClick={handleRepay}
+                    >
+                      Repay
+                    </Button>
+                  </Stack>
+                </Stack>
+              </Box>
             </Stack>
+          }
+          {
+            positionStatus != 'active' &&
+            <Stack sx={{width: 1, height: 1}} justifyContent='center' alignItems='center'>
+              <Typography variant='subtitle1' color='white' sx={{opacity: 0.2}}>
+                No open modules
+              </Typography>
+            </Stack>
+          }  
           </Stack>
-          <Box sx={radiusBoxStyle}>
-            <Grid container spacing={8}>
-              <Grid item xs={12} lg={6}>
-                <HealthFactor 
-                  safety={healthFactor}
-                />
-              </Grid>
-              <Grid item xs={12} lg={6}>
-                <BorrowingPower 
-                  percent={borrowingPowerPercent}
-                  max={maxBorrowingValue}
-                />
-              </Grid>
-            </Grid>
-          </Box>
         </Grid>
       </Grid>
-      <Box sx={{...radiusBoxStyle, pt: 6, pb: 6}} >
+      <Box sx={{...radiusBoxStyle, pt: 6, pb: 6, background: '#1013149C', mt: {xs: 8, md: 8}}} >
         <Result
           liquidationPrice={liquidationPrice}
           ltv={currentLTV}
@@ -398,6 +415,7 @@ const Borrow = () => {
           userCollateralBal={parseUnits(userModuleInfo.userTotalCollateralAmount.toString(), decimals)}
           depositAmount={depositAmount}
           borrowAmount={borrowAmount}
+          reloadBalance={reloadBalance}
         />
       )}
     </Box>

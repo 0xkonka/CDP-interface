@@ -9,6 +9,7 @@ import createEmotionServer from '@emotion/server/create-instance'
 
 // ** Utils Imports
 import { createEmotionCache } from 'src/@core/utils/create-emotion-cache'
+import Script from 'next/script'
 
 class CustomDocument extends Document {
   render() {
@@ -17,13 +18,13 @@ class CustomDocument extends Document {
         <Head>
           <link rel='preconnect' href='https://fonts.googleapis.com' />
           <link rel='preconnect' href='https://fonts.gstatic.com' />
-          {/* <link
-            rel='stylesheet'
-            href='https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap'
-          /> */}
           <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
           <link rel='apple-touch-icon' sizes='180x180' href='/images/apple-touch-icon.png' />
           <link rel='shortcut icon' href='/images/favicon.png' />
+          {/* <Script
+            src="https://unpkg.com/@splinetool/viewer@1.2.5/build/spline-viewer.js"
+            strategy="beforeInteractive"
+          /> */}
         </Head>
         <body>
           <Main />

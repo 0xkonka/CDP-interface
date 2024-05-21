@@ -51,8 +51,7 @@ const ListItem = styled(MuiListItem)<ListItemProps>(({ theme }) => ({
   cursor: 'pointer',
   borderRadius: theme.shape.borderRadius,
   '&:hover': {
-    // background: theme.palette.action.hover
-    background: 'transparent'
+    background: 'transparent',
   }
 }))
 
@@ -252,7 +251,7 @@ const HorizontalNavGroup = (props: Props) => {
                       }}
                     />
                   ) : null}
-                  <Icon icon={hasParent ? toggleIcon : 'tabler:chevron-down'} fontSize='1.125rem' />
+                  <Icon className='arrow' icon={menuOpen ? 'tabler:chevron-up' : 'tabler:chevron-down'} fontSize='1.125rem' />
                 </Box>
               </Box>
             </ListItem>

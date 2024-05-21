@@ -35,7 +35,7 @@ const themeOptions = (settings: Settings, overrideMode: PaletteMode): ThemeOptio
       },
       mixins: {
         toolbar: {
-          minHeight: 96 // This is only for desktop version (horizontal) and it will be different in mobile.
+          minHeight: 104 // This is only for desktop version (horizontal) and it will be different in mobile.
         }
       },
       shadows: shadows(mode === 'semi-dark' ? overrideMode : mode),

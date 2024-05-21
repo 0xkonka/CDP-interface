@@ -10,7 +10,7 @@ import { erc20Abi, formatEther, formatUnits, parseUnits } from 'viem'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { formatToThousands } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
-import { BorrowPopup } from '@/views/components/modules/borrowPopup'
+import { BorrowPopup } from '@/views/components/popups/borrowPopup'
 
 // React imports
 import React, { useState, useMemo, useEffect } from 'react'
@@ -32,7 +32,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
   const [walletBalance, setWalletBalance] = useState(0)
 
   // Wallet Address
-  const { address: account, isConnected } = useAccount()
+  const { address: account } = useAccount()
 
    // === Get Collateral Detail === //
    const { collateralDetails } = useProtocol()
@@ -40,11 +40,11 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
      () => collateralDetails.find(i => i.symbol === row.symbol),
      [row, collateralDetails]
   )
-  const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0) } = collateralDetail || {}
+  const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0), debtTokenGasCompensation = BigInt(0) } = collateralDetail || {}
 
   // === User Trove management === //
   const { moduleInfo } = useModuleView(row.symbol)
-  const {
+  let {
     healthFactor = 0,
     borrowingPower = 0,
     maximumBorrowingPower = BigInt(0),
@@ -52,6 +52,10 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
     debt: debtAmount = BigInt(0),
     coll: depositedAmount = BigInt(0),
   } = moduleInfo || {}
+
+  // Minus Gas compensation from trenBox Debt  @Alex R
+  if(debtAmount > debtTokenGasCompensation)
+    debtAmount -= debtTokenGasCompensation
 
   // Get Allowance
   const chainId = useChainId()
@@ -92,6 +96,17 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
     setType('repay')
   }
 
+  //  //reload and refetch the input values and balance.
+  //  const reloadBalance = useCallback(() => {
+  //   setDepositAmount('');
+  //   setBorrowAmount('');
+  //   setTriggerEffect(prev => prev + 1)
+  // }, [setDepositAmount, setBorrowAmount]);
+
+  const reloadBalance = () => {
+      // Do nothing ; Just keep it
+  }
+
   return (
     <Box className='borrow-position' sx={{ display: positionStatus === 'active' ? 'block' : 'none' }}>
       <Typography variant='subtitle1' sx={{ my: 4, fontWeight: 600 }}>
@@ -121,18 +136,18 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
                   src={`/images/tokens/${row.symbol.replace(/\//g, '-').replace(/\s+/g, '')}.png`}
                   alt={row.symbol}
                   height={isSmallScreen ? 36 : 42}
-                  style={{ marginRight: 10 }}
+                  style={{ marginRight: 10, borderRadius: '100%' }}
                 />
                 {row.symbol}
               </Stack>
               <Stack sx={{ ml: isSmallScreen ? 0 : 12, alignItems: 'flex-end' }}>
                 <Typography variant='subtitle1'>
-                  {formatToThousands(+formatUnits(depositedAmount, row.decimals)).substring(1)}
+                  {formatToThousands(+formatEther(depositedAmount)).substring(1)}
                 </Typography>
                 <Stack direction='row' alignItems='center' gap={1}>
                   <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                   <Typography variant='subtitle2' sx={{ color: '#707175' }}>
-                    {formatToThousands(+formatUnits(depositedAmount, row.decimals) * +formatEther(row.price))}
+                    {formatToThousands(+formatEther(depositedAmount) * +formatEther(row.price))}
                   </Typography>
                 </Stack>
               </Stack>
@@ -228,6 +243,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
           userCollateralBal={parseUnits(walletBalance.toString(), row.decimals)}
           depositAmount=''
           borrowAmount=''
+          reloadBalance={reloadBalance}
         />
       )}
     </Box>

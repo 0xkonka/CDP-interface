@@ -1,5 +1,5 @@
 // ** React Imports
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -53,8 +53,7 @@ const AppBarContent = (props: Props) => {
   const { hidden, settings, saveSettings } = props
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      {/* <ModeToggler settings={settings} saveSettings={saveSettings} /> */}
+    <Box sx={{ position: 'absolute', right: 0, display: 'flex', alignItems: 'center' }}>
       <ConnectWallet />
     </Box>
   )

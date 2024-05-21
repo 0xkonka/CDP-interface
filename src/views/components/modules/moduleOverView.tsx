@@ -42,12 +42,13 @@ export const ModuleOverView = (props: Props) => {
     {
       key: 'trenUSD Available',
       tooltip: 'trenUSD available to borrow/total trenUSD allocated',
-      value: `${formatMoney(formattedBorrowAvailable)} / ${formatMoney(formattedMintCap)}`
+      value: formatMoney(formattedBorrowAvailable),
+      value2: formatMoney(formattedMintCap)
     },
     {
       key: 'Utilization',
       tooltip: 'Total borrowed trenUSD/total trenUSD allocated',
-      value: formatPercent((formattedBorrowAvailable / formattedMintCap) * 100, 2)
+      value: formatPercent((1 - formattedBorrowAvailable / formattedMintCap) * 100, 2)
     },
     {
       key: 'Max LTV',
@@ -84,7 +85,7 @@ export const ModuleOverView = (props: Props) => {
     borderBottom: 'solid 1px',
     borderTop: 'solid 1px',
     borderColor: theme.palette.secondary.dark,
-    gap: 6,
+    gap: 10,
     overflowX: 'scroll'
   }
 
@@ -92,23 +93,29 @@ export const ModuleOverView = (props: Props) => {
   return (
     <Stack
       direction='row'
-      sx={{ ...computedStyle, flexWrap: isMediumScreen ? 'nowrap' : 'wrap', justifyContent: 'space-between' }}
+      sx={{ ...computedStyle, flexWrap: isMediumScreen ? 'nowrap' : 'wrap', justifyContent: 'space-between', px: {xs: 4, md: 12}, background: '#1013149C' }}
     >
       {labels.map((label, index) => (
         <Stack key={index} sx={{ alignItems: 'center', gap: isSmallScreen ? 0 : 1 }}>
           <Typography
             variant='body1'
             color='#707175'
-            sx={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}
+            sx={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap', position:'relative' }}
           >
             {label.key}
             <Tooltip title={label.tooltip} placement='top'>
-              <IconButton sx={{ bgcolor: 'transparent !important' }}>
+              <IconButton sx={{ position: 'absolute', bgcolor: 'transparent !important', right: -28 }}>
                 <Icon fontSize='14' icon='simple-line-icons:question' style={{ color: '#707175', cursor: 'pointer' }} />
               </IconButton>
             </Tooltip>
           </Typography>
-          <Typography variant='body1'>{label.value}</Typography>
+          <Typography variant='body1' sx={{whiteSpace: 'nowrap'}}>
+            {
+              label.key != 'trenUSD Available' ? 
+                label.value : 
+                <span>{label.value} <span style={{color: '#707175'}}> / {label.value2}</span></span>
+            }
+          </Typography>
         </Stack>
       ))}
     </Stack>

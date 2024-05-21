@@ -7,7 +7,7 @@ import {
 
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { useModuleView } from '@/context/ModuleProvider/useModuleView'
-import { erc20Abi, formatEther, formatUnits, parseUnits } from 'viem'
+import { erc20Abi, formatEther, formatUnits, parseEther, parseUnits } from 'viem'
 
 // Core Components Imports
 import Icon from '@/@core/components/icon'
@@ -23,12 +23,15 @@ interface Props {
     uptoFee?: number
     type: string
     amount: string
+    closeModule?: boolean
+    depositAmount?: string
+    borrowAmount?: string
 }
 
 export const TransactionOverView = (props: Props) => {
     const {radiusBoxStyle} = useGlobalValues()
     const theme:Theme = useTheme()
-    const {collateral, gasFee, uptoFee, type, amount} = props
+    const {collateral, gasFee, uptoFee, type, amount, closeModule, depositAmount, borrowAmount} = props
     
     // Fetch detail from hook.
     const { collateralDetails } = useProtocol()
@@ -36,35 +39,45 @@ export const TransactionOverView = (props: Props) => {
         () => collateralDetails.find(i => i.symbol === collateral),
         [collateral, collateralDetails]
     )
-    const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0) } = collateralDetail || {}
+    const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0), debtTokenGasCompensation = BigInt(0), borrowingFee = BigInt(0)} = collateralDetail || {}
 
     // === User Trove management === //
     const { moduleInfo } = useModuleView(collateral!)
-    const {
+    let {
         debt: debtAmount = BigInt(0),
         coll: depositedAmount = BigInt(0)
     } = moduleInfo || {}
     
-    const plusColl = type == 'deposit'? +removeComma(amount) : ((type == 'withdraw')? +removeComma(amount) * -1 : 0)
-    const plusDebt = type == 'borrow'? +removeComma(amount) : ((type == 'repay')? +removeComma(amount) * -1 : 0)
+    // Minus Gas compensation from trenBox Debt  @Alex R
+    if(debtAmount > debtTokenGasCompensation)
+        debtAmount -= debtTokenGasCompensation
+
+    let plusColl, plusDebt
+    if(type == 'openOrAdjust') {
+        plusColl = +depositAmount!
+        plusDebt = +borrowAmount!
+    } else {
+        plusColl = type == 'deposit'? +removeComma(amount) : ((type == 'withdraw')? +removeComma(amount) * -1 : 0)
+        plusDebt = type == 'borrow'? +removeComma(amount) : ((type == 'repay')? +removeComma(amount) * -1 : 0)
+    }
 
     // Module Calculation
-    const collateralValue = +formatUnits(price, decimals!) * (+formatUnits(depositedAmount, decimals))
-    const new_collateralValue = +formatUnits(price, decimals!) * (+formatUnits(depositedAmount, decimals) + plusColl)
-    const loanValue = +formatUnits(debtAmount, decimals)
-    const new_loanValue = +formatUnits(debtAmount, decimals) + plusDebt
-    const currentLTV = (collateralValue == 0) ? 0 : (loanValue / collateralValue * 100)
-    const new_CurrentLTV = (new_collateralValue == 0) ? 0 : (new_loanValue / new_collateralValue * 100)
-    const old_healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
-    const new_healthFactor = (new_CurrentLTV == 0) ? 0 : (+formatEther(liquidation) / new_CurrentLTV * 100)
-    const liquidationPrice = (+formatUnits(depositedAmount, decimals) + plusColl) == 0 ? 0 : new_loanValue / ((+formatUnits(depositedAmount, decimals) + plusColl) * +formatEther(liquidation))
+    const collateralValue = +formatEther(price) * (+formatEther(depositedAmount))
+    const new_collateralValue = +formatEther(price!) * (+formatEther(depositedAmount) + plusColl)
+    const loanValue = +formatEther(debtAmount)
+    const new_loanValue = +formatEther(debtAmount) + plusDebt * (plusDebt > 0 ? 1 + +formatEther(borrowingFee) : 1)
+    const currentLTV = (collateralValue == 0) ? 0 : ((loanValue + +formatEther(debtTokenGasCompensation)) / collateralValue * 100)
+    const new_CurrentLTV = (new_collateralValue == 0) ? 0 : ((new_loanValue + +formatEther(debtTokenGasCompensation)) / new_collateralValue * 100)
+    const old_healthFactor = (currentLTV == 0 || loanValue == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
+    const new_healthFactor = (new_CurrentLTV == 0 || new_loanValue == 0) ? 0 : (+formatEther(liquidation) / new_CurrentLTV * 100)
+    const liquidationPrice = (+formatEther(depositedAmount) + plusColl) == 0 ? 0 : (new_loanValue + +formatEther(debtTokenGasCompensation)) / ((+formatEther(depositedAmount) + plusColl) * +formatEther(liquidation))
   
     return (
         <Stack>
             <Typography variant='h5' fontWeight={400} color='#707175' mt={4} mb={3}>
                 Transaction overview
             </Typography>
-            <Stack sx={radiusBoxStyle} gap={6}>
+            <Stack sx={{...radiusBoxStyle, background: '#1013149C'}} gap={6}>
                 {
                     type == 'repay' &&
                     <Stack direction='row' justifyContent='space-between' alignItems='center'>
@@ -148,11 +161,21 @@ export const TransactionOverView = (props: Props) => {
 
                 }
             </Stack>
-            <Box sx={{...radiusBoxStyle, backgroundColor: 'rgba(103, 218, 177, 0.10)', mt: 2, mb: 12}} display={type == 'repay' ? 'none' : 'block'}>
-                <Typography variant='subtitle1' lineHeight='normal'>
-                    <span style={{ color: theme.palette.primary.main, fontWeight: 600}}>Attention: </span>
-                    Parameter changes via governance can alter your account health factor and risk of liquidation. Follow the Tren governance forum for updates.
-                </Typography>
+            <Box sx={{...radiusBoxStyle, backgroundColor: 'rgba(103, 218, 177, 0.10)', mt: 2, mb: 12}} display={(type == 'repay' && !closeModule) ? 'none' : 'block'}>
+                {
+                    !closeModule &&
+                    <Typography variant='subtitle1' lineHeight='normal'>
+                        <span style={{ color: theme.palette.primary.main, fontWeight: 600}}>Attention: </span>
+                        Parameter changes via governance can alter your account health factor and risk of liquidation. Follow the Tren governance forum for updates.
+                    </Typography>
+                }
+                {
+                    closeModule &&
+                    <Typography variant='subtitle1' lineHeight='normal'>
+                        <span style={{ color: theme.palette.primary.main, fontWeight: 600}}>Attention: </span>
+                        Once you click close button, you will not be able to undo this action.
+                    </Typography>
+                }
             </Box>
         </Stack>
     )

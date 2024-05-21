@@ -4,7 +4,7 @@ import { removeComma } from '@/hooks/utils'
 import { formatToThousands } from '@/hooks/utils'
 import { Stack, Typography } from '@mui/material'
 import { useMemo } from 'react'
-import { formatUnits } from 'viem'
+import { formatEther, formatUnits } from 'viem'
 
 interface Props {
   depositAmount: string
@@ -21,24 +21,25 @@ export const ApproveDetailView = (props: Props) => {
     () => collateralDetails.find(i => i.symbol === collateral),
     [collateral, collateralDetails]
   )
-  const collateralUSD = collateralDetail ? +formatUnits(collateralDetail.price, collateralDetail.decimals) : 0
+  const collateralUSD = collateralDetail ? +formatEther(collateralDetail.price) : 0
   const trenUSD = 1.0
 
   return (
     <Stack>
-      <Stack gap={4} sx={radiusBoxStyle}>
+      <Stack sx={{...radiusBoxStyle, gap: 1}}>
         <Typography color='#707175' fontWeight={500}>
           You Deposit
         </Typography>
         <Stack direction='row' justifyContent='space-between' alignItems='center'>
           <Typography variant='h2' fontWeight={600}>
-            {depositAmount}
+            {formatToThousands(+removeComma(depositAmount)).substring(1)}
           </Typography>
           <Stack direction='row' gap={2} alignItems='center'>
             <img
               src={`/images/tokens/${collateral.replace(/\s+/g, '').replace(/\//g, '-')}.png`}
               alt={collateral}
-              height={25}
+              height={30}
+              style={{borderRadius: '100%'}}
             />
             <Typography variant='h5'>{collateral}</Typography>
           </Stack>
@@ -47,16 +48,16 @@ export const ApproveDetailView = (props: Props) => {
           {formatToThousands(+removeComma(depositAmount) * collateralUSD)}
         </Typography>
       </Stack>
-      <Stack gap={4} sx={radiusBoxStyle}>
+      <Stack sx={{...radiusBoxStyle, gap: 1}}>
         <Typography color='#707175' fontWeight={500}>
           You Borrow
         </Typography>
         <Stack direction='row' justifyContent='space-between' alignItems='center'>
           <Typography variant='h2' fontWeight={600}>
-            {borrowAmount}
+            {formatToThousands(+removeComma(borrowAmount)).substring(1)}
           </Typography>
           <Stack direction='row' gap={2} alignItems='center'>
-            <img src='/images/tokens/trenUSD.png' alt='trenUSD' height={25} />
+            <img src='/images/tokens/trenUSD.png' alt='trenUSD' height={30} style={{borderRadius: '100%'}}/>
             <Typography variant='h5'>trenUSD</Typography>
           </Stack>
         </Stack>

@@ -11,10 +11,10 @@ interface Props {
 }
 
 export const BorrowingPower = (props: Props) => {
-    const {percent, max} = props
-    let {label} = props
+    let {percent, label, max} = props
     if(label == undefined)
         label = 'Borrowing power used'
+    percent = percent > 0 ? percent : 0
     return (
         <Stack>
             <Typography variant='subtitle1'>
@@ -46,7 +46,7 @@ export const BorrowingPower = (props: Props) => {
                     $0
                 </Typography>
                 <Typography variant='subtitle1' color='#707175'>
-                    {formatToThousands(max).slice(0, -3)}
+                    {formatToThousands(max)}
                 </Typography>
             </Box>
         </Stack>

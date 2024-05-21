@@ -36,7 +36,7 @@ export const Result = (props: Props) => {
                         Liquidation Price
                     </Typography>
                     <Typography variant='body1'>
-                        {liquidationPrice.toFixed(8)}
+                        {liquidationPrice == 0 ? '-' : liquidationPrice.toFixed(8)}
                     </Typography>
                 </Stack>
             </Grid>
@@ -46,7 +46,7 @@ export const Result = (props: Props) => {
                         LTV
                     </Typography>
                     <Typography variant='body1'>
-                        {ltv.toFixed(2)}%
+                        {ltv == 0 ? '-' : `${ltv.toFixed(2)}%`}
                     </Typography>
                 </Stack>
             </Grid>
@@ -56,7 +56,7 @@ export const Result = (props: Props) => {
                         Collateral Value
                     </Typography>
                     <Typography variant='body1'>
-                        {formatToThousands(collateralValue)}
+                        {collateralValue == 0 ? '-' : formatToThousands(collateralValue)}
                     </Typography>
                 </Stack>
             </Grid>
@@ -66,7 +66,7 @@ export const Result = (props: Props) => {
                         Loan Value
                     </Typography>
                     <Typography variant='body1'>
-                        {formatToThousands(loanValue)}
+                        {loanValue == 0 ? '-' : formatToThousands(loanValue)}
                     </Typography>
                 </Stack>
             </Grid>

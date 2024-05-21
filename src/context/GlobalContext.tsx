@@ -41,6 +41,7 @@ interface GlobaContextValue {
     isMediumLargeScreen: boolean;
     isLargeScreen: boolean;
     radiusBoxStyle: any;
+    componentContainerStyle: any;
 }
 
 const defaultValues: GlobaContextValue = {
@@ -52,7 +53,8 @@ const defaultValues: GlobaContextValue = {
     isMediumScreen: false,
     isMediumLargeScreen: false,
     isLargeScreen: false,
-    radiusBoxStyle: {}
+    radiusBoxStyle: {},
+    componentContainerStyle: {}
 }
 
 const Transition = forwardRef(function Transition(
@@ -91,6 +93,13 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
         gap: 3
     }
 
+    const componentContainerStyle = {
+        padding: '16px 24px',
+        background: '#1A1D1E91',
+        border: 'solid 1px #2D3131',
+        borderRadius: '6px',
+    }
+
     // Event : Change Slippage percent
     const changeSlippagePerent = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value
@@ -106,7 +115,8 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
         isMediumScreen,
         isMediumLargeScreen,
         isLargeScreen,
-        radiusBoxStyle
+        radiusBoxStyle,
+        componentContainerStyle
     }
 
     return (

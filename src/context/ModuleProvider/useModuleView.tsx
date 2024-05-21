@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { readContract } from '@wagmi/core'
 import { ModuleEvent, ModuleView } from '@/context/ModuleProvider/type'
-import MODULE_MANAGER_ABI from '@/abi/ModuleManager.json'
-import { MODULE_MANAGER } from '@/configs/address'
+import TRENBOX_MANAGER_ABI from '@/abi/TrenBoxManager.json'
+import { TRENBOX_MANAGER } from '@/configs/address'
 import { wagmiConfig } from '@/pages/_app'
 import { useAccount, useChainId } from 'wagmi'
 import { useProtocol } from '../ProtocolProvider/ProtocolContext'
@@ -138,16 +138,16 @@ export const useModuleView = (collateral: string) => {
   const getModuleInfo = async () => {
     if (!account || !chainId || !collateralDetail) return
     const _module: any = await readContract(wagmiConfig, {
-      abi: MODULE_MANAGER_ABI,
-      address: MODULE_MANAGER[chainId] as '0x{string}',
+      abi: TRENBOX_MANAGER_ABI,
+      address: TRENBOX_MANAGER[chainId] as '0x{string}',
       functionName: 'TrenBoxes',
       args: [account, collateralDetail.address]
     })
     if(collateralDetail.price == undefined) {
       throw new Error('Collateral price fetching failed.')
     }
-    const collUSD = (_module[1] * collateralDetail.price) / BigInt(10 ** collateralDetail.decimals)
-    const currentLTV = Number(_module[0]) / Number(collUSD)
+    const collUSD = (_module[1] * collateralDetail.price) / BigInt(10 ** 18)
+    const currentLTV = Number(_module[0] - collateralDetail.debtTokenGasCompensation) / Number(collUSD)
     const MRCV = +formatEther(_module[0]) / +formatEther(collateralDetail.LTV)
     const _moduleInfo: ModuleInfo = {
       debt: _module[0] as bigint,

@@ -3,6 +3,7 @@ import Fab from '@mui/material/Fab'
 import AppBar from '@mui/material/AppBar'
 import { styled } from '@mui/material/styles'
 import Box, { BoxProps } from '@mui/material/Box'
+import { Stack, Typography, Link } from '@mui/material'
 import MuiToolbar, { ToolbarProps } from '@mui/material/Toolbar'
 import useScrollTrigger from '@mui/material/useScrollTrigger'
 
@@ -19,9 +20,11 @@ import { LayoutProps } from 'src/@core/layouts/types'
 import Footer from './components/shared-components/footer'
 import ScrollToTop from 'src/@core/components/scroll-to-top'
 import AppBarContent from './components/horizontal/app-bar-content'
+import { useRouter } from 'next/router';
 
 // ** Util Import
 import { hexToRGBA } from '../utils/hex-to-rgba'
+import { useState } from 'react'
 
 const HorizontalLayoutWrapper = styled('div')({
   height: '100%',
@@ -81,6 +84,8 @@ const HorizontalLayout = (props: LayoutProps) => {
   const { skin, appBar, navHidden, appBarBlur, contentWidth } = settings
   const appBarProps = horizontalLayoutProps?.appBar?.componentProps
 
+  const [showBar, setShowBar] = useState(true)
+
    // ** init trigger for scroll down 100px
   const trigger = useScrollTrigger({
     threshold: 100,
@@ -94,6 +99,13 @@ const HorizontalLayout = (props: LayoutProps) => {
   }
   const userAppBarProps = Object.assign({}, appBarProps)
   delete userAppBarProps.sx
+
+  const router = useRouter()
+  const isHomePath = router.pathname === '/';
+
+  const closeAnnouncementBar = () => {
+    setShowBar(false)
+  }
 
   return (
     <HorizontalLayoutWrapper className='layout-wrapper'>
@@ -113,7 +125,7 @@ const HorizontalLayout = (props: LayoutProps) => {
             ...(appBarBlur && { backdropFilter: 'blur(6px)' }),
             //backgroundColor: trigger ? '#101818' : 'transparent',       // Topbar background - DesktopView.
             backgroundColor: 'transparent',
-            ...(skin === 'bordered' && { borderBottom: theme => `1px solid ${theme.palette.divider}` }),
+            // ...(skin === 'bordered' && { borderBottom: theme => `1px solid ${theme.palette.divider}` }),
             ...userAppBarStyle
           }}
           {...userAppBarProps}
@@ -126,13 +138,34 @@ const HorizontalLayout = (props: LayoutProps) => {
               // ...(navHidden ? {} : { borderBottom: theme => `1px solid ${theme.palette.divider}` })
             }}
           >
+            <Box sx={{ width: '100%', background: '#67DAB1'}} display={showBar ? 'block' : 'none'}>
+              <Stack sx={{
+                position: 'relative', width: '100%', py: 3, justifyContent: 'center',
+                mx: 'auto', 
+                ...(contentWidth === 'boxed' && { 
+                  '@media (min-width:1440px)': { maxWidth: '95%' },
+                  '@media (min-width:1680px)': { maxWidth: '95%' }, 
+                  '@media (min-width:2560px)': { maxWidth: '1920px !important' },
+                })
+              }}>
+                <Typography sx={{color: '#000', fontWeight: 500, textAlign: 'center'}}>
+                  Tren has been accepted into Mode Network’s Yield Accelerator.&nbsp;
+                  <Link style={{fontWeight: 600, color: '#000'}} href='https://mode.mirror.xyz/lQu3X5t-cKve4Yu2gfa49rPRS_0rhMq-4zXUyFCPH8M' target='_blank'>Read more</Link>
+                </Typography>
+                {/* <Box sx={{width: 16, height: 16, position: 'absolute', right: 24, top: '50%', transform: 'translate(0, -50%)', cursor: 'pointer'}} onClick={(closeAnnouncementBar)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8.9944 7.9958L14.8025 2.18772C14.9301 2.05561 15.0007 1.87868 14.9991 1.69503C14.9975 1.51137 14.9238 1.33569 14.7939 1.20582C14.6641 1.07596 14.4884 1.00229 14.3047 1.00069C14.1211 0.999099 13.9442 1.0697 13.8121 1.19729L8.00398 7.00537L2.1959 1.19589C2.06379 1.0683 1.88686 0.997698 1.70321 0.999294C1.51955 1.00089 1.34387 1.07455 1.214 1.20442C1.08414 1.33429 1.01047 1.50997 1.00888 1.69362C1.00728 1.87728 1.07788 2.05421 1.20547 2.18632L7.01355 7.9958L1.20407 13.8039C1.13717 13.8685 1.08381 13.9458 1.0471 14.0312C1.01039 14.1167 0.991069 14.2086 0.990261 14.3016C0.989453 14.3946 1.00717 14.4868 1.04239 14.5729C1.07761 14.659 1.12962 14.7372 1.19539 14.803C1.26116 14.8687 1.33936 14.9208 1.42544 14.956C1.51153 14.9912 1.60376 15.0089 1.69676 15.0081C1.78977 15.0073 1.88168 14.988 1.96714 14.9513C2.05259 14.9146 2.12989 14.8612 2.1945 14.7943L8.00398 8.98622L13.8121 14.7943C13.9442 14.9219 14.1211 14.9925 14.3047 14.9909C14.4884 14.9893 14.6641 14.9156 14.7939 14.7858C14.9238 14.6559 14.9975 14.4802 14.9991 14.2966C15.0007 14.1129 14.9301 13.936 14.8025 13.8039L8.9944 7.9958Z" fill="black"/>
+                  </svg>
+                </Box> */}
+              </Stack>
+            </Box>
             <Toolbar
               className='navbar-content-container'
               sx={{
                 mx: 'auto',
                 ...(contentWidth === 'boxed' && { 
-                  '@media (min-width:1440px)': { maxWidth: 1440 },
-                  '@media (min-width:1680px)': { maxWidth: '85%' }, 
+                  '@media (min-width:1440px)': { maxWidth: '95%' },
+                  '@media (min-width:1680px)': { maxWidth: '95%' }, 
                   '@media (min-width:2560px)': { maxWidth: '1920px !important' },
                 }),
                 minHeight: theme => `${(theme.mixins.toolbar.minHeight as number) - 2}px !important`
@@ -155,12 +188,13 @@ const HorizontalLayout = (props: LayoutProps) => {
           className='layout-page-content'
           sx={{
             width: '100%',
+            position: 'relative',
             ...(contentHeightFixed && { display: 'flex', overflow: 'hidden' }),
             ...(contentWidth === 'boxed' && {
               mx: 'auto',
               '@media (min-width:1200px)': { maxWidth: '100%' },
-              '@media (min-width:1440px)': { maxWidth: 1440 },
-              '@media (min-width:1680px)': { maxWidth: '85%' },
+              '@media (min-width:1440px)': { maxWidth: '95%' },
+              '@media (min-width:1680px)': { maxWidth: '95%' },
               '@media (min-width:2560px)': { maxWidth: '1920px !important' },
             })
           }}
@@ -168,7 +202,9 @@ const HorizontalLayout = (props: LayoutProps) => {
           {children}
         </ContentWrapper>
         {/* Footer */}
-        <Footer {...props} footerStyles={footerProps?.sx} footerContent={footerProps?.content} />
+        {!isHomePath && (
+          <Footer {...props} footerStyles={footerProps?.sx} footerContent={footerProps?.content} />
+        )}
         {/* Scroll to top button */}
         {scrollToTop ? (
           scrollToTop(props)
