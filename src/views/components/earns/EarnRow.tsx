@@ -120,7 +120,7 @@ export const EarnRow = (props: TableHeaderProps) => {
                     <Stack direction='row' width='100%' mr={8} justifyContent='space-between' alignItems='center'>
                         <Typography variant='h5' fontWeight={400}>${formatToThousandsInt(500000)}</Typography>
                         <svg xmlns="http://www.w3.org/2000/svg" width="2" height="100%" viewBox="0 0 2 68" fill="none">
-                            <path opacity="0.5" d="M1 0V68" stroke="white" stroke-width="0.3"/>
+                            <path opacity="0.5" d="M1 0V68" stroke="white" strokeWidth="0.3"/>
                         </svg>
                     </Stack>
                 </Stack>
@@ -139,7 +139,7 @@ export const EarnRow = (props: TableHeaderProps) => {
                             </Button>
                         </Stack>
                         <svg xmlns="http://www.w3.org/2000/svg" width="2" height="100%" viewBox="0 0 2 68" fill="none">
-                            <path opacity="0.5" d="M1 0V68" stroke="white" stroke-width="0.3"/>
+                            <path opacity="0.5" d="M1 0V68" stroke="white" strokeWidth="0.3"/>
                         </svg>
                     </Stack>
                 </Stack>
@@ -158,7 +158,7 @@ export const EarnRow = (props: TableHeaderProps) => {
                             </Button>
                         </Stack>
                         <svg xmlns="http://www.w3.org/2000/svg" width="2" height="100%" viewBox="0 0 2 68" fill="none">
-                            <path opacity="0.5" d="M1 0V68" stroke="white" stroke-width="0.3"/>
+                            <path opacity="0.5" d="M1 0V68" stroke="white" strokeWidth="0.3"/>
                         </svg>
                     </Stack>
                 </Stack>
