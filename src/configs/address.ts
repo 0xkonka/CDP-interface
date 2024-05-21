@@ -66,3 +66,7 @@ export const TIME_LOCK_TESTOR: AddressMap = {   // updated 05/09/2024
 export const DEBT_TOKEN: AddressMap = {   // updated 05/09/2024
     [SupportedChainId.SEPOLIA]: '0xAD525A54D2a761dFa921353512FF145f2B5B37fd'
 }
+
+export const DEBT_TOKEN_MANAGER: AddressMap = {
+    [SupportedChainId.SEPOLIA]: '0xAb4C13ebF080972CCbE67231F4844a744252b81E'
+}
