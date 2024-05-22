@@ -46,7 +46,7 @@ export const BorrowingPower = (props: Props) => {
                     $0
                 </Typography>
                 <Typography variant='subtitle1' color='#707175'>
-                    {formatToThousands(max)}
+                    {formatToThousands(max, 2)}
                 </Typography>
             </Box>
         </Stack>

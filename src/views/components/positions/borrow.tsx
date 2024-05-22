@@ -147,7 +147,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
                 <Stack direction='row' alignItems='center' gap={1}>
                   <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                   <Typography variant='subtitle2' sx={{ color: '#707175' }}>
-                    {formatToThousands(+formatEther(depositedAmount) * +formatEther(row.price))}
+                    {formatToThousands(+formatEther(depositedAmount) * +formatEther(row.price), 2)}
                   </Typography>
                 </Stack>
               </Stack>
@@ -201,7 +201,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
                 <Stack direction='row' alignItems='center' gap={1}>
                   <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                   <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                    {formatToThousands(+formatEther(debtAmount))}
+                    {formatToThousands(+formatEther(debtAmount), 2)}
                   </Typography>
                 </Stack>
               </Stack>

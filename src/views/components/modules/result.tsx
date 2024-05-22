@@ -56,7 +56,7 @@ export const Result = (props: Props) => {
                         Collateral Value
                     </Typography>
                     <Typography variant='body1'>
-                        {collateralValue == 0 ? '-' : formatToThousands(collateralValue)}
+                        {collateralValue == 0 ? '-' : formatToThousands(collateralValue, 2)}
                     </Typography>
                 </Stack>
             </Grid>
@@ -66,7 +66,7 @@ export const Result = (props: Props) => {
                         Loan Value
                     </Typography>
                     <Typography variant='body1'>
-                        {loanValue == 0 ? '-' : formatToThousands(loanValue)}
+                        {loanValue == 0 ? '-' : formatToThousands(loanValue, 2)}
                     </Typography>
                 </Stack>
             </Grid>
