@@ -23,7 +23,7 @@ const Faucet = () => {
     const debtTokenMintContract = DEBT_TOKEN_MANAGER[chainId] as '0x{string}'
     const [isLoading, setIsLoading] = useState(false)
     const { storage, entryExists, addToFaucetStorage } = useFaucetStorage()
-    const debtTokenFaucetLimit = 1000
+    const debtTokenFaucetLimit = 10000
 
     // Get trenUSD balance of wallet.
     const { data: debtWalletBalance = BigInt(0), refetch: refetchBalance } = useReadContract({
@@ -162,11 +162,13 @@ const Faucet = () => {
                     <Stack sx={{ py: 4 }} gap={0} position='relative' zIndex={1}>
                     {collateralDetails.length > 0 ? (
                         collateralDetails.map((row, index) => (
-                        <FaucetRow
-                            row={row}
-                            key={index}
-                            isLastElement={index === collateralDetails.length - 1}
-                        />
+                            row.symbol != 'WETH' ? (
+                                <FaucetRow
+                                row={row}
+                                key={index}
+                                isLastElement={index === collateralDetails.length - 1}
+                            />        
+                            ) : null
                         ))
                     ) : (
                         <Box sx={{ p: 6, textAlign: 'center' }}>
