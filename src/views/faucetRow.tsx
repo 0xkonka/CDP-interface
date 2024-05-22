@@ -28,6 +28,7 @@ interface TableHeaderProps {
 
 const FaucetRow = (props: TableHeaderProps) => {
     const {row, isLastElement} = props
+    console.log(row.symbol, ':', row.decimals, ':', row.price)
     const theme: Theme = useTheme()
     const {isMobileScreen} = useGlobalValues()
     const [isLoading, setIsLoading] = useState(false)
@@ -122,7 +123,7 @@ const FaucetRow = (props: TableHeaderProps) => {
                     
                     <Stack direction='row' sx={{alignItems: 'center'}}>
                         <Button variant='outlined' color='primary' sx={{fontSize: 16, py: 2.5, color: '#FFF', fontWeight: 400, width: 1}} 
-                            onClick={() => mintToken(account as '0x{string}', row.address, parseEther((maxDollar / +formatEther(row.price)).toFixed(0)))}
+                            onClick={() => mintToken(account as '0x{string}', row.address, parseUnits((maxDollar / +formatEther(row.price)).toFixed(0), row.decimals))}
                             disabled={isLoading}>
                             {
                                 isLoading && 
@@ -153,7 +154,7 @@ const FaucetRow = (props: TableHeaderProps) => {
                     </Stack>
                     <Stack direction='row' sx={{flex: '6 1 0%', alignItems: 'center', gap: 8}}>
                         <Button variant='outlined' color='primary' sx={{fontSize: 18, py: 3, color: '#FFFFFF', fontWeight: 400, width: 1}} 
-                            onClick={() => mintToken(account as '0x{string}', row.address, parseEther((maxDollar / +formatEther(row.price)).toFixed(0)))}
+                            onClick={() => mintToken(account as '0x{string}', row.address, parseUnits((maxDollar / +formatEther(row.price)).toFixed(0), row.decimals))}
                             disabled={isLoading}>
                             {
                                 isLoading && 
