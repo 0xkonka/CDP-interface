@@ -23,6 +23,7 @@ const Faucet = () => {
     const debtTokenMintContract = DEBT_TOKEN_MANAGER[chainId] as '0x{string}'
     const [isLoading, setIsLoading] = useState(false)
     const { storage, entryExists, addToFaucetStorage } = useFaucetStorage()
+    const debtTokenFaucetLimit = 1000
 
     // Get trenUSD balance of wallet.
     const { data: debtWalletBalance = BigInt(0), refetch: refetchBalance } = useReadContract({
@@ -100,7 +101,7 @@ const Faucet = () => {
                                 <rect width="32" height="32" rx="16" fill="#1D1C1C"/>
                                 <path fillRule="evenodd" clipRule="evenodd" d="M15.4996 7.14892C14.499 8.41759 13.3127 10.8541 14.6644 13.0151C14.8221 13.2672 15.0104 13.562 15.223 13.8909C14.2478 13.914 13.2733 14.2144 12.6626 15.0779C11.8181 16.2721 10.163 18.9599 8.82211 21.1374C8.338 21.9236 7.89484 22.6433 7.54556 23.2022C7.40424 23.4283 7.50078 23.7243 7.76012 23.7863C9.15816 24.1206 11.5628 23.9577 12.2779 22.8653L16.6912 16.123C18.4371 18.7474 20.6514 22.0018 21.8973 23.82C22.0514 24.0449 22.3693 24.0667 22.5234 23.8419C23.4785 22.4485 24.3613 19.4671 23.3788 17.9982L16.1475 7.18703C15.9942 6.95785 15.6703 6.93243 15.4996 7.14892Z" fill="white"/>
                             </svg>
-                            <Typography variant='h5' sx={{fontWeight: 400, ml: 2, width: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>TrenUSD</Typography>
+                            <Typography variant='h5' sx={{fontWeight: 400, ml: 2, width: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>trenUSD</Typography>
                         </Stack>
                         <Stack direction='row'>
                             <Tooltip title='Wallet Balance' placement='top'>
@@ -113,13 +114,13 @@ const Faucet = () => {
                     
                     <Stack direction='row' sx={{alignItems: 'center'}}>
                         <Button variant='contained' color='primary' sx={{fontSize: 16, py: 2.5, color: '#000', fontWeight: 600, width: 1}} 
-                            onClick={() => mintDebtToken(account as '0x{string}', debtTokenMintContract, parseEther('1000'))}
+                            onClick={() => mintDebtToken(account as '0x{string}', debtTokenMintContract, parseEther(debtTokenFaucetLimit.toString()))}
                             disabled={isLoading || entryExists({account: account as '0x{string}', address: debtTokenMintContract})}>
                             {
                                 isLoading && 
                                 <CircularProgress sx={{color: '#000', mr: 4, height: '20px !important', width: '20px !important'}} />
                             }
-                            Claim 1000 tokens
+                            Claim {formatToThousandsInt(debtTokenFaucetLimit)} tokens
                         </Button>
                     </Stack>
                 </Stack>
@@ -130,7 +131,7 @@ const Faucet = () => {
                             <rect width="32" height="32" rx="16" fill="#1D1C1C"/>
                             <path fillRule="evenodd" clipRule="evenodd" d="M15.4996 7.14892C14.499 8.41759 13.3127 10.8541 14.6644 13.0151C14.8221 13.2672 15.0104 13.562 15.223 13.8909C14.2478 13.914 13.2733 14.2144 12.6626 15.0779C11.8181 16.2721 10.163 18.9599 8.82211 21.1374C8.338 21.9236 7.89484 22.6433 7.54556 23.2022C7.40424 23.4283 7.50078 23.7243 7.76012 23.7863C9.15816 24.1206 11.5628 23.9577 12.2779 22.8653L16.6912 16.123C18.4371 18.7474 20.6514 22.0018 21.8973 23.82C22.0514 24.0449 22.3693 24.0667 22.5234 23.8419C23.4785 22.4485 24.3613 19.4671 23.3788 17.9982L16.1475 7.18703C15.9942 6.95785 15.6703 6.93243 15.4996 7.14892Z" fill="white"/>
                         </svg>
-                        <Typography variant='h5' sx={{fontWeight: 400, ml: 2, width: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>TrenUSD</Typography>
+                        <Typography variant='h5' sx={{fontWeight: 400, ml: 2, width: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>trenUSD</Typography>
                     </Stack>
                     <Stack direction='row' sx={{flex: '4 1 0%'}}>
                         <Tooltip title='Wallet Balance' placement='top'>
@@ -141,13 +142,13 @@ const Faucet = () => {
                     </Stack>
                     <Stack direction='row' sx={{flex: '6 1 0%', alignItems: 'center', gap: 8}}>
                         <Button variant='contained' color='primary' sx={{fontSize: 18, py: 3, color: '#000', fontWeight: 600, width: 1}} 
-                            onClick={() => mintDebtToken(account as '0x{string}', debtTokenMintContract, parseEther('1000'))}
+                            onClick={() => mintDebtToken(account as '0x{string}', debtTokenMintContract, parseEther(debtTokenFaucetLimit.toString()))}
                             disabled={isLoading || entryExists({account: account as '0x{string}', address: debtTokenMintContract})}>
                             {
                                 isLoading && 
                                 <CircularProgress sx={{color: '#000', mr: 4, height: '20px !important', width: '20px !important'}} />
                             }
-                            Claim 1000 tokens
+                            Claim {formatToThousandsInt(debtTokenFaucetLimit)} tokens
                         </Button>
                     </Stack>
                 </Stack>
