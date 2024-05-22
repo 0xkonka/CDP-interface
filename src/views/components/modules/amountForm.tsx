@@ -137,7 +137,7 @@ export const AmountForm = (props: Props) => {
                 <Stack direction='row' justifyContent='space-between'>
                     <Stack direction='row' gap={1} alignItems='center'>
                         <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
-                        <Typography variant='subtitle1' color='white' fontWeight={500} sx={{opacity: 0.5}}>{formatToThousands(+removeComma(amount) * collateralUSD)}</Typography>
+                        <Typography variant='subtitle1' color='white' fontWeight={500} sx={{opacity: 0.5}}>{formatToThousands(+removeComma(amount) * collateralUSD, 2)}</Typography>
                     </Stack>
                     <Stack direction='row' gap={2} alignItems='center'>
                         <Typography color='#707175' fontWeight={400}>{type == 'repay' ? 'Wallet balance:' : 'Available:'} {formatToThousands(available).substring(1)}</Typography>

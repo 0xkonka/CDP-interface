@@ -284,7 +284,7 @@ const Borrow = () => {
                       <Stack direction='row' alignItems='center' gap={1}>
                         <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                         <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                          {formatToThousands(+formatEther(depositedAmount) * +formatEther(price!))}
+                          {formatToThousands(+formatEther(depositedAmount) * +formatEther(price!), 2)}
                         </Typography>
                       </Stack>
                     </Box>
@@ -338,7 +338,7 @@ const Borrow = () => {
                       <Stack direction='row' alignItems='center' gap={1}>
                         <img style={{marginLeft: 8}} src='/images/icons/customized-icons/approximate-icon.png' height='fit-content' alt='Approximate Icon'/>
                         <Typography variant='subtitle2' sx={{ color: '#707175', textAlign: 'end' }}>
-                          {formatToThousands(+formatEther(debtAmount))}
+                          {formatToThousands(+formatEther(debtAmount), 2)}
                         </Typography>
                       </Stack>
                     </Box>

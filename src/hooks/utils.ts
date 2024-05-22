@@ -5,7 +5,7 @@ export const getOverView = (collateral: string) => {
     // In future, we will remove this one and all values will be replaced with dynamic one which comes from contract.
     if (collateral == 'WETH') {
         return {
-            type: 'Vault',
+            type: 'Spot',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',
@@ -37,7 +37,7 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'sDAI') {
         return {
-            type: 'Stable',
+            type: 'Vault',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',
@@ -53,7 +53,7 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'eETH') {
         return {
-            type: 'Volatile',
+            type: 'LRT',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',
@@ -69,7 +69,7 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'ONDO') {
         return {
-            type: 'Vault',
+            type: 'RWA',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',
@@ -77,7 +77,7 @@ export const getOverView = (collateral: string) => {
         }
     } else if (collateral == 'wstETH') {
         return {
-            type: 'Vault',
+            type: 'LST',
             borrowAPY: 0,
             network: 'Ethereum',
             platform: 'Uniswap v3',

@@ -38,6 +38,7 @@ const Modules = () => {
     'PT Token',
     'Meme',
     'Volatile',
+    'Spot',
     'Stable'
   ]
   const { isSmallScreen, isMediumScreen, componentContainerStyle } = useGlobalValues()

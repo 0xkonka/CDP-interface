@@ -17,8 +17,9 @@ import { CollateralParams } from '@/context/ModuleProvider/type'
 import { useAccount, useChainId, useReadContract, BaseError } from 'wagmi'
 import {ethers} from 'ethers'
 import { formatToThousands, formatToThousandsInt } from '@/hooks/utils'
-import { erc20Abi, formatEther, formatUnits, parseEther, parseUnits } from 'viem'
+import { erc20Abi, formatEther, formatUnits, parseUnits } from 'viem'
 import { showToast } from '@/hooks/toasts'
+import useFaucetStorage from '@/hooks/useFaucetStorage'
 
 // Define Props
 interface TableHeaderProps {
@@ -33,7 +34,8 @@ const FaucetRow = (props: TableHeaderProps) => {
     const [isLoading, setIsLoading] = useState(false)
     const chainId = useChainId()
     const { address: account } = useAccount()
-    const maxDollar = 100000
+    const maxDollar = 10000
+    const { storage, entryExists, addToFaucetStorage } = useFaucetStorage()
 
     // Get collateral balance of wallet.
     const { data: collateralWalletBalance = BigInt(0), refetch: refetchBalance } = useReadContract({
@@ -44,6 +46,11 @@ const FaucetRow = (props: TableHeaderProps) => {
     })
 
     const mintToken = async(ownerAddress: string, tokenAddress: string, amount: bigint) => {
+        if(entryExists({account: ownerAddress, address: tokenAddress})){
+            showToast('error', 'Error', 'You have already claimed this token.', 3000)
+            return
+        }
+
         const provider = new ethers.BrowserProvider(window.ethereum);
         
         setIsLoading(true)
@@ -76,6 +83,8 @@ const FaucetRow = (props: TableHeaderProps) => {
                 `You have successfully minted ${formatToThousandsInt(+formatEther(amount))} ${row.symbol}.`,
                 30000,
             )
+
+            addToFaucetStorage({account: ownerAddress, address: tokenAddress})
         } catch (error) {
             setIsLoading(false)
             console.error("Transaction failed:", error);
@@ -114,7 +123,7 @@ const FaucetRow = (props: TableHeaderProps) => {
                         <Stack direction='row'>
                             <Tooltip title='Wallet Balance' placement='top'>
                                 <Typography variant='h5' sx={{fontWeight: 400}}>
-                                    {formatToThousands(+formatEther(collateralWalletBalance), 3).substring(1)}
+                                    {formatToThousands(+formatUnits(collateralWalletBalance, row.decimals), 3).substring(1)}
                                 </Typography>
                             </Tooltip>
                         </Stack>
@@ -122,11 +131,11 @@ const FaucetRow = (props: TableHeaderProps) => {
                     
                     <Stack direction='row' sx={{alignItems: 'center'}}>
                         <Button variant='outlined' color='primary' sx={{fontSize: 16, py: 2.5, color: '#FFF', fontWeight: 400, width: 1}} 
-                            onClick={() => mintToken(account as '0x{string}', row.address, parseEther((maxDollar / +formatEther(row.price)).toFixed(0)))}
-                            disabled={isLoading}>
+                            onClick={() => mintToken(account as '0x{string}', row.address, parseUnits((maxDollar / +formatEther(row.price)).toFixed(0), row.decimals))}
+                            disabled={isLoading || entryExists({account: account as '0x{string}', address: row.address})}>
                             {
                                 isLoading && 
-                                <CircularProgress sx={{color: '#000', mr: 4, height: '20px !important', width: '20px !important'}} />
+                                <CircularProgress sx={{color: '#FFF', mr: 4, height: '20px !important', width: '20px !important'}} />
                             }
                             Claim {formatToThousandsInt(maxDollar / +formatEther(row.price))} tokens
                         </Button>
@@ -147,17 +156,17 @@ const FaucetRow = (props: TableHeaderProps) => {
                     <Stack direction='row' sx={{flex: '4 1 0%'}}>
                         <Tooltip title='Wallet Balance' placement='top'>
                             <Typography variant='h5' sx={{fontWeight: 400}}>
-                                {formatToThousands(+formatEther(collateralWalletBalance), 3).substring(1)}
+                                {formatToThousands(+formatUnits(collateralWalletBalance, row.decimals), 3).substring(1)}
                             </Typography>
                         </Tooltip>
                     </Stack>
                     <Stack direction='row' sx={{flex: '6 1 0%', alignItems: 'center', gap: 8}}>
                         <Button variant='outlined' color='primary' sx={{fontSize: 18, py: 3, color: '#FFFFFF', fontWeight: 400, width: 1}} 
-                            onClick={() => mintToken(account as '0x{string}', row.address, parseEther((maxDollar / +formatEther(row.price)).toFixed(0)))}
-                            disabled={isLoading}>
+                            onClick={() => mintToken(account as '0x{string}', row.address, parseUnits((maxDollar / +formatEther(row.price)).toFixed(0), row.decimals))}
+                            disabled={isLoading|| entryExists({account: account as '0x{string}', address: row.address})}>
                             {
                                 isLoading && 
-                                <CircularProgress sx={{color: '#000', mr: 4, height: '20px !important', width: '20px !important'}} />
+                                <CircularProgress sx={{color: '#FFF', mr: 4, height: '20px !important', width: '20px !important'}} />
                             }
                             Claim {formatToThousandsInt(maxDollar / +formatEther(row.price))} tokens
                         </Button>

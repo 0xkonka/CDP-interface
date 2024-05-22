@@ -205,7 +205,7 @@ const Home = () => {
                                 // disabled={code.length < 5}
                                 onClick={enterCode}
                             >
-                            {!isValidated && paramCode.length == 0 ? 'Enter Code' : 'Code Eligable'}
+                            {!isValidated && paramCode.length == 0 ? 'Enter Code' : 'Code Eligible'}
                             {
                             isChecking && 
                             <CircularProgress color='primary' sx={{ml: 4, height: '20px !important', width: '20px !important', color: '#020101'}} />
