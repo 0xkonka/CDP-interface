@@ -12,6 +12,7 @@ import { formatToThousandsInt } from '@/hooks/utils'
 import {ethers} from 'ethers'
 import { showToast } from '@/hooks/toasts'
 import { useState } from 'react'
+import useFaucetStorage from '@/hooks/useFaucetStorage'
 
 const Faucet = () => {
     const { collateralDetails } = useProtocol()
@@ -21,6 +22,7 @@ const Faucet = () => {
     const debtTokenAddress = DEBT_TOKEN[chainId] as '0x{string}'
     const debtTokenMintContract = DEBT_TOKEN_MANAGER[chainId] as '0x{string}'
     const [isLoading, setIsLoading] = useState(false)
+    const { storage, entryExists, addToFaucetStorage } = useFaucetStorage()
 
     // Get trenUSD balance of wallet.
     const { data: debtWalletBalance = BigInt(0), refetch: refetchBalance } = useReadContract({
@@ -31,6 +33,11 @@ const Faucet = () => {
     })
 
     const mintDebtToken = async(ownerAddress: string, tokenAddress: string, amount: bigint) => {
+        if(entryExists({account: ownerAddress, address: tokenAddress})){
+            showToast('error', 'Error', 'You have already claimed this token.', 3000)
+            return
+        }
+
         const provider = new ethers.BrowserProvider(window.ethereum);
 
         setIsLoading(true)
@@ -64,13 +71,15 @@ const Faucet = () => {
                 `You have successfully minted ${formatToThousandsInt(+formatEther(amount))} trenUSD.`,
                 30000,
             )
+
+            addToFaucetStorage({account: ownerAddress, address: tokenAddress})
         } catch (error) {
             setIsLoading(false)
             console.error("Transaction failed:", error);
             showToast('error', 'Error', (error as BaseError).shortMessage || 'An unexpected error occurred.', 50000)
         }
     }
-    
+
     return (
         <Stack alignItems='center'>
             <iframe style={{position: 'absolute', left: -250, top: -100, width: 'calc(100vw + 500px)', height: 'calc(100% + 340px)'}} src='https://my.spline.design/waterv2copy-ff5ef8dc1c68ec421f00c0aeb688e639/' frameBorder='0' width='100%' height='100%'></iframe>
@@ -105,7 +114,7 @@ const Faucet = () => {
                     <Stack direction='row' sx={{alignItems: 'center'}}>
                         <Button variant='contained' color='primary' sx={{fontSize: 16, py: 2.5, color: '#000', fontWeight: 600, width: 1}} 
                             onClick={() => mintDebtToken(account as '0x{string}', debtTokenMintContract, parseEther('1000'))}
-                            disabled={isLoading}>
+                            disabled={isLoading || entryExists({account: account as '0x{string}', address: debtTokenMintContract})}>
                             {
                                 isLoading && 
                                 <CircularProgress sx={{color: '#000', mr: 4, height: '20px !important', width: '20px !important'}} />
@@ -133,7 +142,7 @@ const Faucet = () => {
                     <Stack direction='row' sx={{flex: '6 1 0%', alignItems: 'center', gap: 8}}>
                         <Button variant='contained' color='primary' sx={{fontSize: 18, py: 3, color: '#000', fontWeight: 600, width: 1}} 
                             onClick={() => mintDebtToken(account as '0x{string}', debtTokenMintContract, parseEther('1000'))}
-                            disabled={isLoading}>
+                            disabled={isLoading || entryExists({account: account as '0x{string}', address: debtTokenMintContract})}>
                             {
                                 isLoading && 
                                 <CircularProgress sx={{color: '#000', mr: 4, height: '20px !important', width: '20px !important'}} />
