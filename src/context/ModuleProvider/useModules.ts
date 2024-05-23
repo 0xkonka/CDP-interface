@@ -7,6 +7,8 @@ import { BORROWER_OPERATIONS } from '@/configs/address'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
 import { ethers } from 'ethers'
 import { useModuleView } from './useModuleView'
+import { createPublicClient, http } from 'viem'
+import { sepolia } from 'viem/chains'
 
 const useModules = (collateral: string) => {
   const chainId = useChainId()
@@ -15,6 +17,7 @@ const useModules = (collateral: string) => {
     () => collateralDetails.find(i => i.symbol === collateral),
     [collateral, collateralDetails]
   )
+  const {address: account} = useAccount()
 
   const { refresh: refreshProtocol } = useProtocol()
   const { refresh: refreshModule } = useModuleView(collateral)
@@ -39,23 +42,53 @@ const useModules = (collateral: string) => {
     abi: BORROWER_OPERATIONS_ABI
   } as const
 
+  const publicClient = createPublicClient({
+    chain: sepolia,
+    transport: http()
+  })
+  
   const handleApprove = (approveAmount: bigint) => {
     if (!collateralDetail) return
+    
     try {
       writeContract({
         address: collateralDetail.address as '0x{string}',
         abi: erc20Abi,
         functionName: 'approve',
         args: [BORROWER_OPERATIONS[chainId] as '0x{string}', approveAmount]
-        // gas: parseGwei('20'),
       })
     } catch (err) {
       console.log('err', err)
     }
   }
 
-  const handleOpen = (depositAmount: bigint, borrowAmount: bigint) => {
+  const getGasApprove = async (approveAmount: bigint) => {
+    if (!collateralDetail) return 0
+
+    //  Estimate Gas Fee
+    const gasLimit = await publicClient.estimateContractGas({
+      address: collateralDetail.address as '0x{string}',
+      abi: erc20Abi,
+      functionName: 'approve',
+      args: [BORROWER_OPERATIONS[chainId] as '0x{string}', approveAmount],
+      account
+    });
+    
+    // Fetching the current gas price using publicClient
+    const gasPrice = await publicClient.getGasPrice();
+    // Actual price is the above 'gasPrice' but the network estmiate max Gas Price as 2Gwei.
+    const maxGasPrice = ethers.parseUnits('2', 'gwei');
+    
+    // Calculate the estimated gas fee in ETH
+    const estimatedGasFeeInWei = gasLimit * maxGasPrice;
+    const estimatedGasFeeInEth = ethers.formatEther(estimatedGasFeeInWei);
+    
+    return +((+estimatedGasFeeInEth).toFixed(5))
+  }
+
+  const handleOpen = async (depositAmount: bigint, borrowAmount: bigint) => {
     if (!collateralDetail) return
+    
     try {
       writeContract({
         ...BorrowerOperationsContract,
@@ -73,8 +106,38 @@ const useModules = (collateral: string) => {
     }
   }
 
-  const handleAdjust = (depositAmount: bigint, borrowAmount: bigint) => {
+  const getGasOpen = async (depositAmount: bigint, borrowAmount: bigint) => {
+    if (!collateralDetail) return 0
+
+    //  Estimate Gas Fee
+    const gasLimit = await publicClient.estimateContractGas({
+      ...BorrowerOperationsContract,
+      functionName: 'openTrenBox',
+      args: [
+        collateralDetail.address as '0x{string}',
+        depositAmount,
+        borrowAmount,
+        ethers.ZeroAddress,
+        ethers.ZeroAddress
+      ],
+      account
+    });
+    
+    // Fetching the current gas price using publicClient
+    const gasPrice = await publicClient.getGasPrice();
+    // Actual price is the above 'gasPrice' but the network estmiate max Gas Price as 2Gwei.
+    const maxGasPrice = ethers.parseUnits('2', 'gwei');
+    
+    // Calculate the estimated gas fee in ETH
+    const estimatedGasFeeInWei = gasLimit * maxGasPrice;
+    const estimatedGasFeeInEth = ethers.formatEther(estimatedGasFeeInWei);
+
+    return +((+estimatedGasFeeInEth).toFixed(5))
+  }
+
+  const handleAdjust = async (depositAmount: bigint, borrowAmount: bigint) => {
     if (!collateralDetail) return
+
     try {
       writeContract({
         ...BorrowerOperationsContract,
@@ -94,6 +157,37 @@ const useModules = (collateral: string) => {
     }
   }
 
+  const getGasAdjust = async (depositAmount: bigint, borrowAmount: bigint) => {
+    if (!collateralDetail) return 0
+
+    //  Estimate Gas Fee
+    const gasLimit = await publicClient.estimateContractGas({
+      ...BorrowerOperationsContract,
+      functionName: 'adjustTrenBox',
+      args: [
+        collateralDetail.address as '0x{string}',
+        depositAmount,
+        BigInt(0),
+        borrowAmount,
+        true,
+        ethers.ZeroAddress,
+        ethers.ZeroAddress
+      ],
+      account
+    });
+    
+    // Fetching the current gas price using publicClient
+    const gasPrice = await publicClient.getGasPrice();
+    // Actual price is the above 'gasPrice' but the network estmiate max Gas Price as 2Gwei.
+    const maxGasPrice = ethers.parseUnits('2', 'gwei');
+    
+    // Calculate the estimated gas fee in ETH
+    const estimatedGasFeeInWei = gasLimit * maxGasPrice;
+    const estimatedGasFeeInEth = ethers.formatEther(estimatedGasFeeInWei);
+
+    return +((+estimatedGasFeeInEth).toFixed(5))
+  }
+
   const handleDeposit = (depositAmount: bigint) => {
     if (!collateralDetail) return
     try {
@@ -105,6 +199,29 @@ const useModules = (collateral: string) => {
     } catch (err) {
       console.log('err', err)
     }
+  }
+
+  const getGasDeposit = async (depositAmount: bigint) => {
+    if (!collateralDetail || depositAmount == BigInt(0)) return 0
+    
+    //  Estimate Gas Fee
+    const gasLimit = await publicClient.estimateContractGas({
+      ...BorrowerOperationsContract,
+      functionName: 'addColl',
+      args: [collateralDetail.address as '0x{string}', depositAmount, ethers.ZeroAddress, ethers.ZeroAddress],
+      account
+    });
+    
+    // Fetching the current gas price using publicClient
+    const gasPrice = await publicClient.getGasPrice();
+    // Actual price is the above 'gasPrice' but the network estmiate max Gas Price as 2Gwei.
+    const maxGasPrice = ethers.parseUnits('2', 'gwei');
+    
+    // Calculate the estimated gas fee in ETH
+    const estimatedGasFeeInWei = gasLimit * maxGasPrice;
+    const estimatedGasFeeInEth = ethers.formatEther(estimatedGasFeeInWei);
+
+    return +((+estimatedGasFeeInEth).toFixed(5))
   }
 
   const handleWithdraw = (withdrawAmount: bigint) => {
@@ -120,6 +237,29 @@ const useModules = (collateral: string) => {
     }
   }
 
+  const getGasWithdraw = async (withdrawAmount: bigint) => {
+    if (!collateralDetail || withdrawAmount == BigInt(0)) return 0
+
+    //  Estimate Gas Fee
+    const gasLimit = await publicClient.estimateContractGas({
+      ...BorrowerOperationsContract,
+      functionName: 'withdrawColl',
+      args: [collateralDetail.address as '0x{string}', withdrawAmount, ethers.ZeroAddress, ethers.ZeroAddress],
+      account
+    });
+    
+    // Fetching the current gas price using publicClient
+    const gasPrice = await publicClient.getGasPrice();
+    // Actual price is the above 'gasPrice' but the network estmiate max Gas Price as 2Gwei.
+    const maxGasPrice = ethers.parseUnits('2', 'gwei');
+    
+    // Calculate the estimated gas fee in ETH
+    const estimatedGasFeeInWei = gasLimit * maxGasPrice;
+    const estimatedGasFeeInEth = ethers.formatEther(estimatedGasFeeInWei);
+
+    return +((+estimatedGasFeeInEth).toFixed(5))
+  }
+
   const handleBorrow = (borrowAmount: bigint) => {
     if (!collateralDetail) return
     try {
@@ -131,6 +271,29 @@ const useModules = (collateral: string) => {
     } catch (err) {
       console.log('err', err)
     }
+  }
+
+  const getGasBorrow = async (borrowAmount: bigint) => {
+    if (!collateralDetail || borrowAmount == BigInt(0)) return 0
+
+    //  Estimate Gas Fee
+    const gasLimit = await publicClient.estimateContractGas({
+      ...BorrowerOperationsContract,
+      functionName: 'withdrawDebtTokens',
+      args: [collateralDetail.address as '0x{string}', borrowAmount, ethers.ZeroAddress, ethers.ZeroAddress],
+      account
+    });
+    
+    // Fetching the current gas price using publicClient
+    const gasPrice = await publicClient.getGasPrice();
+    // Actual price is the above 'gasPrice' but the network estmiate max Gas Price as 2Gwei.
+    const maxGasPrice = ethers.parseUnits('2', 'gwei');
+    
+    // Calculate the estimated gas fee in ETH
+    const estimatedGasFeeInWei = gasLimit * maxGasPrice;
+    const estimatedGasFeeInEth = ethers.formatEther(estimatedGasFeeInWei);
+
+    return +((+estimatedGasFeeInEth).toFixed(5))
   }
 
   const handleRepay = (repayAmount: bigint) => {
@@ -146,6 +309,30 @@ const useModules = (collateral: string) => {
     }
   }
 
+  const getGasRepay = async (repayAmount: bigint) => {
+    if (!collateralDetail || repayAmount == BigInt(0)) return 0
+
+    //  Estimate Gas Fee
+    const gasLimit = await publicClient.estimateContractGas({
+      ...BorrowerOperationsContract,
+      functionName: 'repayDebtTokens',
+      args: [collateralDetail.address as '0x{string}', repayAmount, ethers.ZeroAddress, ethers.ZeroAddress],
+      account
+    });
+    
+    // Fetching the current gas price using publicClient
+    const gasPrice = await publicClient.getGasPrice();
+    // Actual price is the above 'gasPrice' but the network estmiate max Gas Price as 2Gwei.
+    const maxGasPrice = ethers.parseUnits('2', 'gwei');
+    
+    // Calculate the estimated gas fee in ETH
+    const estimatedGasFeeInWei = gasLimit * maxGasPrice;
+    const estimatedGasFeeInEth = ethers.formatEther(estimatedGasFeeInWei);
+
+    return +((+estimatedGasFeeInEth).toFixed(5))
+  }
+
+
   return {
     handleApprove,
     handleOpen,
@@ -154,6 +341,13 @@ const useModules = (collateral: string) => {
     handleWithdraw,
     handleBorrow,
     handleRepay,
+    getGasApprove,
+    getGasOpen,
+    getGasAdjust,
+    getGasDeposit,
+    getGasWithdraw,
+    getGasBorrow,
+    getGasRepay,
     txhash,
     isPending,
     isConfirming,
