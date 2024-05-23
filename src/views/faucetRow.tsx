@@ -16,7 +16,7 @@ import { useGlobalValues } from '@/context/GlobalContext'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { useAccount, useChainId, useReadContract, BaseError } from 'wagmi'
 import {ethers} from 'ethers'
-import { formatToThousands, formatToThousandsInt } from '@/hooks/utils'
+import { formatToThousands, formatToThousandsInt, removeComma } from '@/hooks/utils'
 import { erc20Abi, formatEther, formatUnits, parseUnits } from 'viem'
 import { showToast } from '@/hooks/toasts'
 import useFaucetStorage from '@/hooks/useFaucetStorage'
@@ -131,13 +131,14 @@ const FaucetRow = (props: TableHeaderProps) => {
                     
                     <Stack direction='row' sx={{alignItems: 'center'}}>
                         <Button variant='outlined' color='primary' sx={{fontSize: 16, py: 2.5, color: '#FFF', fontWeight: 400, width: 1}} 
-                            onClick={() => mintToken(account as '0x{string}', row.address, parseUnits((maxDollar / +formatEther(row.price)).toFixed(0), row.decimals))}
+                            onClick={() => mintToken(account as '0x{string}', row.address, 
+                            parseUnits(removeComma(formatToThousands(maxDollar / +formatEther(row.price), 2).substring(1)), row.decimals))}
                             disabled={isLoading || entryExists({account: account as '0x{string}', address: row.address})}>
                             {
                                 isLoading && 
                                 <CircularProgress sx={{color: '#FFF', mr: 4, height: '20px !important', width: '20px !important'}} />
                             }
-                            Claim {formatToThousandsInt(maxDollar / +formatEther(row.price))} tokens
+                            Claim {formatToThousands(maxDollar / +formatEther(row.price), 2).substring(1)} tokens
                         </Button>
                     </Stack>
                 </Stack>
@@ -162,13 +163,14 @@ const FaucetRow = (props: TableHeaderProps) => {
                     </Stack>
                     <Stack direction='row' sx={{flex: '6 1 0%', alignItems: 'center', gap: 8}}>
                         <Button variant='outlined' color='primary' sx={{fontSize: 18, py: 3, color: '#FFFFFF', fontWeight: 400, width: 1}} 
-                            onClick={() => mintToken(account as '0x{string}', row.address, parseUnits((maxDollar / +formatEther(row.price)).toFixed(0), row.decimals))}
+                            onClick={() => mintToken(account as '0x{string}', row.address, 
+                                    parseUnits(removeComma(formatToThousands(maxDollar / +formatEther(row.price), 2).substring(1)), row.decimals))}
                             disabled={isLoading|| entryExists({account: account as '0x{string}', address: row.address})}>
                             {
                                 isLoading && 
                                 <CircularProgress sx={{color: '#FFF', mr: 4, height: '20px !important', width: '20px !important'}} />
                             }
-                            Claim {formatToThousandsInt(maxDollar / +formatEther(row.price))} tokens
+                            Claim {formatToThousands(maxDollar / +formatEther(row.price), 2).substring(1)} tokens
                         </Button>
                     </Stack>
                 </Stack>
