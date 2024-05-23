@@ -34,7 +34,7 @@ const FaucetRow = (props: TableHeaderProps) => {
     const [isLoading, setIsLoading] = useState(false)
     const chainId = useChainId()
     const { address: account } = useAccount()
-    const maxDollar = 100000
+    const maxDollar = 10000
     const { storage, entryExists, addToFaucetStorage } = useFaucetStorage()
 
     // Get collateral balance of wallet.
