@@ -110,19 +110,26 @@ export const BorrowPopup = (props: Props) => {
 
   const {
     handleApprove,
+    getGasApprove,
     handleOpen,
+    getGasOpen,
     handleAdjust,
+    getGasAdjust,
     handleDeposit,
+    getGasDeposit,
     handleWithdraw,
+    getGasWithdraw,
     handleBorrow,
+    getGasBorrow,
     handleRepay,
+    getGasRepay,
     txhash,
     isPending,
     isConfirming,
     isConfirmed,
     error
   } = useModules(collateral)
-
+  
   const { view: moduleView, moduleInfo } = useModuleView(collateral)
   let { debt: debtAmount = BigInt(0), coll: depositedAmount = BigInt(0) } = moduleInfo || {}
   
@@ -134,6 +141,8 @@ export const BorrowPopup = (props: Props) => {
   const [inputAmount, setInputAmount] = useState('')
   const [availableBalance, setAvailableBalance] = useState(0)
   const [walletDebtAmount, setWalletDebtAmount] = useState(0)
+  const [gasFee, setGasFee] = useState<number>(0)
+
   const initializePopupStates = () => {
     setOpen(false)
     setInputAmount('')
@@ -262,6 +271,39 @@ export const BorrowPopup = (props: Props) => {
     }
   }
 
+  useEffect(() => {
+    const getGasFee = async (type:string) => {
+      let _gasFee = 0
+      if(type == 'openOrAdjust') {
+        if (+formattedAllowance < +removeComma(depositAmount!)) {
+          _gasFee = await getGasApprove(parseUnits(formattedDepositAmount, decimals))
+        } else if (moduleView === 'ACTIVE') {
+          _gasFee =  await getGasAdjust(parseEther(formattedDepositAmount), parseEther(formattedBorrowAmount))
+        } else {
+          _gasFee = await getGasOpen(parseEther(formattedDepositAmount), parseEther(formattedBorrowAmount))
+        }
+      } else if(type == 'deposit') {
+        if (+formattedAllowance < +removeComma(depositAmount!)) {
+          _gasFee =  await getGasApprove(parseUnits(inputAmount, decimals))
+        } else if (moduleView === 'ACTIVE') {
+          _gasFee =  await getGasDeposit(parseEther(inputAmount))
+        }
+      } else if(type == 'withdraw') {
+        _gasFee =  await getGasWithdraw(parseEther(inputAmount))
+      } else if(type == 'borrow') {
+        _gasFee =  await getGasBorrow(parseEther(inputAmount))
+      } else if(type == 'repay') {
+        if(+inputAmount < +formatEther(debtAmount)) {
+          _gasFee =  await getGasRepay(parseEther(inputAmount))
+        } else {
+          _gasFee =  await getGasRepay(debtAmount)
+        }
+      }
+      setGasFee(_gasFee!)
+    } 
+    getGasFee(type)
+  }, [type, inputAmount])
+
   return (
     <Fragment>
       <Dialog
@@ -292,7 +334,7 @@ export const BorrowPopup = (props: Props) => {
               asset={type =='borrow' ? 'trenUSD' : String(collateral)}
               available={availableBalance}
             />
-            <TransactionOverView collateral={collateralDetail.symbol} type={type} amount={inputAmount} gasFee={0.14} />
+            <TransactionOverView collateral={collateralDetail.symbol} type={type} amount={inputAmount} gasFee={gasFee} />
             <Button
               sx={{
                 color: 'white',
@@ -329,7 +371,7 @@ export const BorrowPopup = (props: Props) => {
               depositAmount={depositAmount!}
               borrowAmount={borrowAmount!}
             />
-            <TransactionOverView collateral={collateralDetail.symbol} type={type} amount={inputAmount} gasFee={0.14} uptoFee={34.21} depositAmount={depositAmount} borrowAmount={borrowAmount}/>
+            <TransactionOverView collateral={collateralDetail.symbol} type={type} amount={inputAmount} gasFee={gasFee} uptoFee={34.21} depositAmount={depositAmount} borrowAmount={borrowAmount}/>
             <Button
               sx={{
                 color: 'white',
@@ -419,7 +461,7 @@ export const BorrowPopup = (props: Props) => {
             <TransactionOverView
               collateral={collateralDetail.symbol}
               type={type}
-              gasFee={0.14}
+              gasFee={gasFee}
               amount={inputAmount}
               closeModule={+inputAmount >= +formatEther(debtAmount)}
             />
