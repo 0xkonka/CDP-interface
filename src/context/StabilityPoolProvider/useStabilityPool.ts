@@ -2,15 +2,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { type BaseError, useAccount, useChainId, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { erc20Abi, parseUnits, parseGwei } from 'viem'
-import { useProtocol } from '../ProtocolProvider/ProtocolContext'
 import { STABILITY_POOL } from '@/configs/address'
 import STABILITY_POOLABI from '@/abi/StabilityPool.json'
 import { ethers } from 'ethers'
 import { useStabilityPoolView } from './StabilityPoolContext'
+import { createPublicClient, http } from 'viem'
+import { sepolia } from 'viem/chains'
 
 const useStabilityPool = () => {
   const chainId = useChainId()
-
+  const {address: account} = useAccount()
   const { refresh: refreshStabilityPool } = useStabilityPoolView()
 
   const { data: txhash, writeContract, isPending, error, reset } = useWriteContract()
@@ -31,6 +32,11 @@ const useStabilityPool = () => {
     address: STABILITY_POOL[chainId] as '0x{string}',
     abi: STABILITY_POOLABI
   } as const
+
+  const publicClient = createPublicClient({
+    chain: sepolia,
+    transport: http()
+  })
 
   // const handleApprove = (approveAmount: bigint) => {
   //   if (!collateralDetail) return
@@ -62,6 +68,32 @@ const useStabilityPool = () => {
     }
   }
 
+  const getGasDeposit = async (amount: bigint, assets: string[]) => {
+    if (amount == BigInt(0) || assets.length == 0) return 0
+
+    //  Estimate Gas Fee
+    const gasLimit = await publicClient.estimateContractGas({
+      ...StabilityPoolContract,
+      functionName: 'provideToSP',
+      args: [
+        amount,
+        assets
+      ],
+      account
+    });
+    
+    // Fetching the current gas price using publicClient
+    const gasPrice = await publicClient.getGasPrice();
+    // Actual price is the above 'gasPrice' but the network estmiate max Gas Price as 2Gwei.
+    const maxGasPrice = ethers.parseUnits('2', 'gwei');
+    
+    // Calculate the estimated gas fee in ETH
+    const estimatedGasFeeInWei = gasLimit * maxGasPrice;
+    const estimatedGasFeeInEth = ethers.formatEther(estimatedGasFeeInWei);
+
+    return +((+estimatedGasFeeInEth).toFixed(5))
+  }
+
   const handleWithdraw = (amount: bigint, assets: string[]) => {
     try {
       writeContract({
@@ -77,9 +109,37 @@ const useStabilityPool = () => {
     }
   }
 
+  const getGasWithdraw = async (amount: bigint, assets: string[]) => {
+    if (amount == BigInt(0) || assets.length == 0) return 0
+
+    //  Estimate Gas Fee
+    const gasLimit = await publicClient.estimateContractGas({
+      ...StabilityPoolContract,
+      functionName: 'withdrawFromSP',
+      args: [
+        amount,
+        assets
+      ],
+      account
+    });
+    
+    // Fetching the current gas price using publicClient
+    const gasPrice = await publicClient.getGasPrice();
+    // Actual price is the above 'gasPrice' but the network estmiate max Gas Price as 2Gwei.
+    const maxGasPrice = ethers.parseUnits('2', 'gwei');
+    
+    // Calculate the estimated gas fee in ETH
+    const estimatedGasFeeInWei = gasLimit * maxGasPrice;
+    const estimatedGasFeeInEth = ethers.formatEther(estimatedGasFeeInWei);
+
+    return +((+estimatedGasFeeInEth).toFixed(5))
+  }
+
   return {
     handleProvide,
+    getGasDeposit,
     handleWithdraw,
+    getGasWithdraw,
     txhash,
     isPending,
     isConfirming,

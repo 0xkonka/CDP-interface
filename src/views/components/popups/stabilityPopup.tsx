@@ -63,7 +63,9 @@ export const StabilityPopup = (props: Props) => {
   } = props
 
   const { 
+    getGasDeposit,
     handleProvide, 
+    getGasWithdraw,
     handleWithdraw, 
     txhash, 
     isPending, 
@@ -75,6 +77,7 @@ export const StabilityPopup = (props: Props) => {
 
   const [inputAmount, setInputAmount] = useState('')
   const [availableBalance, setAvailableBalance] = useState(0)
+  const [gasFee, setGasFee] = useState<number>(0)
   const initializePopupStates = () => {
     setOpen(false)
     setInputAmount('')
@@ -131,6 +134,20 @@ export const StabilityPopup = (props: Props) => {
     }
   }
 
+  useEffect(() => {
+    const getGasFee = async (type:string) => {
+      let _gasFee = 0
+      if (type == 'deposit') {
+        _gasFee = await getGasDeposit(parseEther(inputAmount), collaterals)
+      } else if (type == 'withdraw') {
+        _gasFee = await getGasWithdraw(parseEther(inputAmount), collaterals)
+      }
+      setGasFee(_gasFee!)
+    }
+
+    getGasFee(type)
+  }, [type, inputAmount])
+
   return (
     <Fragment>
       <Dialog
@@ -161,7 +178,7 @@ export const StabilityPopup = (props: Props) => {
               asset='trenUSD'
               available={availableBalance}
             />
-            <TransactionOverView collateral='trenUSD' type={type} amount={inputAmount} gasFee={0.14} poolBalance={withdrawAvailable} poolVolume={totalDebtTokenDeposits} />
+            <TransactionOverView collateral='trenUSD' type={type} amount={inputAmount} gasFee={gasFee} poolBalance={withdrawAvailable} poolVolume={totalDebtTokenDeposits} />
             <Button
               sx={{
                 color: 'white',
