@@ -19,7 +19,6 @@ interface Props {
 
 export const TransactionOverView = (props: Props) => {
     const {radiusBoxStyle} = useGlobalValues()
-    const theme:Theme = useTheme()
     const {collateral, gasFee, poolVolume, poolBalance, amount, type} = props
     const newPoolBalance = poolBalance + +amount * (type == 'deposit' ? 1 : -1)
     
@@ -28,7 +27,7 @@ export const TransactionOverView = (props: Props) => {
             <Typography variant='h5' fontWeight={400} color='#707175' mt={4} mb={3}>
                 Transaction overview
             </Typography>
-            <Stack sx={radiusBoxStyle} gap={6}>
+            <Stack sx={{...radiusBoxStyle, background: '#1013149C'}} gap={6}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between'>
                     <Typography variant='h5' fontWeight={400}>Pool Balance</Typography>
                     <Box>
@@ -49,7 +48,7 @@ export const TransactionOverView = (props: Props) => {
                         </Stack>
                         <Stack justifyContent='flex-end' mt={2}>
                             <Typography variant='h5' color='#707175' fontWeight={400} textAlign='right'>
-                                Pool Share: {formatPercent(newPoolBalance / poolVolume, 5)}
+                                Pool Share: {formatPercent(newPoolBalance / poolVolume * 100, 2)}
                             </Typography>
                         </Stack>
                     </Box>
@@ -67,7 +66,7 @@ export const TransactionOverView = (props: Props) => {
                             </clipPath>
                         </defs>
                     </svg>
-                    {formatToThousands(gasFee)}
+                    {formatToThousands(gasFee).substring(1)} ETH
                     <Tooltip title='Gas fees are payments made by users to compensate for the computing energy required to process and validate transactions on the blockchain. Fees vary based on network congestion and transaction complexity.' placement='top'>
                         <IconButton sx={{bgcolor: 'transparent !important', p: 0}}>
                             <Icon fontSize='23' icon='ci:info' style={{color: '#707175', cursor: 'pointer'}}/>

@@ -191,19 +191,31 @@ export const BorrowPopup = (props: Props) => {
               'Borrow Success',
               `You have successfully deposited ${formatToThousands(+depositAmount!, 2).substring(1)} ${collateral} and borrowed ${formatToThousands(+borrowAmount!).substring(1)} trenUSD.`,
               30000,
-              `${ETHERSCAN_BASE_URL}/tx/${txhash}`,
+              `${ETHERSCAN_BASE_URL}/tx/${txhash}`
             )
           }
           break
         case 'deposit':
           initializePopupStates()
           reloadBalance()
-          showToast('success', 'Deposit Success', `You have successfully deposited ${formatToThousands(+inputAmount!, 2).substring(1)} ${collateral}`, 50000)
+          showToast(
+            'success', 
+            'Deposit Success', 
+            `You have successfully deposited ${formatToThousands(+inputAmount!, 2).substring(1)} ${collateral}`, 
+            30000,
+            `${ETHERSCAN_BASE_URL}/tx/${txhash}`
+          )
           break
         case 'borrow':
           initializePopupStates()
           reloadBalance()
-          showToast('success', 'Borrow Success', `You have successfully borrowed ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 50000)
+          showToast(
+            'success', 
+            'Borrow Success', 
+            `You have successfully borrowed ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 
+            30000,
+            `${ETHERSCAN_BASE_URL}/tx/${txhash}`
+          )
           break
         case 'withdraw':
           initializePopupStates()
@@ -212,14 +224,27 @@ export const BorrowPopup = (props: Props) => {
             'success',
             'Withdraw Success',
             `You have successfully withdrawn ${formatToThousands(+inputAmount!, 2).substring(1)} ${collateral}`,
-            30000
+            30000,
+            `${ETHERSCAN_BASE_URL}/tx/${txhash}`
           )
           break
         case 'repay':
           if(+inputAmount < +formatEther(debtAmount)) {
-            showToast('success', 'Repay Success', `You have successfully repaid ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 50000)
+            showToast(
+              'success', 
+              'Repay Success', 
+              `You have successfully repaid ${formatToThousands(+inputAmount!, 2).substring(1)} trenUSD`, 
+              30000,
+              `${ETHERSCAN_BASE_URL}/tx/${txhash}`
+            )
           } else {
-            showToast('success', 'Close Success', `You have successfully closed the module`, 50000)
+            showToast(
+              'success', 
+              'Close Success', 
+              `You have successfully closed the module`, 
+              30000,
+              `${ETHERSCAN_BASE_URL}/tx/${txhash}`,
+            )
           }
           initializePopupStates()
           reloadBalance()
@@ -236,6 +261,7 @@ export const BorrowPopup = (props: Props) => {
   const handleSubmit = () => {
     if (!collateralDetail) return
     if (type != 'openOrAdjust' && (+inputAmount > availableBalance || +inputAmount == 0)) return
+
     if (type === 'openOrAdjust') {
       try {
         if (+formattedAllowance < +removeComma(depositAmount!)) {
@@ -272,6 +298,12 @@ export const BorrowPopup = (props: Props) => {
   }
 
   useEffect(() => {
+    if (!collateralDetail) return
+    if (type != 'openOrAdjust' && (+inputAmount > availableBalance || +inputAmount == 0)) {
+      setGasFee(0)
+      return
+    }
+
     const getGasFee = async (type:string) => {
       let _gasFee = 0
       if(type == 'openOrAdjust') {
@@ -481,7 +513,7 @@ export const BorrowPopup = (props: Props) => {
                 (isPending || isConfirming) && 
                 <CircularProgress color='primary' sx={{mr: 4, height: '20px !important', width: '20px !important'}} />
               }
-              {+inputAmount >= +formatEther(debtAmount) ? 'Close' : 'Repay'}
+              {+inputAmount >= +formatEther(debtAmount) ? 'Close Module' : 'Repay'}
             </Button>
           </Box>
         )}
