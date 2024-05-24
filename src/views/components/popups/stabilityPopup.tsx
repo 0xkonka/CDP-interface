@@ -136,6 +136,11 @@ export const StabilityPopup = (props: Props) => {
 
   useEffect(() => {
     const getGasFee = async (type:string) => {
+      if (collaterals.length <= 0 || +inputAmount > availableBalance || +inputAmount == 0) {
+        setGasFee(0)
+        return
+      }
+      
       let _gasFee = 0
       if (type == 'deposit') {
         _gasFee = await getGasDeposit(parseEther(inputAmount), collaterals)
