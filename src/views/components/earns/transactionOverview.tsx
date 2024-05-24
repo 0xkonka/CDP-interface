@@ -67,7 +67,7 @@ export const TransactionOverView = (props: Props) => {
                             </clipPath>
                         </defs>
                     </svg>
-                    {formatToThousands(gasFee)}
+                    {formatToThousands(gasFee).substring(1)} ETH
                     <Tooltip title='Gas fees are payments made by users to compensate for the computing energy required to process and validate transactions on the blockchain. Fees vary based on network congestion and transaction complexity.' placement='top'>
                         <IconButton sx={{bgcolor: 'transparent !important', p: 0}}>
                             <Icon fontSize='23' icon='ci:info' style={{color: '#707175', cursor: 'pointer'}}/>
