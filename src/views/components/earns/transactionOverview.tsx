@@ -28,7 +28,7 @@ export const TransactionOverView = (props: Props) => {
             <Typography variant='h5' fontWeight={400} color='#707175' mt={4} mb={3}>
                 Transaction overview
             </Typography>
-            <Stack sx={radiusBoxStyle} gap={6}>
+            <Stack sx={{...radiusBoxStyle, background: '#1013149C'}} gap={6}>
                 <Stack direction='row' alignItems='center' justifyContent='space-between'>
                     <Typography variant='h5' fontWeight={400}>Pool Balance</Typography>
                     <Box>
