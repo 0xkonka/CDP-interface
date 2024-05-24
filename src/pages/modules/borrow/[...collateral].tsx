@@ -178,10 +178,9 @@ const Borrow = () => {
   const totalCollateralQuantity = +removeComma(depositAmount) + +formatEther(depositedAmount)
   const liquidationPrice = totalCollateralQuantity == 0 ? 0 : (loanValue + +formatEther(debtTokenGasCompensation)) / (totalCollateralQuantity * +formatEther(liquidation))
   const healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
-  const borrowingPowerPercent = currentLTV / +formatEther(LTV)
-  // const maxBorrowingValue = collateralValue * +formatEther(LTV)
+  // const borrowingPowerPercent = currentLTV / +formatEther(LTV)
   const maxBorrowingValue = Math.max(0, (collateralValue * +formatEther(LTV) - +formatEther(debtTokenGasCompensation)) / (1 + +formatEther(borrowingFee)))
-  // const borrowingPowerPercent = (maxBorrowingValue == 0) ? 0 : (loanValue / maxBorrowingValue * 100)
+  const borrowingPowerPercent = ((+formatEther(debtAmount) / 1.01 + +removeComma(borrowAmount)) / maxBorrowingValue) * 100
 
   // Handle click for poups
   const handleClickApprove = () => {

@@ -18,6 +18,7 @@ import { useAccount, useChainId, useReadContract } from 'wagmi'
 import { getBalance } from '@wagmi/core'
 import { wagmiConfig } from '@/pages/_app'
 import { BORROWER_OPERATIONS } from '@/configs/address'
+import { LinearToSRGB } from 'three/src/math/ColorManagement'
 
 interface BorrowPostionProps {
   row: CollateralParams
@@ -40,12 +41,12 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
      () => collateralDetails.find(i => i.symbol === row.symbol),
      [row, collateralDetails]
   )
-  const { address = '', decimals = 18, liquidation = BigInt(1), price = BigInt(0), LTV = BigInt(1), minNetDebt = BigInt(0), debtTokenGasCompensation = BigInt(0) } = collateralDetail || {}
+  const { address = '', decimals = 18, debtTokenGasCompensation = BigInt(0), liquidation = BigInt(0), borrowingFee = BigInt(0), LTV = BigInt(0) } = collateralDetail || {}
 
   // === User Trove management === //
   const { moduleInfo } = useModuleView(row.symbol)
   let {
-    healthFactor = 0,
+    // healthFactor = 0,
     borrowingPower = 0,
     maximumBorrowingPower = BigInt(0),
     status: positionStatus = 'nonExistent',
@@ -96,16 +97,15 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
     setType('repay')
   }
 
-  //  //reload and refetch the input values and balance.
-  //  const reloadBalance = useCallback(() => {
-  //   setDepositAmount('');
-  //   setBorrowAmount('');
-  //   setTriggerEffect(prev => prev + 1)
-  // }, [setDepositAmount, setBorrowAmount]);
-
   const reloadBalance = () => {
       // Do nothing ; Just keep it
   }
+
+  // Calculation View
+  const currentLTV = (depositedAmount == BigInt(0) || debtAmount ==  BigInt(0)) ? 0 : ((+formatEther(debtAmount + debtTokenGasCompensation)) / (+formatEther(depositedAmount) * +formatEther(row.price)) * 100)
+  const healthFactor = (currentLTV == 0) ? 0 : (+formatEther(liquidation) / currentLTV * 100)
+  const maxBorrowingValue = Math.max(0, (+formatEther(depositedAmount) * +formatEther(row.price) * +formatEther(LTV) - +formatEther(debtTokenGasCompensation)) / (1 + +formatEther(borrowingFee)))
+  const borrowingPowerPercent = ((+formatEther(debtAmount) / 1.01) / maxBorrowingValue) * 100
 
   return (
     <Box className='borrow-position' sx={{ display: positionStatus === 'active' ? 'block' : 'none' }}>
@@ -118,8 +118,10 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
         </Grid>
         <Grid item xs={12} lg={6}>
           <BorrowingPower
-            percent={borrowingPower * 100}
-            max={+formatEther(maximumBorrowingPower)}
+            // percent={borrowingPower * 100}
+            // max={+formatEther(maximumBorrowingPower)}
+            percent={borrowingPowerPercent}
+            max={maxBorrowingValue}
           />
         </Grid>
         <Grid item xs={12} lg={6}>
