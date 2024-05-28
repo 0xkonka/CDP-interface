@@ -48,7 +48,7 @@ export const TransactionOverView = (props: Props) => {
                         </Stack>
                         <Stack justifyContent='flex-end' mt={2}>
                             <Typography variant='h5' color='#707175' fontWeight={400} textAlign='right'>
-                                Pool Share: {formatPercent(newPoolBalance / poolVolume * 100, 2)}
+                                Pool Share: {formatPercent(newPoolBalance / (poolVolume - poolBalance + newPoolBalance) * 100, 2)}
                             </Typography>
                         </Stack>
                     </Box>
