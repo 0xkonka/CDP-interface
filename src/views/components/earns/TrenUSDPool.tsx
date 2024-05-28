@@ -135,7 +135,7 @@ export const TrenUSDPool = () => {
                                         Wallet Balance
                                     </Typography>
                                     <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' mb={6} fontWeight={400}>
-                                        {userStabilityInfo.walletBalance == 0 ? '-' : formatToThousandsInt(userStabilityInfo.walletBalance) + ' trenUSD'}
+                                        {Math.floor(userStabilityInfo.walletBalance) == 0 ? '-' : formatToThousandsInt(userStabilityInfo.walletBalance) + ' trenUSD'}
                                     </Typography>
                                     <Button variant='contained' color='primary'
                                         sx={{ 
@@ -153,7 +153,7 @@ export const TrenUSDPool = () => {
                                         Staked trenUSD
                                     </Typography>
                                     <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' mb={6}>
-                                        {userDeposit == undefined || userDeposit == BigInt(0) ? '-' : formatToThousandsInt(+formatEther(userDeposit || BigInt(0))) + ' trenUSD'}
+                                        {userDeposit == undefined || Math.floor(+formatEther(userDeposit)) == 0 ? '-' : formatToThousandsInt(+formatEther(userDeposit || BigInt(0))) + ' trenUSD'}
                                     </Typography>
                                     <Button variant='outlined' color='primary'
                                         sx={{ 
@@ -193,8 +193,8 @@ export const TrenUSDPool = () => {
                 open={open}
                 setOpen={setOpen}
                 type={type}
-                depositAvailable={userStabilityInfo.walletBalance}
-                withdrawAvailable={userStabilityInfo.userDeposit}
+                depositAvailable={Math.floor(userStabilityInfo.walletBalance)}
+                withdrawAvailable={Math.floor(userStabilityInfo.userDeposit)}
                 totalDebtTokenDeposits={+formatUnits(totalDebtTokenDeposits, decimals!)}
             />
         </Box>
