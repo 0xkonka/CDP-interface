@@ -21,7 +21,6 @@ const useStabilityPool = () => {
   })
 
   useEffect(() => {
-    console.log('isConfirmed', isConfirmed)
     if (isConfirmed) {
       refreshStabilityPool()
       reset()
