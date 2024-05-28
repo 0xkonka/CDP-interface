@@ -144,6 +144,8 @@ export const BorrowPopup = (props: Props) => {
   const [gasFee, setGasFee] = useState<number>(0)
 
   const initializePopupStates = () => {
+    if(isPending || isConfirming)
+      return
     setOpen(false)
     setInputAmount('')
   }
@@ -365,6 +367,7 @@ export const BorrowPopup = (props: Props) => {
               type={type}
               asset={type =='borrow' ? 'trenUSD' : String(collateral)}
               available={availableBalance}
+              disabled={isPending || isConfirming}
             />
             <TransactionOverView collateral={collateralDetail.symbol} type={type} amount={inputAmount} gasFee={gasFee} />
             <Button
@@ -489,7 +492,15 @@ export const BorrowPopup = (props: Props) => {
                 Collateral (coming soon)
               </Button>
             </Stack>
-            <AmountForm amount={inputAmount} setAmount={setInputAmount} type={type} asset='trenUSD' available={availableBalance} debtAmount={debtAmount}/>
+            <AmountForm 
+              amount={inputAmount} 
+              setAmount={setInputAmount} 
+              type={type} 
+              asset='trenUSD' 
+              available={availableBalance} 
+              debtAmount={debtAmount}
+              disabled={isPending || isConfirming}
+            />
             <TransactionOverView
               collateral={collateralDetail.symbol}
               type={type}
