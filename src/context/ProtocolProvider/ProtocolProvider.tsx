@@ -11,7 +11,7 @@ import {
   type Client,
   type Transport
 } from 'viem'
-import { multicall, readContract, getBalance } from '@wagmi/core'
+import { multicall, readContract } from '@wagmi/core'
 import ADMIN_CONTRACT_ABI from '@/abi/AdminContract.json'
 import PRICE_FEED_ABI from '@/abi/PriceFeed.json'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'

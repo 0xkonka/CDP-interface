@@ -11,8 +11,6 @@ import { ApproveDetailView } from '../modules/approveDetailView'
 import { AmountForm } from '../modules/amountForm'
 import { showToast } from '@/hooks/toasts'
 import { BaseError, useAccount, useChainId, useReadContract } from 'wagmi'
-import { getBalance } from '@wagmi/core'
-import { wagmiConfig } from '@/pages/_app'
 import { erc20Abi, formatEther, formatUnits } from 'viem'
 import { formatToThousands, removeComma } from '@/hooks/utils'
 import { parseEther, parseUnits } from 'viem'
@@ -149,6 +147,19 @@ export const BorrowPopup = (props: Props) => {
     setOpen(false)
     setInputAmount('')
   }
+
+  // Get trenUSD balance of wallet.
+  const { data: _walletDebtAmount } = useReadContract({
+    address: DEBT_TOKEN[chainId] as '0x{string}',
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+    args: [account as '0x{string}'],
+  })
+
+  useEffect(() => {
+    setWalletDebtAmount(_walletDebtAmount ? +formatEther(_walletDebtAmount) : 0 )
+  }, [_walletDebtAmount])
+
   useEffect(() => {
     switch (type) {
       case 'deposit':
@@ -165,18 +176,6 @@ export const BorrowPopup = (props: Props) => {
         break
     }
   }, [type, decimals, userCollateralBal, depositedAmount, debtAmount])
-  
-  useEffect(() => {
-    if (!account) return
-    const getUserInfo = async () => {
-      const _userDebtBal = await getBalance(wagmiConfig, {
-        address: account as '0x${string}',
-        token: DEBT_TOKEN[chainId] as '0x{string}'
-      })
-      setWalletDebtAmount(+formatEther(_userDebtBal.value))
-    }
-    getUserInfo()
-  }, [account])
 
   useEffect(() => {
     if (isConfirmed && !isPending) {

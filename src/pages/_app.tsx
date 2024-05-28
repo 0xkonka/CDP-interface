@@ -76,6 +76,7 @@ import '../../styles/globals.css'
 import '../../styles/rainbowwallet.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import { ProtocolProvider } from '@/context/ProtocolProvider/ProtocolProvider'
+import { BalanceProvider } from '@/context/BalanceProvider/BalanceProvider'
 import { GlobalProvider } from '@/context/GlobalContext'
 import { StabilityPoolProvider } from '@/context/StabilityPoolProvider/StabilityPoolProvider'
 import { PointProvider } from '@/context/PointContext'
@@ -126,27 +127,29 @@ const App = (props: ExtendedAppProps) => {
       <Web3Provider>
         <ProtocolProvider>
           <StabilityPoolProvider>
-            <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-              <SettingsConsumer>
-                {({ settings }) => {
-                  return (
-                    <ThemeComponent settings={settings}>
-                      <GlobalProvider>
-                        <PointProvider>
-                          {getLayout(<Component {...pageProps} />)}
-                          <ReactHotToast>
-                            <Toaster
-                              position={settings.toastPosition}
-                              toastOptions={{ className: 'react-hot-toast' }}
-                            />
-                          </ReactHotToast>
-                        </PointProvider>
-                      </GlobalProvider>
-                    </ThemeComponent>
-                  )
-                }}
-              </SettingsConsumer>
-            </SettingsProvider>
+            <BalanceProvider>
+              <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+                <SettingsConsumer>
+                  {({ settings }) => {
+                    return (
+                      <ThemeComponent settings={settings}>
+                        <GlobalProvider>
+                          <PointProvider>
+                            {getLayout(<Component {...pageProps} />)}
+                            <ReactHotToast>
+                              <Toaster
+                                position={settings.toastPosition}
+                                toastOptions={{ className: 'react-hot-toast' }}
+                              />
+                            </ReactHotToast>
+                          </PointProvider>
+                        </GlobalProvider>
+                      </ThemeComponent>
+                    )
+                  }}
+                </SettingsConsumer>
+              </SettingsProvider>
+            </BalanceProvider>
           </StabilityPoolProvider>
         </ProtocolProvider>
       </Web3Provider>

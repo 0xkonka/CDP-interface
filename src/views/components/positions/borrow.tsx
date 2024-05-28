@@ -10,15 +10,13 @@ import { erc20Abi, formatEther, formatUnits, parseUnits } from 'viem'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { formatToThousands } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
+import { useBalance } from '@/context/BalanceProvider/BalanceContext'
 import { BorrowPopup } from '@/views/components/popups/borrowPopup'
 
 // React imports
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useAccount, useChainId, useReadContract } from 'wagmi'
-import { getBalance } from '@wagmi/core'
-import { wagmiConfig } from '@/pages/_app'
 import { BORROWER_OPERATIONS } from '@/configs/address'
-import { LinearToSRGB } from 'three/src/math/ColorManagement'
 
 interface BorrowPostionProps {
   row: CollateralParams
@@ -30,25 +28,25 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
   // Modal Props
   const [open, setOpen] = useState<boolean>(false)
   const [type, setType] = useState<string>('withdraw')
-  const [walletBalance, setWalletBalance] = useState(0)
 
   // Wallet Address
   const { address: account } = useAccount()
 
-   // === Get Collateral Detail === //
+  // === Get Collateral Detail === //
    const { collateralDetails } = useProtocol()
    const collateralDetail = useMemo(
      () => collateralDetails.find(i => i.symbol === row.symbol),
      [row, collateralDetails]
   )
-  const { address = '', decimals = 18, debtTokenGasCompensation = BigInt(0), liquidation = BigInt(0), borrowingFee = BigInt(0), LTV = BigInt(0) } = collateralDetail || {}
+  const { decimals = 18, debtTokenGasCompensation = BigInt(0), liquidation = BigInt(0), borrowingFee = BigInt(0), LTV = BigInt(0) } = collateralDetail || {}
+
+  // == Get Collateral Balance == //
+  const { balanceDetails } = useBalance()
+  const walletBalance:bigint = balanceDetails.find(item => item.address == row.address)?.balance || BigInt(0)
 
   // === User Trove management === //
   const { moduleInfo } = useModuleView(row.symbol)
   let {
-    // healthFactor = 0,
-    borrowingPower = 0,
-    maximumBorrowingPower = BigInt(0),
     status: positionStatus = 'nonExistent',
     debt: debtAmount = BigInt(0),
     coll: depositedAmount = BigInt(0),
@@ -66,19 +64,6 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
     functionName: 'allowance',
     args: [account as '0x${string}', BORROWER_OPERATIONS[chainId] as '0x${string}']
   })
-
-  // Setup user collateral value for state
-  useEffect(() => {
-    if (!account || !address) return
-    const getUserInfo = async () => {
-      const _userCollateralBal = await getBalance(wagmiConfig, {
-        address: account as '0x${string}',
-        token: address as '0x${string}'
-      })
-      setWalletBalance(+formatUnits(_userCollateralBal.value, decimals!))
-    }
-    getUserInfo()
-  }, [account, address])
 
   const handleWithdraw = () => {
     setOpen(true)
@@ -118,8 +103,6 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
         </Grid>
         <Grid item xs={12} lg={6}>
           <BorrowingPower
-            // percent={borrowingPower * 100}
-            // max={+formatEther(maximumBorrowingPower)}
             percent={borrowingPowerPercent}
             max={maxBorrowingValue}
           />
@@ -242,7 +225,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
           collateral={String(row.symbol)}
           collateralDetail={collateralDetail}
           allowance={allowance}
-          userCollateralBal={parseUnits(walletBalance.toString(), row.decimals)}
+          userCollateralBal={walletBalance}
           depositAmount=''
           borrowAmount=''
           reloadBalance={reloadBalance}
