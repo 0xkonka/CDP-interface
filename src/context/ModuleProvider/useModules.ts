@@ -29,7 +29,6 @@ const useModules = (collateral: string) => {
   })
 
   useEffect(() => {
-    console.log('isConfirmed', isConfirmed)
     if (isConfirmed) {
       refreshProtocol()
       refreshModule()
