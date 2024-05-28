@@ -25,6 +25,7 @@ interface Props {
     setAmount: (amount: string) => void
     showTooltip?: boolean
     debtAmount?: bigint // It is only for Repay popup
+    disabled?: boolean  // If it set true, it disabled the input form.
 }
 
 const getAmountTooltip = (type: string) => {
@@ -48,7 +49,7 @@ const getAmountTooltip = (type: string) => {
 
 export const AmountForm = (props: Props) => {
     const theme:Theme = useTheme()
-    const {asset, type, available, amount, setAmount, showTooltip = true, debtAmount} = props
+    const {asset, type, available, amount, setAmount, showTooltip = true, debtAmount, disabled = false} = props
     const [borderColorStyle, setBorderColorStyle] = useState({})
     const [collateralUSD, setCollateralUSD] = useState(1)
     const {radiusBoxStyle} = useGlobalValues()
@@ -123,6 +124,7 @@ export const AmountForm = (props: Props) => {
                             onChange={e => setAmount(removeComma(e.target.value))}
                             onFocus={handleFocus} onBlur={handleBlur}
                             autoComplete='off'
+                            disabled={disabled}
                         />
                     </CleaveWrapper>
                     <Stack direction='row' gap={2} alignItems='center'>
