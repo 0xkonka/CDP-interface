@@ -153,7 +153,7 @@ export const TrenUSDPool = () => {
                                         Staked trenUSD
                                     </Typography>
                                     <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' mb={6}>
-                                        {userDeposit == undefined || userDeposit == BigInt(0) ? '-' : formatMoney(+formatEther(userDeposit || BigInt(0))) + ' trenUSD'}
+                                        {userDeposit == undefined || userDeposit == BigInt(0) ? '-' : formatToThousandsInt(+formatEther(userDeposit || BigInt(0))) + ' trenUSD'}
                                     </Typography>
                                     <Button variant='outlined' color='primary'
                                         sx={{ 
