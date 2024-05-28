@@ -17,6 +17,7 @@ import { BorrowPopup } from '@/views/components/popups/borrowPopup'
 import React, { useState, useMemo } from 'react'
 import { useAccount, useChainId, useReadContract } from 'wagmi'
 import { BORROWER_OPERATIONS } from '@/configs/address'
+
 interface BorrowPostionProps {
   row: CollateralParams
 }
