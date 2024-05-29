@@ -41,7 +41,7 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
   const { decimals = 18, debtTokenGasCompensation = BigInt(0), liquidation = BigInt(0), borrowingFee = BigInt(0), LTV = BigInt(0) } = collateralDetail || {}
 
   // == Get Collateral Balance == //
-  const { balanceDetails } = useBalance()
+  const { balanceDetails, refresh:reloadBalance } = useBalance()
   const walletBalance:bigint = balanceDetails.find(item => item.address == row.address)?.balance || BigInt(0)
 
   // === User Trove management === //
@@ -82,9 +82,9 @@ export const BorrowPosition = (props: BorrowPostionProps) => {
     setType('repay')
   }
 
-  const reloadBalance = () => {
-      // Do nothing ; Just keep it
-  }
+  // const reloadBalance = () => {
+  //     // Do nothing ; Just keep it
+  // }
 
   // Calculation View
   const currentLTV = (depositedAmount == BigInt(0) || debtAmount ==  BigInt(0)) ? 0 : ((+formatEther(debtAmount + debtTokenGasCompensation)) / (+formatEther(depositedAmount) * +formatEther(row.price)) * 100)

@@ -101,8 +101,6 @@ const getUserModuleStatus = (num: number): UserModuleStatus => {
   }
 }
 
-// const select = ({ module: { status } }: LiquityStoreState) => status
-
 export interface ModuleInfo {
   debt: bigint
   coll: bigint
@@ -132,8 +130,6 @@ export const useModuleView = (collateral: string) => {
     () => collateralDetails.find(i => i.symbol === collateral),
     [collateral, collateralDetails]
   )
-
-  // useEffect(() => {
 
   const getModuleInfo = async () => {
     if (!account || !chainId || !collateralDetail) return
@@ -166,11 +162,7 @@ export const useModuleView = (collateral: string) => {
     setModuleStatus(_moduleInfo.status)
     setModuleInfo(_moduleInfo)
     setView(getInitialView(_moduleInfo.status))
-
-    // console.log('_moduleInfo', _moduleInfo)
   }
-  // getModuleInfo()
-  // }, [chainId, account, collateralDetail])
 
   const dispatchEvent = useCallback((event: ModuleEvent) => {
     const nextView = transition(viewRef.current, event)

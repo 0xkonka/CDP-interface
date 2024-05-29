@@ -82,103 +82,103 @@ const Faucet = () => {
     }
 
     return (
-        <Stack alignItems='center'>
-            <iframe style={{position: 'absolute', left: -250, top: -100, width: 'calc(100vw + 500px)', height: 'calc(100% + 340px)'}} src='https://my.spline.design/waterv2copy-ff5ef8dc1c68ec421f00c0aeb688e639/' frameBorder='0' width='100%' height='100%'></iframe>
-            <Typography className='header-gradient' variant='h1'sx={{
-                    mb: { xs: 4, md: 8 }, mt: 8,
-                    fontSize: { xs: 36, md: 64, xl: 72 },
-                    textAlign: 'center'
-                }}
-            >
-                Get Token
-            </Typography>
-            
-            {isMobileScreen ? (
-                <Stack sx={{px: 4, py: 4, width: 1, maxWidth: 700, gap: 4, border: 'solid 1px #67DAB1C4', borderRadius: '10px', mb: 8, boxShadow: 'inset 0 0 6px #67DAB1C4'}}>
-                    <Stack direction='row' justifyContent='space-between'>
+        <Box position='relative'>
+            <Stack alignItems='center' position='relative' zIndex={10}>
+                <Typography className='header-gradient' variant='h1'sx={{
+                        mb: { xs: 4, md: 8 }, mt: 8,
+                        fontSize: { xs: 36, md: 64, xl: 72 },
+                        textAlign: 'center'
+                    }}
+                >
+                    Get Token
+                </Typography>
+                {isMobileScreen ? (
+                    <Stack sx={{px: 4, py: 4, width: 1, maxWidth: 700, gap: 4, border: 'solid 1px #67DAB1C4', borderRadius: '10px', mb: 8, boxShadow: 'inset 0 0 6px #67DAB1C4'}}>
+                        <Stack direction='row' justifyContent='space-between'>
+                            <Stack direction='row' sx={{alignItems: 'center'}}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                    <rect width="32" height="32" rx="16" fill="#1D1C1C"/>
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M15.4996 7.14892C14.499 8.41759 13.3127 10.8541 14.6644 13.0151C14.8221 13.2672 15.0104 13.562 15.223 13.8909C14.2478 13.914 13.2733 14.2144 12.6626 15.0779C11.8181 16.2721 10.163 18.9599 8.82211 21.1374C8.338 21.9236 7.89484 22.6433 7.54556 23.2022C7.40424 23.4283 7.50078 23.7243 7.76012 23.7863C9.15816 24.1206 11.5628 23.9577 12.2779 22.8653L16.6912 16.123C18.4371 18.7474 20.6514 22.0018 21.8973 23.82C22.0514 24.0449 22.3693 24.0667 22.5234 23.8419C23.4785 22.4485 24.3613 19.4671 23.3788 17.9982L16.1475 7.18703C15.9942 6.95785 15.6703 6.93243 15.4996 7.14892Z" fill="white"/>
+                                </svg>
+                                <Typography variant='h5' sx={{fontWeight: 400, ml: 2, width: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>trenUSD</Typography>
+                            </Stack>
+                            <Stack direction='row'>
+                                <Tooltip title='Wallet Balance' placement='top'>
+                                    <Typography variant='h5' sx={{fontWeight: 400}}>
+                                        {formatToThousandsInt(+formatEther(debtWalletBalance!))}
+                                    </Typography>
+                                </Tooltip>
+                            </Stack>
+                        </Stack>
+                        
                         <Stack direction='row' sx={{alignItems: 'center'}}>
+                            <Button variant='contained' color='primary' sx={{fontSize: 16, py: 2.5, color: '#000', fontWeight: 600, width: 1}} 
+                                onClick={() => mintDebtToken(account as '0x{string}', debtTokenMintContract, parseEther(debtTokenFaucetLimit.toString()))}
+                                disabled={isLoading || entryExists({account: account as '0x{string}', address: debtTokenMintContract})}>
+                                {
+                                    isLoading && 
+                                    <CircularProgress sx={{color: '#000', mr: 4, height: '20px !important', width: '20px !important'}} />
+                                }
+                                Claim {formatToThousandsInt(debtTokenFaucetLimit)} tokens
+                            </Button>
+                        </Stack>
+                    </Stack>
+                ) : (
+                    <Stack direction='row' alignItems='center' sx={{px: 3, py: 6, width: 1, maxWidth: 700, border: 'solid 1px #67DAB1C4', borderRadius: '10px', mb: 14, boxShadow: 'inset 0 0 6px #67DAB1C4'}}>
+                        <Stack direction='row' sx={{flex: '6 1 0%', alignItems: 'center'}}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                                 <rect width="32" height="32" rx="16" fill="#1D1C1C"/>
                                 <path fillRule="evenodd" clipRule="evenodd" d="M15.4996 7.14892C14.499 8.41759 13.3127 10.8541 14.6644 13.0151C14.8221 13.2672 15.0104 13.562 15.223 13.8909C14.2478 13.914 13.2733 14.2144 12.6626 15.0779C11.8181 16.2721 10.163 18.9599 8.82211 21.1374C8.338 21.9236 7.89484 22.6433 7.54556 23.2022C7.40424 23.4283 7.50078 23.7243 7.76012 23.7863C9.15816 24.1206 11.5628 23.9577 12.2779 22.8653L16.6912 16.123C18.4371 18.7474 20.6514 22.0018 21.8973 23.82C22.0514 24.0449 22.3693 24.0667 22.5234 23.8419C23.4785 22.4485 24.3613 19.4671 23.3788 17.9982L16.1475 7.18703C15.9942 6.95785 15.6703 6.93243 15.4996 7.14892Z" fill="white"/>
                             </svg>
                             <Typography variant='h5' sx={{fontWeight: 400, ml: 2, width: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>trenUSD</Typography>
                         </Stack>
-                        <Stack direction='row'>
+                        <Stack direction='row' sx={{flex: '4 1 0%'}}>
                             <Tooltip title='Wallet Balance' placement='top'>
                                 <Typography variant='h5' sx={{fontWeight: 400}}>
                                     {formatToThousandsInt(+formatEther(debtWalletBalance!))}
                                 </Typography>
                             </Tooltip>
                         </Stack>
-                    </Stack>
-                    
-                    <Stack direction='row' sx={{alignItems: 'center'}}>
-                        <Button variant='contained' color='primary' sx={{fontSize: 16, py: 2.5, color: '#000', fontWeight: 600, width: 1}} 
-                            onClick={() => mintDebtToken(account as '0x{string}', debtTokenMintContract, parseEther(debtTokenFaucetLimit.toString()))}
-                            disabled={isLoading || entryExists({account: account as '0x{string}', address: debtTokenMintContract})}>
-                            {
-                                isLoading && 
-                                <CircularProgress sx={{color: '#000', mr: 4, height: '20px !important', width: '20px !important'}} />
-                            }
-                            Claim {formatToThousandsInt(debtTokenFaucetLimit)} tokens
-                        </Button>
-                    </Stack>
-                </Stack>
-            ) : (
-                <Stack direction='row' alignItems='center' sx={{px: 3, py: 6, width: 1, maxWidth: 700, border: 'solid 1px #67DAB1C4', borderRadius: '10px', mb: 14, boxShadow: 'inset 0 0 6px #67DAB1C4'}}>
-                    <Stack direction='row' sx={{flex: '6 1 0%', alignItems: 'center'}}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                            <rect width="32" height="32" rx="16" fill="#1D1C1C"/>
-                            <path fillRule="evenodd" clipRule="evenodd" d="M15.4996 7.14892C14.499 8.41759 13.3127 10.8541 14.6644 13.0151C14.8221 13.2672 15.0104 13.562 15.223 13.8909C14.2478 13.914 13.2733 14.2144 12.6626 15.0779C11.8181 16.2721 10.163 18.9599 8.82211 21.1374C8.338 21.9236 7.89484 22.6433 7.54556 23.2022C7.40424 23.4283 7.50078 23.7243 7.76012 23.7863C9.15816 24.1206 11.5628 23.9577 12.2779 22.8653L16.6912 16.123C18.4371 18.7474 20.6514 22.0018 21.8973 23.82C22.0514 24.0449 22.3693 24.0667 22.5234 23.8419C23.4785 22.4485 24.3613 19.4671 23.3788 17.9982L16.1475 7.18703C15.9942 6.95785 15.6703 6.93243 15.4996 7.14892Z" fill="white"/>
-                        </svg>
-                        <Typography variant='h5' sx={{fontWeight: 400, ml: 2, width: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>trenUSD</Typography>
-                    </Stack>
-                    <Stack direction='row' sx={{flex: '4 1 0%'}}>
-                        <Tooltip title='Wallet Balance' placement='top'>
-                            <Typography variant='h5' sx={{fontWeight: 400}}>
-                                {formatToThousandsInt(+formatEther(debtWalletBalance!))}
-                            </Typography>
-                        </Tooltip>
-                    </Stack>
-                    <Stack direction='row' sx={{flex: '6 1 0%', alignItems: 'center', gap: 8}}>
-                        <Button variant='contained' color='primary' sx={{fontSize: 18, py: 3, color: '#000', fontWeight: 600, width: 1}} 
-                            onClick={() => mintDebtToken(account as '0x{string}', debtTokenMintContract, parseEther(debtTokenFaucetLimit.toString()))}
-                            disabled={isLoading || entryExists({account: account as '0x{string}', address: debtTokenMintContract})}>
-                            {
-                                isLoading && 
-                                <CircularProgress sx={{color: '#000', mr: 4, height: '20px !important', width: '20px !important'}} />
-                            }
-                            Claim {formatToThousandsInt(debtTokenFaucetLimit)} tokens
-                        </Button>
-                    </Stack>
-                </Stack>
-            )}
-            
-            
-
-            {/* Collateral Group Stack*/}
-            <Box sx={{background: '#10131499', borderRadius: '10px', border: 'solid 1px #67DAB14D', width: 1, maxWidth: 700}}>
-                {collateralDetails && (
-                    <Stack sx={{ py: 4 }} gap={0} position='relative' zIndex={1}>
-                    {collateralDetails.length > 0 ? (
-                        collateralDetails.map((row, index) => (
-                            row.symbol != 'WETH' ? (
-                                <FaucetRow
-                                row={row}
-                                key={index}
-                                isLastElement={index === collateralDetails.length - 1}
-                            />        
-                            ) : null
-                        ))
-                    ) : (
-                        <Box sx={{ p: 6, textAlign: 'center' }}>
-                            <Typography variant='body1'>No matching collateral</Typography>
-                        </Box>
-                    )}
+                        <Stack direction='row' sx={{flex: '6 1 0%', alignItems: 'center', gap: 8}}>
+                            <Button variant='contained' color='primary' sx={{fontSize: 18, py: 3, color: '#000', fontWeight: 600, width: 1}} 
+                                onClick={() => mintDebtToken(account as '0x{string}', debtTokenMintContract, parseEther(debtTokenFaucetLimit.toString()))}
+                                disabled={isLoading || entryExists({account: account as '0x{string}', address: debtTokenMintContract})}>
+                                {
+                                    isLoading && 
+                                    <CircularProgress sx={{color: '#000', mr: 4, height: '20px !important', width: '20px !important'}} />
+                                }
+                                Claim {formatToThousandsInt(debtTokenFaucetLimit)} tokens
+                            </Button>
+                        </Stack>
                     </Stack>
                 )}
-            </Box>
-        </Stack>
+                
+                
+
+                {/* Collateral Group Stack*/}
+                <Box sx={{background: '#10131499', borderRadius: '10px', border: 'solid 1px #67DAB14D', width: 1, maxWidth: 700}}>
+                    {collateralDetails && (
+                        <Stack sx={{ py: 4 }} gap={0} position='relative' zIndex={1}>
+                        {collateralDetails.length > 0 ? (
+                            collateralDetails.map((row, index) => (
+                                row.symbol != 'WETH' ? (
+                                    <FaucetRow
+                                    row={row}
+                                    key={index}
+                                    isLastElement={index === collateralDetails.length - 1}
+                                />        
+                                ) : null
+                            ))
+                        ) : (
+                            <Box sx={{ p: 6, textAlign: 'center' }}>
+                                <Typography variant='body1'>No matching collateral</Typography>
+                            </Box>
+                        )}
+                        </Stack>
+                    )}
+                </Box>
+            </Stack>
+        </Box>
     )
 }
 
