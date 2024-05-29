@@ -70,6 +70,7 @@ const VerticalLayout = (props: LayoutProps) => {
     <>
       <VerticalLayoutWrapper className='layout-wrapper'>
         {/* Navigation Menu */}
+        <iframe style={{position: 'fixed', width: '100%', height: 'calc(100% + 60px)'}} src='https://my.spline.design/waterv2copy-ff5ef8dc1c68ec421f00c0aeb688e639/' frameBorder='0' width='100%' height='100%'></iframe>
         {navHidden && !(navHidden && settings.lastLayout === 'horizontal') ? null : (
           <Navigation
             // navWidth={navWidth}
@@ -96,7 +97,7 @@ const VerticalLayout = (props: LayoutProps) => {
           sx={{ ...(contentHeightFixed && { maxHeight: '100vh' }) }}
         >
           {/* Announcement Bar */}
-          <Box sx={{ width: '100%', background: '#67DAB1'}}>
+          <Box sx={{ width: '100%', background: '#67DAB1', zIndex: 10}}>
               <Stack sx={{
                 position: 'relative', width: '100%', py: 3, justifyContent: 'center',
                 mx: 'auto', 
