@@ -14,10 +14,22 @@ body {
   width: 0px;
   height: 2px;
 }
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
+  background-color: #67DAB1;
+  border-radius: 20px;
+} */
+
+#leaderboard::-webkit-scrollbar {
+  width: 6px;
+  height: 2px;
+}
+#leaderboard::-webkit-scrollbar-track {
+  background: transparent;
+}
+#leaderboard::-webkit-scrollbar-thumb {
   background-color: #67DAB1;
   border-radius: 20px;
 }

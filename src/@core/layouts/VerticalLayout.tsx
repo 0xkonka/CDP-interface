@@ -21,6 +21,7 @@ import Footer from './components/shared-components/footer'
 import AppBar from './components/vertical/appBar'
 import Navigation from './components/vertical/navigation'
 import ScrollToTop from 'src/@core/components/scroll-to-top'
+import { useRouter } from 'next/router'
 
 const VerticalLayoutWrapper = styled('div')({
   height: '100%',
@@ -66,11 +67,14 @@ const VerticalLayout = (props: LayoutProps) => {
   // ** Toggle Functions
   const toggleNavVisibility = () => setNavVisible(!navVisible)
 
+  const router = useRouter()
+  const showWater = router.pathname === '/faucet' || router.pathname === '/referrals';
+
   return (
     <>
       <VerticalLayoutWrapper className='layout-wrapper'>
         {/* Navigation Menu */}
-        <iframe style={{position: 'fixed', width: '100%', height: 'calc(100% + 60px)'}} src='https://my.spline.design/waterv2copy-ff5ef8dc1c68ec421f00c0aeb688e639/' frameBorder='0' width='100%' height='100%'></iframe>
+        <iframe style={{display: showWater ? 'block' : 'none', position: 'fixed', width: '100%', height: 'calc(100% + 60px)'}} src='https://my.spline.design/waterv2copy-ff5ef8dc1c68ec421f00c0aeb688e639/' frameBorder='0' width='100%' height='100%'></iframe>
         {navHidden && !(navHidden && settings.lastLayout === 'horizontal') ? null : (
           <Navigation
             // navWidth={navWidth}
