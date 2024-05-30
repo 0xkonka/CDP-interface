@@ -1,5 +1,5 @@
 import { useGlobalValues } from '@/context/GlobalContext'
-import { Grid, Typography, Box, Stack, useTheme } from '@mui/material'
+import { Grid, Typography, Box, Stack, useTheme, Button } from '@mui/material'
 import { useState, useRef, useEffect } from 'react'
 
 import { formatToThousands, formatToThousandsInt, shortenWalletAddress } from '@/hooks/utils'
@@ -8,34 +8,14 @@ import { Copy } from '../Copy'
 import { usePoint } from '@/context/PointContext'
 
 export const ExperienceBoard = () => {
-    const [firstItemHeight, setFirstItemHeight] = useState('auto')
     const secondItemRef = useRef<HTMLDivElement>(null)
-    const { isMobileScreen, radiusBoxStyle} = useGlobalValues()
+    const {isMobileScreen, radiusBoxStyle} = useGlobalValues()
 
     const [direction, setDirection] = useState('asc')
     const [sortBy, setSortBy] = useState('symbol')
     const theme = useTheme()
 
     const {userReferral} = usePoint()
-
-    // Adjust the container heights of leaderboard and referrals.
-    useEffect(() => {
-        const updateHeight = () => {
-          if (secondItemRef.current) {
-            const height = secondItemRef.current.clientHeight;
-            setFirstItemHeight(`${height}px`)
-          }
-        }
-    
-        // Set the initial height
-        updateHeight()
-    
-        // Update height whenever the window resizes
-        window.addEventListener('resize', updateHeight)
-    
-        // Remove event listener on component unmount
-        return () => window.removeEventListener('resize', updateHeight)
-    }, [])
 
     const setSortDetail = (sortBy: string, direction: string) => {
         setSortBy(sortBy)
@@ -46,32 +26,32 @@ export const ExperienceBoard = () => {
         {
           label: 'Rank',
           key: 'id', // This is sort key.
-          flexWidth: 6.5,
-          sortable: false
+          flexWidth: 3.5,
+          sortable: true
         },
         {
           label: 'User Address',
           key: 'address',
-          flexWidth: 8.5,
-          sortable: false
+          flexWidth: 7.5,
+          sortable: true
         },
         {
           label: 'Total XP',
           key: 'totalXP',
-          flexWidth: 5.5,
-          sortable: false
+          flexWidth: 6,
+          sortable: true
         },
         {
-          label: 'XP gained per day',
-          key: 'dailyXP',
-          flexWidth: 8.5,
-          sortable: false
+          label: 'Protocol XP',
+          key: 'protocolXP',
+          flexWidth: 5.5,
+          sortable: true
         },
         {
           label: 'Referral XP',
           key: 'referralXP',
-          flexWidth: 6,
-          sortable: false
+          flexWidth: 4.5,
+          sortable: true
         }
     ]
 
@@ -86,13 +66,27 @@ export const ExperienceBoard = () => {
         <Grid container spacing={4} mt={12} >
             {/* Leaderboard Group */}
             <Grid item xs={12} lg={7} xl={7.5}>
-                <Typography className='header-gradient' sx={{ fontSize: { xs: 32, lg: 40 } }}>
-                    Leaderboard
-                </Typography>
+                <Stack justifyContent='space-between' sx={{flexDirection: {xs: 'column', sm: 'row'}, alignItems: {xs: 'start', md: 'center'}}} gap={4}>
+                    <Typography className='header-gradient' sx={{ fontSize: { xs: 32, lg: 40 } }}>
+                        Leaderboard
+                    </Typography>
+                    <Stack direction='row' gap={4}>
+                        <Button sx={{ width: 'fit-content', color: 'white', py: 3, fontWeight: 400}}
+                                variant='outlined'
+                                color='primary'>
+                            See top 10
+                        </Button>
+                        <Button sx={{ width: 'fit-content', color: '#6B6D6D', py: 3, fontWeight: 400, mr: 8}}
+                                variant='outlined'
+                                color='secondary'>
+                            See my Score
+                        </Button>
+                    </Stack>
+                </Stack>
                 <Box
-                    sx={{ ...radiusBoxStyle, mt: 8, pt: 0 }}
+                    sx={{ ...radiusBoxStyle, mt: 6, pt: 0 }}
                     id='leaderboard'
-                    style={{ overflowY: 'scroll', maxHeight: firstItemHeight }}
+                    style={{ overflowY: 'scroll', height: 450 }}
                 >
                     {/* Leaderboard Table Header */}
                     <Stack
@@ -125,17 +119,20 @@ export const ExperienceBoard = () => {
                             <Stack direction='row' alignItems='center'
                                 sx={{
                                     border: 'solid 1px transparent',
-                                    borderRadius: '16px',
+                                    borderRadius: '6px',
                                     '&:hover': {
-                                        borderColor: theme.palette.primary.main
+                                        borderColor: theme.palette.primary.main,
+                                        'h5': {
+                                            color: theme.palette.primary.main,
+                                        }
                                     },
                                     display: { xs: 'none', lg: 'flex' },
-                                    p: { xs: 3, sm: 5 }
+                                    p: 3
                                 }}
                             >
                                 <Stack flex='3.5'>
                                     <Typography variant='h5' fontWeight={400} marginLeft={4}>
-                                        {index + 1}
+                                        {formatToThousandsInt(index + 1)}
                                     </Typography>
                                 </Stack>
                                 <Stack flex='7.5' direction='row' alignItems='center' gap={3}>
@@ -162,11 +159,6 @@ export const ExperienceBoard = () => {
                             <Stack gap={2} py={4} sx={{ display: { xs: 'flex', lg: 'none' }, borderTop: index == 0 ? 'none' : 'solid 1px #3030306e' }}>
                                 <Stack direction='row' justifyContent='space-between' alignItems='center'>
                                     <Stack direction='row' gap={2}>
-                                        <img
-                                        width={27}
-                                        alt='Gradient Circle'
-                                        src='/images/icons/customized-icons/gradient-circle.png'
-                                        />
                                         <Typography variant='subtitle1' fontWeight={400}>
                                         {shortenWalletAddress('0xD88Cc271583b0019DdA08666fF2DB78B2A0172cC')}
                                         </Typography>
@@ -185,7 +177,7 @@ export const ExperienceBoard = () => {
                                     </Stack>
                                     <Stack sx={{ flex: 3.5 }}>
                                         <Typography fontSize={12} fontWeight={500} color='#D4D4D4'>
-                                        XP gained per day
+                                        Protocol XP
                                         </Typography>
                                     </Stack>
                                     <Stack sx={{ flex: 2 }}>
@@ -219,93 +211,18 @@ export const ExperienceBoard = () => {
             </Grid>
 
             {/* Referrals group */}
-            {/* <Grid item xs={12} lg={5} xl={4.5}>
-                <Typography className='header-gradient' sx={{ fontSize: { xs: 32, lg: 40 } }}>
-                    Referrals
-                </Typography>
-                <Box sx={{ ...radiusBoxStyle, mt: 8, py: 6 }} ref={secondItemRef}>
-                    <Stack direction='row' justifyContent='space-between' sx={{mb: {xs: 0, lg: 20}}}>
-                        <Stack sx={{flex: {xs: 4, sm: 3.5}}}>
-                            <Stack direction='row' gap={2} alignItems='center' sx={{mb: {xs: 4, md: 10}}}>
-                                <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}}}>Codes</Typography>
-                            </Stack>
-                            <Stack sx={{gap: {xs: 4, sm: 6}}}>
-                                {
-                                    userReferral.map((item, index) => (
-                                        <Stack width={isMobileScreen ? 100 : 130} direction='row' gap={isMobileScreen ? 1 : 3} sx={{height: {xs: 28, sm:32}}} alignItems='center' justifyContent='space-between' key={index}>
-                                            <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color={item.redeemed ? 'primary' : 'white'} sx={{my:'auto', userSelect: 'none', textDecorationThickness: 2, textDecoration: item.redeemed ? 'line-through' : 'none'}}>
-                                                {item.inviteCode}
-                                            </Typography>
-                                            <Box display={item.redeemed ? 'none' : 'block'} height={isMobileScreen ? 20 : 24}><Copy text={item.inviteCode}/></Box>
-                                        </Stack>        
-                                    ))
-                                }
-                            </Stack>
-                        </Stack>
-                        <Stack sx={{ flex: {sm: 1, xl: 2}, display: {xs: 'none', sm: 'flex'} }} direction='row'>
-                            <Stack sx={{flex: 1, borderRight: 'solid 2px #262929'}}>
-                            </Stack>
-                            <Stack sx={{flex: 1}}>
-                            </Stack>
-                        </Stack>
-                        <Stack sx={{flex: 8.5}}>
-                            <Stack direction='row' justifyContent='space-between' sx={{mb: {xs: 4, md: 10}}}>
-                                <Stack direction='row' gap={2} alignItems='center'>
-                                    <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}}}>Redeemed Wallet</Typography>
-                                </Stack>
-                                <Stack direction='row' gap={2} alignItems='center'>
-                                    <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}}}>Referral XP</Typography>
-                                </Stack>
-                            </Stack>
-                            <Stack sx={{gap: {xs: 4, sm: 6}}}>
-                                {
-                                    userReferral.map((item, index) => {
-                                        if(item.redeemed) {
-                                            return (
-                                                <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{height: {xs: 28, sm:32}}} key={index}>
-                                                    <Stack direction='row' alignItems='center' gap={isMobileScreen ? 2 : 3}>
-                                                        <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
-                                                            {shortenWalletAddress(item.redeemer)}
-                                                        </Typography>
-                                                    </Stack>
-                                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
-                                                        {formatToThousandsInt(item.xpPoint || 0)} XP
-                                                    </Typography>
-                                                </Stack> 
-                                            )
-                                        } else {
-                                            return (
-                                                <Stack sx={{height: {xs: 28, sm:32}}} direction='row' alignItems='center' justifyContent='center' key={index}>
-                                                    <Typography variant='subtitle2' color='#D4D4D44D'>No wallet has redeemed&nbsp;
-                                                    <Typography component='span' variant='subtitle2' color='#D4D4D44D' sx={{display:{xs: 'none', sm: 'inline'}}}>this code </Typography>
-                                                    yet
-                                                    </Typography>
-                                                </Stack>
-                                            )
-                                        }
-                                    })
-                                }
-                                <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{height: {xs: 28, sm:32}}}>
-                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#FFFFFF99' sx={{width: {xs: 124, sm: 166}, textAlign: 'end'}}>Total</Typography>
-                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={600} color='primary'> {formatToThousandsInt(totalxpPoint)} XP </Typography>
-                                </Stack>
-                            </Stack>
-                        </Stack>
-                    </Stack>
-                </Box>
-            </Grid> */}
             <Grid item xs={12} lg={5} xl={4.5}>
                 <Typography className='header-gradient' sx={{ fontSize: { xs: 32, lg: 40 } }}>
                     Referrals
                 </Typography>
-                <Box sx={{ ...radiusBoxStyle, mt: 8, p: 0 }} ref={secondItemRef}>
+                <Box sx={{ ...radiusBoxStyle, mt: 6, p: 0 }} ref={secondItemRef}>
                     <Stack direction='row' height='100%' sx={{minHeight: {xs: 0, lg:450}}}>
                         <Stack sx={{flex: 6.5, borderRight: 'solid 1px #2D3131'}}>
-                            <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}, padding: {xs: 3, md: 6}}}>Codes</Typography>
+                            <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}, px: {xs: 3, md: 6}, pt: {xs: 3, md: 6}, pb: 2}}>Codes</Typography>
                             <Stack>
                                 {
                                     userReferral.map((item, index) => (
-                                        <Stack direction='row' gap={isMobileScreen ? 2 : 6} sx={{borderBottom: 'solid 1px #2D3131', padding: {xs: 3, md: 6}}} alignItems='center' key={index}>
+                                        <Stack direction='row' gap={isMobileScreen ? 2 : 6} sx={{borderBottom: 'solid 1px #2D3131', px: {xs: 3, md: 6}, py: {xs: 3, md: 4}}} alignItems='center' key={index}>
                                             <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color={item.redeemed ? 'primary' : 'white'} sx={{my:'auto', userSelect: 'none'}}>
                                                 {item.inviteCode}
                                             </Typography>
@@ -322,7 +239,7 @@ export const ExperienceBoard = () => {
                             </Stack>
                         </Stack>
                         <Stack sx={{flex: 11.5}}>
-                            <Stack direction='row' justifyContent='space-between' sx={{padding: {xs: 3, md: 6}}}>
+                            <Stack direction='row' justifyContent='space-between' sx={{px: {xs: 3, md: 6}, pt: {xs: 3, md: 6}, pb: 2}}>
                                 <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}}}>Active Codes</Typography>
                                 <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}}}>Referral XP</Typography>
                             </Stack>
@@ -331,7 +248,7 @@ export const ExperienceBoard = () => {
                                     userReferral.map((item, index) => {
                                         if(item.redeemed) {
                                             return (
-                                                <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{borderBottom: 'solid 1px #2D3131', padding: {xs: 3, md: 6}}} key={index}>
+                                                <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{borderBottom: 'solid 1px #2D3131', px: {xs: 3, md: 6}, py: {xs: 3, md: 4}}} key={index}>
                                                     <Stack direction='row' alignItems='center' gap={isMobileScreen ? 2 : 3}>
                                                         <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
                                                             {shortenWalletAddress(item.redeemer)}
@@ -344,7 +261,7 @@ export const ExperienceBoard = () => {
                                             )
                                         } else {
                                             return (
-                                                <Stack sx={{borderBottom: 'solid 1px #2D3131', padding: {xs: 3, md: 6}}} direction='row' alignItems='center' justifyContent='center' key={index}>
+                                                <Stack sx={{borderBottom: 'solid 1px #2D3131', px: {xs: 3, md: 6}, py: {xs: 3, md: 4}}} direction='row' alignItems='center' justifyContent='center' key={index}>
                                                     <Stack sx={{height: {xs: 20, sm: 24}}}>
                                                         <Typography sx={{fontSize:{xs: 12, md: 14}}} color='#D4D4D44D' margin='auto'>
                                                             No wallet has redeemed yet
