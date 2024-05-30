@@ -102,6 +102,7 @@ const HorizontalLayout = (props: LayoutProps) => {
 
   const router = useRouter()
   const isHomePath = router.pathname === '/';
+  const showWater = router.pathname === '/faucet';
 
   const closeAnnouncementBar = () => {
     setShowBar(false)
@@ -109,7 +110,7 @@ const HorizontalLayout = (props: LayoutProps) => {
 
   return (
     <HorizontalLayoutWrapper className='layout-wrapper'>
-      <iframe style={{position: 'fixed', width: '100%', height: 'calc(100% + 60px)'}} src='https://my.spline.design/waterv2copy-ff5ef8dc1c68ec421f00c0aeb688e639/' frameBorder='0' width='100%' height='100%'></iframe>
+      <iframe style={{display: showWater ? 'block': 'none', position: 'fixed', width: '100%', height: 'calc(100% + 60px)'}} src='https://my.spline.design/waterv2copy-ff5ef8dc1c68ec421f00c0aeb688e639/' frameBorder='0' width='100%' height='100%'></iframe>
       <MainContentWrapper className='layout-content-wrapper' sx={{ ...(contentHeightFixed && { maxHeight: '100vh' }), zIndex: 10 }}>
         {/* Navbar (or AppBar) and Navigation Menu Wrapper */}
         <AppBar
