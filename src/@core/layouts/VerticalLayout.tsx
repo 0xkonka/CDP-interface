@@ -68,7 +68,7 @@ const VerticalLayout = (props: LayoutProps) => {
   const toggleNavVisibility = () => setNavVisible(!navVisible)
 
   const router = useRouter()
-  const showWater = router.pathname === '/faucet';
+  const showWater = router.pathname === '/faucet' || router.pathname === '/referrals';
 
   return (
     <>

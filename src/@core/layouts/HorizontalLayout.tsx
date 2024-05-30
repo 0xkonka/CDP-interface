@@ -102,7 +102,7 @@ const HorizontalLayout = (props: LayoutProps) => {
 
   const router = useRouter()
   const isHomePath = router.pathname === '/';
-  const showWater = router.pathname === '/faucet';
+  const showWater = router.pathname === '/faucet' || router.pathname === '/referrals';
 
   const closeAnnouncementBar = () => {
     setShowBar(false)
