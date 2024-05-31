@@ -13,6 +13,7 @@ export const ExperienceBoard = () => {
 
     const [direction, setDirection] = useState('asc')
     const [sortBy, setSortBy] = useState('symbol')
+    const [showRange, setShowRange] = useState('top10')
     const theme = useTheme()
 
     const {userReferral} = usePoint()
@@ -71,14 +72,14 @@ export const ExperienceBoard = () => {
                         Leaderboard
                     </Typography>
                     <Stack direction='row' gap={4}>
-                        <Button sx={{ width: 'fit-content', color: 'white', py: 3, fontWeight: 400}}
+                        <Button sx={{ width: 'fit-content', color: showRange=='top10' ? 'white' : '#6B6D6D', py: 3, fontWeight: 400}}
                                 variant='outlined'
-                                color='primary'>
+                                color={showRange=='top10' ? 'primary' : 'secondary'} onClick={()=>{setShowRange('top10')}}>
                             See top 10
                         </Button>
-                        <Button sx={{ width: 'fit-content', color: '#6B6D6D', py: 3, fontWeight: 400, mr: 8}}
+                        <Button sx={{ width: 'fit-content', color: showRange=='myscore' ? 'white' : '#6B6D6D', py: 3, fontWeight: 400, mr: 8}}
                                 variant='outlined'
-                                color='secondary'>
+                                color={showRange=='myscore' ? 'primary' : 'secondary'} onClick={()=>{setShowRange('myscore')}}>
                             See my Score
                         </Button>
                     </Stack>
@@ -120,12 +121,12 @@ export const ExperienceBoard = () => {
                                 sx={{
                                     border: 'solid 1px transparent',
                                     borderRadius: '6px',
-                                    '&:hover': {
-                                        borderColor: theme.palette.primary.main,
-                                        'h5': {
-                                            color: theme.palette.primary.main,
-                                        }
-                                    },
+                                    // '&:hover': {
+                                    //     borderColor: theme.palette.primary.main,
+                                    //     'h5': {
+                                    //         color: theme.palette.primary.main,
+                                    //     }
+                                    // },
                                     display: { xs: 'none', lg: 'flex' },
                                     p: 3
                                 }}

@@ -18,12 +18,12 @@ interface Props {
 
 export const ActiveTaskSpecial = (props: Props) => {
     const {icon, title, exp, description, learnMoreLink, tooltip, from, to, percent} = props
-    const {isSmallScreen} = useGlobalValues()
+    const {isSmallScreen, isLargeScreen} = useGlobalValues()
 
     return (
         <Stack padding={4} borderRadius='10px' bgcolor='#171717' height='100%' justifyContent='space-between'>
-            <Stack direction='row' alignItems='center' justifyContent='space-between'>
-                <Stack direction='row' gap={2} alignItems='center'>
+            <Stack alignItems='start' justifyContent='space-between' mb={4} sx={{flexDirection: {xs: 'row', lg: 'column', xl: 'row'}}}>
+                <Stack direction='row' gap={2} alignItems='center' mt={2}>
                     <Image src={`/images/icons/points/${icon}.svg`}
                         alt={title} 
                         width={32}
@@ -31,10 +31,10 @@ export const ActiveTaskSpecial = (props: Props) => {
                         priority />
                     <Typography fontSize={isSmallScreen ? 14 : 16} fontWeight={700} color='white'>{title}</Typography>
                 </Stack>
-                <Typography variant={isSmallScreen ? 'h3' : 'h2'} fontWeight={400} textAlign='end' fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} color='primary'>{exp} XP</Typography>
-            </Stack>
-            <Stack direction='row' justifyContent='end' mb={4}>
-                <Typography fontSize={isSmallScreen ? 10 : 12} fontWeight={400} color='#C6C6C7'>per day / per dollar</Typography>
+                <Stack alignItems='end'>
+                    <Typography variant={isSmallScreen ? 'h3' : 'h2'} fontWeight={400} whiteSpace='nowrap' textAlign='end' fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} color='primary'>{exp} XP</Typography>
+                    <Typography fontSize={isSmallScreen ? 10 : 12} fontWeight={400} color='#C6C6C7'>per day / per dollar</Typography>
+                </Stack>
             </Stack>
             <Stack height={200} justifyContent='space-between'>
                 <Typography variant='subtitle2' color='#C6C6C7' lineHeight={1.25}>{description}</Typography>
@@ -89,18 +89,18 @@ export const ActiveTaskSpecial = (props: Props) => {
             </Stack>
             <Stack>
                 <Grid container spacing={3.5}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} sm={6}>
                         <Link href={title=='Borrowing' ? '/modules' : '/earn'}>
-                            <Button sx={{width: 1, color: 'white', py: 3}}
+                            <Button sx={{width: 1, height: 1, color: 'white', py: 3}}
                                     variant='outlined'
                                     color='primary'>
                                 {title=='Borrowing' ? 'Borrow' : 'Stake'}
                             </Button>
                         </Link>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} sm={6}>
                         <Link href={learnMoreLink}>
-                            <Button sx={{width: 1, color: 'white', py: 3}}
+                            <Button sx={{width: 1, height: 1, color: 'white', py: 3}}
                                     variant='outlined'
                                     color='secondary'>
                                 Learn more
