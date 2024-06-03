@@ -3,6 +3,7 @@ import { useAccount } from 'wagmi'
 import { RainbowKitProvider, darkTheme, ConnectButton } from '@rainbow-me/rainbowkit'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+
 interface Props {
   show?: 'always' | 'connected' | 'disconnected'
 }
