@@ -9,13 +9,14 @@ import { usePoint } from '@/context/PointContext'
 import { useAccount } from 'wagmi'
 import ConnectWalletWithIcon from '@/views/components/ConnectWalletWithIcon'
 import { useRouter } from 'next/router'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next/types';
 
-const Home = () => {
+const Home = ({serverParamCode}: {serverParamCode: string}) => {
     const router = useRouter()
     
     // Get the inviteCode from the query object
-    const paramCode = router.query?.code?.toString() || ''
-
+    const paramCode = serverParamCode || router.query?.code?.toString() || ''
+    
     const {isMobileScreen, isSmallScreen, isMediumScreen, isMediumLargeScreen} = useGlobalValues()
     const [currentStep, setCurrentStep] = useState(1)
     const [progressWidth, setProgressWidth] = useState('')
@@ -23,55 +24,67 @@ const Home = () => {
     const { signMsg, validateInviteCode, isUserRedeemed, redeemedCode } = usePoint()
     const [code, setCode] = useState('')
     const [isValidated, setIsValidated] = useState(false)
-    const [isRedeemd, setIsRedeemd] = useState(isUserRedeemed)
     const [isChecking, setIsChecking] = useState(false)
     
+    // Set steps based on validation states
     useEffect(() => {
+        document.cookie = "user-redeemed=false; path=/";
         if(!isValidated) {
             setCurrentStep(1)
-        } else if(!isConnected || !isRedeemd) {
+        } else if(!isConnected || !isUserRedeemed) {
             setCurrentStep(2)
         } else {
             setCurrentStep(3)
+            document.cookie = "user-redeemed=true; path=/";
+            setCode(redeemedCode)
         }
-    }, [isValidated, isConnected, isRedeemd])
+    }, [isValidated, isConnected, isUserRedeemed])
     
+    /*
+    // Set state and cookies.
     useEffect(() => {
-        console.log('isConnected: ', isConnected)
+        // console.log('isConnected: ', isConnected)
         console.log('isUserRedeemed: ', isUserRedeemed)
         if(isConnected && isUserRedeemed) {     // If the wallet connected and it is redeemed wallet.
+            // console.log('Redeemed Code: ', redeemedCode)
             document.cookie = "user-redeemed=true; path=/";
             setCode(redeemedCode)
             setIsValidated(true)
-            setIsRedeemd(true)
-            // const codeInputs = document.getElementsByClassName('react-code-input')[0].getElementsByTagName('input');
-
-            // if(redeemedCode != '' && codeInputs.length == 5) {                   /// Don't remove comments here
-            //     codeInputs[0].value = redeemedCode[0];
-            //     codeInputs[1].value = redeemedCode[1] || '';
-            //     codeInputs[2].value = redeemedCode[2] || '';
-            //     codeInputs[3].value = redeemedCode[3] || '';
-            //     codeInputs[4].value = redeemedCode[4] || '';
-            //           console.log('Changing Code:', code)
-            // }
-
-        // } else if(paramCode.length === 5) {
-        //     setCode(paramCode)
-        //     // setIsValidated(true)
-        //     setIsRedeemd(false)
+            // setIsRedeemd(true)
         } else {
             document.cookie = "user-redeemed=false; path=/";
             setIsValidated(false)
-            setIsRedeemd(false)
+            // setIsRedeemd(false)
         }    
     }, [isConnected, isUserRedeemed, redeemedCode])
+    */
+
+    // If user connect wallet and it is redeemed wallet, set the state as validated.
+    useEffect(() => {
+        if(isConnected && isUserRedeemed) {
+            setIsValidated(true)
+        }
+    }, [isUserRedeemed, isConnected])
+
+    // If the URL has the default code, we should set the code value as default.
+    useEffect(() => {
+        const validateParamCode = async () => {
+            if(paramCode != '' ) {
+                const result = await validateInviteCode(paramCode.toUpperCase(), false)
+                if(result) {
+                    setIsValidated(true)
+                }
+            }
+        }
+        validateParamCode()
+    }, [paramCode])
 
     useEffect(() => {
         setProgressWidth(`calc(${16.5 * (2 * currentStep - 1)}%${currentStep == 3 ? ' + 10px': ''})`)
     }, [currentStep])
 
     const enterCode = async () => {
-        if(isValidated || paramCode.length != 0) {
+        if(isValidated) {
             return
         }
         setIsChecking(true)
@@ -90,22 +103,26 @@ const Home = () => {
         }
     }
 
+    const handleEnterPress = (event:React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+          // Call your submit function here
+          enterCode()
+        }
+    };
+
     const signWalletToRedeem = async () => {
-        if(isRedeemd) {
+        if(isUserRedeemed) {
             showToast("success", "Enter App", "You've already redeemed your invite code.", 3000)
             return;
         }
         try {
-            const result = await signMsg(code.toUpperCase())
+            const result = await signMsg(paramCode ? paramCode.toUpperCase() : code.toUpperCase())
             if(result) {
                 showToast('success', 'Enter App', 'You have successfully redeemed invite code.', 3000)
-                setIsRedeemd(true)
                 return
             }
-            setIsRedeemd(false)
         } catch (error) {
             console.error("Error Redeeming invite code", error);
-            setIsRedeemd(false)
         }
     }
     
@@ -126,13 +143,16 @@ const Home = () => {
         padding: 6,
         backgroundColor: '#0c1c174b',
         color: '#67DAB1',
-        border: '1px solid #67dab14b',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: '#67dab14b',
         fontSize: 22,
         textTransform: 'uppercase',
         textAlign: 'center',
         fontFamily: `'Britanica-HeavySemiExpanded', sans-serif`,
         outline: 'none'
     }
+    const inptuStyle1: CSSProperties = {...inputStyle}
 
     return (
         <Box>
@@ -170,24 +190,38 @@ const Home = () => {
 
                     <Wizard step={1} isCompleted={currentStep >= 1} header='Enter Code' description='Enter an invite code to verify its eligibility. '>
                         <Stack justifyContent='space-between' alignItems='center' sx={{width: 1, flexDirection: {xs: 'column', xl: 'row'}, alignItems: {xs: 'center', lg: 'start', xl: 'center'}, gap: {xs: 8, lg: 4, xl: 4}}}>
-                            <Stack direction='row' justifyContent='center' className='tren-connect-box' sx={{width: 'fit-content'}}>
-                                <ReactCodeInput
-                                    key={isValidated && isConnected && isRedeemd ? code : ''}
-                                    name='pinCode'
-                                    type='text'
-                                    placeholder=''
-                                    fields={5}
-                                    onChange={setCode}
-                                    value={code}
-                                    inputMode='verbatim'
-                                    inputStyle={inputStyle}
-                                    pattern='0-9'
-                                    autoFocus={code.length !== 0}
-                                    // Check if the code comes from previous landing.
-                                    // Check if it is already validated code 
-                                    // In above two cases, we set disable true
-                                    disabled={isValidated || paramCode.length > 0}
-                                />
+                            <Stack direction='row' justifyContent='center' className='tren-connect-box' sx={{width: 'fit-content'}} onKeyDown={handleEnterPress}>
+                                {
+                                    (paramCode && !isUserRedeemed) && 
+                                    <ReactCodeInput
+                                        key={paramCode}
+                                        name='pinCode'
+                                        type='text'
+                                        placeholder=''
+                                        fields={5}
+                                        value={paramCode}
+                                        inputMode='verbatim'
+                                        inputStyle={inptuStyle1}
+                                        autoFocus={code.length !== 0}
+                                        disabled={paramCode.length > 0}
+                                    />
+                                }
+                                {
+                                    (!paramCode || isUserRedeemed) &&
+                                    <ReactCodeInput
+                                        key={isValidated && isConnected && isUserRedeemed ? code : ''}
+                                        name='pinCode1'
+                                        type='text'
+                                        placeholder=''
+                                        fields={5}
+                                        onChange={setCode}
+                                        value={code}
+                                        inputMode='verbatim'
+                                        inputStyle={inputStyle}
+                                        autoFocus={code.length !== 0}
+                                        disabled={isValidated}
+                                    />
+                                }
                             </Stack>
                             <Button
                                 sx={{
@@ -201,11 +235,11 @@ const Home = () => {
                                     width: {xs: '100%', sm: 'fit-content'},
                                 }}
                                 variant='contained'
-                                endIcon={!isValidated && paramCode.length == 0 ? <></> : <Icon icon='mingcute:check-fill' fontSize={20}/>}
+                                endIcon={!isValidated ? <></> : <Icon icon='mingcute:check-fill' fontSize={20}/>}
                                 // disabled={code.length < 5}
                                 onClick={enterCode}
                             >
-                            {!isValidated && paramCode.length == 0 ? 'Enter Code' : 'Code Eligible'}
+                            {!isValidated ? (paramCode ? 'Invalid Code' : 'Enter Code') : 'Code Eligible'}
                             {
                             isChecking && 
                             <CircularProgress color='primary' sx={{ml: 4, height: '20px !important', width: '20px !important', color: '#020101'}} />
@@ -234,6 +268,7 @@ const Home = () => {
                                     width: 1,
                                 }}
                                 variant='outlined'
+                                disabled={!isValidated}
                             >
                                 Sign Message
                                 <Icon icon='solar:key-outline' fontSize={isMobileScreen ? 16: 20} style={{marginLeft: 10}}/>
@@ -297,4 +332,18 @@ const Home = () => {
     )
 }
 
+export const getServerSideProps: GetServerSideProps = async(context: GetServerSidePropsContext) => {
+    console.log('Query object:', context.query);
+    // Get the 'code' query parameter from the context
+    const { query } = context;
+    const serverParamCode = query.code ? query.code.toString() : '';
+    console.log('ServerSide: ', serverParamCode)
+  
+    return {
+      props: {
+        serverParamCode
+      }
+    };
+}
+  
 export default Home
