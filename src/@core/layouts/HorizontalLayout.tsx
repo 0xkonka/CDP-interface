@@ -152,7 +152,7 @@ const HorizontalLayout = (props: LayoutProps) => {
               }}>
                 <Typography sx={{color: '#000', fontWeight: 500, textAlign: 'center'}}>
                   Tren has been accepted into Mode Network’s Yield Accelerator.&nbsp;
-                  <Link style={{fontWeight: 600, color: '#000'}} href='https://mode.mirror.xyz/lQu3X5t-cKve4Yu2gfa49rPRS_0rhMq-4zXUyFCPH8M' target='_blank'>Read more</Link>
+                  <Link style={{fontWeight: 600, color: '#000'}} href='https://blog.tren.finance/mode-announcement' target='_blank'>Read more</Link>
                 </Typography>
                 {/* <Box sx={{width: 16, height: 16, position: 'absolute', right: 24, top: '50%', transform: 'translate(0, -50%)', cursor: 'pointer'}} onClick={(closeAnnouncementBar)}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
