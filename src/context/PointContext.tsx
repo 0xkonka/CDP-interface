@@ -79,7 +79,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
     getUserReferral()
   }, [account])
 
-  const validateInviteCode = async (inviteCode: string, showSuccessToast: boolean = true) => {
+  const validateInviteCode = async (inviteCode: string, showSuccessToast?: boolean) => {
     // if (!account) return
 
     try {
