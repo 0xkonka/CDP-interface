@@ -13,6 +13,7 @@ export const ExperienceBoard = () => {
 
     const [direction, setDirection] = useState('asc')
     const [sortBy, setSortBy] = useState('symbol')
+    const [showRange, setShowRange] = useState('top10')
     const theme = useTheme()
 
     const {userReferral} = usePoint()
@@ -71,14 +72,14 @@ export const ExperienceBoard = () => {
                         Leaderboard
                     </Typography>
                     <Stack direction='row' gap={4}>
-                        <Button sx={{ width: 'fit-content', color: 'white', py: 3, fontWeight: 400}}
+                        <Button sx={{ width: 'fit-content', color: showRange=='top10' ? 'white' : '#6B6D6D', py: 3, fontWeight: 400}}
                                 variant='outlined'
-                                color='primary'>
+                                color={showRange=='top10' ? 'primary' : 'secondary'} onClick={()=>{setShowRange('top10')}}>
                             See top 10
                         </Button>
-                        <Button sx={{ width: 'fit-content', color: '#6B6D6D', py: 3, fontWeight: 400, mr: 8}}
+                        <Button sx={{ width: 'fit-content', color: showRange=='myscore' ? 'white' : '#6B6D6D', py: 3, fontWeight: 400, mr: 8}}
                                 variant='outlined'
-                                color='secondary'>
+                                color={showRange=='myscore' ? 'primary' : 'secondary'} onClick={()=>{setShowRange('myscore')}}>
                             See my Score
                         </Button>
                     </Stack>
@@ -120,12 +121,12 @@ export const ExperienceBoard = () => {
                                 sx={{
                                     border: 'solid 1px transparent',
                                     borderRadius: '6px',
-                                    '&:hover': {
-                                        borderColor: theme.palette.primary.main,
-                                        'h5': {
-                                            color: theme.palette.primary.main,
-                                        }
-                                    },
+                                    // '&:hover': {
+                                    //     borderColor: theme.palette.primary.main,
+                                    //     'h5': {
+                                    //         color: theme.palette.primary.main,
+                                    //     }
+                                    // },
                                     display: { xs: 'none', lg: 'flex' },
                                     p: 3
                                 }}
@@ -281,58 +282,6 @@ export const ExperienceBoard = () => {
                             </Stack>
                         </Stack>
                     </Stack>
-                    
-                    {/* <Stack direction='row' justifyContent='space-between' sx={{mb: {xs: 0, lg: 20}}}>
-                        <Stack sx={{flex: 6.5, borderRight: 'solid 1px #2D3131'}}>
-                            <Stack>
-                                {
-                                    userReferral.map((item, index) => (
-                                        <Stack direction='row' gap={isMobileScreen ? 1 : 3} sx={{borderBottom: 'solid 1px #2D3131', padding: 6}} alignItems='center' key={index}>
-                                            <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color={item.redeemed ? 'primary' : 'white'} sx={{my:'auto', userSelect: 'none', textDecorationThickness: 2, textDecoration: item.redeemed ? 'line-through' : 'none'}}>
-                                                {item.inviteCode}
-                                            </Typography>
-                                            <Box display={item.redeemed ? 'none' : 'block'} height={isMobileScreen ? 20 : 24}><Copy text={item.inviteCode}/></Box>
-                                        </Stack>        
-                                    ))
-                                }
-                            </Stack>
-                        </Stack>
-                        <Stack sx={{flex: 11.5}}>
-                            <Stack>
-                                {
-                                    userReferral.map((item, index) => {
-                                        if(item.redeemed) {
-                                            return (
-                                                <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{borderBottom: 'solid 1px #2D3131', padding: 6}} key={index}>
-                                                    <Stack direction='row' alignItems='center' gap={isMobileScreen ? 2 : 3}>
-                                                        <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
-                                                            {shortenWalletAddress(item.redeemer)}
-                                                        </Typography>
-                                                    </Stack>
-                                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
-                                                        {formatToThousandsInt(item.xpPoint || 0)} XP
-                                                    </Typography>
-                                                </Stack> 
-                                            )
-                                        } else {
-                                            return (
-                                                <Stack sx={{borderBottom: 'solid 1px #2D3131', padding: 6}} direction='row' alignItems='center' justifyContent='center' key={index}>
-                                                    <Typography variant='subtitle2' color='#D4D4D44D'>No wallet has redeemed&nbsp;
-                                                    <Typography component='span' variant='subtitle2' color='#D4D4D44D' sx={{display:{xs: 'none', sm: 'inline'}}}>this code </Typography>
-                                                    yet
-                                                    </Typography>
-                                                </Stack>
-                                            )
-                                        }
-                                    })
-                                }
-                                <Stack direction='row' alignItems='center' justifyContent='space-between'>
-                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#FFFFFF99' sx={{width: {xs: 124, sm: 166}, textAlign: 'end'}}>Total</Typography>
-                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={600} color='primary'> {formatToThousandsInt(totalxpPoint)} XP </Typography>
-                                </Stack>
-                            </Stack>
-                        </Stack>
-                    </Stack> */}
                 </Box>
             </Grid>
         </Grid>

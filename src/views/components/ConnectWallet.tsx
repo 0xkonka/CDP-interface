@@ -8,10 +8,11 @@ interface Props {
   show?: 'always' | 'connected' | 'disconnected'
 }
 
-export default function ConnectWallet({ show = 'always' }: Props) {
+export default function ConnectWallet({ show = 'always'}: Props) {
   const { isConnected } = useAccount()
-
   const router = useRouter()
+  const paramCode = router.query?.code?.toString() || ''
+
   const connectedStyle = {
     px: 2, 
     background: '#1A1D1E91', 
@@ -21,16 +22,15 @@ export default function ConnectWallet({ show = 'always' }: Props) {
   }
   
   useEffect(() => {
-    if(!isConnected) {
+    if(router.pathname !== '/' && !isConnected) {
       router.replace('/')
     }
-    // document.cookie = "user-redeemed=false; path=/";
     if (isConnected) {
       document.cookie = "wallet-connected=true; path=/";
     } else {
       document.cookie = "wallet-connected=false; path=/";
     }
-  }, [isConnected])
+  }, [isConnected, paramCode])
 
   if ((show === 'connected' && !isConnected) || (show === 'disconnected' && isConnected)) return null
   return (
