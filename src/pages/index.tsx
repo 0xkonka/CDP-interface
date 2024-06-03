@@ -103,6 +103,13 @@ const Home = ({serverParamCode}: {serverParamCode: string}) => {
         }
     }
 
+    const handleEnterPress = (event:React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+          // Call your submit function here
+          enterCode()
+        }
+    };
+
     const signWalletToRedeem = async () => {
         if(isUserRedeemed) {
             showToast("success", "Enter App", "You've already redeemed your invite code.", 3000)
@@ -183,7 +190,7 @@ const Home = ({serverParamCode}: {serverParamCode: string}) => {
 
                     <Wizard step={1} isCompleted={currentStep >= 1} header='Enter Code' description='Enter an invite code to verify its eligibility. '>
                         <Stack justifyContent='space-between' alignItems='center' sx={{width: 1, flexDirection: {xs: 'column', xl: 'row'}, alignItems: {xs: 'center', lg: 'start', xl: 'center'}, gap: {xs: 8, lg: 4, xl: 4}}}>
-                            <Stack direction='row' justifyContent='center' className='tren-connect-box' sx={{width: 'fit-content'}}>
+                            <Stack direction='row' justifyContent='center' className='tren-connect-box' sx={{width: 'fit-content'}} onKeyDown={handleEnterPress}>
                                 {
                                     (paramCode && !isUserRedeemed) && 
                                     <ReactCodeInput
