@@ -91,18 +91,18 @@ const HorizontalNavLink = (props: Props) => {
           className={clsx({ active: isNavLinkActive() })}
           target={item.openInNewTab ? '_blank' : undefined}
           href={item.path === undefined ? '/' : `${item.path}`}
-          onClick={e => {
-            if(!isConnected) {
-              showToast('success', 'Welcome', 'You should connect wallet to view protocol.', 3000)
-            }
-            else if(!isUserRedeemed) {
-              showToast('success', 'Welcome', 'You should redeem the code to view protocol.', 3000)
-            }
-            if (item.path === undefined) {
-              e.preventDefault()
-              e.stopPropagation()
-            }
-          }}
+          // onClick={e => {
+          //   if(!isConnected) {
+          //     showToast('success', 'Welcome', 'You should connect wallet to view protocol.', 3000)
+          //   }
+          //   else if(!isUserRedeemed) {
+          //     showToast('success', 'Welcome', 'You should redeem the code to view protocol.', 3000)
+          //   }
+          //   if (item.path === undefined) {
+          //     e.preventDefault()
+          //     e.stopPropagation()
+          //   }
+          // }}
           sx={{
             px: 6,
             ...(item.disabled ? { pointerEvents: 'none' } : { cursor: 'pointer' }),
