@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import Box from '@mui/material/Box'
 import Chip from '@mui/material/Chip'
 import List from '@mui/material/List'
+import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -78,6 +79,10 @@ const HorizontalNavLink = (props: Props) => {
   return (
     <CanViewNavLink navLink={item}>
       <Wrapper {...(!hasParent ? { component: 'div', sx: { py: settings.skin === 'bordered' ? 2 : 2.75 } } : {})}>
+        <Button
+        href={item.path}>
+          Enter Test
+        </Button>
         <ListItem
           component={Link}
           passHref 
