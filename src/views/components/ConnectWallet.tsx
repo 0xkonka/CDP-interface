@@ -22,9 +22,9 @@ export default function ConnectWallet({ show = 'always'}: Props) {
   }
   
   useEffect(() => {
-    if(router.pathname !== '/' && !isConnected) {
-      router.replace('/')
-    }
+    // if(router.pathname !== '/' && !isConnected) {
+    //   router.replace('/')
+    // }
     if (isConnected) {
       document.cookie = "wallet-connected=true; path=/";
     } else {

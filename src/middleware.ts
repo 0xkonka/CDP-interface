@@ -5,6 +5,8 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
     const walletConnected = request.cookies.get('wallet-connected');
     const userRedeemed = request.cookies.get('user-redeemed');
+    console.log('Cookie: Wallet Connected: ', walletConnected)
+    console.log('Cookie: userRedeemed: ', userRedeemed)
     if(!walletConnected || walletConnected.value != 'true' || !userRedeemed || userRedeemed.value != 'true') {
       console.log("Hello, here is middleware redirecting")
       return NextResponse.redirect(new URL('/', request.url))
