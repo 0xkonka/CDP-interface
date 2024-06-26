@@ -333,11 +333,8 @@ const Home = ({serverParamCode}: {serverParamCode: string}) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async(context: GetServerSidePropsContext) => {
-    console.log('Query object:', context.query);
-    // Get the 'code' query parameter from the context
     const { query } = context;
     const serverParamCode = query.code ? query.code.toString() : '';
-    console.log('ServerSide: ', serverParamCode)
   
     return {
       props: {
