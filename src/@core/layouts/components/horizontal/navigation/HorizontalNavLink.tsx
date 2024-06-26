@@ -3,6 +3,8 @@ import { ElementType, Fragment } from 'react'
 
 // ** Next Imports
 // import Link from 'next/link'
+
+// === Jordan use this Link from @mui for temporary because next/link occurs cache problem when read cookie in the middleware.
 import { Link } from '@mui/material'
 import { useRouter } from 'next/router'
 
