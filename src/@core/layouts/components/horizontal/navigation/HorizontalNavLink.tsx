@@ -2,7 +2,8 @@
 import { ElementType, Fragment } from 'react'
 
 // ** Next Imports
-import Link from 'next/link'
+// import Link from 'next/link'
+import { Link } from '@mui/material'
 import { useRouter } from 'next/router'
 
 // ** MUI Imports
@@ -80,7 +81,7 @@ const HorizontalNavLink = (props: Props) => {
       <Wrapper {...(!hasParent ? { component: 'div', sx: { py: settings.skin === 'bordered' ? 2 : 2.75 } } : {})}>
         <ListItem
           component={Link}
-          passHref 
+          // passHref 
           disabled={item.disabled}
           {...(item.disabled && { tabIndex: -1 })}
           className={clsx({ active: isNavLinkActive() })}
@@ -88,9 +89,13 @@ const HorizontalNavLink = (props: Props) => {
           href={item.path === undefined ? '/' : `${item.path}`}
           onClick={e => {
             if(!isConnected) {
+              e.preventDefault()
+              e.stopPropagation()
               showToast('success', 'Welcome', 'You should connect wallet to view protocol.', 3000)
             }
             else if(!isUserRedeemed) {
+              e.preventDefault()
+              e.stopPropagation()
               showToast('success', 'Welcome', 'You should redeem the code to view protocol.', 3000)
             }
             if (item.path === undefined) {
