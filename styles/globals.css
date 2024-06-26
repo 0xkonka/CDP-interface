@@ -10,17 +10,9 @@ body {
 }
 
 ::-webkit-scrollbar {
-  /* width: 6px; */
   width: 0px;
   height: 2px;
 }
-/* ::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background-color: #67DAB1;
-  border-radius: 20px;
-} */
 
 #leaderboard::-webkit-scrollbar {
   width: 6px;
@@ -62,6 +54,10 @@ code[class*='language-'] {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 400;
+}
+
+.font-britanica {
+  font-family: 'Britanica-HeavySemiExpanded', sans-serif;
 }
 
 @font-face {
