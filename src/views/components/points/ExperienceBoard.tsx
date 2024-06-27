@@ -276,7 +276,7 @@ export const ExperienceBoard = () => {
                             </Stack>
                             <Stack direction='row' alignItems='center' justifyContent='space-between' paddingX={6} paddingY={4} marginTop='auto'>
                                 <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={600} color='#FFF'>Total XP</Typography>
-                                <Typography sx={{fontSize:{xs: 16, md:24}}} fontWeight={400} color='primary' fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`}> 
+                                <Typography sx={{fontSize:{xs: 16, md:24}}} fontWeight={400} color='primary' className='font-britanica'> 
                                     {formatToThousandsInt(totalxpPoint)} XP 
                                 </Typography>
                             </Stack>

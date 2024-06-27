@@ -72,6 +72,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 import 'src/iconify-bundle/icons-bundle-react'
 
 // ** Global css styles
+import '../../styles/code-input.css'
 import '../../styles/globals.css'
 import '../../styles/rainbowwallet.css'
 import '@rainbow-me/rainbowkit/styles.css'

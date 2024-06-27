@@ -18,7 +18,7 @@ export const Wizard: React.FC<Props> = ({header, description, step, isCompleted 
             <Box position='absolute' left='50%' sx={{top:{xs: -80, lg: -140}, transform: 'translateX(-50%)', border: 'solid 1px #67DAB133', borderRadius: '100%', width: 48, height: 48, 
                 background: {xs: '#212c28', lg: 'linear-gradient(73deg, rgba(26, 48, 40, 0.00) 2.62%, rgba(52, 97, 81, 0.20) 51.46%, rgba(26, 48, 40, 0.00) 101%)'}, zIndex: 1}}>
                 <Stack justifyContent='center' alignItems='center' sx={{width: 1, height: 1}}>
-                    <Typography sx={{fontFamily: `'Britanica-HeavySemiExpanded', sans-serif`}} fontSize={24}>{step}</Typography>
+                    <Typography className='font-britanica' fontSize={24}>{step}</Typography>
                 </Stack>
             </Box>
             <Box position='absolute' left='50%' sx={{transform: 'translateX(-50%)', width: {xs: 18, lg: 'auto'},  top: {xs: -9, lg: -77}}}>
