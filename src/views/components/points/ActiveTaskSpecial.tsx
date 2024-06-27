@@ -32,7 +32,7 @@ export const ActiveTaskSpecial = (props: Props) => {
                     <Typography fontSize={isSmallScreen ? 14 : 16} fontWeight={700} color='white'>{title}</Typography>
                 </Stack>
                 <Stack alignItems='end'>
-                    <Typography variant={isSmallScreen ? 'h3' : 'h2'} fontWeight={400} whiteSpace='nowrap' textAlign='end' fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} color='primary'>{exp} XP</Typography>
+                    <Typography variant={isSmallScreen ? 'h3' : 'h2'} fontWeight={400} whiteSpace='nowrap' textAlign='end' className='font-britanica' color='primary'>{exp} XP</Typography>
                     <Typography fontSize={isSmallScreen ? 10 : 12} fontWeight={400} color='#C6C6C7'>per day / per dollar</Typography>
                 </Stack>
             </Stack>

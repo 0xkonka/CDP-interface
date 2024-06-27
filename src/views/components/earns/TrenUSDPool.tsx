@@ -134,7 +134,7 @@ export const TrenUSDPool = () => {
                                     <Typography color='#D4D4D4' mb={2}>
                                         Wallet Balance
                                     </Typography>
-                                    <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' mb={6} fontWeight={400}>
+                                    <Typography className='font-britanica' fontSize={24} color='white' mb={6} fontWeight={400}>
                                         {Math.floor(userStabilityInfo.walletBalance) == 0 ? '-' : formatToThousandsInt(userStabilityInfo.walletBalance) + ' trenUSD'}
                                     </Typography>
                                     <Button variant='contained' color='primary'
@@ -152,7 +152,7 @@ export const TrenUSDPool = () => {
                                     <Typography color='#D4D4D4' mb={2}>
                                         Staked trenUSD
                                     </Typography>
-                                    <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' mb={6}>
+                                    <Typography className='font-britanica' fontSize={24} color='white' mb={6}>
                                         {userDeposit == undefined || Math.floor(+formatEther(userDeposit)) == 0 ? '-' : formatToThousandsInt(+formatEther(userDeposit || BigInt(0))) + ' trenUSD'}
                                     </Typography>
                                     <Button variant='outlined' color='primary'
@@ -170,7 +170,7 @@ export const TrenUSDPool = () => {
                                     <Typography color='#D4D4D4' mb={2}>
                                         Rewards
                                     </Typography>
-                                    <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' mb={6}>
+                                    <Typography className='font-britanica' fontSize={24} color='white' mb={6}>
                                         {userDebtGain == undefined || userDebtGain == BigInt(0) ? '-' : formatMoney(+formatEther(userDebtGain || BigInt(0))) + ' TREN'}
                                     </Typography>
                                     <Button variant='outlined'

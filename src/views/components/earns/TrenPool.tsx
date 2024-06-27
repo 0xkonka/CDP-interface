@@ -134,7 +134,7 @@ export const TrenPool = () => {
                         <Typography color='#D4D4D4' mb={2}>
                             Wallet Balance
                         </Typography>
-                        <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' mb={6} fontWeight={400}>
+                        <Typography className='font-britanica' fontSize={24} color='white' mb={6} fontWeight={400}>
                             -
                         </Typography>
                         <Button variant='contained' color='primary'
@@ -152,7 +152,7 @@ export const TrenPool = () => {
                         <Typography color='#D4D4D4' mb={2}>
                             Staked trenUSD
                         </Typography>
-                        <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' mb={6}>
+                        <Typography className='font-britanica' fontSize={24} color='white' mb={6}>
                             -
                         </Typography>
                         <Button variant='outlined' color='primary'
@@ -170,7 +170,7 @@ export const TrenPool = () => {
                         <Typography color='#D4D4D4' mb={2}>
                             Rewards
                         </Typography>
-                        <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' mb={6}>
+                        <Typography className='font-britanica' fontSize={24} color='white' mb={6}>
                             -
                         </Typography>
                         <Button variant='outlined'

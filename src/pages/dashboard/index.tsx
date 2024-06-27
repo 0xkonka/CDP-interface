@@ -72,23 +72,23 @@ const Dashboard = () => {
             }}>
                 <Box sx={statBoxStyle}>
                     <Typography fontWeight={400} color='#C6C6C799' sx={{fontSize: {xs: 14, lg: 18}}}>Total Collateral</Typography>
-                    <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} color='#FFF' lineHeight='normal' sx={{fontSize: {xs: 24, lg: 46}}}>232. XP</Typography>
+                    <Typography className='font-britanica' color='#FFF' lineHeight='normal' sx={{fontSize: {xs: 24, lg: 46}}}>232. XP</Typography>
                 </Box>
                 <Box sx={statBoxStyle}>
                     <Typography fontWeight={400} color='#C6C6C799' sx={{fontSize: {xs: 14, lg: 18}}}>Total Debts</Typography>
-                    <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} color='#FFF' lineHeight='normal' sx={{fontSize: {xs: 24, lg: 46}}}>24.1</Typography>
+                    <Typography className='font-britanica' color='#FFF' lineHeight='normal' sx={{fontSize: {xs: 24, lg: 46}}}>24.1</Typography>
                 </Box>
                 <Box sx={statBoxStyle}>
                     <Typography fontWeight={400} color='#C6C6C799' sx={{fontSize: {xs: 14, lg: 18}}}>Stability Pool</Typography>
-                    <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} color='#FFF' lineHeight='normal' sx={{fontSize: {xs: 24, lg: 46}}}>#1,321</Typography>
+                    <Typography className='font-britanica' color='#FFF' lineHeight='normal' sx={{fontSize: {xs: 24, lg: 46}}}>#1,321</Typography>
                 </Box>
                 <Box sx={statBoxStyle}>
                     <Typography fontWeight={400} color='#C6C6C799' sx={{fontSize: {xs: 14, lg: 18}}}>Staked</Typography>
-                    <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} color='#FFF' lineHeight='normal' sx={{fontSize: {xs: 24, lg: 46}}}>50 XP</Typography>
+                    <Typography className='font-britanica' color='#FFF' lineHeight='normal' sx={{fontSize: {xs: 24, lg: 46}}}>50 XP</Typography>
                 </Box>
                 <Box sx={statBoxStyle}>
                     <Typography fontWeight={400} color='#C6C6C799' sx={{fontSize: {xs: 14, lg: 18}}}>Net Worth</Typography>
-                    <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} color='#FFF' lineHeight='normal' sx={{fontSize: {xs: 24, lg: 46}}}>50 XP</Typography>
+                    <Typography className='font-britanica' color='#FFF' lineHeight='normal' sx={{fontSize: {xs: 24, lg: 46}}}>50 XP</Typography>
                 </Box>
             </Stack>
             <Grid container spacing={statBoxStyle ? 6 : 10} sx={{ mt: {xs: 0, lg:30} }}>
@@ -149,7 +149,7 @@ const Dashboard = () => {
                         <Box>
                             <Typography color='#D4D4D4' sx={{textAlign: {xs: 'center', xlg: 'left'}}}>Wallet Balance</Typography>
                             <Typography fontSize={24} color='#FFF' sx={{textAlign: {xs: 'center', sm: 'left'}}}>
-                                <span style={{fontFamily: `'Britanica-HeavySemiExpanded', sans-serif`}}>200 </span>
+                                <span className='font-britanica'>200 </span>
                                 trenUSD
                             </Typography>
                         </Box>
@@ -166,7 +166,7 @@ const Dashboard = () => {
                         <Box>
                             <Typography color='#D4D4D4' sx={{textAlign: {xs: 'center', xlg: 'left'}}}>Staked trenUSD</Typography>
                             <Typography fontSize={24} color='#FFF' sx={{textAlign: {xs: 'center', sm: 'left'}}}>
-                                <span style={{fontFamily: `'Britanica-HeavySemiExpanded', sans-serif`}}>400 </span>
+                                <span className='font-britanica'>400 </span>
                                 trenUSD
                             </Typography>
                         </Box>
