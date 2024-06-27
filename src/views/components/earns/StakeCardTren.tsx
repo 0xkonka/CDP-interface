@@ -21,7 +21,7 @@ export const StakeCardTren = (props: Props) => {
         
             <Stack position='relative' direction='column' alignItems='center' px={2.5} py={6} sx={{opacity: 0.05}}>
                 <CustomChip label='Staked' color='secondary' variant='filled' sx={{px: 3, mb: 6}}/>
-                <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} variant='h2' color='white' mb={4}>{balanceTren} TREN</Typography>
+                <Typography className='font-britanica' variant='h2' color='white' mb={4}>{balanceTren} TREN</Typography>
                 <Typography color='#98999D' mb={6}>~ ${balanceUSD}USD</Typography>
                 <Button variant='outlined' color='secondary' sx={{maxWidth: '100%', width: 450, py: {xs: 2, lg: 3}, color: 'white', mb: 6, fontSize: {xs: 16, md: 18}, fontWeight: 400, borderRadius: '10px'}}>
                     Claim Rewards

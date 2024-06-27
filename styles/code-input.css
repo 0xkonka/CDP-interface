@@ -1,0 +1,32 @@
+.tren-connect-box .react-code-input {
+    display: flex !important;
+    justify-content: space-between;
+    gap: 4px;
+}
+  
+.tren-connect-box .react-code-input input::selection {
+    background: transparent;
+}
+
+.tren-connect-box .react-code-input input:disabled {
+    background: transparent !important;
+    color: #67DAB1 !important;
+    border: 1px solid #67dab14b !important;
+}
+
+.tren-connect-box .react-code-input input:focus {
+    border-color: #FFF !important;
+    border-width: 2px !important;
+}
+
+@media screen and (max-width: 768px) {
+    .tren-connect-box .react-code-input {
+        gap: 6px !important;
+    }
+    .tren-connect-box .react-code-input input {
+        height: 45px !important;
+        font-size: 20px !important;
+        border-radius: 3px !important;
+        font-weight: 300 !important;
+    }
+} 

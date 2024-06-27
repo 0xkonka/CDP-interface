@@ -29,7 +29,7 @@ export const ActiveTask = (props: Props) => {
                         priority />
                     <Typography fontSize={isSmallScreen ? 16 : 18} fontWeight={700} color='white'>{title}</Typography>
                 </Stack>
-                <Typography variant={isSmallScreen ? 'h3' : 'h2'} fontWeight={400} textAlign='end' fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} color='primary'>{exp}</Typography>
+                <Typography variant={isSmallScreen ? 'h3' : 'h2'} fontWeight={400} textAlign='end' className='font-britanica' color='primary'>{exp}</Typography>
             </Stack>
             <Box height={140}>
                 <Typography variant='subtitle2' color='#C6C6C7' lineHeight={1.25}>{description}</Typography>

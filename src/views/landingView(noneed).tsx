@@ -69,7 +69,7 @@ export const LandingView = () => {
                     }}>
                         {!account 
                         ? <>
-                            <Typography style={{fontFamily: 'Poppins, sans-serif'}}>Connect Wallet</Typography>
+                            <Typography className='font-poppins'>Connect Wallet</Typography>
                             <Icon icon='system-uicons:arrow-right'/>
                           </>
                         : <></>

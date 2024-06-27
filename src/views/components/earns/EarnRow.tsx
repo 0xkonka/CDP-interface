@@ -127,7 +127,7 @@ export const EarnRow = (props: TableHeaderProps) => {
                 <Stack direction='row' sx={{flex: '3.7 1 0%', alignItems: 'center'}}>
                     <Stack direction='row' width='100%' mr={8} justifyContent='space-between' alignItems='center'>
                         <Stack direction='row' width='100%' mr={8} justifyContent='space-between' alignItems='center'>
-                            <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' fontWeight={400}>
+                            <Typography className='font-britanica' fontSize={24} color='white' fontWeight={400}>
                                 200
                             </Typography>
                             <Button variant='contained' color='primary'
@@ -146,7 +146,7 @@ export const EarnRow = (props: TableHeaderProps) => {
                 <Stack direction='row' sx={{flex: '3.7 1 0%', alignItems: 'center'}}>
                     <Stack direction='row' width='100%' mr={8} justifyContent='space-between' alignItems='center'>
                         <Stack direction='row' width='100%' mr={8} justifyContent='space-between' alignItems='center'>
-                            <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' fontWeight={400}>
+                            <Typography className='font-britanica' fontSize={24} color='white' fontWeight={400}>
                                 400
                             </Typography>
                             <Button variant='outlined' color='primary'
@@ -170,7 +170,7 @@ export const EarnRow = (props: TableHeaderProps) => {
                                 alt='trenUSD' width={25} height={25}
                                 style={{ width: 'auto', borderRadius: '100%' }}
                             />
-                            <Typography fontFamily={`'Britanica-HeavySemiExpanded', sans-serif`} fontSize={24} color='white' fontWeight={400}>
+                            <Typography className='font-britanica' fontSize={24} color='white' fontWeight={400}>
                                 178.2
                             </Typography>
                         </Stack>
