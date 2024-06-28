@@ -11,48 +11,49 @@ import { useAccount } from 'wagmi'
 import { TrenPointBanner } from '@/views/components/points/TrenPointBanner'
 import { ExperienceBoard } from '@/views/components/points/ExperienceBoard'
 import { borderBottom, fontWeight, textAlign } from '@mui/system'
-import { PositionLineChart } from '@/views/components/charts/PositionLineChart'
+import { PointsLineChart } from '@/views/components/charts/PointsLineChart'
+
+const StyledTableCell = styled(TableCell)<TableCellProps>(({ theme }) => ({
+  fontSize: 18,
+  padding: 0,
+  textAlign: 'center',
+  borderRight: 'none',
+  '&:first-child': {
+    paddingLeft: '0 !important',
+    textAlign: 'left'
+  },
+  '&:last-child': {
+    paddingRight: '0 !important',
+    textAlign: 'right',
+    borderRight: 0,
+  },
+  '&.header': {
+    fontWeight: 600,
+    color: '#F3F3F3',
+    borderBottom: 0
+  },
+  '&.label': {
+    fontWeight: 400,
+    color: '#777'
+  },
+  '&.label-1': {
+    fontWeight: 400,
+    color: '#F3F3F3'
+  },
+  '&.content': {
+    fontWeight: 600,
+    color: '#FFF'
+  },
+  '&.summary-cta': {
+    cursor: 'pointer',
+    fontWeight: 600,
+    color: '#67DAB1',
+  }
+}))
 
 const Points = () => {
   const { radiusBoxStyle } = useGlobalValues()
-
-  const StyledTableCell = styled(TableCell)<TableCellProps>(({ theme }) => ({
-    fontSize: 18,
-    padding: 0,
-    textAlign: 'center',
-    borderRight: 'none',
-    '&:first-child': {
-      paddingLeft: '0 !important',
-      textAlign: 'left'
-    },
-    '&:last-child': {
-      paddingRight: '0 !important',
-      textAlign: 'right',
-      borderRight: 0,
-    },
-    '&.header': {
-      fontWeight: 600,
-      color: '#F3F3F3',
-      borderBottom: 0
-    },
-    '&.label': {
-      fontWeight: 400,
-      color: '#777'
-    },
-    '&.label-1': {
-      fontWeight: 400,
-      color: '#F3F3F3'
-    },
-    '&.content': {
-      fontWeight: 600,
-      color: '#FFF'
-    },
-    '&.summary-cta': {
-      cursor: 'pointer',
-      fontWeight: 600,
-      color: '#67DAB1',
-    }
-  }))
+  const [isBoosted, setIsBoosted] = useState(false)
 
   return (
     <Box>
@@ -108,26 +109,39 @@ const Points = () => {
               </TableContainer>
             </Stack>
             <Stack flex={1} sx={{...radiusBoxStyle, mb: 0, px: 2}}>
-              <PositionLineChart title='Points'/>
+              <PointsLineChart title='Points'/>
             </Stack>
           </Stack>
         </Grid>
         <Grid item xs={12} xl={4}>
           <Stack height='100%' sx={{...radiusBoxStyle, pt: 8, gap: 0}}>
-            <Typography textAlign='center' variant='h3' fontWeight={700} mb={10}>Daily Boost</Typography>
+            <Typography textAlign='center' variant='h3' fontWeight={700} mb={8}>Daily Boost</Typography>
             <Typography textAlign='center' mb={14} mx='auto' color='#C6C6C7' maxWidth={550}>
-              Borrow against your collateral on Tren Finance, where points are allocated based on the total value borrowed
+              { !isBoosted ? 'Borrow against your collateral on Tren Finance, where points are allocated based on the total value borrowed' : 
+                'Roll the dice to get an extra multiplier for the next 24 hours. Once the time is up you can come back and do it again.'}
             </Typography>
             <Stack direction='row' borderBottom='solid 1px #2C2D33' justifyContent='space-between' pb={4} mb={8}>
-              <Typography variant='h5' fontWeight={400}>Expected boost</Typography>
-              <Typography variant='h5' fontWeight={600}>1x</Typography>
+              <Typography variant='h5' fontWeight={400} color={isBoosted ? '#FFFFFF3F' : '#FFF'}>Expected boost</Typography>
+              <Typography variant='h5' fontWeight={600} color={isBoosted ? '#FFFFFF3F' : '#FFF'}>1x</Typography>
             </Stack>
-            <Stack direction='row' borderBottom='solid 1px #2C2D33' justifyContent='space-between' pb={4}>
+            <Stack direction='row' borderBottom='solid 1px #2C2D33' justifyContent='space-between' alignItems='center' pb={isBoosted ? 0 : 4 }>
               <Typography variant='h5' fontWeight={400} color='primary'>Your daily boost</Typography>
-              <Typography variant='h5' fontWeight={600}>Click Below</Typography>
+              {
+                !isBoosted && 
+                <Typography variant='h5' fontWeight={600}>Click Below</Typography>
+              }
+              {
+                isBoosted &&
+                <Typography variant='h1' fontWeight={600} color='primary'>1.3x</Typography>
+              }
+              
             </Stack>
-            <Button variant='outlined' color='primary' sx={{fontSize: 18, mt: 10, py: 3, color: 'white', fontWeight: 400}}>
-              Get Boost
+            <Button variant='outlined' color='primary' 
+              sx={{fontSize: 18, mt: 10, py: 3, color: 'white', fontWeight: 400, background: (isBoosted ? '#67DAB133' : 'transparent')}} onClick={() => {setIsBoosted(true)}}>
+              {
+                !isBoosted ? 'Get Boost' :
+                <><span style={{fontWeight: 600, color: '#67DAB1'}}>23h 56m 29s</span>&nbsp;for the next boost</>
+              }
             </Button>
           </Stack>
         </Grid>
