@@ -24,7 +24,7 @@ const navigation = (): VerticalNavItemsType => {
       path: '/points'
     },
 
-   // =========== These are for testnet only ========== //
+   // ============ These are for testnet only =========== //
     // {
     //   title: 'Referrals',
     //   icon: 'referrals',
