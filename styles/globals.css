@@ -106,8 +106,13 @@ input[type="number"] {
 .go2072408551.react-hot-toast .go3958317564 {
   margin: 0;
 }
-
+apexcharts-xcrosshairs
 /* End -- Customize Toast Style */
+
+
+.apexcharts-gridline {
+  stroke-width: 0.5; /* Or any desired width */
+}
 
 /* FadeUp Animation for landing */
 /* 
