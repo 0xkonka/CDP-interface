@@ -11,7 +11,7 @@ interface Props {
     title: string
 }
 
-export const PositionLineChart = (props: Props) => {
+export const PointsLineChart = (props: Props) => {
     const {title} = props
     // ** Hook
     const theme = useTheme()
@@ -33,7 +33,18 @@ export const PositionLineChart = (props: Props) => {
                 enabled: false // This disables the zoom functionality
             }
         },
-        tooltip: { shared: false },
+        tooltip: { 
+          shared: true,
+          theme: 'dark',
+          style: {
+            fontSize: '14px',
+            fontFamily: 'Helvetica, Arial, sans-serif'
+          },
+          onDatasetHover: {
+              highlightDataSeries: true
+          },
+          fillSeriesColor: false // Disables the series color filling for the tooltip
+        },
         dataLabels: { enabled: false },
         stroke: {
             width: 1,
@@ -61,7 +72,7 @@ export const PositionLineChart = (props: Props) => {
         grid: {
           show: true,
           strokeDashArray: 4,
-          borderColor: theme.palette.divider,
+          borderColor: '#929292AA',
           xaxis: {
             lines: { show: true }
           }
@@ -77,8 +88,16 @@ export const PositionLineChart = (props: Props) => {
           axisTicks: {
             show: false // This hides the tick points on the x-axis
           },
+          // crosshairs: {
+          //   stroke: { color: theme.palette.divider }
+          // },
           crosshairs: {
-            stroke: { color: theme.palette.divider }
+            show: true,
+            width: 2,
+            opacity: 0.9,
+            stroke: {
+              color: theme.palette.divider
+            }
           },
           labels: {
             style: { colors: theme.palette.text.disabled }
