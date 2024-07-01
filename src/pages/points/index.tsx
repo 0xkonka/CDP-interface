@@ -18,7 +18,7 @@ const StyledTableCell = styled(TableCell)<TableCellProps>(({ theme }) => ({
   padding: 0,
   textAlign: 'center',
   borderRight: 'none',
-  '&:first-child': {
+  '&:first-of-type': {
     paddingLeft: '0 !important',
     textAlign: 'left'
   },
