@@ -1,23 +1,78 @@
 import { useGlobalValues } from '@/context/GlobalContext'
 import { Grid, Typography, Box, Stack, useTheme, Button } from '@mui/material'
 import { useState, useRef, useEffect } from 'react'
+import axios from 'axios'
 
 import { formatToThousands, formatToThousandsInt, shortenWalletAddress } from '@/hooks/utils'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
 import { Copy } from '../Copy'
 import { usePoint } from '@/context/PointContext'
+import { gql, useQuery } from '@apollo/client';
+import { formatEther } from 'viem'
 
+const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://be-express-lime.vercel.app' // 'http://localhost:8000'
+const GET_TRENING_BALANCES  = gql`
+  {
+    treningBalances {
+      id
+      balance
+    }
+  }
+`;
+
+interface XPType {
+    userAddress: string
+    totalXP: number
+    // protocolXP: number   // This will be calculated by totalXP - referralXP automatically.
+    referralXP: number
+}
 export const ExperienceBoard = () => {
     const secondItemRef = useRef<HTMLDivElement>(null)
     const {isMobileScreen, radiusBoxStyle} = useGlobalValues()
-
+    const {userReferral} = usePoint()
     const [direction, setDirection] = useState('asc')
     const [sortBy, setSortBy] = useState('symbol')
     const [showRange, setShowRange] = useState('top10')
-    const theme = useTheme()
+    const [offChainList, setOffChainList] = useState([])
+    
+    useEffect(() => {
+        const fetchXPPoints = async() => {
+            const { data: referralPoints } = await axios.get(`${BE_ENDPOINT}/api/point/offChain/list`)
+            // console.log('Referral Points:', referralPoints.data)
+            setOffChainList(referralPoints.data)
+        }
+        fetchXPPoints()
+    }, [])
+    const { loading, error, data } = useQuery(GET_TRENING_BALANCES );
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>;
 
-    const {userReferral} = usePoint()
+    console.log(data.treningBalances)
+    const leaderboards: XPType[] = []
+    data.treningBalances.forEach((value:any) => {
+        if(value.id != '0x0000000000000000000000000000000000000000') {
+            leaderboards.push({
+                userAddress: value.id,
+                totalXP: parseInt(formatEther(value.balance)),
+                referralXP: 0,
+            })
+        }
+    })
+    offChainList.forEach((value: any) => {
+        const index = leaderboards.findIndex(record => record.userAddress == value.account)
+        if(index !== -1) {
+            leaderboards[index].referralXP = value.referralPoint
+        } else {
+            leaderboards.push({
+                userAddress: value.account,
+                totalXP: value.referralPoint,
+                referralXP: value.referralPoint
+            })
+        }
+    })
 
+    console.log('Leaderboards:', leaderboards)
+    
     const setSortDetail = (sortBy: string, direction: string) => {
         setSortBy(sortBy)
         setDirection(direction)
@@ -115,7 +170,7 @@ export const ExperienceBoard = () => {
 
                     {/* Leaderboard Table Body */}
                     <Stack mt={2}>
-                    {Array.from({ length: 50 }, (_, index) => (
+                    {leaderboards.map((value:XPType, index) => (
                         <Box id='leaderboard-row' key={index}>
                             <Stack direction='row' alignItems='center'
                                 sx={{
@@ -138,22 +193,22 @@ export const ExperienceBoard = () => {
                                 </Stack>
                                 <Stack flex='7.5' direction='row' alignItems='center' gap={3}>
                                     <Typography variant='h5' fontWeight={400}>
-                                        {shortenWalletAddress('0xD88Cc271583b0019DdA08666fF2DB78B2A0172cC')}
+                                        {shortenWalletAddress(value.userAddress)}
                                     </Typography>
                                 </Stack>
                                 <Stack flex='6'>
                                     <Typography variant='h5' fontWeight={400}>
-                                        {formatToThousandsInt(123000)} XP
+                                        {formatToThousandsInt(value.totalXP)} XP
                                     </Typography>
                                 </Stack>
                                 <Stack flex='5.5'>
                                     <Typography variant='h5' fontWeight={400}>
-                                        {formatToThousandsInt(4500)} XP
+                                        {formatToThousandsInt(value.totalXP - value.referralXP)} XP
                                     </Typography>
                                 </Stack>
                                 <Stack flex='4.5'>
                                     <Typography variant='h5' fontWeight={400}>
-                                        {formatToThousandsInt(3000)} XP
+                                        {formatToThousandsInt(value.referralXP)} XP
                                     </Typography>
                                 </Stack>
                             </Stack>

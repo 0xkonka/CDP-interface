@@ -60,6 +60,7 @@ import ReactHotToast from 'src/@core/styles/libs/react-hot-toast'
 // ** Utils Imports
 import { createEmotionCache } from 'src/@core/utils/create-emotion-cache'
 
+
 // ** Prismjs Styles
 import 'prismjs'
 import 'prismjs/themes/prism-tomorrow.css'
@@ -81,6 +82,8 @@ import { BalanceProvider } from '@/context/BalanceProvider/BalanceProvider'
 import { GlobalProvider } from '@/context/GlobalContext'
 import { StabilityPoolProvider } from '@/context/StabilityPoolProvider/StabilityPoolProvider'
 import { PointProvider } from '@/context/PointContext'
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -128,29 +131,31 @@ const App = (props: ExtendedAppProps) => {
       <Web3Provider>
         <ProtocolProvider>
           <StabilityPoolProvider>
-            <BalanceProvider>
-              <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-                <SettingsConsumer>
-                  {({ settings }) => {
-                    return (
-                      <ThemeComponent settings={settings}>
-                        <GlobalProvider>
-                          <PointProvider>
-                            {getLayout(<Component {...pageProps} />)}
-                            <ReactHotToast>
-                              <Toaster
-                                position={settings.toastPosition}
-                                toastOptions={{ className: 'react-hot-toast' }}
-                              />
-                            </ReactHotToast>
-                          </PointProvider>
-                        </GlobalProvider>
-                      </ThemeComponent>
-                    )
-                  }}
-                </SettingsConsumer>
-              </SettingsProvider>
-            </BalanceProvider>
+            <ApolloProvider client={client}>
+              <BalanceProvider>
+                <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+                  <SettingsConsumer>
+                    {({ settings }) => {
+                      return (
+                        <ThemeComponent settings={settings}>
+                          <GlobalProvider>
+                            <PointProvider>
+                              {getLayout(<Component {...pageProps} />)}
+                              <ReactHotToast>
+                                <Toaster
+                                  position={settings.toastPosition}
+                                  toastOptions={{ className: 'react-hot-toast' }}
+                                />
+                              </ReactHotToast>
+                            </PointProvider>
+                          </GlobalProvider>
+                        </ThemeComponent>
+                      )
+                    }}
+                  </SettingsConsumer>
+                </SettingsProvider>
+              </BalanceProvider>
+            </ApolloProvider>
           </StabilityPoolProvider>
         </ProtocolProvider>
       </Web3Provider>
@@ -201,3 +206,8 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
     </WagmiProvider>
   )
 }
+
+const client = new ApolloClient({
+  uri: 'https://api.studio.thegraph.com/query/76908/trenxp/version/latest', // Replace with your GraphQL endpoint
+  cache: new InMemoryCache()
+});
