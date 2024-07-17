@@ -26,6 +26,7 @@ export default function ConnectWallet({ show = 'always'}: Props) {
       document.cookie = "wallet-connected=true; path=/";
     } else {
       document.cookie = "wallet-connected=false; path=/";
+      document.cookie = "user-redeemed=false; path=/";
     }
     if(router.pathname !== '/' && !isConnected) {
       router.replace('/')
