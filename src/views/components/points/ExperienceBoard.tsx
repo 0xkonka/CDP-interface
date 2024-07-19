@@ -9,8 +9,9 @@ import { Copy } from '../Copy'
 import { usePoint } from '@/context/PointContext'
 import { gql, useQuery } from '@apollo/client';
 import { formatEther } from 'viem'
+import { useAccount } from 'wagmi'
 
-const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://be-express-lime.vercel.app' // 'http://localhost:8000'
+const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://api.tren.finance' // 'http://localhost:8000'
 const GET_TRENING_BALANCES  = gql`
   {
     treningBalances {
@@ -34,6 +35,10 @@ export const ExperienceBoard = () => {
     const [sortBy, setSortBy] = useState('symbol')
     const [showRange, setShowRange] = useState('top10')
     const [offChainList, setOffChainList] = useState([])
+    const leaderboardRef = useRef<HTMLDivElement>(null)
+    const myLeaderRef = useRef<HTMLDivElement>(null)
+    const {address: account} =  useAccount()
+    const theme = useTheme()
     
     useEffect(() => {
         const fetchXPPoints = async() => {
@@ -129,12 +134,22 @@ export const ExperienceBoard = () => {
                     <Stack direction='row' gap={4}>
                         <Button sx={{ width: 'fit-content', color: showRange=='top10' ? 'white' : '#6B6D6D', py: 3, fontWeight: 400}}
                                 variant='outlined'
-                                color={showRange=='top10' ? 'primary' : 'secondary'} onClick={()=>{setShowRange('top10')}}>
+                                color={showRange=='top10' ? 'primary' : 'secondary'} onClick={()=>{
+                                    leaderboardRef.current?.scrollTo({ behavior: "smooth", top: 0})
+                                    setShowRange('top10')
+                                }}>
                             See top 10
                         </Button>
                         <Button sx={{ width: 'fit-content', color: showRange=='myscore' ? 'white' : '#6B6D6D', py: 3, fontWeight: 400, mr: 8}}
                                 variant='outlined'
-                                color={showRange=='myscore' ? 'primary' : 'secondary'} onClick={()=>{setShowRange('myscore')}}>
+                                color={showRange=='myscore' ? 'primary' : 'secondary'}
+                                onClick={() => {
+                                    if(myLeaderRef && myLeaderRef.current && leaderboardRef && leaderboardRef.current) {
+                                        const offsetTop = myLeaderRef.current?.offsetTop - leaderboardRef.current.offsetTop - 70
+                                        leaderboardRef.current.scrollTo({ behavior: "smooth", top: offsetTop})
+                                        setShowRange('myscore')
+                                    }
+                                }}>
                             See my Score
                         </Button>
                     </Stack>
@@ -143,6 +158,7 @@ export const ExperienceBoard = () => {
                     sx={{ ...radiusBoxStyle, mt: 6, pt: 0 }}
                     id='leaderboard'
                     style={{ overflowY: 'scroll', height: 450 }}
+                    ref={leaderboardRef}
                 >
                     {/* Leaderboard Table Header */}
                     <Stack
@@ -171,17 +187,12 @@ export const ExperienceBoard = () => {
                     {/* Leaderboard Table Body */}
                     <Stack mt={2}>
                     {leaderboards.map((value:XPType, index) => (
-                        <Box id='leaderboard-row' key={index}>
+                        <Box className='leaderboard-row' key={index} 
+                            ref={value.userAddress.toLowerCase() == (account as '0x{string}').toLowerCase() ? myLeaderRef : null}>
                             <Stack direction='row' alignItems='center'
                                 sx={{
-                                    border: 'solid 1px transparent',
+                                    border: value.userAddress.toLowerCase() == (account as '0x{string}').toLowerCase() ? `solid 1px ${theme.palette.primary.main}` : 'none',
                                     borderRadius: '6px',
-                                    // '&:hover': {
-                                    //     borderColor: theme.palette.primary.main,
-                                    //     'h5': {
-                                    //         color: theme.palette.primary.main,
-                                    //     }
-                                    // },
                                     display: { xs: 'none', lg: 'flex' },
                                     p: 3
                                 }}
@@ -212,7 +223,9 @@ export const ExperienceBoard = () => {
                                     </Typography>
                                 </Stack>
                             </Stack>
-                            <Stack gap={2} py={4} sx={{ display: { xs: 'flex', lg: 'none' }, borderTop: index == 0 ? 'none' : 'solid 1px #3030306e' }}>
+                            <Stack gap={2} py={4} sx={{ display: { xs: 'flex', lg: 'none' }, 
+                                borderTop: index == 0 ? 'none' : 'solid 1px #3030306e', 
+                                borderBottom: value.userAddress.toLowerCase() == (account as '0x{string}').toLowerCase() ? `solid 1px ${theme.palette.primary.main}` : 'none', }}>
                                 <Stack direction='row' justifyContent='space-between' alignItems='center'>
                                     <Stack direction='row' gap={2}>
                                         <Typography variant='subtitle1' fontWeight={400}>
@@ -224,8 +237,8 @@ export const ExperienceBoard = () => {
                                         {index + 1}
                                         </Typography>
                                     </Stack>
-                                    </Stack>
-                                    <Stack direction='row' alignItems='center'>
+                                </Stack>
+                                <Stack direction='row' alignItems='center'>
                                     <Stack sx={{ flex: 3 }}>
                                         <Typography fontSize={12} fontWeight={500} color='#D4D4D4'>
                                         Total XP

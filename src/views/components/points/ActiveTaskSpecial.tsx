@@ -39,18 +39,13 @@ export const ActiveTaskSpecial = (props: Props) => {
             <Stack height={200} justifyContent='space-between'>
                 <Typography variant='subtitle2' color='#C6C6C7' lineHeight={1.25}>{description}</Typography>
                 <Box mb={6}>
-                    <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                        <Stack direction='row' alignItems='center' gap={0}>
-                            <Typography color='#FFF' lineHeight={1.25} sx={{fontSize: {xs: 14, md: 16}}}>Milestone</Typography>
-                            <Tooltip title={tooltip} placement='top'>
-                                <IconButton sx={{ bgcolor: 'transparent !important'}}>
-                                    <Icon fontSize='18' icon='simple-line-icons:question' style={{ color: '#707175', cursor: 'pointer' }} />
-                                </IconButton>
-                            </Tooltip>
-                        </Stack>    
-                        <Typography color='#FFF' lineHeight={1.25} sx={{fontSize: {xs: 12, md: 14}, textDecoration: 'underline', cursor: 'pointer'}}>
-                            What's this?
-                        </Typography>
+                    <Stack direction='row' alignItems='center' gap={3}>
+                        <Typography color='#FFF' lineHeight={1.25} fontWeight={600} sx={{fontSize: {xs: 14, md: 16}}}>Milestone</Typography>
+                        <Tooltip title={tooltip} placement='top'>
+                            <Typography color='#FFF' lineHeight={1.25} sx={{fontSize: {xs: 12, md: 14}, textDecoration: 'underline', cursor: 'pointer'}}>
+                                What's this?
+                            </Typography>
+                        </Tooltip>
                     </Stack>
                     <Stack direction='row' justifyContent='space-between' alignItems='center' mt={2}>
                         <Box sx={{borderRadius: '4px', border: 'solid 1px #67DAB1', background: '#67DAB10D', color: '#C6C6C7', fontSize: 14, px: 2.5, py: 1}}>
