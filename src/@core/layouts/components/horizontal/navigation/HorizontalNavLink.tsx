@@ -93,12 +93,12 @@ const HorizontalNavLink = (props: Props) => {
             if(!isConnected) {
               e.preventDefault()
               e.stopPropagation()
-              showToast('success', 'Welcome', 'You should connect wallet to view protocol.', 3000)
+              showToast('success', 'Welcome', 'Connect wallet to view protocol.', 3000)
             }
             else if(!isUserRedeemed) {
               e.preventDefault()
               e.stopPropagation()
-              showToast('success', 'Welcome', 'You should redeem the code to view protocol.', 3000)
+              showToast('success', 'Welcome', 'Redeem a code to view the protocol.', 3000)
             }
             if (item.path === undefined) {
               e.preventDefault()

@@ -15,7 +15,8 @@ import { multicall, readContract } from '@wagmi/core'
 import ADMIN_CONTRACT_ABI from '@/abi/AdminContract.json'
 import PRICE_FEED_ABI from '@/abi/PriceFeed.json'
 import BORROWER_OPERATIONS_ABI from '@/abi/BorrowerOperations.json'
-import { ADMIN_CONTRACT, PRICE_FEED, BORROWER_OPERATIONS, TRENBOX_STORAGE } from '@/configs/address'
+import TRENBOX_MANAGER_ABI from '@/abi/TrenBoxManager.json'
+import { ADMIN_CONTRACT, PRICE_FEED, BORROWER_OPERATIONS, TRENBOX_STORAGE, TRENBOX_MANAGER } from '@/configs/address'
 import { CollateralParams } from '@/context/ModuleProvider/type'
 import { wagmiConfig } from '@/pages/_app'
 import { ProtocolContext } from './ProtocolContext'
@@ -35,6 +36,8 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
 
   const [collaterals, setCollaterals] = useState<string[]>([])
   const [collateralDetails, setCollateralDetails] = useState<CollateralParams[]>([])
+  const [totalBorrowed, setTotalBorrowed] = useState<bigint>(BigInt(0))
+
   // useEffect(() => {
   const getCollateralList = async () => {
     const _collaterals = await readContract(wagmiConfig, {
@@ -44,6 +47,9 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
       args: []
     })
     const sortedCollateral = (_collaterals as string[]).sort()
+    console.log('Provider collaterals: ', sortedCollateral)
+
+
     setCollaterals(sortedCollateral)
   }
   //   getCollateralList()
@@ -65,10 +71,17 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
     address: BORROWER_OPERATIONS[chainId] as '0x{string}',
     abi: BORROWER_OPERATIONS_ABI as any
   } as const
+
+  const TrenboxManagerContract = {
+    address: TRENBOX_MANAGER[chainId] as '0x{string}',
+    abi: TRENBOX_MANAGER_ABI as any
+  } as const
+
   // Get Protocol Config
   const getCollateralDetails = async () => {
     if (collaterals.length > 0) {
       const _collateralDetails: CollateralParams[] = []
+      let _totalBorrowed: bigint = BigInt(0)
 
       for (let i = 0; i < collaterals.length; i++) {
         const result = await multicall(wagmiConfig, {
@@ -161,6 +174,11 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
               functionName: 'balanceOf',
               args: [TRENBOX_STORAGE[chainId] as '0x{string}']
             },
+            {
+              ...TrenboxManagerContract,
+              functionName: 'getTrenBoxDebt',
+              args: [collaterals[i], account as '0x{string}']
+            }
           ]
         })
         const address = collaterals[i] as string
@@ -181,6 +199,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
         const price = result[14].result as bigint
         const entireSystemDebt = result[15].result as bigint
         const totalCollDeposited = result[16].result as bigint
+        const debt = result[17].result as bigint
 
         let baseAPY = 0
         if (symbol) baseAPY = await getDefillmaAPY(symbol)
@@ -215,12 +234,16 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
           maxDepositAPY: 0,
           network: 'network',
           platform: 'platform',
-          rateType: 'collateral rate tye here'
+          rateType: 'collateral rate tye here',
+          debt
         }
+        _totalBorrowed += debt - debtTokenGasCompensation
         _collateralDetails.push(_collateralDetail)
       }
       console.log('_collateralDetails', _collateralDetails)
+      console.log('__totalBorrowed: ', _totalBorrowed)
       setCollateralDetails(_collateralDetails)
+      setTotalBorrowed(_totalBorrowed)
     }
   }
   // getCollateralDetails()
@@ -235,6 +258,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
       value={{
         collaterals,
         collateralDetails,
+        totalBorrowed,
         refresh: () => {
           return Promise.all([getCollateralList(), getCollateralDetails()])
         }

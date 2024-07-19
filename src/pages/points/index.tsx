@@ -6,12 +6,13 @@ import { ActiveTask } from '@/views/components/points/ActiveTask'
 import { ActiveTaskSpecial } from '@/views/components/points/ActiveTaskSpecial'
 import { useGlobalValues } from '@/context/GlobalContext'
 import { useState } from 'react'
-import { useRef, useEffect } from 'react'
-import { useAccount } from 'wagmi'
 import { TrenPointBanner } from '@/views/components/points/TrenPointBanner'
 import { ExperienceBoard } from '@/views/components/points/ExperienceBoard'
-import { borderBottom, fontWeight, textAlign } from '@mui/system'
 import { PointsLineChart } from '@/views/components/charts/PointsLineChart'
+import { useStabilityPoolView } from '@/context/StabilityPoolProvider/StabilityPoolContext'
+import { formatEther } from 'viem'
+import { formatToThousandsInt } from '@/hooks/utils'
+import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 
 const StyledTableCell = styled(TableCell)<TableCellProps>(({ theme }) => ({
   fontSize: 18,
@@ -54,6 +55,9 @@ const StyledTableCell = styled(TableCell)<TableCellProps>(({ theme }) => ({
 const Points = () => {
   const { radiusBoxStyle } = useGlobalValues()
   const [isBoosted, setIsBoosted] = useState(false)
+  const { stabilityPoolInfo, userStabilityPoolPosition } = useStabilityPoolView()
+  const { userDeposit = BigInt(0) } = userStabilityPoolPosition || {}
+  const { totalBorrowed } = useProtocol()
 
   return (
     <Box>
@@ -82,21 +86,31 @@ const Points = () => {
                       </TableRow>
                       <TableRow>
                           <StyledTableCell className='label'>trenUSD borrowed</StyledTableCell>
-                          <StyledTableCell className='content'>50</StyledTableCell>
-                          <StyledTableCell className='content'>100</StyledTableCell>
-                          <StyledTableCell className='summary-cta'>Borrow</StyledTableCell>
+                          <StyledTableCell className='content'>{totalBorrowed == undefined || totalBorrowed == BigInt(0) ? '-' : formatToThousandsInt(+formatEther(totalBorrowed))}</StyledTableCell>
+                          <StyledTableCell className='content'>{totalBorrowed == undefined || totalBorrowed == BigInt(0) ? '-' : formatToThousandsInt(+formatEther(totalBorrowed) * 2)}</StyledTableCell>
+                          <StyledTableCell className='summary-cta'>
+                            <Link href='/modules'>Borrow</Link>
+                          </StyledTableCell>
                       </TableRow>
                       <TableRow>
                           <StyledTableCell className='label'>trenUSD staked to SP</StyledTableCell>
-                          <StyledTableCell className='content'>50</StyledTableCell>
-                          <StyledTableCell className='content'>100</StyledTableCell>
-                          <StyledTableCell className='summary-cta'>Stake</StyledTableCell>
+                          <StyledTableCell className='content'>
+                            {userDeposit == undefined || Math.floor(+formatEther(userDeposit)) == 0 ? '-' : formatToThousandsInt(+formatEther(userDeposit || BigInt(0)))}
+                          </StyledTableCell>
+                          <StyledTableCell className='content'>
+                            {userDeposit == undefined || Math.floor(+formatEther(userDeposit)) == 0 ? '-' : formatToThousandsInt(2 * +formatEther(userDeposit || BigInt(0)))}
+                          </StyledTableCell>
+                          <StyledTableCell className='summary-cta'>
+                            <Link href='/earn'>Stake</Link>
+                          </StyledTableCell>
                       </TableRow>
                       <TableRow>
-                          <StyledTableCell className='label'>LP tokens staked</StyledTableCell>
-                          <StyledTableCell className='content'>50</StyledTableCell>
-                          <StyledTableCell className='content'>100</StyledTableCell>
-                          <StyledTableCell className='summary-cta'>Stake</StyledTableCell>
+                          <StyledTableCell className='label'>Liquidity provided</StyledTableCell>
+                          <StyledTableCell className='content'>-</StyledTableCell>
+                          <StyledTableCell className='content'>-</StyledTableCell>
+                          <StyledTableCell className='summary-cta'>
+                            <Link href='/#'>Stake</Link>
+                          </StyledTableCell>
                       </TableRow>
                       <TableRow>
                           <StyledTableCell className='label' style={{color: '#F3F3F3'}}>Multiplier</StyledTableCell>
@@ -159,7 +173,7 @@ const Points = () => {
               title='Borrowing'
               exp='2.5'
               description='Borrow against your collateral on Tren Finance, where points are allocated based on the total value borrowed'
-              learnMoreLink='#'
+              learnMoreLink='https://docs.tren.finance/get-started/borrow'
               tooltip='Borrowing Milestone Description'
               from={0}
               to={5}
@@ -173,7 +187,7 @@ const Points = () => {
               title='Stake TrenUSD'
               exp='2.5'
               description='Stake your TrenUSD directly into our stability pool to help secure the protocol.'
-              learnMoreLink='#'
+              learnMoreLink='https://docs.tren.finance/get-started/staking-to-the-stability-pool'
               tooltip='Stake TrenUSD Milestone Description'
               from={0}
               to={7.5}
@@ -203,7 +217,7 @@ const Points = () => {
               description='Earn a share of your referral’s XP. Your friend is also rewarded with a multiplier by using your invite code.'
               plus='+15%'
               period='of each referral'
-              learnMoreLink='#'
+              learnMoreLink='https://docs.tren.finance/get-started/redeem-a-referral-code'
               totalReferralXP={20}
             />
           </Grid>
