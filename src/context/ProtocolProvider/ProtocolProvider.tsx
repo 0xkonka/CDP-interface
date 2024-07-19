@@ -81,7 +81,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
   const getCollateralDetails = async () => {
     if (collaterals.length > 0) {
       const _collateralDetails: CollateralParams[] = []
-      let _totalBorrowed: bigint = BigInt(0)
+      let _totalBorrowed = BigInt(0)
 
       for (let i = 0; i < collaterals.length; i++) {
         const result = await multicall(wagmiConfig, {
