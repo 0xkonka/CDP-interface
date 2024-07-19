@@ -35,6 +35,7 @@ export type CollateralParams = {
     rateType: string
     borrowAPY: number
     maxLeverage: number
+    debt: bigint
 }
 
 type NoneView = 'NONE'

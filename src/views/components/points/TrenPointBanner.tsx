@@ -68,7 +68,7 @@ export const TrenPointBanner = () => {
                                 24.1
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} lg={4.2} xl={3.3}>
+                        <Grid item xs={6} lg={4.2} xl={3.3}>
                             <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>
                                 Rank
                             </Typography>
@@ -106,20 +106,7 @@ export const TrenPointBanner = () => {
                                 </Stack>
                             </Stack>
                         </Grid>
-                        <Grid item xs={6} lg={1.6} xl={1.4}>
-                            <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>
-                                Referrals
-                            </Typography>
-                            <Typography variant='h1' className='font-britanica'
-                                sx={{
-                                    fontSize: { xs: 16, md: 32, xl: 42 },
-                                    mt: { xs: 2, lg: 0 }
-                                }}
-                            >
-                                50 XP
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6} lg={1.8} xl={1.4}>
+                        <Grid item xs={12} sm={6} lg={1.8} xl={1.4}>
                             <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>
                                 Total Multiplier
                             </Typography>
@@ -132,7 +119,7 @@ export const TrenPointBanner = () => {
                                 4X
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} lg={4.5} xl={2.4}>
+                        <Grid item xs={12} lg={4.5} xl={3.8}>
                             <Stack gap={2} width='fit-content' sx={{ml: {xs: 0, xl: 'auto'}}}>
                                 <Stack direction='row' justifyContent='space-between' gap={3}>
                                     <Typography variant='h4' fontWeight={700}>
