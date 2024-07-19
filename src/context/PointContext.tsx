@@ -10,7 +10,7 @@ import { wagmiConfig } from '@/pages/_app'
 import axios from 'axios'
 import { showToast } from '@/hooks/toasts'
 
-const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://be-express-lime.vercel.app' // 'http://localhost:8000'
+const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://api.tren.finance' // 'http://localhost:8000'
 
 const REFERRAL_DISTRIBUTION = process.env.REFERRAL_DISTRIBUTION || 2
 
