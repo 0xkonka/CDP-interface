@@ -3,9 +3,14 @@ import { usePoint } from "@/context/PointContext"
 import { formatToThousandsInt } from "@/hooks/utils"
 import { Box, Stack, Typography, Grid } from "@mui/material"
 
-export const TrenPointBanner = () => {
+interface Props {
+    totalXPGained: number
+    totalLeaders: number
+    rank: number
+}
+export const TrenPointBanner = (props:Props) => {
+    const {totalXPGained, totalLeaders, rank} = props
     const {isSmallScreen, isMediumScreen, isMediumLargeScreen} = useGlobalValues()
-    const {userPoint} = usePoint()
 
     return (
         <Box
@@ -41,7 +46,7 @@ export const TrenPointBanner = () => {
                 </Box>
                 <Box position='relative' sx={{ mt: { xs: 5, lg: 20 }, p: 4 }}>
                     <Grid container spacing={4} alignItems='center' ml={-8}>
-                        <Grid item xs={6} lg={2.2} xl={2}>
+                        <Grid item xs={6} lg={2.2} xl={2.5}>
                             <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>
                                 Total XP Gained
                             </Typography>
@@ -52,7 +57,7 @@ export const TrenPointBanner = () => {
                                 }}
                             >
                                 {/* {userPoint?.xpPoint} XP */}
-                                232.2 XP
+                                {formatToThousandsInt(totalXPGained)} XP
                             </Typography>
                         </Grid>
                         <Grid item xs={6} lg={2.2} xl={1.5}>
@@ -65,7 +70,7 @@ export const TrenPointBanner = () => {
                                     mt: { xs: 2, lg: 0 }
                                 }}
                             >
-                                24.1
+                                -
                             </Typography>
                         </Grid>
                         <Grid item xs={6} lg={4.2} xl={3.3}>
@@ -79,14 +84,14 @@ export const TrenPointBanner = () => {
                                     }}
                                 >
                                     {/* #{userPoint?.rank} */}
-                                    #{formatToThousandsInt(1321)}
+                                    {rank > 0 ? '#' + formatToThousandsInt(rank) : '-'} 
                                     <Typography variant='caption' className='font-britanica'
                                         sx={{
                                             color: '#7D817F',
                                             fontSize: { xs: 16, md: 28, xl: 32 },
                                         }}
                                     >
-                                        /{246757}
+                                        /{formatToThousandsInt(totalLeaders)}
                                     </Typography>
                                 </Typography>
                                 <Stack direction='row' alignItems='center' gap={0.5} sx={{mb: {xs: 1, md: 2, xl: 3}}}>
@@ -119,7 +124,7 @@ export const TrenPointBanner = () => {
                                 4X
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} lg={4.5} xl={3.8}>
+                        <Grid item xs={12} lg={4.5} xl={3.3}>
                             <Stack gap={2} width='fit-content' sx={{ml: {xs: 0, xl: 'auto'}}}>
                                 <Stack direction='row' justifyContent='space-between' gap={3}>
                                     <Typography variant='h4' fontWeight={700}>
