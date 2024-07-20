@@ -5,7 +5,8 @@ import { styled } from '@mui/material/styles'
 import { ActiveTask } from '@/views/components/points/ActiveTask'
 import { ActiveTaskSpecial } from '@/views/components/points/ActiveTaskSpecial'
 import { useGlobalValues } from '@/context/GlobalContext'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 import { TrenPointBanner } from '@/views/components/points/TrenPointBanner'
 import { ExperienceBoard } from '@/views/components/points/ExperienceBoard'
 import { PointsLineChart } from '@/views/components/charts/PointsLineChart'
@@ -13,6 +14,19 @@ import { useStabilityPoolView } from '@/context/StabilityPoolProvider/StabilityP
 import { formatEther } from 'viem'
 import { formatToThousandsInt } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
+import { gql, useQuery } from '@apollo/client';
+import { XPType } from '@/types'
+import { useAccount } from 'wagmi'
+
+const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://api.tren.finance' // 'http://localhost:8000'
+const GET_TRENING_BALANCES = gql`
+  {
+    treningBalances {
+      id
+      balance
+    }
+  }
+`;
 
 const StyledTableCell = styled(TableCell)<TableCellProps>(({ theme }) => ({
   fontSize: 18,
@@ -55,14 +69,61 @@ const StyledTableCell = styled(TableCell)<TableCellProps>(({ theme }) => ({
 const Points = () => {
   const { radiusBoxStyle } = useGlobalValues()
   const [isBoosted, setIsBoosted] = useState(false)
-  const { stabilityPoolInfo, userStabilityPoolPosition } = useStabilityPoolView()
+  const { userStabilityPoolPosition } = useStabilityPoolView()
   const { userDeposit = BigInt(0) } = userStabilityPoolPosition || {}
   const { totalBorrowed } = useProtocol()
+  const [offChainList, setOffChainList] = useState([])
+  const {address: account} =  useAccount()
+  
+  useEffect(() => {
+    const fetchXPPoints = async() => {
+        const { data: referralPoints } = await axios.get(`${BE_ENDPOINT}/api/point/offChain/list`)
+        setOffChainList(referralPoints.data)
+    }
+    fetchXPPoints()
+  }, [])
+
+  const { loading, error, data } = useQuery(GET_TRENING_BALANCES );
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  const leaderboards: XPType[] = []
+  data.treningBalances.forEach((value:any) => {
+    if(value.id != '0x0000000000000000000000000000000000000000') {
+        leaderboards.push({
+            userAddress: value.id,
+            totalXP: parseInt(formatEther(value.balance)),
+            referralXP: 0,
+        })
+    }
+  })
+  offChainList.forEach((value: any) => {
+    const index = leaderboards.findIndex(record => record.userAddress.toLocaleLowerCase() == value.account.toLocaleLowerCase())
+    if(index !== -1) {
+      leaderboards[index].referralXP = value.referralPoint
+    } else {
+      leaderboards.push({
+          userAddress: value.account,
+          totalXP: value.referralPoint,
+          referralXP: value.referralPoint
+      })
+    }
+  })
+  console.log('leaderboards: ', leaderboards)
+
+  const myLeader = leaderboards.find((leaderboard) => {
+    return leaderboard.userAddress.toLowerCase() == account?.toLowerCase()
+  })
+  const totalXPGained = myLeader ? myLeader.totalXP : 0
+
+  const totalLeaders = leaderboards.length
+  const sortedLeaders = leaderboards.sort((a, b) => b.totalXP - a.totalXP)
+  const rank = leaderboards.findIndex((leaderboard) => leaderboard.userAddress.toLocaleLowerCase() == account?.toLocaleLowerCase()) + 1
 
   return (
     <Box>
       {/* 3D Tren Points Banner section */}
-      <TrenPointBanner />
+      <TrenPointBanner totalXPGained={totalXPGained} totalLeaders={totalLeaders} rank={rank}/>
 
       {/* Daily Boost */}
       <Grid container spacing={8} mt={12}>
@@ -146,7 +207,7 @@ const Points = () => {
               }
               {
                 isBoosted &&
-                <Typography variant='h1' fontWeight={600} color='primary'>1.3x</Typography>
+                <Typography variant='h1' fontWeight={600} color='primary'>{Math.floor(Math.random() * 4 + 1) / 10 + 1}x</Typography>
               }
               
             </Stack>
@@ -237,7 +298,7 @@ const Points = () => {
       </Box>
 
       {/* Leaderboard and Referrals */}
-      <ExperienceBoard />
+      <ExperienceBoard leaderboards={leaderboards}/>
     </Box>
   )
 }
