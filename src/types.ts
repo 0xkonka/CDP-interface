@@ -14,3 +14,10 @@ export interface Point {
     endTimestamp?: number
     rank?: number
 }
+
+export interface XPType {
+    userAddress: string
+    totalXP: number
+    // protocolXP: number   // This will be calculated by totalXP - referralXP automatically.
+    referralXP: number
+}
