@@ -1,82 +1,30 @@
 import { useGlobalValues } from '@/context/GlobalContext'
 import { Grid, Typography, Box, Stack, useTheme, Button } from '@mui/material'
 import { useState, useRef, useEffect } from 'react'
-import axios from 'axios'
 
 import { formatToThousands, formatToThousandsInt, shortenWalletAddress } from '@/hooks/utils'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
 import { Copy } from '../Copy'
 import { usePoint } from '@/context/PointContext'
-import { gql, useQuery } from '@apollo/client';
-import { formatEther } from 'viem'
 import { useAccount } from 'wagmi'
+import { XPType } from '@/types'
 
-const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://api.tren.finance' // 'http://localhost:8000'
-const GET_TRENING_BALANCES  = gql`
-  {
-    treningBalances {
-      id
-      balance
-    }
-  }
-`;
-
-interface XPType {
-    userAddress: string
-    totalXP: number
-    // protocolXP: number   // This will be calculated by totalXP - referralXP automatically.
-    referralXP: number
+interface Props {
+    leaderboards: XPType[]
 }
-export const ExperienceBoard = () => {
+
+export const ExperienceBoard = (props: Props) => {
+    const {leaderboards} = props
     const secondItemRef = useRef<HTMLDivElement>(null)
     const {isMobileScreen, radiusBoxStyle} = useGlobalValues()
     const {userReferral} = usePoint()
     const [direction, setDirection] = useState('asc')
     const [sortBy, setSortBy] = useState('symbol')
     const [showRange, setShowRange] = useState('top10')
-    const [offChainList, setOffChainList] = useState([])
     const leaderboardRef = useRef<HTMLDivElement>(null)
     const myLeaderRef = useRef<HTMLDivElement>(null)
     const {address: account} =  useAccount()
     const theme = useTheme()
-    
-    useEffect(() => {
-        const fetchXPPoints = async() => {
-            const { data: referralPoints } = await axios.get(`${BE_ENDPOINT}/api/point/offChain/list`)
-            // console.log('Referral Points:', referralPoints.data)
-            setOffChainList(referralPoints.data)
-        }
-        fetchXPPoints()
-    }, [])
-    const { loading, error, data } = useQuery(GET_TRENING_BALANCES );
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error.message}</p>;
-
-    console.log(data.treningBalances)
-    const leaderboards: XPType[] = []
-    data.treningBalances.forEach((value:any) => {
-        if(value.id != '0x0000000000000000000000000000000000000000') {
-            leaderboards.push({
-                userAddress: value.id,
-                totalXP: parseInt(formatEther(value.balance)),
-                referralXP: 0,
-            })
-        }
-    })
-    offChainList.forEach((value: any) => {
-        const index = leaderboards.findIndex(record => record.userAddress == value.account)
-        if(index !== -1) {
-            leaderboards[index].referralXP = value.referralPoint
-        } else {
-            leaderboards.push({
-                userAddress: value.account,
-                totalXP: value.referralPoint,
-                referralXP: value.referralPoint
-            })
-        }
-    })
-
-    console.log('Leaderboards:', leaderboards)
     
     const setSortDetail = (sortBy: string, direction: string) => {
         setSortBy(sortBy)
