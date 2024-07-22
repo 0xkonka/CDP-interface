@@ -12,6 +12,7 @@ import { ExperienceBoard } from '@/views/components/points/ExperienceBoard'
 import { PointsLineChart } from '@/views/components/charts/PointsLineChart'
 import { useStabilityPoolView } from '@/context/StabilityPoolProvider/StabilityPoolContext'
 import { formatEther } from 'viem'
+import { getAddress } from 'ethers'
 import { formatToThousandsInt } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { gql, useQuery } from '@apollo/client';
@@ -83,6 +84,11 @@ const Points = () => {
     fetchXPPoints()
   }, [])
 
+  function isValidAddress(address: string) {
+    // Check if the address is all lowercase or all uppercase
+    return /^[0-9a-f]{40}$/.test(address) || /^[0-9A-F]{40}$/.test(address);
+  }
+
   const { loading, error, data } = useQuery(GET_TRENING_BALANCES );
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -91,7 +97,7 @@ const Points = () => {
   data.treningBalances.forEach((value:any) => {
     if(value.id != '0x0000000000000000000000000000000000000000') {
         leaderboards.push({
-            userAddress: value.id,
+            userAddress: isValidAddress(value.id) ? getAddress(value.id) : value.id,
             totalXP: parseInt(formatEther(value.balance)),
             referralXP: 0,
         })
@@ -103,7 +109,7 @@ const Points = () => {
       leaderboards[index].referralXP = value.referralPoint
     } else {
       leaderboards.push({
-          userAddress: value.account,
+          userAddress: isValidAddress(value.account) ? getAddress(value.account) : value.account,
           totalXP: value.referralPoint,
           referralXP: value.referralPoint
       })
