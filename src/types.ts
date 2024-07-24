@@ -21,3 +21,14 @@ export interface XPType {
     // protocolXP: number   // This will be calculated by totalXP - referralXP automatically.
     referralXP: number
 }
+
+export interface LiquidationRowType {
+    symbol: string
+    address: string
+    price: bigint
+    liquidation: bigint
+    debtTokenGasCompensation: bigint
+    // borrowedAmount: bigint
+    // healthFactor: number
+    // collRatio: number
+}
