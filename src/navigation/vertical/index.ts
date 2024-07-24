@@ -39,15 +39,20 @@ const navigation = (): VerticalNavItemsType => {
       path: '/swap'
     },
     {
-      title: 'Analytics',
-      icon: 'analytics',
-      children: [
-        {
-          title: 'Liquidation',
-          path: '/liquidation'
-        }
-      ]
+      title: 'Liquidation',
+      icon: 'liquidation',
+      path: '/liquidation'
     },
+    // {
+    //   title: 'Analytics',
+    //   icon: 'analytics',
+    //   children: [
+    //     {
+    //       title: 'Liquidation',
+    //       path: '/liquidation'
+    //     }
+    //   ]
+    // },
   ] 
 }
 
