@@ -128,6 +128,7 @@ const Liquidation = () => {
                         rows.map((row, index) => (
                         <LiquidationRow
                             row={row}
+                            key={index}
                         />
                         ))
                     ) : (
