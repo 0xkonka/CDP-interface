@@ -20,14 +20,17 @@ import { XPType } from '@/types'
 import { useAccount } from 'wagmi'
 
 const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://api.tren.finance' // 'http://localhost:8000'
+
 const GET_TRENING_BALANCES = gql`
   {
-    treningBalances {
+    trenXPPoints(where: {account: "0x48ae3b6C0Af855260d4382F9f693e53DA7F6E94E"}) {
       id
-      balance
+      type
+      account
+      amount
     }
   }
-`;
+`    
 
 const StyledTableCell = styled(TableCell)<TableCellProps>(({ theme }) => ({
   fontSize: 18,
@@ -90,31 +93,43 @@ const Points = () => {
   }
 
   const { loading, error, data } = useQuery(GET_TRENING_BALANCES );
+  console.log("GraphQL Result: ", data)
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   const leaderboards: XPType[] = []
-  data.treningBalances.forEach((value:any) => {
+  data.trenXPPoints.forEach((value:any) => {
     if(value.id != '0x0000000000000000000000000000000000000000') {
         leaderboards.push({
             userAddress: isValidAddress(value.id) ? getAddress(value.id) : value.id,
-            totalXP: parseInt(formatEther(value.balance)),
+            totalXP: parseInt(formatEther(value.amount)),
             referralXP: 0,
         })
     }
   })
-  offChainList.forEach((value: any) => {
-    const index = leaderboards.findIndex(record => record.userAddress.toLocaleLowerCase() == value.account.toLocaleLowerCase())
-    if(index !== -1) {
-      leaderboards[index].referralXP = value.referralPoint
-    } else {
-      leaderboards.push({
-          userAddress: isValidAddress(value.account) ? getAddress(value.account) : value.account,
-          totalXP: value.referralPoint,
-          referralXP: value.referralPoint
-      })
+
+  const totals = data.trenXPPoints.reduce((result: any, point: any) => {
+    if(point.type === 0) {
+      result.borrowedPoint += +formatEther(point.amount)
+    } else if (point.type === 1) {
+      result.stakedPoint += +formatEther(point.amount)
     }
-  })
+    return result
+  }, {borrowedPoint: 0, stakedPoint: 0})
+  console.log("Totals: ", totals)
+
+  // offChainList.forEach((value: any) => {
+  //   const index = leaderboards.findIndex(record => record.userAddress.toLocaleLowerCase() == value.account.toLocaleLowerCase())
+  //   if(index !== -1) {
+  //     leaderboards[index].referralXP = value.referralPoint
+  //   } else {
+  //     leaderboards.push({
+  //         userAddress: isValidAddress(value.account) ? getAddress(value.account) : value.account,
+  //         totalXP: value.referralPoint,
+  //         referralXP: value.referralPoint
+  //     })
+  //   }
+  // })
   console.log('leaderboards: ', leaderboards)
 
   const myLeader = leaderboards.find((leaderboard) => {
@@ -124,7 +139,7 @@ const Points = () => {
 
   const totalLeaders = leaderboards.length
   const sortedLeaders = leaderboards.sort((a, b) => b.totalXP - a.totalXP)
-  const rank = leaderboards.findIndex((leaderboard) => leaderboard.userAddress.toLocaleLowerCase() == account?.toLocaleLowerCase()) + 1
+  const rank = sortedLeaders.findIndex((leaderboard) => leaderboard.userAddress.toLocaleLowerCase() == account?.toLocaleLowerCase()) + 1
 
   return (
     <Box>
@@ -234,35 +249,29 @@ const Points = () => {
           Tasks
         </Typography>
         <Grid container spacing={4} mt={4}>
-          <Grid item xs={12} sm={6} lg={2.4}>
+          <Grid item xs={12} sm={6} lg={3}>
             <ActiveTaskSpecial
               icon='borrowing'
               title='Borrowing'
               exp='2.5'
               description='Borrow against your collateral on Tren Finance, where points are allocated based on the total value borrowed'
               learnMoreLink='https://docs.tren.finance/get-started/borrow'
-              tooltip='Borrowing Milestone Description'
-              from={0}
-              to={5}
-              percent={15}
+              xpPoints={totals.borrowedPoint}
             />
           </Grid>
 
-          <Grid item xs={12} sm={6} lg={2.4}>
+          <Grid item xs={12} sm={6} lg={3}>
             <ActiveTaskSpecial
               icon='stake-trenUSD'
               title='Stake TrenUSD'
               exp='2.5'
               description='Stake your TrenUSD directly into our stability pool to help secure the protocol.'
               learnMoreLink='https://docs.tren.finance/get-started/staking-to-the-stability-pool'
-              tooltip='Stake TrenUSD Milestone Description'
-              from={0}
-              to={7.5}
-              percent={48}
+              xpPoints={totals.stakedPoint}
             />
           </Grid>
           
-          <Grid item xs={12} sm={6} lg={2.4}>
+          {/* <Grid item xs={12} sm={6} lg={3}>
             <ActiveTaskSpecial
               icon='stake-lp'
               title='Stake LP Tokens'
@@ -274,9 +283,9 @@ const Points = () => {
               to={15}
               percent={87}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} sm={6} lg={2.4}>
+          <Grid item xs={12} sm={6} lg={3}>
             <ActiveTask
               icon='refer-friends'
               title='Refer Friends'
@@ -289,7 +298,7 @@ const Points = () => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6} lg={2.4}>
+          <Grid item xs={12} sm={6} lg={3}>
             <ActiveTask
               icon='social-tasks'
               title='Social Tasks'
