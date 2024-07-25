@@ -4,7 +4,7 @@ export interface Referral {
     redeemer: string
     redeemed: boolean
     signMsg?: string
-    xpPoint: number
+    xpPoint?: any
 }
 
 export interface Point {
