@@ -237,7 +237,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
           rateType: 'collateral rate tye here',
           debt
         }
-        _totalBorrowed += debt - debtTokenGasCompensation
+        _totalBorrowed += (debt > debtTokenGasCompensation) ? debt - debtTokenGasCompensation : BigInt(0)
         _collateralDetails.push(_collateralDetail)
       }
       console.log('_collateralDetails', _collateralDetails)

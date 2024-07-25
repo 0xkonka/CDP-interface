@@ -208,6 +208,6 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
 }
 
 const client = new ApolloClient({
-  uri: 'https://api.studio.thegraph.com/query/76908/trenxp/version/latest', // Replace with your GraphQL endpoint
+  uri: 'https://api.studio.thegraph.com/proxy/84460/trenxp/version/latest', // Replace with your GraphQL endpoint
   cache: new InMemoryCache()
 });
