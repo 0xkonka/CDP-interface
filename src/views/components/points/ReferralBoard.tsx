@@ -1,56 +1,20 @@
 import { useGlobalValues } from '@/context/GlobalContext'
-import { Grid, Typography, Box, Stack, useTheme } from '@mui/material'
-import { useState, useRef, useEffect } from 'react'
-
-import { formatToThousands, formatToThousandsInt, shortenWalletAddress } from '@/hooks/utils'
-import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
+import { Grid, Typography, Box, Stack } from '@mui/material'
+import { formatToThousandsInt, shortenWalletAddress } from '@/hooks/utils'
 import { Copy } from '../Copy'
 import { usePoint } from '@/context/PointContext'
 
 export const ReferralBoard = () => {
     const { isMobileScreen, radiusBoxStyle} = useGlobalValues()
-
     const {userReferral} = usePoint()
 
-    const headerItems = [
-        {
-          label: 'Rank',
-          key: 'id', // This is sort key.
-          flexWidth: 6.5,
-          sortable: false
-        },
-        {
-          label: 'User Address',
-          key: 'address',
-          flexWidth: 8.5,
-          sortable: false
-        },
-        {
-          label: 'Total XP',
-          key: 'totalXP',
-          flexWidth: 5.5,
-          sortable: false
-        },
-        {
-          label: 'XP gained per day',
-          key: 'dailyXP',
-          flexWidth: 8.5,
-          sortable: false
-        },
-        {
-          label: 'Referral XP',
-          key: 'referralXP',
-          flexWidth: 6,
-          sortable: false
-        }
-    ]
-
-    const totalxpPoint = userReferral.reduce((sum, item) => {
-        if (item.redeemed) {
-            return sum + item.xpPoint;
-        }
-        return sum;
-    }, 0);
+    let totalXPPoint = 0
+    userReferral.forEach((item) => {
+        const xpPoint = item.xpPoint ? item.xpPoint.reduce((sum: number, row: any) => {
+            return sum + row.point
+        }, 0) : 0
+        totalXPPoint += xpPoint
+    })
 
     return (
         <Grid container spacing={4} mt={12} justifyContent='center'>
@@ -99,6 +63,10 @@ export const ReferralBoard = () => {
                             <Stack sx={{gap: {xs: 4, sm: 6}}}>
                                 {
                                     userReferral.map((item, index) => {
+                                        const xpPoint = item.xpPoint ? item.xpPoint.reduce((sum: number, row: any) => {
+                                            return sum + row.point
+                                        }, 0) : 0
+                                        
                                         if(item.redeemed) {
                                             return (
                                                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{height: {xs: 28, sm:32}}} key={index}>
@@ -108,7 +76,7 @@ export const ReferralBoard = () => {
                                                         </Typography>
                                                     </Stack>
                                                     <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
-                                                        {formatToThousandsInt(item.xpPoint || 0)} XP
+                                                        {formatToThousandsInt(xpPoint)} XP
                                                     </Typography>
                                                 </Stack> 
                                             )
@@ -126,7 +94,7 @@ export const ReferralBoard = () => {
                                 }
                                 <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{height: {xs: 28, sm:32}}}>
                                     <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#FFFFFF99' sx={{width: {xs: 124, sm: 166}, textAlign: 'end'}}>Total</Typography>
-                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={600} color='primary'> {formatToThousandsInt(totalxpPoint)} XP </Typography>
+                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={600} color='primary'> {formatToThousandsInt(totalXPPoint)} XP </Typography>
                                 </Stack>
                             </Stack>
                         </Stack>
