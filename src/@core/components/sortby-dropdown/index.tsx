@@ -124,6 +124,7 @@ const SortByDropdown = (props : SortyByDropdownProps) => {
         sx={{ 
           '& .MuiPopover-paper' : {
             minWidth: `${menuWidth}px`,
+            background: '#121516',
             border: theme => `solid 1px ${theme.palette.primary.main}`,
           }
         }}

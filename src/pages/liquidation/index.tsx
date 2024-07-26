@@ -4,14 +4,30 @@ import { LiquidationOverview } from '@/views/components/liquidation/overview'
 import { Box, Stack, Typography } from '@mui/material'
 import Icon from '@/@core/components/icon'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { LiquidationRowType } from '@/types'
 import LiquidationRow from '@/views/LiquidationRow'
 import { CollateralParams } from '@/context/ModuleProvider/type'
+import MultiFilterDropdown from '@/@core/components/filter-dropdown'
 
 const Liquidation = () => {
     const {radiusBoxStyle} = useGlobalValues()
     const { collateralDetails } = useProtocol()
+    const [sortBy, setSortBy] = useState<string>('+asset')
+    const [filterBy, setFilterBy] = useState({
+        'specific_number': false,
+        'manual_liquidate': false,
+        'collateral': false,
+        'wallet_address': false,
+        'health_factor': false,
+        'module': false,
+    })
+    const updateFilterOption = (key: keyof typeof filterBy) => {
+        setFilterBy((prevFilterBy) => ({
+            ...prevFilterBy, 
+            [key]: !prevFilterBy[key]
+        }))
+    }
     console.log(collateralDetails)
 
     const rows = useMemo(() => {
@@ -53,8 +69,8 @@ const Liquidation = () => {
                             </Stack>
                             <Stack direction='row' justifyContent='space-between' alignItems='center'>
                                 <Typography color='#707175' fontWeight={500}>Up to</Typography>
-                                <Stack direction='row' gap={2} alignItems='center'>
-                                    <Icon fontSize='16' icon='bi:trash' style={{ color: '#FF5A75', cursor: 'pointer' }} />
+                                <Stack direction='row' gap={2} alignItems='center' sx={{cursor: 'pointer'}}>
+                                    <Icon fontSize='16' icon='bi:trash' style={{ color: '#FF5A75' }} />
                                     <Typography color='#707175'>Delete</Typography>
                                 </Stack>
                             </Stack>
@@ -74,7 +90,7 @@ const Liquidation = () => {
                     </Box>
                 </Stack>
             </Box>
-            <Stack id='risky-troves' direction='row' sx={{justifyContent: 'space-between'}} mt={16}>
+            <Stack id='risky-troves' sx={{flexDirection: {xs: 'column', md: 'row'}, justifyContent: 'space-between'}} mt={16} gap={4}>
                 <Typography className='header-gradient' variant='h1'sx={{
                         fontSize: { xs: 24, md: 32, xl: 36 },
                         fontWeight: 400,
@@ -83,8 +99,27 @@ const Liquidation = () => {
                 >
                     Risky Troves
                 </Typography>
-                <Stack direction='row'>
-                    Filter by
+                <Stack sx={{flexDirection: {xs: 'column', sm: 'row'}}} gap={4}>
+                    <MultiFilterDropdown
+                        placeholder='Liquidate all loans'
+                        filterBy={filterBy}
+                        updateFilterOption={updateFilterOption}
+                        fields={[
+                            { key: 'specific_number', label: 'Specify number of loans' },
+                            { key: 'manual_liquidate', label: 'Liquidate manually' },
+                        ]}
+                    />
+                    <MultiFilterDropdown
+                        placeholder='Filter by'
+                        filterBy={filterBy}
+                        updateFilterOption={updateFilterOption}
+                        fields={[
+                            { key: 'collateral', label: 'Collateral' },
+                            { key: 'wallet_address', label: 'Wallet Address' },
+                            { key: 'health_factor', label: 'Health Factor' },
+                            { key: 'module', label: 'Module' },
+                        ]}
+                    />
                 </Stack>
             </Stack>
 
