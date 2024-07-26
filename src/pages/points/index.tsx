@@ -186,14 +186,14 @@ const Points = () => {
                             <Link href='/earn'>Stake</Link>
                           </StyledTableCell>
                       </TableRow>
-                      <TableRow>
+                      {/* <TableRow>
                           <StyledTableCell className='label'>Liquidity provided</StyledTableCell>
                           <StyledTableCell className='content'>-</StyledTableCell>
                           <StyledTableCell className='content'>-</StyledTableCell>
                           <StyledTableCell className='summary-cta'>
                             <Link href='/#'>Stake</Link>
                           </StyledTableCell>
-                      </TableRow>
+                      </TableRow> */}
                       <TableRow>
                           <StyledTableCell className='label' style={{color: '#F3F3F3'}}>Multiplier</StyledTableCell>
                           <StyledTableCell className='content'>1.8x</StyledTableCell>
