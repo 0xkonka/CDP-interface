@@ -7,10 +7,11 @@ import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem
 import { Copy } from '../Copy'
 import { usePoint } from '@/context/PointContext'
 import { useAccount } from 'wagmi'
-import { XPType } from '@/types'
+import { PointDataType } from '@/types'
+import { getAddress } from 'ethers'
 
 interface Props {
-    leaderboards: XPType[]
+    leaderboards: PointDataType[]
 }
 
 export const ExperienceBoard = (props: Props) => {
@@ -134,12 +135,12 @@ export const ExperienceBoard = (props: Props) => {
 
                     {/* Leaderboard Table Body */}
                     <Stack mt={2}>
-                    {leaderboards.map((value:XPType, index) => (
+                    {leaderboards.map((leaderboard:PointDataType, index) => (
                         <Box className='leaderboard-row' key={index} 
-                            ref={value.userAddress.toLowerCase() == (account as '0x{string}').toLowerCase() ? myLeaderRef : null}>
+                            ref={getAddress(leaderboard.id.toLowerCase()) == account ? myLeaderRef : null}>
                             <Stack direction='row' alignItems='center'
                                 sx={{
-                                    border: value.userAddress.toLowerCase() == (account as '0x{string}').toLowerCase() ? `solid 1px ${theme.palette.primary.main}` : 'none',
+                                    border: getAddress(leaderboard.id.toLowerCase()) == account ? `solid 1px ${theme.palette.primary.main}` : 'none',
                                     borderRadius: '6px',
                                     display: { xs: 'none', lg: 'flex' },
                                     p: 3
@@ -152,28 +153,28 @@ export const ExperienceBoard = (props: Props) => {
                                 </Stack>
                                 <Stack flex='7.5' direction='row' alignItems='center' gap={3}>
                                     <Typography variant='h5' fontWeight={400}>
-                                        {shortenWalletAddress(value.userAddress)}
+                                        {shortenWalletAddress(getAddress(leaderboard.id))}
                                     </Typography>
                                 </Stack>
                                 <Stack flex='6'>
                                     <Typography variant='h5' fontWeight={400}>
-                                        {formatToThousandsInt(value.totalXP)} XP
+                                        {formatToThousandsInt(leaderboard.totalPoints)} XP
                                     </Typography>
                                 </Stack>
                                 <Stack flex='5.5'>
                                     <Typography variant='h5' fontWeight={400}>
-                                        {formatToThousandsInt(value.totalXP - value.referralXP)} XP
+                                        {formatToThousandsInt(leaderboard.totalPoints - leaderboard.offChainReferralPoints)} XP
                                     </Typography>
                                 </Stack>
                                 <Stack flex='4.5'>
                                     <Typography variant='h5' fontWeight={400}>
-                                        {formatToThousandsInt(value.referralXP)} XP
+                                        {formatToThousandsInt(leaderboard.offChainReferralPoints)} XP
                                     </Typography>
                                 </Stack>
                             </Stack>
                             <Stack gap={2} py={4} sx={{ display: { xs: 'flex', lg: 'none' }, 
                                 borderTop: index == 0 ? 'none' : 'solid 1px #3030306e', 
-                                borderBottom: value.userAddress.toLowerCase() == (account as '0x{string}').toLowerCase() ? `solid 1px ${theme.palette.primary.main}` : 'none', }}>
+                                borderBottom: getAddress(leaderboard.id) == account ? `solid 1px ${theme.palette.primary.main}` : 'none', }}>
                                 <Stack direction='row' justifyContent='space-between' alignItems='center'>
                                     <Stack direction='row' gap={2}>
                                         <Typography variant='subtitle1' fontWeight={400}>
