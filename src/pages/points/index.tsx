@@ -16,7 +16,7 @@ import { getAddress } from 'ethers'
 import { formatToThousandsInt } from '@/hooks/utils'
 import { useProtocol } from '@/context/ProtocolProvider/ProtocolContext'
 import { gql, useQuery } from '@apollo/client';
-import { XPType } from '@/types'
+import { PointDataType } from '@/types'
 import { useAccount } from 'wagmi'
 
 const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://api.tren.finance' // 'http://localhost:8000'
@@ -76,18 +76,30 @@ const Points = () => {
   const { userStabilityPoolPosition } = useStabilityPoolView()
   const { userDeposit = BigInt(0) } = userStabilityPoolPosition || {}
   const { totalBorrowed } = useProtocol()
-  const [offChainList, setOffChainList] = useState([])
+  // const [offChainList, setOffChainList] = useState([])
   const {address: account} =  useAccount()
+  const [leaderboards, setLeaderboards] = useState<PointDataType[]>([])
+  const [periodPoint, setPeriodPoint] = useState(0)
+  const [totalMultiplier, setTotalMultiplier] = useState(0)
+  const [lastUpdatedTime, setLastUpdatedTime] = useState(0)
+  const [epoch , setEpoch] = useState(0)
   
   useEffect(() => {
     const fetchXPPoints = async() => {
-        const { data: referralPoints } = await axios.get(`${BE_ENDPOINT}/api/point/offChain/list`)
-        setOffChainList(referralPoints.data)
+        const { data: response } = await axios.get(`${BE_ENDPOINT}/api/point/list`)
+        setLeaderboards(response.data)
+        const { data: periodResponse } = await axios.get(`${BE_ENDPOINT}/api/point/user/${account}?period=1`)
+        setPeriodPoint(periodResponse.data)
+        const { data: multiplierResponse } = await axios.get(`${BE_ENDPOINT}/api/point/offChain/user/${account}`)
+        setTotalMultiplier(multiplierResponse.data.point ? multiplierResponse.data.point.multiplier_permanent + multiplierResponse.data.point.multiplier_temporary.value : 0)
+        const { data: pointEpochResponse } = await axios.get(`${BE_ENDPOINT}/api/point/pointEpoch`)
+        setLastUpdatedTime(pointEpochResponse.data.lastUpdateTime)
+        setEpoch(pointEpochResponse.data.epoch)
     }
     fetchXPPoints()
   }, [])
 
-  function isValidAddress(address: string) {
+  const isValidAddress = (address: string) => {
     // Check if the address is all lowercase or all uppercase
     return /^[0-9a-f]{40}$/.test(address) || /^[0-9A-F]{40}$/.test(address);
   }
@@ -97,17 +109,6 @@ const Points = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const leaderboards: XPType[] = []
-  data.trenXPPoints.forEach((value:any) => {
-    if(value.id != '0x0000000000000000000000000000000000000000') {
-        leaderboards.push({
-            userAddress: isValidAddress(value.id) ? getAddress(value.id) : value.id,
-            totalXP: parseInt(formatEther(value.amount)),
-            referralXP: 0,
-        })
-    }
-  })
-
   const totals = data.trenXPPoints.reduce((result: any, point: any) => {
     if(point.type === 0) {
       result.borrowedPoint += +formatEther(point.amount)
@@ -116,35 +117,21 @@ const Points = () => {
     }
     return result
   }, {borrowedPoint: 0, stakedPoint: 0})
-  console.log("Totals: ", totals)
+  console.log("Cards points: ", totals)
 
-  // offChainList.forEach((value: any) => {
-  //   const index = leaderboards.findIndex(record => record.userAddress.toLocaleLowerCase() == value.account.toLocaleLowerCase())
-  //   if(index !== -1) {
-  //     leaderboards[index].referralXP = value.referralPoint
-  //   } else {
-  //     leaderboards.push({
-  //         userAddress: isValidAddress(value.account) ? getAddress(value.account) : value.account,
-  //         totalXP: value.referralPoint,
-  //         referralXP: value.referralPoint
-  //     })
-  //   }
-  // })
-  console.log('leaderboards: ', leaderboards)
-
-  const myLeader = leaderboards.find((leaderboard) => {
-    return leaderboard.userAddress.toLowerCase() == account?.toLowerCase()
+  const myPoint = leaderboards.find((leaderboard:PointDataType) => {
+    return getAddress(leaderboard.id) == account
   })
-  const totalXPGained = myLeader ? myLeader.totalXP : 0
+  const totalXPGained = myPoint ? myPoint.totalPoints : 0
 
   const totalLeaders = leaderboards.length
-  const sortedLeaders = leaderboards.sort((a, b) => b.totalXP - a.totalXP)
-  const rank = sortedLeaders.findIndex((leaderboard) => leaderboard.userAddress.toLocaleLowerCase() == account?.toLocaleLowerCase()) + 1
+  const sortedLeaders = leaderboards.sort((a, b) => b.totalPoints - a.totalPoints)
+  const rank = sortedLeaders.findIndex((leaderboard) => getAddress(leaderboard.id) == account) + 1
 
   return (
     <Box>
       {/* 3D Tren Points Banner section */}
-      <TrenPointBanner totalXPGained={totalXPGained} totalLeaders={totalLeaders} rank={rank}/>
+      <TrenPointBanner totalXPGained={totalXPGained} totalLeaders={totalLeaders} rank={rank} periodPoint={periodPoint} totalMultiplier={totalMultiplier} lastUpdated = {lastUpdatedTime} epoch={epoch}/>
 
       {/* Daily Boost */}
       <Grid container spacing={8} mt={12}>

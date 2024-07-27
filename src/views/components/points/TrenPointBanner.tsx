@@ -1,16 +1,65 @@
 import { useGlobalValues } from "@/context/GlobalContext"
-import { usePoint } from "@/context/PointContext"
 import { formatToThousandsInt } from "@/hooks/utils"
 import { Box, Stack, Typography, Grid } from "@mui/material"
+import { useEffect, useState } from "react"
 
 interface Props {
     totalXPGained: number
     totalLeaders: number
     rank: number
+    periodPoint: number
+    totalMultiplier: number
+    lastUpdated: number
+    epoch: number
 }
+
+const formatTimestamp = (unixTimestamp:number) => {
+    const date = new Date(unixTimestamp * 1000); // Convert Unix timestamp to milliseconds
+  
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Months are zero-indexed
+    const year = date.getFullYear();
+  
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+  
+    // Format the components with leading zeros if necessary
+    const formattedDay = day.toString().padStart(2, '0');
+    const formattedMonth = month.toString().padStart(2, '0');
+    const formattedHours = hours.toString().padStart(2, '0');
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+    const formattedSeconds = seconds.toString().padStart(2, '0');
+  
+    // Create the formatted date and time string
+    return `${formattedMonth}/${formattedDay}/${year} - ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+}
+
+const formatOffsetToTime = (offsetInSeconds:number) => {
+    const hours = Math.floor(offsetInSeconds / 3600);
+    const minutes = Math.floor((offsetInSeconds % 3600) / 60);
+    const seconds = offsetInSeconds % 60;
+  
+    // Pad hours, minutes, and seconds with leading zeros if needed
+    const formattedHours = String(hours).padStart(2, '0');
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    const formattedSeconds = String(seconds).padStart(2, '0');
+  
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+  }
+
 export const TrenPointBanner = (props:Props) => {
-    const {totalXPGained, totalLeaders, rank} = props
+    const {totalXPGained, totalLeaders, rank, periodPoint, totalMultiplier, lastUpdated, epoch} = props
     const {isSmallScreen, isMediumScreen, isMediumLargeScreen} = useGlobalValues()
+    const [remainingTime, setRemainingTime] = useState(0)
+
+    useEffect(()=>{
+        const interval = setInterval(()=>{
+            const nowStamp = Math.floor(Date.now() / 1000)
+            setRemainingTime(epoch - (nowStamp - lastUpdated))
+        }, 1000)
+        return () => clearInterval(interval); 
+    }, [lastUpdated])
 
     return (
         <Box
@@ -46,7 +95,7 @@ export const TrenPointBanner = (props:Props) => {
                 </Box>
                 <Box position='relative' sx={{ mt: { xs: 5, lg: 20 }, p: 4 }}>
                     <Grid container spacing={4} alignItems='center' ml={-8}>
-                        <Grid item xs={6} lg={2.2} xl={2.5}>
+                        <Grid item xs={6} lg={2.5} xl={2.5}>
                             <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>
                                 Total XP Gained
                             </Typography>
@@ -60,7 +109,7 @@ export const TrenPointBanner = (props:Props) => {
                                 {formatToThousandsInt(totalXPGained)} XP
                             </Typography>
                         </Grid>
-                        <Grid item xs={6} lg={2.2} xl={1.5}>
+                        <Grid item xs={6} lg={2.5} xl={2.5}>
                             <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>
                                 XP Gained / 24 hrs
                             </Typography>
@@ -70,10 +119,10 @@ export const TrenPointBanner = (props:Props) => {
                                     mt: { xs: 2, lg: 0 }
                                 }}
                             >
-                                -
+                                {formatToThousandsInt(periodPoint)} XP
                             </Typography>
                         </Grid>
-                        <Grid item xs={6} lg={4.2} xl={3.3}>
+                        <Grid item xs={6} lg={1.8} xl={2.8}>
                             <Typography variant={isSmallScreen ? 'subtitle2' : 'h5'} fontWeight={400} color='#C6C6C799'>
                                 Rank
                             </Typography>
@@ -94,7 +143,7 @@ export const TrenPointBanner = (props:Props) => {
                                         /{formatToThousandsInt(totalLeaders)}
                                     </Typography>
                                 </Typography>
-                                <Stack direction='row' alignItems='center' gap={0.5} sx={{mb: {xs: 1, md: 2, xl: 3}}}>
+                                {/* <Stack direction='row' alignItems='center' gap={0.5} sx={{mb: {xs: 1, md: 2, xl: 3}}}>
                                     <Stack sx={{width: {xs: 12, md: 16}}}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
                                             <path fillRule="evenodd" clipRule="evenodd" d="M7.24884 3.05287L3.27299 7.02872C3.13132 7.16555 2.94158 7.24126 2.74463 7.23955C2.54768 7.23784 2.35928 7.15884 2.22001 7.01957C2.08074 6.8803 2.00174 6.6919 2.00003 6.49495C1.99832 6.298 2.07403 6.10826 2.21086 5.96659L7.46893 0.70852C7.53862 0.638704 7.6214 0.583315 7.71253 0.545524C7.80366 0.507733 7.90134 0.488281 7.99999 0.488281C8.09864 0.488281 8.19633 0.507733 8.28745 0.545524C8.37858 0.583315 8.46136 0.638704 8.53106 0.70852L13.7891 5.96659C13.926 6.10826 14.0017 6.298 14 6.49495C13.9982 6.6919 13.9192 6.8803 13.78 7.01957C13.6407 7.15884 13.4523 7.23784 13.2554 7.23955C13.0584 7.24126 12.8687 7.16555 12.727 7.02872L8.75114 3.05287V14.7603C8.75114 14.9596 8.67201 15.1506 8.53114 15.2915C8.39027 15.4323 8.19921 15.5115 7.99999 15.5115C7.80077 15.5115 7.60971 15.4323 7.46885 15.2915C7.32798 15.1506 7.24884 14.9596 7.24884 14.7603V3.05287Z" fill="#67DAB1"/>
@@ -108,7 +157,7 @@ export const TrenPointBanner = (props:Props) => {
                                         }}>
                                         <span style={{color: '#67DAB1', fontWeight: 600}}>+4</span>/24h
                                     </Typography>
-                                </Stack>
+                                </Stack> */}
                             </Stack>
                         </Grid>
                         <Grid item xs={12} sm={6} lg={1.8} xl={1.4}>
@@ -121,21 +170,21 @@ export const TrenPointBanner = (props:Props) => {
                                     mt: { xs: 2, lg: 0 }
                                 }}
                             >
-                                4X
+                                {totalMultiplier}X
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} lg={4.5} xl={3.3}>
-                            <Stack gap={2} width='fit-content' sx={{ml: {xs: 0, xl: 'auto'}}}>
+                        <Grid item xs={12} lg={3.4} xl={2.8}>
+                            <Stack gap={2} width='fit-content' sx={{ml: {xs: 0, lg: 'auto'}}}>
                                 <Stack direction='row' justifyContent='space-between' gap={3}>
                                     <Typography variant='h4' fontWeight={700}>
                                     Next Update
                                     </Typography>
                                     <Typography variant='h4' fontWeight={700} color='primary'>
-                                    08:51:58
+                                        {formatOffsetToTime(remainingTime)}
                                     </Typography>
                                 </Stack>
                                 <Typography sx={{ fontSize: { xs: 14, md: 16, xl: 18 } }} fontWeight={400} color='#C6C6C7'>
-                                    Last Update: 3/3/2024 - 22:19:19
+                                    Last Update: {formatTimestamp(lastUpdated)}
                                 </Typography>
                             </Stack>
                         </Grid>
