@@ -15,11 +15,12 @@ export interface Point {
     rank?: number
 }
 
-export interface XPType {
-    userAddress: string
-    totalXP: number
-    // protocolXP: number   // This will be calculated by totalXP - referralXP automatically.
-    referralXP: number
+export interface PointDataType {
+    id: string
+    onChainPoints: number
+    offChainXpPoints: number
+    offChainReferralPoints: number
+    totalPoints: number
 }
 
 export interface LiquidationRowType {
