@@ -20,7 +20,7 @@ export const ExperienceBoard = (props: Props) => {
     const {isMobileScreen, radiusBoxStyle} = useGlobalValues()
     const {userReferral} = usePoint()
     const [direction, setDirection] = useState('asc')
-    const [sortBy, setSortBy] = useState('symbol')
+    const [sortBy, setSortBy] = useState('rank')
     const [showRange, setShowRange] = useState('top10')
     const leaderboardRef = useRef<HTMLDivElement>(null)
     const myLeaderRef = useRef<HTMLDivElement>(null)
@@ -32,10 +32,25 @@ export const ExperienceBoard = (props: Props) => {
         setDirection(direction)
     }
 
+    const sortedLeaders = () => {
+        if(direction == "none") 
+            return leaderboards
+
+        const offset = (direction == "asc") ? 1 :  -1
+        if(sortBy == "rank" || sortBy == "totalXP") {
+            return leaderboards.sort((a, b) => offset * (b.totalPoints - a.totalPoints))
+        } else if(sortBy == "protocolXP") {
+            return leaderboards.sort((a, b) => offset * ((b.totalPoints - b.offChainReferralPoints) - (a.totalPoints - a.offChainReferralPoints)))
+        } else if(sortBy == "referralXP") {
+            return leaderboards.sort((a, b) => offset * (b.offChainReferralPoints - a.offChainReferralPoints))
+        }
+        return leaderboards
+    }
+
     const headerItems = [
         {
           label: 'Rank',
-          key: 'id', // This is sort key.
+          key: 'rank', // This is sort key.
           flexWidth: 3.5,
           sortable: true
         },
@@ -43,7 +58,7 @@ export const ExperienceBoard = (props: Props) => {
           label: 'User Address',
           key: 'address',
           flexWidth: 7.5,
-          sortable: true
+          sortable: false
         },
         {
           label: 'Total XP',
@@ -64,10 +79,10 @@ export const ExperienceBoard = (props: Props) => {
           sortable: true
         }
     ]
-
+    console.log('User Referrals: ', userReferral)
     const totalxpPoint = userReferral.reduce((sum, item) => {
         if (item.redeemed) {
-            return sum + item.xpPoint;
+            return sum + item.xpPoint || 0;
         }
         return sum;
     }, 0);
@@ -84,6 +99,8 @@ export const ExperienceBoard = (props: Props) => {
                         <Button sx={{ width: 'fit-content', color: showRange=='top10' ? 'white' : '#6B6D6D', py: 3, fontWeight: 400}}
                                 variant='outlined'
                                 color={showRange=='top10' ? 'primary' : 'secondary'} onClick={()=>{
+                                    setSortBy('rank')
+                                    setDirection('asc')
                                     leaderboardRef.current?.scrollTo({ behavior: "smooth", top: 0})
                                     setShowRange('top10')
                                 }}>
@@ -106,6 +123,7 @@ export const ExperienceBoard = (props: Props) => {
                 <Box
                     sx={{ ...radiusBoxStyle, mt: 6, pt: 0 }}
                     id='leaderboard'
+                    className='scrollable'
                     style={{ overflowY: 'scroll', height: 450 }}
                     ref={leaderboardRef}
                 >
@@ -135,7 +153,7 @@ export const ExperienceBoard = (props: Props) => {
 
                     {/* Leaderboard Table Body */}
                     <Stack mt={2}>
-                    {leaderboards.map((leaderboard:PointDataType, index) => (
+                    {sortedLeaders().map((leaderboard:PointDataType, index) => (
                         <Box className='leaderboard-row' key={index} 
                             ref={getAddress(leaderboard.id.toLowerCase()) == account ? myLeaderRef : null}>
                             <Stack direction='row' alignItems='center'
@@ -148,7 +166,7 @@ export const ExperienceBoard = (props: Props) => {
                             >
                                 <Stack flex='3.5'>
                                     <Typography variant='h5' fontWeight={400} marginLeft={4}>
-                                        {formatToThousandsInt(index + 1)}
+                                        {formatToThousandsInt(leaderboard.rank)}
                                     </Typography>
                                 </Stack>
                                 <Stack flex='7.5' direction='row' alignItems='center' gap={3}>
@@ -178,12 +196,12 @@ export const ExperienceBoard = (props: Props) => {
                                 <Stack direction='row' justifyContent='space-between' alignItems='center'>
                                     <Stack direction='row' gap={2}>
                                         <Typography variant='subtitle1' fontWeight={400}>
-                                        {shortenWalletAddress('0xD88Cc271583b0019DdA08666fF2DB78B2A0172cC')}
+                                        {shortenWalletAddress(getAddress(leaderboard.id))}
                                         </Typography>
                                     </Stack>
                                     <Stack>
                                         <Typography variant='subtitle1' fontWeight={500}>
-                                        {index + 1}
+                                        {leaderboard.rank}
                                         </Typography>
                                     </Stack>
                                 </Stack>
@@ -207,17 +225,17 @@ export const ExperienceBoard = (props: Props) => {
                                 <Stack direction='row' alignItems='center'>
                                     <Stack sx={{ flex: 3 }}>
                                         <Typography variant='subtitle1' fontWeight={500} color='#D4D4D4'>
-                                        {formatToThousandsInt(123000)} XP
+                                        {formatToThousandsInt(leaderboard.totalPoints)} XP
                                         </Typography>
                                     </Stack>
                                     <Stack sx={{ flex: 3.5 }}>
                                         <Typography variant='subtitle1' fontWeight={500} color='#D4D4D4'>
-                                        {formatToThousandsInt(4500)} XP
+                                        {formatToThousandsInt(leaderboard.totalPoints - leaderboard.offChainReferralPoints)} XP
                                         </Typography>
                                     </Stack>
                                     <Stack sx={{ flex: 2 }}>
                                         <Typography variant='subtitle1' fontWeight={500} color='#D4D4D4'>
-                                        {formatToThousandsInt(3000)} XP
+                                        {formatToThousandsInt(leaderboard.offChainReferralPoints)} XP
                                         </Typography>
                                     </Stack>
                                 </Stack>
@@ -233,8 +251,73 @@ export const ExperienceBoard = (props: Props) => {
                 <Typography className='header-gradient' sx={{ fontSize: { xs: 32, lg: 40 } }}>
                     Referrals
                 </Typography>
-                <Box sx={{ ...radiusBoxStyle, mt: 6, p: 0 }} ref={secondItemRef}>
+                <Box sx={{ ...radiusBoxStyle, mt: 6, p: 0, height: 450 }} ref={secondItemRef}>
                     <Stack direction='row' height='100%' sx={{minHeight: {xs: 0, lg:450}}}>
+                        {/* @Jordan - This is tempoarary code while we will update the backend for main net - user will have one invite code and many redeemers */}
+                        <Stack className='scrollable' sx={{flex: 7, borderRight: 'solid 1px #2D3131', overflowY: 'scroll'}}>
+                            <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}, px: {xs: 3, md: 6}, pt: {xs: 3, md: 6}, pb: 2, 
+                                position: 'sticky', top: 0, background: '#080b0b'}}>
+                                Wallets referred
+                            </Typography>
+                            <Stack>
+                                {
+                                    userReferral.map((item, index) => (
+                                        <Stack direction='row' gap={isMobileScreen ? 2 : 6} sx={{borderBottom: 'solid 1px #2D3131', px: {xs: 3, md: 6}, py: {xs: 3, md: 4}}} alignItems='center' key={index}>
+                                            <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
+                                                {shortenWalletAddress(getAddress(item.redeemer))}
+                                            </Typography>
+                                        </Stack>        
+                                    ))
+                                }
+                            </Stack>
+                        </Stack>
+                        <Stack sx={{flex: 11.5}}>
+                            <Stack direction='row' justifyContent='space-between' sx={{px: {xs: 3, md: 6}, pt: {xs: 3, md: 6}, pb: 2}}>
+                                <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}}}>Codes</Typography>
+                                <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}}}>Referral XP</Typography>
+                            </Stack>
+                            <Stack>
+                                {
+                                    userReferral.length > 0 && 
+                                    <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{px: {xs: 3, md: 6}, py: {xs: 3, md: 4}}}>
+                                        <Stack direction='row' alignItems='center' gap={isMobileScreen ? 2 : 3}>
+                                            <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color={userReferral[0].redeemed ? 'primary' : 'white'} sx={{my:'auto', userSelect: 'none'}}>
+                                                {userReferral[0].inviteCode}
+                                            </Typography>
+                                        </Stack>
+                                        <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
+                                            {formatToThousandsInt(userReferral[0].xpPoint || 0)} XP
+                                        </Typography>
+                                    </Stack> 
+                                }
+                                <Stack direction='row' sx={{mx: {xs: 3, md: 6}, pt: 4, pb: 12, borderBottom: 'solid 1px #FFFFFF33'}} gap={4}>
+                                    <Button sx={{ flex: 1, color: 'white', py: 3, fontWeight: 400}}
+                                            variant='outlined'
+                                            color='primary' onClick={()=>{
+                                                console.log('Copy Code')
+                                            }}>
+                                        Copy Code
+                                    </Button>
+                                    <Button sx={{ flex: 1, color: 'white', py: 3, fontWeight: 400}}
+                                            variant='outlined'
+                                            color='secondary' onClick={()=>{
+                                                console.log('Copy invite URL')
+                                            }}>
+                                        Copy invite URL
+                                    </Button>
+                                </Stack>
+                            </Stack>
+                            <Stack direction='row' alignItems='center' justifyContent='space-between' paddingX={6} paddingY={4} marginTop='auto'>
+                                <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={600} color='#FFF'>People referred</Typography>
+                                <Typography sx={{fontSize:{xs: 16, md:24}}} fontWeight={400} color='primary' className='font-britanica'> 
+                                    {userReferral.length}
+                                </Typography>
+                            </Stack>
+                        </Stack>
+                    </Stack>
+                    
+                    {/* This is old referral section of testnet */}
+                    {/* <Stack direction='row' height='100%' sx={{minHeight: {xs: 0, lg:450}}}>
                         <Stack sx={{flex: 6.5, borderRight: 'solid 1px #2D3131'}}>
                             <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}, px: {xs: 3, md: 6}, pt: {xs: 3, md: 6}, pb: 2}}>Codes</Typography>
                             <Stack>
@@ -298,7 +381,7 @@ export const ExperienceBoard = (props: Props) => {
                                 </Typography>
                             </Stack>
                         </Stack>
-                    </Stack>
+                    </Stack> */}
                 </Box>
             </Grid>
         </Grid>
