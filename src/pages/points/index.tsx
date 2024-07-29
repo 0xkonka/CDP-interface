@@ -87,7 +87,11 @@ const Points = () => {
   useEffect(() => {
     const fetchXPPoints = async() => {
         const { data: response } = await axios.get(`${BE_ENDPOINT}/api/point/list`)
-        setLeaderboards(response.data)
+        const leaderboardsWithRank = response.data.map((item: any, index: number) => ({
+          ...item,
+          rank: index + 1
+        }))
+        setLeaderboards(leaderboardsWithRank)
         const { data: periodResponse } = await axios.get(`${BE_ENDPOINT}/api/point/user/${account}?period=1`)
         setPeriodPoint(periodResponse.data)
         const { data: multiplierResponse } = await axios.get(`${BE_ENDPOINT}/api/point/offChain/user/${account}`)
@@ -183,9 +187,10 @@ const Points = () => {
                       </TableRow> */}
                       <TableRow>
                           <StyledTableCell className='label' style={{color: '#F3F3F3'}}>Multiplier</StyledTableCell>
-                          <StyledTableCell className='content'>1.8x</StyledTableCell>
-                          <StyledTableCell className='content'>2.8x</StyledTableCell>
-                          <StyledTableCell className='summary-cta'>Learn more</StyledTableCell>
+                          <StyledTableCell className='content'>{totalMultiplier}x</StyledTableCell>
+                          <StyledTableCell className='content'>{totalMultiplier + 1}x</StyledTableCell>
+                          {/* <StyledTableCell className='summary-cta'>Learn more</StyledTableCell> */}
+                          <StyledTableCell className='summary-cta'></StyledTableCell>
                       </TableRow>
                     </TableBody>
                 </Table>
