@@ -14,14 +14,14 @@ body {
   height: 2px;
 }
 
-#leaderboard::-webkit-scrollbar {
+.scrollable::-webkit-scrollbar {
   width: 6px;
   height: 2px;
 }
-#leaderboard::-webkit-scrollbar-track {
+.scrollable::-webkit-scrollbar-track {
   background: transparent;
 }
-#leaderboard::-webkit-scrollbar-thumb {
+.scrollable::-webkit-scrollbar-thumb {
   background-color: #67DAB1;
   border-radius: 20px;
 }
