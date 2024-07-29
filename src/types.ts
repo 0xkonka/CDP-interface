@@ -17,6 +17,7 @@ export interface Point {
 
 export interface PointDataType {
     id: string
+    rank: number
     onChainPoints: number
     offChainXpPoints: number
     offChainReferralPoints: number
