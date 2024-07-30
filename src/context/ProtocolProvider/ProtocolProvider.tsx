@@ -47,8 +47,7 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
       args: []
     })
     const sortedCollateral = (_collaterals as string[]).sort()
-    console.log('Provider collaterals: ', sortedCollateral)
-
+    // console.log('Provider collaterals: ', sortedCollateral)
 
     setCollaterals(sortedCollateral)
   }
@@ -240,8 +239,8 @@ export const ProtocolProvider: React.FC<ProtocolProviderProps> = ({ children }) 
         _totalBorrowed += (debt > debtTokenGasCompensation) ? debt - debtTokenGasCompensation : BigInt(0)
         _collateralDetails.push(_collateralDetail)
       }
-      console.log('_collateralDetails', _collateralDetails)
-      console.log('__totalBorrowed: ', _totalBorrowed)
+      // console.log('_collateralDetails', _collateralDetails)
+      // console.log('__totalBorrowed: ', _totalBorrowed)
       setCollateralDetails(_collateralDetails)
       setTotalBorrowed(_totalBorrowed)
     }

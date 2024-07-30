@@ -139,7 +139,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
   const getRedeemCode = async (address: string) => {
     try {
       const response = await axios.post(BE_ENDPOINT + '/api/referral/user/' + address)
-      console.log('Get Redeemed Code:', response)
+      // console.log('Get Redeemed Code:', response)
       if (response.data.result === true) {
         showToast('success', 'Correct InviteCode', 'You have successfully entered correct inviteCode', 3000)
         return true
