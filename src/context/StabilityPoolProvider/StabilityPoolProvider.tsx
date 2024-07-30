@@ -56,7 +56,7 @@ export const StabilityPoolProvider: React.FC<StabilityPoolProviderProps> = ({ ch
         }
       ]
     })
-    console.log('_stabilityPoolDetails', _stabilityPoolDetails)
+    // console.log('_stabilityPoolDetails', _stabilityPoolDetails)
     setStabilityPoolInfo({
       totalCollateral: {
         assets: (_stabilityPoolDetails[0].result as any[])[0],
@@ -87,7 +87,7 @@ export const StabilityPoolProvider: React.FC<StabilityPoolProviderProps> = ({ ch
           }
         ]
       })
-      console.log('_userPosition', _userInfo)
+      // console.log('_userPosition', _userInfo)
 
       let _userPositionByCollateral: any = [[], []]
 
