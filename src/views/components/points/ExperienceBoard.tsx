@@ -79,7 +79,6 @@ export const ExperienceBoard = (props: Props) => {
           sortable: true
         }
     ]
-    console.log('User Referrals: ', userReferral)
     const totalxpPoint = userReferral.reduce((sum, item) => {
         if (item.redeemed) {
             return sum + item.xpPoint || 0;

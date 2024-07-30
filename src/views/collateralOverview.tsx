@@ -48,13 +48,13 @@ export const CollateralOverview = (props: Props) => {
             <Grid item xs={12} sm={6} lg={4}>
                 <Stack direction='row' sx={{justifyContent: 'space-between', alignItems: 'center'}} >
                     <Typography variant='subtitle1' color='#D4D4D4'>Total trenUSD</Typography>
-                    <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} fontWeight={400}>{formatMoney(+formatUnits(row.mintCap, row.decimals))}</Typography>
+                    <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} fontWeight={400}>{formatMoney(+formatEther(row.mintCap))}</Typography>
                 </Stack>
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
                 <Stack direction='row' sx={{justifyContent: 'space-between', alignItems: 'center'}}>
                     <Typography variant='subtitle1' color='#D4D4D4'>TVL</Typography>
-                    <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} fontWeight={400}>{formatMoney(+formatUnits(row.totalAssetDebt, row.decimals))}</Typography>
+                    <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} fontWeight={400}>{formatMoney(+formatEther(row.totalAssetDebt))}</Typography>
                 </Stack>    
             </Grid>
             <Grid item xs={12} sm={6} lg={4}>
@@ -66,7 +66,7 @@ export const CollateralOverview = (props: Props) => {
             <Grid item xs={12} sm={6} lg={4}>
                 <Stack direction='row' sx={{justifyContent: 'space-between', alignItems: 'center'}}>
                     <Typography variant='subtitle1' color='#D4D4D4'>Available trenUSD</Typography>
-                    <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} fontWeight={400}>{formatMoney(+formatUnits(row.totalBorrowAvailable, row.decimals))}</Typography>
+                    <Typography variant={isSmallScreen ? 'subtitle1' : 'h5'} fontWeight={400}>{formatMoney(+formatEther(row.totalBorrowAvailable))}</Typography>
                 </Stack>
             </Grid>
         </Grid>

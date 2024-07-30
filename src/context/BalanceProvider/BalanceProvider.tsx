@@ -57,7 +57,7 @@ export const BalanceProvider: React.FC<BalanceProviderProps> = ({ children }) =>
       address,
       balance: result[index].result as bigint
     }))
-    console.log('__balanceDetails', _balanceDetails)
+    // console.log('__balanceDetails', _balanceDetails)
     setBalanceDetails(_balanceDetails)
   }
 
