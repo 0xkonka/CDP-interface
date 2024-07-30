@@ -28,7 +28,6 @@ const Liquidation = () => {
             [key]: !prevFilterBy[key]
         }))
     }
-    console.log(collateralDetails)
 
     const rows = useMemo(() => {
         if (collateralDetails && collateralDetails.length > 0) {
