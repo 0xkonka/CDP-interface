@@ -79,12 +79,12 @@ export const ExperienceBoard = (props: Props) => {
           sortable: true
         }
     ]
-    const totalxpPoint = userReferral.reduce((sum, item) => {
-        if (item.redeemed) {
-            return sum + item.xpPoint || 0;
-        }
-        return sum;
-    }, 0);
+    // const totalxpPoint = userReferral.reduce((sum, item) => {
+    //     if (item.redeemed) {
+    //         return sum + item.xpPoint || 0;
+    //     }
+    //     return sum;
+    // }, 0);
 
     return (
         <Grid container spacing={4} mt={12} >
@@ -253,7 +253,7 @@ export const ExperienceBoard = (props: Props) => {
                 <Box sx={{ ...radiusBoxStyle, mt: 6, p: 0, height: 450 }} ref={secondItemRef}>
                     <Stack direction='row' height='100%' sx={{minHeight: {xs: 0, lg:450}}}>
                         {/* @Jordan - This is tempoarary code while we will update the backend for main net - user will have one invite code and many redeemers */}
-                        <Stack className='scrollable' sx={{flex: 7, borderRight: 'solid 1px #2D3131', overflowY: 'scroll'}}>
+                        <Stack className='scrollable' sx={{flex: {xs: 1, md: 7}, borderRight: 'solid 1px #2D3131', overflowY: 'scroll', borderTopLeftRadius: '10px'}}>
                             <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}, px: {xs: 3, md: 6}, pt: {xs: 3, md: 6}, pb: 2, 
                                 position: 'sticky', top: 0, background: '#080b0b'}}>
                                 Wallets referred
@@ -270,7 +270,7 @@ export const ExperienceBoard = (props: Props) => {
                                 }
                             </Stack>
                         </Stack>
-                        <Stack sx={{flex: 11.5}}>
+                        <Stack sx={{flex: {xs: 1, md: 11.5}}}>
                             <Stack direction='row' justifyContent='space-between' sx={{px: {xs: 3, md: 6}, pt: {xs: 3, md: 6}, pb: 2}}>
                                 <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}}}>Codes</Typography>
                                 <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}}}>Referral XP</Typography>
@@ -285,11 +285,13 @@ export const ExperienceBoard = (props: Props) => {
                                             </Typography>
                                         </Stack>
                                         <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
-                                            {formatToThousandsInt(userReferral[0].xpPoint || 0)} XP
+                                            {formatToThousandsInt(userReferral[0].xpPoint?.reduce((sum: number, item:any) => {
+                                                return sum + item.point || 0
+                                            }, 0) || 0)} XP
                                         </Typography>
                                     </Stack> 
                                 }
-                                <Stack direction='row' sx={{mx: {xs: 3, md: 6}, pt: 4, pb: 12, borderBottom: 'solid 1px #FFFFFF33'}} gap={4}>
+                                <Stack sx={{mx: {xs: 3, md: 6}, pt: 4, pb: 12, borderBottom: 'solid 1px #FFFFFF33', flexDirection: {xs: 'column', md: 'row'}}} gap={4}>
                                     <Button sx={{ flex: 1, color: 'white', py: 3, fontWeight: 400}}
                                             variant='outlined'
                                             color='primary' onClick={()=>{
