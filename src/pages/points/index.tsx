@@ -21,17 +21,6 @@ import { useAccount } from 'wagmi'
 
 const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://api.tren.finance' // 'http://localhost:8000'
 
-const GET_TRENING_BALANCES = gql`
-  {
-    trenXPPoints(where: {account: "0x48ae3b6C0Af855260d4382F9f693e53DA7F6E94E"}) {
-      id
-      type
-      account
-      amount
-    }
-  }
-`    
-
 const StyledTableCell = styled(TableCell)<TableCellProps>(({ theme }) => ({
   fontSize: 18,
   padding: 0,
@@ -83,6 +72,17 @@ const Points = () => {
   const [totalMultiplier, setTotalMultiplier] = useState(0)
   const [lastUpdatedTime, setLastUpdatedTime] = useState(0)
   const [epoch , setEpoch] = useState(0)
+
+  const GET_TRENING_BALANCES = gql`
+    {
+      trenXPPoints(where: {account: "${account}"}) {
+        id
+        type
+        account
+        amount
+      }
+    }
+  `
   
   useEffect(() => {
     const fetchXPPoints = async() => {

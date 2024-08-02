@@ -12,7 +12,7 @@ import { showToast } from '@/hooks/toasts'
 
 const BE_ENDPOINT = process.env.BE_ENDPOINT || 'https://api.tren.finance' // 'http://localhost:8000'
 
-const REFERRAL_DISTRIBUTION = process.env.REFERRAL_DISTRIBUTION || 2
+const REFERRAL_DISTRIBUTION = process.env.REFERRAL_DISTRIBUTION || 1
 
 interface PointContextValue {
   isUserRedeemed: boolean
