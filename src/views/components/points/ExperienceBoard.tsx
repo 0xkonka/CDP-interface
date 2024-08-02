@@ -261,9 +261,10 @@ export const ExperienceBoard = (props: Props) => {
                             <Stack>
                                 {
                                     userReferral.map((item, index) => (
+                                        item.redeemed &&
                                         <Stack direction='row' gap={isMobileScreen ? 2 : 6} sx={{borderBottom: 'solid 1px #2D3131', px: {xs: 3, md: 6}, py: {xs: 3, md: 4}}} alignItems='center' key={index}>
                                             <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
-                                                {shortenWalletAddress(getAddress(item.redeemer))}
+                                                {item.redeemed ? shortenWalletAddress(getAddress(item.redeemer)) : ''}
                                             </Typography>
                                         </Stack>        
                                     ))
