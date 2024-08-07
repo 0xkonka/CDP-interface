@@ -95,7 +95,7 @@ const Points = () => {
         const { data: periodResponse } = await axios.get(`${BE_ENDPOINT}/api/point/user/${account}?period=1`)
         setPeriodPoint(periodResponse.data)
         const { data: multiplierResponse } = await axios.get(`${BE_ENDPOINT}/api/point/offChain/user/${account}`)
-        setTotalMultiplier(multiplierResponse.data.point ? multiplierResponse.data.point.multiplier_permanent + multiplierResponse.data.point.multiplier_temporary.value : 0)
+        setTotalMultiplier(multiplierResponse.data.point ? multiplierResponse.data.point.multiplier_permanent + multiplierResponse.data.point.multiplier_temporary?.value | 0 : 0)
         const { data: pointEpochResponse } = await axios.get(`${BE_ENDPOINT}/api/point/pointEpoch`)
         setLastUpdatedTime(pointEpochResponse.data.lastUpdateTime)
         setEpoch(pointEpochResponse.data.epoch)

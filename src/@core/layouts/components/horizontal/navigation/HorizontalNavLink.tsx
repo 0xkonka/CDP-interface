@@ -95,11 +95,11 @@ const HorizontalNavLink = (props: Props) => {
               e.stopPropagation()
               showToast('success', 'Welcome', 'Connect wallet to view protocol.', 3000)
             }
-            else if(!isUserRedeemed) {
-              e.preventDefault()
-              e.stopPropagation()
-              showToast('success', 'Welcome', 'Redeem a code to view the protocol.', 3000)
-            }
+            // else if(!isUserRedeemed) {
+            //   e.preventDefault()
+            //   e.stopPropagation()
+            //   showToast('success', 'Welcome', 'Redeem a code to view the protocol.', 3000)
+            // }
             if (item.path === undefined) {
               e.preventDefault()
               e.stopPropagation()

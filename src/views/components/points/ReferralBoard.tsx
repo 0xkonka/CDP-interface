@@ -5,21 +5,21 @@ import { Copy } from '../Copy'
 import { usePoint } from '@/context/PointContext'
 
 export const ReferralBoard = () => {
-    const { isMobileScreen, radiusBoxStyle} = useGlobalValues()
-    const {userReferral} = usePoint()
+    // const { isMobileScreen, radiusBoxStyle} = useGlobalValues()
+    // const {userReferral} = usePoint()
 
-    let totalXPPoint = 0
-    userReferral.forEach((item) => {
-        const xpPoint = item.xpPoint ? item.xpPoint.reduce((sum: number, row: any) => {
-            return sum + row.point
-        }, 0) : 0
-        totalXPPoint += xpPoint
-    })
+    // let totalXPPoint = 0
+    // userReferral.forEach((item) => {
+    //     const xpPoint = item.xpPoint ? item.xpPoint.reduce((sum: number, row: any) => {
+    //         return sum + row.point
+    //     }, 0) : 0
+    //     totalXPPoint += xpPoint
+    // })
 
     return (
         <Grid container spacing={4} mt={12} justifyContent='center'>
             {/* Referrals group */}
-            <Grid item xs={12} lg={5} xl={4.5}>
+            {/* <Grid item xs={12} lg={5} xl={4.5}>
                 <Typography className='header-gradient' sx={{ fontSize: { xs: 32, lg: 40 } }}>
                     Referrals
                 </Typography>
@@ -100,7 +100,7 @@ export const ReferralBoard = () => {
                         </Stack>
                     </Stack>
                 </Box>
-            </Grid>
+            </Grid> */}
         </Grid>
     )
 }

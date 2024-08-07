@@ -15,7 +15,7 @@ const Referrals = () => {
   return (
     <Box>
       {/* Leaderboard and Referrals */}
-      <ReferralBoard />
+      {/* <ReferralBoard /> */}
     </Box>
   )
 }
