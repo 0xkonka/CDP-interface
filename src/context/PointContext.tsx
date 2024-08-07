@@ -19,7 +19,7 @@ interface PointContextValue {
   redeemedCode: string
   inviteCode: string
   setInviteCode: (inviteCode: string) => any
-  userReferral: Referral[]
+  userReferral: Referral|undefined
   userPoint?: Point
   validateInviteCode: (inviteCode: string, showSuccessToast?: boolean) => any
   signMsg: (code: string) => any
@@ -38,19 +38,19 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
   const [isUserRedeemed, setIsUserRedeemed] = useState(false)
   const [redeemedCode, setRedeemedCode] = useState('')
   const [inviteCode, setInviteCode] = useState<string>('')
-  const [userReferral, setReferral] = useState<Referral[]>([])
+  const [userReferral, setReferral] = useState()
   const [userPoint, setPoint] = useState<Point>()
 
   useEffect(() => {
     const getUserReferral = async () => {
       if (!account) {
         setIsUserRedeemed(false)
-        setReferral([]);
+        // setReferral();
         return
       }
 
       try {
-        const { data: referralData } = await axios.get(`${BE_ENDPOINT}/api/referral/user/${account}`)
+        const { data: referralData } = await axios.get(`${BE_ENDPOINT}/api/referral/user/${account}?inviteCodeType=mainnet`)
 
         if (referralData.redeemed) {
           setIsUserRedeemed(referralData.redeemed)
@@ -83,7 +83,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
     // if (!account) return
 
     try {
-      const response = await axios.post(BE_ENDPOINT + '/api/referral/user/validate', { inviteCode })
+      const response = await axios.post(BE_ENDPOINT + '/api/referral/user/validate', { inviteCode, inviteCodeType: 'mainnet' })
       if (response.data.result === true) {
         if(showSuccessToast) {
           setInviteCode(inviteCode)
@@ -101,7 +101,7 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
 
   const signMsg = async (code: string) => {
     if (!account || code === '') return false
-    if (userReferral?.length >= +REFERRAL_DISTRIBUTION) {
+    if (userReferral) {
       showToast('error', 'Redeeme Error', `You already redeemed and got ${REFERRAL_DISTRIBUTION} inviteCodes`, 3000)
       return false
     }
@@ -118,7 +118,8 @@ export const PointProvider: React.FC<Props> = ({ children }) => {
         const response = await axios.post(BE_ENDPOINT + '/api/referral/user/redeem', {
           account,
           inviteCode: code,
-          count: REFERRAL_DISTRIBUTION
+          count: REFERRAL_DISTRIBUTION,
+          inviteCodeType: "mainnet"
         })
 
         if (response.data.result === true) {

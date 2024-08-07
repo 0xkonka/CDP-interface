@@ -1,7 +1,7 @@
 export interface Referral {
     owner: string
     inviteCode: string
-    redeemer: string
+    redeemer?: any
     redeemed: boolean
     signMsg?: string
     xpPoint?: any

@@ -1,6 +1,11 @@
+import Link from 'next/link'
+
 import { useGlobalValues } from '@/context/GlobalContext'
 import { Grid, Typography, Box, Stack, useTheme, Button } from '@mui/material'
 import { useState, useRef, useEffect } from 'react'
+
+// Core Components Imports
+import Icon from '@/@core/components/icon'
 
 import { formatToThousands, formatToThousandsInt, shortenWalletAddress } from '@/hooks/utils'
 import { SortableHeaderItem } from '@/views/components/global/SortableHeaderItem'
@@ -26,6 +31,8 @@ export const ExperienceBoard = (props: Props) => {
     const myLeaderRef = useRef<HTMLDivElement>(null)
     const {address: account} =  useAccount()
     const theme = useTheme()
+    const [copyCodeSuccess, setCopyCodeSuccess] = useState(false)
+    const [copyURLSuccess, setCopyURLSuccess] = useState(false)
     
     const setSortDetail = (sortBy: string, direction: string) => {
         setSortBy(sortBy)
@@ -46,6 +53,32 @@ export const ExperienceBoard = (props: Props) => {
         }
         return leaderboards
     }
+
+    const copyToClipBoard = async (text: string) => {
+        if ('clipboard' in navigator) {
+            try {
+                await navigator.clipboard.writeText(text);
+                // alert('Text copied to clipboard'); // You could use a more sophisticated method to notify user
+            } catch (error) {
+                console.error('Could not copy text: ', error);
+            }
+        } else {
+            alert('Clipboard API not available.');
+        }
+    }
+
+    useEffect(() => {
+        if(copyCodeSuccess == true) {
+            setTimeout(() => {
+                setCopyCodeSuccess(false)
+            }, 2000)
+        }
+        if(copyURLSuccess == true) {
+            setTimeout(() => {
+                setCopyURLSuccess(false)
+            }, 2000)
+        }
+    }, [copyCodeSuccess, copyURLSuccess])
 
     const headerItems = [
         {
@@ -252,7 +285,7 @@ export const ExperienceBoard = (props: Props) => {
                 </Typography>
                 <Box sx={{ ...radiusBoxStyle, mt: 6, p: 0, height: 450 }} ref={secondItemRef}>
                     <Stack direction='row' height='100%' sx={{minHeight: {xs: 0, lg:450}}}>
-                        {/* @Jordan - This is tempoarary code while we will update the backend for main net - user will have one invite code and many redeemers */}
+                        {/* @Jordan - This is new logic for mainnet referral section */}
                         <Stack className='scrollable' sx={{flex: {xs: 1, md: 7}, borderRight: 'solid 1px #2D3131', overflowY: 'scroll', borderTopLeftRadius: '10px'}}>
                             <Typography color='#D4D4D4' sx={{fontSize: {xs: 12, sm: 14}, px: {xs: 3, md: 6}, pt: {xs: 3, md: 6}, pb: 2, 
                                 position: 'sticky', top: 0, background: '#080b0b'}}>
@@ -260,11 +293,17 @@ export const ExperienceBoard = (props: Props) => {
                             </Typography>
                             <Stack>
                                 {
-                                    userReferral.map((item, index) => (
-                                        item.redeemed &&
+                                    (!userReferral?.redeemer || userReferral?.redeemer?.length == 0) &&
+                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} sx={{px: {xs: 3, md: 6}, py: 3}}>
+                                        There is no referrer.
+                                    </Typography>
+                                }
+                                {
+                                    userReferral?.redeemer && userReferral?.redeemer.length &&
+                                    userReferral?.redeemer.map((item:any, index:number) => (
                                         <Stack direction='row' gap={isMobileScreen ? 2 : 6} sx={{borderBottom: 'solid 1px #2D3131', px: {xs: 3, md: 6}, py: {xs: 3, md: 4}}} alignItems='center' key={index}>
                                             <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
-                                                {item.redeemed ? shortenWalletAddress(getAddress(item.redeemer)) : ''}
+                                                {shortenWalletAddress(getAddress(item.redeemer))}
                                             </Typography>
                                         </Stack>        
                                     ))
@@ -278,43 +317,64 @@ export const ExperienceBoard = (props: Props) => {
                             </Stack>
                             <Stack>
                                 {
-                                    userReferral.length > 0 && 
+                                    !userReferral &&
+                                    <Stack sx={{px: {xs: 3, md: 6}, py: {xs: 3, md: 4}}}>
+                                        <Link href='#' style={{textDecoration: 'none'}}>
+                                            <Typography variant={isMobileScreen ? 'subtitle2' : 'subtitle1'} fontWeight={400} color='primary' sx={{my:'auto', userSelect: 'none'}}>
+                                                You can Redeem the code to get multiplier points.
+                                            </Typography>
+                                        </Link>
+                                    </Stack>
+                                }
+                                {
+                                    userReferral && 
                                     <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{px: {xs: 3, md: 6}, py: {xs: 3, md: 4}}}>
                                         <Stack direction='row' alignItems='center' gap={isMobileScreen ? 2 : 3}>
-                                            <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color={userReferral[0].redeemed ? 'primary' : 'white'} sx={{my:'auto', userSelect: 'none'}}>
-                                                {userReferral[0].inviteCode}
+                                            <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400} color={userReferral.redeemed ? 'primary' : 'white'} sx={{my:'auto', userSelect: 'none'}}>
+                                                {userReferral.inviteCode}
                                             </Typography>
                                         </Stack>
                                         <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={400}>
-                                            {formatToThousandsInt(userReferral[0].xpPoint?.reduce((sum: number, item:any) => {
+                                            {formatToThousandsInt(userReferral.xpPoint?.reduce((sum: number, item:any) => {
                                                 return sum + item.point || 0
                                             }, 0) || 0)} XP
                                         </Typography>
                                     </Stack> 
                                 }
-                                <Stack sx={{mx: {xs: 3, md: 6}, pt: 4, pb: 12, borderBottom: 'solid 1px #FFFFFF33', flexDirection: {xs: 'column', md: 'row'}}} gap={4}>
-                                    <Button sx={{ flex: 1, color: 'white', py: 3, fontWeight: 400}}
-                                            variant='outlined'
-                                            color='primary' onClick={()=>{
-                                                console.log('Copy Code')
-                                            }}>
-                                        Copy Code
-                                    </Button>
-                                    <Button sx={{ flex: 1, color: 'white', py: 3, fontWeight: 400}}
-                                            variant='outlined'
-                                            color='secondary' onClick={()=>{
-                                                console.log('Copy invite URL')
-                                            }}>
-                                        Copy invite URL
-                                    </Button>
+                                {}
+                                {
+                                    userReferral && 
+                                    <Stack sx={{mx: {xs: 3, md: 6}, pt: 4, pb: 12, borderBottom: 'solid 1px #FFFFFF33', flexDirection: {xs: 'column', md: 'row'}}} gap={4}>
+                                        <Button sx={{ flex: 1, color: 'white', py: 3, fontWeight: 400, display: 'flex'}}
+                                                variant='outlined'
+                                                color='primary' onClick={() => {
+                                                    copyToClipBoard(userReferral.inviteCode)
+                                                    setCopyCodeSuccess(true)
+                                                }}>
+                                            <span>Copy Code</span>
+                                            {copyCodeSuccess && <Icon icon='tabler:check' style={{cursor: 'pointer', marginLeft: 2}} fontSize={18}/>}
+                                        </Button>
+                                        <Button sx={{ flex: 1, color: 'white', py: 3, fontWeight: 400}}
+                                                variant='outlined'
+                                                color='secondary' onClick={()=>{
+                                                    copyToClipBoard(`${location.protocol}//${location.host}?code=${userReferral.inviteCode}`)
+                                                    setCopyURLSuccess(true)
+                                                }}>
+                                            Copy invite URL
+                                            {copyURLSuccess && <Icon icon='tabler:check' style={{cursor: 'pointer', marginLeft: 2}} fontSize={18}/>}
+                                        </Button>
+                                    </Stack>
+                                }
+                            </Stack>
+                            {
+                                userReferral &&
+                                <Stack direction='row' alignItems='center' justifyContent='space-between' paddingX={6} paddingY={4} marginTop='auto'>
+                                    <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={600} color='#FFF'>People referred</Typography>
+                                    <Typography sx={{fontSize:{xs: 16, md:24}}} fontWeight={400} color='primary' className='font-britanica'> 
+                                        {userReferral.redeemer?.length | 0}
+                                    </Typography>
                                 </Stack>
-                            </Stack>
-                            <Stack direction='row' alignItems='center' justifyContent='space-between' paddingX={6} paddingY={4} marginTop='auto'>
-                                <Typography variant={isMobileScreen ? 'subtitle2' : 'h5'} fontWeight={600} color='#FFF'>People referred</Typography>
-                                <Typography sx={{fontSize:{xs: 16, md:24}}} fontWeight={400} color='primary' className='font-britanica'> 
-                                    {userReferral.length}
-                                </Typography>
-                            </Stack>
+                            }
                         </Stack>
                     </Stack>
                     
